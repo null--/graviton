@@ -1,0 +1,9 @@
+- port components of "GraVitoN: Resurrection" into "GraVitoN: Scream of Pain"
+- code a cross platform threading lib
+- code a cross platform tcp/udp/raw socket lib
+- code a cross platform general purpose basic os api
+- metasploit plugin
+- metaworm master/slave
+- android/ios/osx test
+
+and much more!
