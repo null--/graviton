@@ -40,16 +40,23 @@ namespace Core
 {
 namespace Lua
 {
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 typedef struct LuaObj
 {
-	lua_State *lua_state;
+    lua_State *lua_state;
+
+    LuaObj()
+    {
+        lua_state = _null_;
+    }
 } & R_LuaObj;
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// @todo free: Double Free Exception
+/*
 bool free(R_LuaObj obj)
 {
-	/*
 	// Double Free Exception
 	if( obj.lua_state )
 	{
@@ -59,19 +66,18 @@ bool free(R_LuaObj obj)
 	else
 	{
 		return false;
-	}
-	*/
-	return true;
+    }
 }
+*/
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool initialize(R_LuaObj obj)
 {
-	if ( obj.lua_state == _null_ )
+    if ( obj.lua_state == _null_ )
 	{
-		obj.lua_state = luaL_newstate();
+        obj.lua_state = luaL_newstate();
 
-		obj.luaL_openlibs( lua_state );
+		luaL_openlibs( obj.lua_state );
 		/*
 		luaopen_base ( obj.lua_state );
 		luaopen_coroutine ( obj.lua_state );
@@ -93,7 +99,7 @@ bool runScript(R_LuaObj obj, const int prev_err = LUA_OK)
 {
 	if ( prev_err != LUA_OK )
 	{
-		lua_pop(lua_state, 1);
+		lua_pop(obj.lua_state, 1);
 		Logger::logIt("------------------ Lua Error Code: ");
 		Logger::logIt(prev_err);
 		Logger::logItLn(" ------------------");
@@ -119,22 +125,22 @@ bool runScript(R_LuaObj obj, const int prev_err = LUA_OK)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int runScriptFile ( const string &_file )
+int runScriptFile (R_LuaObj obj, const string &_file )
 {
 	Logger::logVariable("File",_file);
 	int err = luaL_loadfile (obj.lua_state, _file.c_str() );
-	return runScript(err);
+	return runScript(obj, err);
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int runScriptString ( const string &_script )
+int runScriptString (R_LuaObj obj, const string &_script )
 {
-    int err = luaL_loadstring ( lua_state, _script.c_str() );
-	return runScript(err);
+    int err = luaL_loadstring ( obj.lua_state, _script.c_str() );
+	return runScript(obj, err);
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool regiserFunction ( const string& func_name, const lua_CFunction func_addr )
+bool regiserFunction (R_LuaObj obj, const string& func_name, const lua_CFunction func_addr )
 {
     lua_register (obj.lua_state, func_name.c_str(), func_addr );
     return true;
@@ -142,5 +148,6 @@ bool regiserFunction ( const string& func_name, const lua_CFunction func_addr )
 
 } // Lua
 } // Core
+} // GraVitoN
 
 #endif // _GVN_LUA_HEAD_

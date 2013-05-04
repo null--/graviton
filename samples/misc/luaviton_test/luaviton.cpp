@@ -51,27 +51,34 @@ int main ( int argc , char **argv)
 
 	file = argv[1];
 
-	GraVitoN::Lua my_lua;
-    my_lua.initialize();
+    GraVitoN::Core::Lua::LuaObj my_lua;
+
+    cout << "Initializing ..." << my_lua.lua_state << " - ";
+    GraVitoN::Core::Lua::initialize(my_lua);
+    cout << my_lua.lua_state << " done" << endl;
 
     /// Register Function
-    my_lua.regiserFunction ( "testFunc", &testFunc );
-
-	bool err;
+    cout << " Registering function ...";
+    GraVitoN::Core::Lua::regiserFunction (my_lua, "testFunc", &testFunc );
+    cout << " done" << endl;
 
     /// Run script file: test.lua
-	err = my_lua.runScriptFile(file);
+    cout << " Running script ...";
+    GraVitoN::Core::Lua::runScriptFile(my_lua, file);
+    cout << " done" << endl;
 
 	/// Test re-initialization
-	my_lua.initialize();
+	GraVitoN::Core::Lua::initialize(my_lua);
 
     /// Run script string
-    err = my_lua.runScriptString (
+    GraVitoN::Core::Lua::runScriptString (my_lua,
 					"a = testFunc(\"Hello GraVitoN\", 3)\n"
 				    "print(\"runScriptString: a= \", a)\n"
 				    "print(\"runScriptStrin: Done\")\n"
 				 );
 	cout << "global_data= " << global_data << endl;
+
+    // GraVitoN::Core::Lua::free(my_lua);
 
     return 0;
 }
