@@ -1,0 +1,275 @@
+/**
+ * @file
+ *
+ * @author  Sina Hatef Matbue ( _null_ ) <sinahatef.cpp@gmail.com>
+ *
+ * @section License
+ *
+ * This file is part of GraVitoN.
+ *
+ * Graviton is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Graviton is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Graviton.  If not, see http://www.gnu.org/licenses/.
+ *
+ * @brief GraVitoN::Lib_Ting
+ *
+ * @todo IT'S NOT COMPELTED YET
+*/
+
+#ifndef _GVN_UDP_SOCKET_HEAD_
+#define _GVN_UDP_SOCKET_HEAD_
+
+#include "../graviton.hpp"
+#include "gvn_logger.hpp"
+#include "gvn_optparser.hpp"
+#include "gvn_socket.hpp"
+#include "lib_ting/net/UDPSocket.hpp"
+#include "lib_ting/mt/Thread.hpp"
+
+namespace GraVitoN
+{
+
+typedef ting::net::UDPSocket UDP_Socket;
+
+/// @todo UDP_Socket
+class UDP_Client: public Socket
+{
+protected:
+	/// Create IP address for connecting
+	ting::net::IPAddress addr;
+	unsigned int local_port;
+
+	/// Socket
+	UDP_Socket *sock;
+
+public:
+	UDP_Client();
+	/**
+	 * @brief Create an object of UDP_Client with a open socket.
+	 *
+	 * By calling this constructor, there is no need to call initialize
+	 */
+	UDP_Client(UDP_Socket *_sock);
+
+	virtual ~UDP_Client();
+
+	/**
+	 * @brief Initialize an UDP client
+	 *
+	 * @options
+	 * IP='Remote IP'
+	 * PORT='Remote Port'
+	 * LPORT='Local Port'
+	 *
+	 * @note
+	 * By setting your LPORT to your local port, and IP to '0.0.0.0' you can use UDP_Client as an UDP Listenner,
+	 * see gravdev/misc/udp_client for more info.
+	 *
+	 */
+	virtual bool initialize(const string &client_options);
+
+	virtual bool open();
+
+	virtual bool close();
+
+	/**
+	 * @brief Recieve data
+	 *
+	 * Do not forget to call open method, before call this function.
+	 *
+	 * @param [out] data
+	 * Recieved data
+	 *
+	 * @param [out] data_size
+	 *
+	 * @return true if, something recieved.
+	 */
+	virtual bool recv(unsigned char *&data, unsigned int &data_size);
+
+	/**
+	 * @brief Recieve data
+	 *
+	 * Do not forget to call open method, before call this function.
+	 *
+	 * @param [in] data
+	 * Send data
+	 *
+	 * @param [in] data_size
+	 * Size of data
+	 *
+	 * @return true if data was sended.
+	 */
+	virtual bool send(const unsigned char *data, const unsigned int &data_size);
+
+	/**
+	 * @brief main loop
+	 *
+	 * You can redifine this method, or send/recv methods; and use them after initilialize you inherited
+	 * object.
+	 */
+	virtual bool run();
+
+	virtual bool isActive();
+
+	virtual UDP_Socket *getTCPSocket() const
+	{
+		return sock;
+	}
+};
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+UDP_Client::UDP_Client()
+{
+	sock = new UDP_Socket();
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+UDP_Client::~UDP_Client()
+{
+	if( sock->IsValid() )
+		UDP_Client::close();
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool UDP_Client::initialize(const string &client_options)
+{
+	options = client_options;
+
+	string ip;
+	unsigned int port;
+
+	if( !OptParser::getValueAsString(options, "IP", ip) )
+		return false;
+	if( !OptParser::getValueAsUInt(options, "PORT", port) )
+		return false;
+
+	if( !OptParser::getValueAsUInt(options, "LPORT", local_port) )
+	{
+		local_port = 0;
+	}
+
+	addr = ting::net::IPAddress(ip.c_str(), port);
+	return true;
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool UDP_Client::open()
+{
+	try
+	{
+		/// connect to remote listening socket.
+		/// It is an asynchronous operation, so we will use WaitSet
+		/// to wait for its completion.
+		sock->Open( local_port );
+
+		ting::WaitSet waitSet(1);
+		waitSet.Add(sock, ting::Waitable::WRITE);
+		waitSet.Wait(); //< Wait for connection to complete.
+	}
+	catch(ting::net::Exc &e)
+	{
+		Logger::logVariable("Network error", e.What());
+		return false;
+	}
+	return true;
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool UDP_Client::close()
+{
+	try
+	{
+		sock->Close();
+	}
+	catch(ting::net::Exc &e)
+	{
+		Logger::logVariable("Network error", e.What());
+		return false;
+	}
+	return true;
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool UDP_Client::run()
+{
+	/// Open socket
+	open();
+
+	send((const unsigned char*)"Hello Server", 13);
+
+	unsigned int size;
+	unsigned char *data;
+	recv(data, size);
+
+	/// Close Socket
+	close();
+
+	return size != -1;
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool UDP_Client::send(const unsigned char *data, const unsigned int &data_size)
+{
+	try
+	{
+		ting::Buffer<const unsigned char> data_buf(data, (size_t)data_size);
+		sock->Send(data_buf, addr);
+	}
+	catch(ting::net::Exc &e)
+	{
+		Logger::logVariable("Network error", e.What());
+		return false;
+	}
+
+	return true;
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool UDP_Client::recv(unsigned char *&data, unsigned int &data_size)
+{
+	try
+	{
+		//if ( data )
+			//delete data;
+
+		ting::StaticBuffer<unsigned char, MAX_TCP_PACKET_SIZE> data_buf;
+		unsigned int bytes_recved = 0;
+
+		while( bytes_recved == 0 )
+		{
+			bytes_recved = sock->Recv(data_buf, addr);
+		}
+		//Logger::logVariable("Bytes Recved: ", bytes_recved);
+		data_size = bytes_recved;
+		data = new unsigned char[data_size];
+
+		for(int i=0; i<bytes_recved; ++i)
+			data[i] = data_buf[i];
+	}
+	catch(ting::net::Exc &e)
+	{
+		Logger::logVariable("Network error", e.What());
+		return false;
+	}
+
+	return true;
+}
+
+bool UDP_Client::isActive()
+{
+	return sock->IsValid();
+}
+
+
+} // end of GraVitoN
+
+#endif // _GVN_UDP_SOCKET_HEAD_

