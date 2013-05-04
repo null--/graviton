@@ -1,5 +1,6 @@
 /**
  * @file
+ * 
  * @author  Sina Hatef Matbue ( _null_ ) <sinahatef.cpp@gmail.com>
  *
  * @section License
@@ -19,84 +20,64 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief GraVitoN::Logger
+ * @brief GraVitoN::Spread
  *
 */
 
+#ifndef _GVN_SPREAD_HEAD_
+#define _GVN_SPREAD_HEAD_
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#ifndef _GVN_LOGGER_HEAD_
-#define _GVN_LOGGER_HEAD_
-
-#include <fstream>
-#include <cstring>
-#include <string>
-#include <cstdio>
-#include <cstdlib>
-#include <iostream>
-using namespace std;
+#include "../graviton.hpp"
 
 namespace GraVitoN
 {
-namespace Core
-{
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// GraVitoN Logging System
-namespace Logger
+/**
+ * @brief Spread techniques
+ *
+ * The main idea of Spreading is to design components that letting us pwn
+ * new victims during an attack.\n
+ * examples:\n
+ * 1. a windows virus spreads using PE file infection \n
+ * 2. a windows worm spreads using ms08_67 exploit \n
+ */
+class Spread : public Component
 {
+public:
+	/// Constructor
+    Spread();
+	
+	/// Destructor
+    virtual ~Spread();
 
-#ifdef GVN_ACTIVATE_LOGGER	
-	#ifdef GVN_LOG_INTO_FILE
-		ofstream output(GVN_LOG_FILE);
-	#else
-		ostream &output = cout;
-	#endif
-#else
-	ostream &output = cout;
-#endif
+	/**
+         * @brief Execute Spread Technique
+	 *
+	 * Calling this method means you want to DO someone/something!
+	 * 
+	 * @return
+	 * Was it successfull, or not?!
+	 * 
+	 */ 
+	virtual bool run();
+};
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// Print a log message
-template < class _C_T_ > bool logIt ( const _C_T_ &log )
+Spread::Spread()
 {
-#ifdef GVN_ACTIVATE_LOGGER
-	output << log;
-    return true;
-#else
-    return true;
-#endif
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// Print an endl
-bool logEndl()
+Spread::~Spread()
 {
-#ifdef GVN_ACTIVATE_LOGGER
-	output << endl;
-    return true;
-#else
-    return true;
-#endif
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// Logger::logIt + Logger::LogEndl
-template < class _C_T_ > bool logItLn ( const _C_T_ &log )
+bool Spread::run()
 {
-    logIt ( log );
-    logEndl();
-    return true;
-}
-
-template < class _C_T_ > bool logVariable(const string &name,const _C_T_ & value)
-{
-	logIt(name);
-	logIt("= ");
-	logItLn(value);
-
+	Logger::logItLn("Spread...");
 	return true;
 }
 }
-}
-}
-#endif // _GVN_LOGGER_HEAD_
 
+#endif // _GVN_SPREAD_HEAD_

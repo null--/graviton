@@ -32,11 +32,11 @@
 #include "core/aocinfo.hpp"
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#include "ai/ai.h"
-#include "payload/payload.h"
-#include "infect/infect.h"
-#include "malkit/malkit.h"
-#include "utils/utils.h"
+#include <ai/ai.hpp>
+#include <payload/payload.hpp>
+#include <infect/infect.hpp>
+#include <malkit/malkit.hpp>
+#include <utils/utils.hpp>
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// My Lovely Define!

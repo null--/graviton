@@ -28,142 +28,68 @@
 #define _GVN_LIBLUA_HEAD_
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#include <iostream>
-#include "lib_lua/lua.hpp"
-#include "lib_lua/llimits.h"
-#include "../graviton.hpp"
-#include "../gvn_utils/gvn_logger.hpp"
+#include <external/liblua/lua.hpp>
+#include <external/liblua/llimits.h>
+#include <graviton.hpp>
+#include <core/logger.hpp>
 using namespace std;
 
 namespace GraVitoN
 {
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/**
- * @brief Lua interface for GraVitoN
- *
- * Sometimes our malware needs to changes it's behavior during run-time, for example imagine
- * that you need to upgrade your virus's spreeding technique (Gvn_Intercross) during a virus attack!
- * You can change a lua script instead of recompiling your viri!
- *
- */
-class Lua : public Component
+namespace Core
 {
-private:
-    /// Lua Current State
-    lua_State *lua_state;
-
-	/// Run a loaded script
-	bool runScript(const int &prev_err);
-
-public:
-    /// Constructor
-	Lua();
-
-    /// Destructor
-	virtual ~Lua();
-
-    /**
-     * @brief Initialize Lua
-     *
-     * Setup Lua Interface for your malware
-     *
-     * @param [in] _options
-     * Lua initializer options
-     *
-     * @return
-     * True if Lua initialized successfully
-     */
-    virtual bool initialize ( const string &_options = "" );
-
-    /**
-     * @brief Run a string scripts
-     *
-     * Run your scripts which is written inside a string
-     *
-     * @param [in] _script
-     * Yoyr Script
-     *
-	 * @return
-	 * True means successful execution
-     */
-	virtual int runScriptString ( const string &_script );
-
-    /**
-     * @brief Run a script file
-     *
-     * Run your script file
-     *
-     * @param [in] _file
-     * Script File
-     *
-	 * @return
-	 * True means successful execution
-	*/
-	virtual int runScriptFile ( const string &_file );
-
-    /**
-     * @brief Register New Function
-     *
-     * @param [in] func_name
-     * Name of your function, you want to call inside lua_CFunction
-     *
-     * @param [in] func_addr
-     * Address of your function.\n
-     * Your function is a 'int func(lua_State *L)' \n
-     *
-     */
-    virtual bool regiserFunction ( const string &func_name, lua_CFunction func_addr );
-};
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Lua::Lua()
+namespace Lua
 {
-    options = "<no_options>";
-
-    lua_state = _null_;
-}
-
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Lua::~Lua()
+
+typedef struct LuaObj
+{
+	lua_State *lua_state;
+} & R_LuaObj;
+
+bool free(R_LuaObj obj)
 {
 	/*
 	// Double Free Exception
-	if( lua_state )
+	if( obj.lua_state )
 	{
-		lua_close ( lua_state );
+		lua_close ( obj.lua_state );
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 	*/
+	return true;
 }
 
-
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Lua::initialize ( const string &_options )
+bool initialize(R_LuaObj obj)
 {
-	options = _options;
-
-	if ( lua_state == _null_ )
+	if ( obj.lua_state == _null_ )
 	{
-		lua_state = luaL_newstate();
+		obj.lua_state = luaL_newstate();
 
-		luaL_openlibs( lua_state );
+		obj.luaL_openlibs( lua_state );
 		/*
-		luaopen_base ( lua_state );
-		luaopen_coroutine ( lua_state );
-		luaopen_table ( lua_state );
-		luaopen_io ( lua_state );
-		luaopen_os(lua_state);
-		luaopen_string ( lua_state );
-		luaopen_bit32 ( lua_state );
-		luaopen_math ( lua_state );
-		luaopen_debug ( lua_state );
-		luaopen_package ( lua_state );
+		luaopen_base ( obj.lua_state );
+		luaopen_coroutine ( obj.lua_state );
+		luaopen_table ( obj.lua_state );
+		luaopen_io ( obj.lua_state );
+		luaopen_os(obj.lua_state);
+		luaopen_string ( obj.lua_state );
+		luaopen_bit32 ( obj.lua_state );
+		luaopen_math ( obj.lua_state );
+		luaopen_debug ( obj.lua_state );
+		luaopen_package ( obj.lua_state );
 		*/
 	}
     return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Lua::runScript(const int &prev_err)
+bool runScript(R_LuaObj obj, const int prev_err = LUA_OK)
 {
 	if ( prev_err != LUA_OK )
 	{
@@ -174,8 +100,8 @@ bool Lua::runScript(const int &prev_err)
 		return false;
 	}
 
-	int err = lua_pcall ( lua_state, 0, LUA_MULTRET, 0 );
-	lua_pop(lua_state, 1);
+	int err = lua_pcall (obj.lua_state, 0, LUA_MULTRET, 0 );
+	lua_pop(obj.lua_state, 1);
 
 	if( err != LUA_OK )
 	{
@@ -193,27 +119,28 @@ bool Lua::runScript(const int &prev_err)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int Lua::runScriptFile ( const string &_file )
+int runScriptFile ( const string &_file )
 {
 	Logger::logVariable("File",_file);
-	int err = luaL_loadfile (lua_state, _file.c_str() );
+	int err = luaL_loadfile (obj.lua_state, _file.c_str() );
 	return runScript(err);
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int Lua::runScriptString ( const string &_script )
+int runScriptString ( const string &_script )
 {
     int err = luaL_loadstring ( lua_state, _script.c_str() );
 	return runScript(err);
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Lua::regiserFunction ( const string& func_name, const lua_CFunction func_addr )
+bool regiserFunction ( const string& func_name, const lua_CFunction func_addr )
 {
-    lua_register ( lua_state, func_name.c_str(), func_addr );
+    lua_register (obj.lua_state, func_name.c_str(), func_addr );
     return true;
 }
 
-}
+} // Lua
+} // Core
 
 #endif // _GVN_LUA_HEAD_

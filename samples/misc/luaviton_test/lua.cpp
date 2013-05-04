@@ -1,8 +1,8 @@
 #define GVN_ACTIVATE_LOGGER
 
 #include <iostream>
-#include "../../../graviton.hpp"
-#include "../../../gvn_utils/gvn_lua.hpp"
+#include <graviton.hpp>
+#include <core/luaviton.hpp>
 using namespace std;
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
