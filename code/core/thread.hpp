@@ -28,78 +28,45 @@
 #ifndef _GVN_THREAD_HEAD_
 #define _GVN_THREAD_HEAD_
 
-#include "../graviton.hpp"
-#include "gvn_logger.hpp"
-#include "gvn_optparser.hpp"
-#include "lib_ting/net/Lib.hpp"
-#include "lib_ting/mt/Thread.hpp"
+#include <graviton.hpp>
+#include <core/logger.hpp>
+#include <external/ting/net/Lib.hpp>
+#include <external/ting/mt/Thread.hpp>
 
 namespace GraVitoN
 {
+	
+namespace Core
+{
+	
+namespace Thread
+{
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// Cross Platform OS version sleep function
-#define gvnSleep(__msec__) ting::mt::Thread::Sleep(__msec__)
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// @todo Thread
-class Thread: public Component, private ting::mt::Thread
+void Sleep(unsigned msec)
 {
-public:
-	// Sleep for a number of milliseconds
-	void static sleep(unsigned int __msec__)
-	{
-		gvnSleep(__msec__);
-	}
-
-private:
-	/// Override ting::mt::Thread::Run()
-	virtual void Run();
-
-protected:
-	/// Stop flag. true means you have to stop your main loop.
-	bool flag_stop;
-
-	/**
-	 * @brief Main Loop of Your Thread
-	 *
-	 * You must override this method.
-	 *
-	 * @note
-	 * Please take care of flag_stop, to stop your thread when it's true. if you don't check this
-	 * variable on every cycle on your main loop, and call stop() method inside your code, your process
-	 * is going to be freeze, because stop() calls waitForEndOfMainLoop() after setting flag_stop to true.
-	 *
-	 * @see graviton/gravdev/misc/thread/thread.cpp
-	 */
-	virtual bool myMainLoop();
-
-public:
-	Thread();
-	virtual ~Thread() throw();
-
-	/**
-	 * @brief Initialize an UDP socket
-	 *
-	 * @options
-	 * There is no options yet.
-	 */
-	virtual bool initialize(const string &_options = "");
-	virtual bool run();
-
-	virtual bool isActive();
-
-	/// Wait For Thread To Exit (Like pthread_join)
-	virtual bool waitForEndOfMainLoop();
-
-	/// Stop thread
-	virtual bool stop();
-};
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Thread::Thread()
-{
-	flag_stop = true;
+	ting::mt::Thread::Sleep( msec );
 }
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+typedef struct ThreadObj
+{
+	class _T_THREAD : public ting::mt::Thread 
+	{
+		void*(void*) prt_mainloop_function;
+		
+	} i_thread;
+	
+	bool i_stop_flag;
+	void*(void*) prt_mainloop_function;
+	
+	ThreadObj()
+	{
+		i_stop_flag = true;
+		ptr_mainloop_func = _null_;
+	}
+} & R_ThreadObj;
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 Thread::~Thread() throw()
@@ -168,6 +135,8 @@ bool Thread::stop()
 	return true;
 }
 
+} // end of Thread
+} // end of Core
 } // end of GraVitoN
 
 #endif // _GVN_THREAD_HEAD_
