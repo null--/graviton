@@ -3,7 +3,7 @@
 #include <graviton.hpp>
 #include <iostream>
 #include <core/luaviton.hpp>
-#include <external/luasocket.hpp>
+#include <external/luasec.hpp>
 
 using namespace std;
 
@@ -60,8 +60,10 @@ int main ( int argc , char **argv)
 
     // GraVitoN::Core::Lua::preloadModule(my_lua, "socket.core", luaopen_socket_core);
     // GraVitoN::Core::Lua::preloadModule(my_lua, "mime", luaopen_mime_core);
+    GraVitoN::Core::Lua::preloadModule(my_lua, "ssl.core", luaopen_ssl_core);
+    GraVitoN::Core::Lua::preloadModule(my_lua, "ssl.context", luaopen_ssl_context);
 
-    GraVitoN::Core::Lua::loadModuleFile (my_lua, "socket.lua");
+    GraVitoN::Core::Lua::loadModuleFile (my_lua, "ssl.lua");
     cout << my_lua.lua_state << " done" << endl;
 
     /// Register Function

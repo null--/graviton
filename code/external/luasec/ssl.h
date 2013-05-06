@@ -14,6 +14,7 @@
 #include "buffer.h"
 #include "timeout.h"
 #include "context.h"
+#include "socket.h"
 
 #define ST_SSL_NEW       1
 #define ST_SSL_CONNECTED 2
