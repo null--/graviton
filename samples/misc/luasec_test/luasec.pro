@@ -1,4 +1,3 @@
-
 INCLUDEPATH += \
     ../../../code \
     ../../../code/external/lua5.1 \
@@ -6,13 +5,8 @@ INCLUDEPATH += \
 
 SOURCES += \
     luasec.cpp \
-    # LUASEC SOURCE
-    ../../../code/external/luasec/ssl.c \
-    ../../../code/external/luasec/buffer.c \
     ../../../code/external/luasec/context.c \
-    ../../../code/external/luasec/timeout.c \
-    ../../../code/external/luasec/usocket.c \
-    ../../../code/external/luasec/io.c \
+    ../../../code/external/luasec/ssl.c
 
 LIBS += \
     ../../../libs/openssl/linux-x86_64/libssl.a \
