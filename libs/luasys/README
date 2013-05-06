@@ -1,0 +1,2 @@
+make linux
+ar rcs luasys.a luasys.o sock/sys_sock.o
