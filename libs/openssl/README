@@ -1,0 +1,4 @@
+./config
+make depends
+make build_ssl
+make build_crypto
