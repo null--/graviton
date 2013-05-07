@@ -5,7 +5,9 @@ Installed:
 	lua-5.1.5
 	luasec - github 05/06/2013
 	luasys-1.6
-
+	lzlib - github 05/07/2013
+	zlip - 1.2.8
+	
 Removed:
 	apr-1.4.2
 	apr-iconv-1.2.1
