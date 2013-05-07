@@ -154,7 +154,7 @@ static int ssl_send(void *ctx, const char *data, size_t count, size_t *sent,
 /**
  * Receive data
  */
-static int ssl_recv(void *ctx, char *data, size_t count, size_t *got,
+extern static int ssl_recv(void *ctx, char *data, size_t count, size_t *got,
   p_timeout tm)
 {
   int err;

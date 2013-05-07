@@ -7,10 +7,6 @@
 
 extern "C" {
 #include "luasocket/luasocket.h"
-#include "luasocket/socket.h"
-#include "luasocket/auxiliar.h"
-#include "luasocket/tcp.h"
-#include "luasocket/udp.h"
 #include "luasocket/mime.h"
 }
 

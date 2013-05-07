@@ -7,6 +7,7 @@ Installed:
 	luasys-1.6
 	lzlib - github 05/07/2013
 	zlip - 1.2.8
+	libtomcrypt-1.17
 	
 Removed:
 	apr-1.4.2
@@ -14,3 +15,5 @@ Removed:
 	apr-util-1.3.9
 	lua-apr-0.23.1-1
 	libapreq2-2.13
+	lcrypt - gitub 05/07/2013
+

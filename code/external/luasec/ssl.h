@@ -24,6 +24,8 @@
 #include "context.h"
 #include "../luasocket/socket.h"
 
+#define IO_SSL	-4       /* SSL error */
+
 #define ST_SSL_NEW       1
 #define ST_SSL_CONNECTED 2
 #define ST_SSL_CLOSED    3
