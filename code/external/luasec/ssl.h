@@ -10,11 +10,19 @@
 #include <openssl/ssl.h>
 #include <lua.h>
 
+// Using luasocket headers
+/*
 #include "io.h"
 #include "buffer.h"
 #include "timeout.h"
 #include "context.h"
 #include "socket.h"
+*/
+#include "../luasocket/io.h"
+#include "../luasocket/buffer.h"
+#include "../luasocket/timeout.h"
+#include "context.h"
+#include "../luasocket/socket.h"
 
 #define ST_SSL_NEW       1
 #define ST_SSL_CONNECTED 2

@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief GraVitoN::Lua
+ * @brief GraVitoN::Core::Lua
  *
 */
 

@@ -14,6 +14,17 @@
 #include "io.h"
 
 /*=========================================================================*\
+* The connect and accept functions accept a timeout and their
+* implementations are somewhat complicated. We chose to move
+* the timeout control into this module for these functions in
+* order to simplify the modules that use them.
+\*=========================================================================*/
+#include "timeout.h"
+
+/* we are lazy... */
+typedef struct sockaddr SA;
+
+/*=========================================================================*\
 * Platform specific compatibilization
 \*=========================================================================*/
 #ifdef _WIN32
@@ -21,17 +32,6 @@
 #else
 #include "usocket.h"
 #endif
-
-/*=========================================================================*\
-* The connect and accept functions accept a timeout and their
-* implementations are somewhat complicated. We chose to move
-* the timeout control into this module for these functions in
-* order to simplify the modules that use them. 
-\*=========================================================================*/
-#include "timeout.h"
-
-/* we are lazy... */
-typedef struct sockaddr SA;
 
 /*=========================================================================*\
 * Functions bellow implement a comfortable platform independent 
@@ -72,5 +72,6 @@ const char *socket_ioerror(p_socket ps, int err);
 
 int socket_gethostbyaddr(const char *addr, socklen_t len, struct hostent **hp);
 int socket_gethostbyname(const char *addr, struct hostent **hp);
+int socket_error();
 
 #endif /* SOCKET_H */

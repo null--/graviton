@@ -5,11 +5,12 @@
 #ifndef _LUASEC_HPP_
 #define _LUASEC_HPP_
 
-/// @todo fix luasec and luasocket confilict (maybe: luasec/socket.h --> luasocket/socket.h)
+#include "luasocket.hpp"
+
 extern "C" {
+#include "luasocket/socket.h"
 #include "luasec/ssl.h"
 #include "luasec/context.h"
-#include "luasec/socket.h"
 }
 
 #endif

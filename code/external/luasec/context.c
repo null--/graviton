@@ -12,7 +12,10 @@
 #include <lauxlib.h>
 
 #include "context.h"
-#include "options.h"
+
+/// GraVitoN dev
+// #include "options.h"
+#include "luasec_options.h"
 
 /*--------------------------- Auxiliary Functions ----------------------------*/
 

@@ -1,3 +1,14 @@
+GraVitoN
+--------
+git rm buffer.*
+git rm io.*
+diff options.h ../luasocket/options.h
+diff timeout.h ../luasocket/timeout.h
+diff timeout.c ../luasocket/timeout.c
+git mv options.h luasec_options.h
+git rm socket.h
+git rm timeout.* usocket.* wsocket.*
+
 --------------------------------------------------------------------------------
 LuaSec 0.4.1
 ------------

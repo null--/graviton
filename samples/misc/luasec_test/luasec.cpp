@@ -1,5 +1,3 @@
-///@ todo fix luasec.a undefined reference issues
-
 #define GVN_ACTIVATE_LOGGER
 
 #include <graviton.hpp>
