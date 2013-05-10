@@ -43,7 +43,6 @@ THE SOFTWARE. */
 #include "Exc.hpp"
 #include "Array.hpp"
 
-
 #if M_OS == M_OS_WINDOWS
 
 //if _WINSOCKAPI_ macro is not defined then it means that the winsock header file
@@ -60,11 +59,12 @@ THE SOFTWARE. */
 
 #elif M_OS == M_OS_LINUX
 #	include <sys/epoll.h>
-
+#	include <unistd.h>
 #elif M_OS == M_OS_MACOSX
 #	include <sys/types.h>
 #	include <sys/event.h>
 #	include <sys/time.h>
+#	include <unistd.h>
 
 #else
 #	error "Unsupported OS"

@@ -63,6 +63,7 @@ THE SOFTWARE. */
 
 #elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX || M_OS == M_OS_SOLARIS
 #	include <pthread.h>
+# 	include <unistd.h>
 
 #	if M_OS == M_OS_SOLARIS
 #		include <sched.h> // for sched_yield();

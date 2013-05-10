@@ -84,11 +84,12 @@ bool initialize(R_LuaObj obj)
 {
     if ( obj.lua_state == _null_ )
 	{
+        // General
         obj.lua_state = luaL_newstate();
-
         luaL_openlibs( obj.lua_state );
 
         // Lua 5.1
+        // obj.lua_state = lua_open();
         // luaopen_base(obj.lua_state);
         // luaopen_debug(obj.lua_state);
         // luaopen_io(obj.lua_state);
@@ -98,6 +99,7 @@ bool initialize(R_LuaObj obj)
         // luaopen_table(obj.lua_state);
 
         // Lua 5.2
+        // obj.lua_state = lua_open();
         // luaopen_base ( obj.lua_state );
         // luaopen_coroutine ( obj.lua_state );
         // luaopen_table ( obj.lua_state );
@@ -113,32 +115,59 @@ bool initialize(R_LuaObj obj)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+//void printStackInfo(R_LuaObj obj)
+//{
+//    lua_Debug info;
+//    int level = 0;
+//    while (lua_getstack(obj.lua_state, level, &info))
+//    {
+//        lua_getinfo(obj.lua_state, "nSl", &info);
+////#ifdef GVN_ACTIVATE_LOGGER
+//        fprintf(stderr, "  [%d] %s:%d -- %s [%s]\n",
+//            level, info.short_src, info.currentline,
+//            (info.name ? info.name : "<unknown>"), info.what);
+//        ++level;
+////#endif
+//    }
+//}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool runScript(R_LuaObj obj, const int prev_err = LUA_OK)
 {
+    int err = LUA_OK;
+
 	if ( prev_err != LUA_OK )
 	{
 		lua_pop(obj.lua_state, 1);
 		Logger::logIt("------------------ Lua Error Code: ");
 		Logger::logIt(prev_err);
 		Logger::logItLn(" ------------------");
-		return false;
+
+        return false;
 	}
 
-	int err = lua_pcall (obj.lua_state, 0, LUA_MULTRET, 0 );
-	lua_pop(obj.lua_state, 1);
+    err = lua_pcall (obj.lua_state, 0, LUA_MULTRET, 0 );
 
-	if( err != LUA_OK )
-	{
-		Logger::logIt("------------------ Lua Error Code: ");
-		Logger::logIt(err);
-		Logger::logItLn(" ------------------");
-		return false;
-	}
-	else
-	{
-		Logger::logItLn("------------------ Lua Executed Successfuly ------------------");
-	}
+    if( err != LUA_OK )
+    {
+        Logger::logIt("------------------ Lua Error Code: ");
+        Logger::logIt(err);
+        Logger::logItLn(" ------------------");
+        Logger::logItLn( lua_tostring(obj.lua_state, -1) );
+        // printStackInfo(obj);
+        Logger::logItLn(" ----------------------------------------");
+        // lua_pop(obj.lua_state, 1);  /* pop error message from the stack */
 
+        return false;
+    }
+    else
+    {
+        Logger::logItLn("------------------ Lua Executed Successfuly ------------------");
+    }
+
+    lua_pop(obj.lua_state, 1);
+
+    // Logger::logItLn("------------------ Lua Executed Successfuly ------------------");
 	return true;
 }
 
