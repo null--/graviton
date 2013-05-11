@@ -1,0 +1,4 @@
+
+SOURCES += \
+	thread.cpp
+
