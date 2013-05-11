@@ -1,11 +1,11 @@
 #define GVN_ACTIVATE_LOGGER
 
-#include "../../../graviton.hpp"
-#include "../../../gvn_utils/gvn_tcp_client.hpp"
+#include "graviton.hpp"
+#include "core/tcp_client.hpp"
 #include <iostream>
 using namespace std;
 
-class My_TCP_Client: public GraVitoN::TCP_Client
+class My_TCP_Client: public GraVitoN::Core::TCP_Client
 {
 public:
 	virtual bool run()
@@ -26,7 +26,7 @@ int main()
 {
 	My_TCP_Client client;
 
-	client.initialize("IP=127.0.0.1 PORT=7357");
+    client.initialize("127.0.0.1", 7357);
 	client.run();
 
     return 0;

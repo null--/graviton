@@ -21,22 +21,19 @@ int main ( int argc , char **argv)
 
 	file = argv[1];
 
-    GraVitoN::Core::Lua::LuaObj my_lua;
+    GraVitoN::Core::Luaviton my_lua;
 
-    cout << "Initializing ..." << my_lua.lua_state << " - ";
-    GraVitoN::Core::Lua::initialize(my_lua);
+    my_lua.preloadModule("zlib", luaopen_zlib);
+    my_lua.loadModuleFile ("gzip.lua");
 
-    GraVitoN::Core::Lua::preloadModule(my_lua, "zlib", luaopen_zlib);
-    GraVitoN::Core::Lua::loadModuleFile (my_lua, "gzip.lua");
-
-    cout << my_lua.lua_state << " done" << endl;
+    cout << " done" << endl;
 
     /// Run script file: test.lua
     cout << " Running script ...";
-    GraVitoN::Core::Lua::runScriptFile(my_lua, file);
+    my_lua.runScriptFile(file);
     cout << " done" << endl;
 
-    // GraVitoN::Core::Lua::free(my_lua);
+    // my_lua.free(my_lua);
 
     return 0;
 }

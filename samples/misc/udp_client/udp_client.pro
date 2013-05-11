@@ -1,6 +1,6 @@
 
 SOURCES += \
-        tcp_client.cpp
+        udp_client.cpp
 
 INCLUDEPATH += \
     ../../../code

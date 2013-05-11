@@ -211,7 +211,7 @@ bool TCP_Client::run()
 	/// Close Socket
 	close();
 
-	return size != -1;
+    return size != 0;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -261,7 +261,7 @@ bool TCP_Client::recv(unsigned char *&data, unsigned int &data_size)
 		data_size = bytes_recved;
 		data = new unsigned char[data_size];
 
-		for(int i=0; i<bytes_recved; ++i)
+        for(size_t i=0; i<bytes_recved; ++i)
 			data[i] = data_buf[i];
 
 		//ting::mt::Thread::Sleep(1);

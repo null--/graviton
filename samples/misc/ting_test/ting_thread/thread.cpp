@@ -3,10 +3,12 @@
 /// based on: http://code.google.com/p/ting/wiki/SocketsUsage
 
 #include <iostream>
-#include "../../../../gvn_utils/lib_ting/Thread.hpp"
+#include <mt/Thread.hpp>
+#include <mt/MsgThread.hpp>
+#include <mt/Message.hpp>
 
 /// Simple Ting::Thread
-class MyThread : public ting::Thread
+class MyThread : public ting::mt::Thread
 {
 public:
     /// Override Thread:Run()
@@ -18,7 +20,7 @@ public:
 };
 
 /// Ting Message/Queues Thread
-class MyMsgThread : public ting::MsgThread
+class MyMsgThread : public ting::mt::MsgThread
 {
 public:
     /// Define some variables specific to your thread,
@@ -33,7 +35,7 @@ public:
         while(!this->quitFlag)
         {
             /// Handle all messages on the queue
-            while(ting::Ptr<ting::Message> m = this->queue.PeekMsg())
+            while(ting::Ptr<ting::mt::Message> m = this->queue.PeekMsg())
             {
                 m->Handle();
                 if( this->quitFlag )
@@ -47,7 +49,7 @@ public:
 };
 
 /// Ting Message
-class MyMessage : public ting::Message
+class MyMessage : public ting::mt::Message
 {
 private:
     MyMsgThread *myThr;
@@ -87,7 +89,7 @@ int main()
     thr.Join();
 
     /// create the message
-    ting::Ptr<ting::Message> msg( new MyMessage(&msg_thr) );
+    ting::Ptr<ting::mt::Message> msg( new MyMessage(&msg_thr) );
 
     /// send the message
     msg_thr.PushMessage(msg);
@@ -96,7 +98,7 @@ int main()
         std::cout<<"Main: Loop!"<<std::endl;
 
     /// Send quit message to msg_thr
-    ting::Ptr<ting::Message> quit( new ting::QuitMessage(&msg_thr) );
+    ting::Ptr<ting::mt::Message> quit( new ting::mt::QuitMessage(&msg_thr) );
     msg_thr.PushMessage(quit);
     /// Wait for msg_thr to be quited
     msg_thr.Join();

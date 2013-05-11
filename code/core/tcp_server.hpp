@@ -47,7 +47,7 @@ namespace Core
 /**
  * @brief TCP Server Component
  */
-class TCP_Server : public GraVitoN::Core::Socket, public GraVitoN::Core::Component
+class TCP_Server : public GraVitoN::Core::Socket, public GraVitoN::Core::Component // Component_With_Init
 {
 protected:
     /// Response function
@@ -100,10 +100,10 @@ public:
      * @brief Initialize an TCP Server
      *
      * @options
-     * PORT='Remote Port'
+     * unsigned int: port
      *
      */
-    virtual bool initialize(const unsigned int server_port);
+    virtual bool initialize(unsigned int local_port); // initialize(...);
 
     /// Open socket
     virtual bool open();
@@ -167,12 +167,17 @@ TCP_Server::~TCP_Server() throw()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool TCP_Server::initialize(const unsigned int server_port)
+bool TCP_Server::initialize(unsigned int local_port) // initialize(...)
 {
     if( listenSock.IsValid() )
         this->close();
 
-    port = server_port;
+    // va_list vl;
+    // va_start(vl, 1); /// Only one argument
+    // port = va_arg(vl, unsigned int);
+    // va_end(vl);
+
+    port = local_port;
 
     //if( !OptParser::getValueAsUInt(options, "THREADS", max_threads) )
     //return false;

@@ -30,6 +30,7 @@
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// Detect Artitecture/OS/Compiler
 #include "core/aocinfo.hpp"
+#include "core/component.hpp"
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// @todo: ai, payload, infect, malkit, utils

@@ -22,23 +22,20 @@ int main ( int argc , char **argv)
 
 	file = argv[1];
 
-    GraVitoN::Core::Lua::LuaObj my_lua;
+    GraVitoN::Core::Luaviton my_lua;
 
-    cout << "Initializing ..." << my_lua.lua_state << " - ";
-    GraVitoN::Core::Lua::initialize(my_lua);
-
-    GraVitoN::Core::Lua::preloadModule(my_lua, "ssl.core", luaopen_ssl_core);
-    GraVitoN::Core::Lua::preloadModule(my_lua, "ssl.context", luaopen_ssl_context);
-    GraVitoN::Core::Lua::loadModuleFile (my_lua, "ssl.lua");
+    my_lua.preloadModule("ssl.core", luaopen_ssl_core);
+    my_lua.preloadModule("ssl.context", luaopen_ssl_context);
+    my_lua.loadModuleFile ("ssl.lua");
     
-    cout << my_lua.lua_state << " done" << endl;
+    cout << " done" << endl;
 
     /// Run script file: test.lua
     cout << " Running script ...";
-    GraVitoN::Core::Lua::runScriptFile(my_lua, file);
+    my_lua.runScriptFile(file);
     cout << " done" << endl;
 
-    // GraVitoN::Core::Lua::free(my_lua);
+    // my_lua.free(my_lua);
 
     return 0;
 }

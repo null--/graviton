@@ -21,10 +21,7 @@ int main ( int argc , char **argv)
 
 	file = argv[1];
 
-    GraVitoN::Core::Lua::LuaObj my_lua;
-
-    cout << "Initializing ..." << my_lua.lua_state << " - ";
-    GraVitoN::Core::Lua::initialize(my_lua);
+    GraVitoN::Core::Luaviton my_lua;
 
     // lua_getfield(my_lua.lua_state, LUA_GLOBALSINDEX, "package");
     // lua_getfield(my_lua.lua_state, -1, "preload");
@@ -33,18 +30,18 @@ int main ( int argc , char **argv)
     // luaopen_mime_core(my_lua.lua_state);
     // luaopen_socket_core(my_lua.lua_state);
 
-    GraVitoN::Core::Lua::preloadModule(my_lua, "socket.core", luaopen_socket_core);
-    GraVitoN::Core::Lua::preloadModule(my_lua, "mime", luaopen_mime_core);
-    GraVitoN::Core::Lua::loadModuleFile (my_lua, "socket.lua");
+    my_lua.preloadModule("socket.core", luaopen_socket_core);
+    my_lua.preloadModule("mime", luaopen_mime_core);
+    my_lua.loadModuleFile ("socket.lua");
     
-    cout << my_lua.lua_state << " done" << endl;
+    cout <<  " done" << endl;
 
     /// Run script file: test.lua
     cout << " Running script ...";
-    GraVitoN::Core::Lua::runScriptFile(my_lua, file);
+    my_lua.runScriptFile(file);
     cout << " done" << endl;
 
-    // GraVitoN::Core::Lua::free(my_lua);
+    // my_lua.free(my_lua);
 
     return 0;
 }

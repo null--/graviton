@@ -5,9 +5,9 @@
 /// Run netcat as server: netcat -lvp 7357
 ///
 #include <iostream>
-#include "../../../../gvn_utils/lib_ting/net/Lib.hpp"
-#include "../../../../gvn_utils/lib_ting/net/TCPSocket.hpp"
-#include "../../../../gvn_utils/lib_ting/net/TCPServerSocket.hpp"
+#include "net/Lib.hpp"
+#include "net/TCPSocket.hpp"
+#include "net/TCPServerSocket.hpp"
 
 int main()
 {

@@ -1,10 +1,31 @@
-- port components of "GraVitoN: Resurrection" into "GraVitoN: Scream of Pain"
-- code a cross platform threading lib
-- code a cross platform tcp/udp/raw socket lib
-- code a cross platform general purpose basic os api
-- metasploit plugin
-- metaworm master/slave
-- android/ios/osx test
-- Documentation
+Major:
+	- GraVitoN::Component - Good or Bad
+	- ms12-20
+	- Build static lib files (.a .lib) of external libraries for linux (32/64) and windows (32/64)
+	- port components of "GraVitoN: Resurrection" into "GraVitoN: Scream of Pain"
+	- code a cross platform threading lib
+	- code a cross platform tcp/udp/raw socket lib
+	- code a cross platform general purpose basic os api
+	- metasploit plugin
+	- metaworm master/slave
+	- android/ios/osx test
+	- Documentation
+	
+Minor:
+	- in-memory loading for this modules:
+		code/external/luasec/https.lua
+		code/external/luasec/ssl.lua
+		code/external/luasocket/mime.lua
+		code/external/luasocket/ftp.lua
+		code/external/luasocket/http.lua
+		code/external/luasocket/ltn12.lua
+		code/external/luasocket/smtp.lua
+		code/external/luasocket/socket.lua
+		code/external/luasocket/tp.lua
+		code/external/luasocket/url.lua
+		code/external/lzlib/gzip.lua
+		
+	- ting api interface
+	- upx
 
 and much more!

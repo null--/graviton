@@ -30,6 +30,7 @@
 #pragma once
 
 #include "logger.hpp"
+#include <cstdarg>
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// GraVitoN Master Nemspace
@@ -45,23 +46,35 @@ class Component
 {
 public:
 	/// Constructor
-    Component();
+    Component() {}
 
 	/// Destructor
-    virtual ~Component();
+    virtual ~Component() {}
 
     virtual bool run() = 0;
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Component::Component()
+class Component_With_Init: public Component
 {
-}
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Component::~Component()
-{
-}
+public:
+    /**
+     * @brief initialize
+     *
+     * Sample code:
+     *
+     * va_list vl;
+     * va_start(vl, 2); /// TWO arguments
+     *
+     * ip = va_arg(vl, std::string);
+     * port = va_arg(vl, unsigned int);
+     *
+     * va_end(vl);
+     *
+     */
+    virtual bool initialize(...) = 0;
+	virtual bool run() = 0;
+};
 
 }
 }

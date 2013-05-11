@@ -8,6 +8,8 @@ Installed:
 	lzlib - github 05/07/2013
 	zlip - 1.2.8
 	libtomcrypt-1.17
+	upx-3.0.9
+	ucl-1.03
 	
 Removed:
 	apr-1.4.2

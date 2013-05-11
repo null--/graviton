@@ -1,6 +1,6 @@
 
 SOURCES += \
-	tcp_server.cpp
+        tcp_client.cpp
 
 INCLUDEPATH += \
     ../../../code
