@@ -1,6 +1,6 @@
 
 SOURCES += \
-        multitask.cpp
+        tcp_client.cpp
 
 INCLUDEPATH += \
     ../../../code
