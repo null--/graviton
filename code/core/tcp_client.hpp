@@ -28,22 +28,23 @@
 #ifndef _GVN_TCP_CLIENT_HEAD_
 #define _GVN_TCP_CLIENT_HEAD_
 
-#include "../graviton.hpp"
-#include "gvn_logger.hpp"
-#include "gvn_optparser.hpp"
-//#include "lib_ting/net/Lib.hpp"
-#include "gvn_socket.hpp"
-#include "lib_ting/net/TCPSocket.hpp"
-#include "lib_ting/net/TCPServerSocket.hpp"
-#include "lib_ting/mt/Thread.hpp"
+#include "graviton.hpp"
+#include "logger.hpp"
+#include "socket.hpp"
+#include "net/TCPSocket.hpp"
+#include "net/TCPServerSocket.hpp"
+#include "mt/Thread.hpp"
 
 namespace GraVitoN
+{
+
+namespace Core
 {
 
 typedef ting::net::TCPSocket TCP_Socket;
 
 /// @brief TCP Client Component
-class TCP_Client : public Socket
+class TCP_Client : public Socket, public GraVitoN::Core::Component
 {
 private:
 	/// Do not copy
@@ -77,7 +78,7 @@ public:
 	 * PORT='Remote Port'
 	 *
 	 */
-	virtual bool initialize(const string &client_options);
+    virtual bool initialize(const string ip, unsigned int port);
 
 	virtual bool open();
 
@@ -149,18 +150,8 @@ TCP_Client::~TCP_Client()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool TCP_Client::initialize(const string &client_options)
+bool TCP_Client::initialize(const string ip, unsigned int port)
 {
-	options = client_options;
-
-	string ip;
-	unsigned int port;
-
-	if( !OptParser::getValueAsString(options, "IP", ip) )
-		return false;
-	if( !OptParser::getValueAsUInt(options, "PORT", port) )
-		return false;
-
 	addr = ting::net::IPAddress(ip.c_str(), port);
 	return true;
 }
@@ -311,6 +302,7 @@ bool TCP_Client::isActive()
 //	return *this;
 //}
 
+} // Core
 } // end of GraVitoN
 
 #endif // _GVN_TCP_CLIENT_HEAD_

@@ -29,13 +29,15 @@
 #define _GVN_UDP_SOCKET_HEAD_
 
 #include "../graviton.hpp"
-#include "gvn_logger.hpp"
-#include "gvn_optparser.hpp"
-#include "gvn_socket.hpp"
-#include "lib_ting/net/UDPSocket.hpp"
-#include "lib_ting/mt/Thread.hpp"
+#include "logger.hpp"
+#include "socket.hpp"
+#include "net/UDPSocket.hpp"
+#include "mt/Thread.hpp"
 
 namespace GraVitoN
+{
+
+namespace Core
 {
 
 typedef ting::net::UDPSocket UDP_Socket;
@@ -75,7 +77,7 @@ public:
 	 * see gravdev/misc/udp_client for more info.
 	 *
 	 */
-	virtual bool initialize(const string &client_options);
+    virtual bool initialize(const string &ip, const unsigned int port, const unsigned int lport = 0);
 
 	virtual bool open();
 
@@ -116,7 +118,7 @@ public:
 	 * You can redifine this method, or send/recv methods; and use them after initilialize you inherited
 	 * object.
 	 */
-	virtual bool run();
+    virtual bool run() = 0;
 
 	virtual bool isActive();
 
@@ -140,22 +142,9 @@ UDP_Client::~UDP_Client()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool UDP_Client::initialize(const string &client_options)
+bool UDP_Client::initialize(const string &ip, const unsigned int port, const unsigned int lport)
 {
-	options = client_options;
-
-	string ip;
-	unsigned int port;
-
-	if( !OptParser::getValueAsString(options, "IP", ip) )
-		return false;
-	if( !OptParser::getValueAsUInt(options, "PORT", port) )
-		return false;
-
-	if( !OptParser::getValueAsUInt(options, "LPORT", local_port) )
-	{
-		local_port = 0;
-	}
+    local_port = lport;
 
 	addr = ting::net::IPAddress(ip.c_str(), port);
 	return true;
@@ -199,6 +188,7 @@ bool UDP_Client::close()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/*
 bool UDP_Client::run()
 {
 	/// Open socket
@@ -213,8 +203,9 @@ bool UDP_Client::run()
 	/// Close Socket
 	close();
 
-	return size != -1;
+    return true;
 }
+*/
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool UDP_Client::send(const unsigned char *data, const unsigned int &data_size)
@@ -269,7 +260,7 @@ bool UDP_Client::isActive()
 	return sock->IsValid();
 }
 
-
+} // Core
 } // end of GraVitoN
 
 #endif // _GVN_UDP_SOCKET_HEAD_

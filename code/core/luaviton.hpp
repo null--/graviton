@@ -47,29 +47,43 @@ namespace GraVitoN
 {
 namespace Core
 {
-namespace Lua
-{
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-typedef struct LuaObj
+class Luaviton
 {
+private:
     lua_State *lua_state;
 
-    LuaObj()
+    void initialize();
+    bool runScript(const int prev_err = LUA_OK);
+
+public:
+    Luaviton()
     {
         lua_state = _null_;
+        initialize();
     }
-} & R_LuaObj;
+
+    bool regiserFunction (const string& func_name, const lua_CFunction func_addr );
+
+    int loadModuleFile (const string &_file );
+    int loadModuleString (const string &_script );
+
+    int runScriptFile (const string &_file );
+    int runScriptString ( const string &_script );
+
+    void preloadModule (const string &module_name, lua_CFunction function_addr);
+};
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// @todo free: Double Free Exception
 /*
-bool free(R_LuaObj obj)
+bool free(R_Lua_Obj obj)
 {
 	// Double Free Exception
-	if( obj.lua_state )
+    if( lua_state )
 	{
-		lua_close ( obj.lua_state );
+        lua_close ( lua_state );
 		return true;
 	}
 	else
@@ -80,48 +94,48 @@ bool free(R_LuaObj obj)
 */
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool initialize(R_LuaObj obj)
+void Luaviton::initialize()
 {
-    if ( obj.lua_state == _null_ )
+    if ( lua_state == _null_ )
 	{
         // General
-        obj.lua_state = luaL_newstate();
-        luaL_openlibs( obj.lua_state );
+        lua_state = luaL_newstate();
+        luaL_openlibs( lua_state );
 
         // Lua 5.1
-        // obj.lua_state = lua_open();
-        // luaopen_base(obj.lua_state);
-        // luaopen_debug(obj.lua_state);
-        // luaopen_io(obj.lua_state);
-        // luaopen_math(obj.lua_state);
-        // luaopen_package(obj.lua_state);
-        // luaopen_string(obj.lua_state);
-        // luaopen_table(obj.lua_state);
+        // lua_state = lua_open();
+        // luaopen_base(lua_state);
+        // luaopen_debug(lua_state);
+        // luaopen_io(lua_state);
+        // luaopen_math(lua_state);
+        // luaopen_package(lua_state);
+        // luaopen_string(lua_state);
+        // luaopen_table(lua_state);
 
         // Lua 5.2
-        // obj.lua_state = lua_open();
-        // luaopen_base ( obj.lua_state );
-        // luaopen_coroutine ( obj.lua_state );
-        // luaopen_table ( obj.lua_state );
-        // luaopen_io ( obj.lua_state );
-        // luaopen_os(obj.lua_state);
-        // luaopen_string ( obj.lua_state );
-        // luaopen_bit32 ( obj.lua_state );
-        // luaopen_math ( obj.lua_state );
-        // // luaopen_debug ( obj.lua_state );
-        // luaopen_package ( obj.lua_state );
+        // lua_state = lua_open();
+        // luaopen_base ( lua_state );
+        // luaopen_coroutine ( lua_state );
+        // luaopen_table ( lua_state );
+        // luaopen_io ( lua_state );
+        // luaopen_os(lua_state);
+        // luaopen_string ( lua_state );
+        // luaopen_bit32 ( lua_state );
+        // luaopen_math ( lua_state );
+        // // luaopen_debug ( lua_state );
+        // luaopen_package ( lua_state );
 	}
-    return true;
+    //return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-//void printStackInfo(R_LuaObj obj)
+//void Luaviton::printStackInfo()
 //{
 //    lua_Debug info;
 //    int level = 0;
-//    while (lua_getstack(obj.lua_state, level, &info))
+//    while (lua_getstack(lua_state, level, &info))
 //    {
-//        lua_getinfo(obj.lua_state, "nSl", &info);
+//        lua_getinfo(lua_state, "nSl", &info);
 ////#ifdef GVN_ACTIVATE_LOGGER
 //        fprintf(stderr, "  [%d] %s:%d -- %s [%s]\n",
 //            level, info.short_src, info.currentline,
@@ -132,13 +146,13 @@ bool initialize(R_LuaObj obj)
 //}
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool runScript(R_LuaObj obj, const int prev_err = LUA_OK)
+bool Luaviton::runScript(const int prev_err)
 {
     int err = LUA_OK;
 
 	if ( prev_err != LUA_OK )
 	{
-		lua_pop(obj.lua_state, 1);
+        lua_pop(lua_state, 1);
 		Logger::logIt("------------------ Lua Error Code: ");
 		Logger::logIt(prev_err);
 		Logger::logItLn(" ------------------");
@@ -146,17 +160,17 @@ bool runScript(R_LuaObj obj, const int prev_err = LUA_OK)
         return false;
 	}
 
-    err = lua_pcall (obj.lua_state, 0, LUA_MULTRET, 0 );
+    err = lua_pcall (lua_state, 0, LUA_MULTRET, 0 );
 
     if( err != LUA_OK )
     {
         Logger::logIt("------------------ Lua Error Code: ");
         Logger::logIt(err);
         Logger::logItLn(" ------------------");
-        Logger::logItLn( lua_tostring(obj.lua_state, -1) );
+        Logger::logItLn( lua_tostring(lua_state, -1) );
         // printStackInfo(obj);
         Logger::logItLn(" ----------------------------------------");
-        // lua_pop(obj.lua_state, 1);  /* pop error message from the stack */
+        // lua_pop(lua_state, 1);  /* pop error message from the stack */
 
         return false;
     }
@@ -165,55 +179,53 @@ bool runScript(R_LuaObj obj, const int prev_err = LUA_OK)
         Logger::logItLn("------------------ Lua Executed Successfuly ------------------");
     }
 
-    lua_pop(obj.lua_state, 1);
+    lua_pop(lua_state, 1);
 
     // Logger::logItLn("------------------ Lua Executed Successfuly ------------------");
 	return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int loadModuleFile (R_LuaObj obj, const string &_file )
+int Luaviton::loadModuleFile (const string &_file )
 {
     Logger::logVariable("File",_file);
-    return luaL_loadfile (obj.lua_state, _file.c_str() );
+    return luaL_loadfile (lua_state, _file.c_str() );
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int loadModuleString (R_LuaObj obj, const string &_script )
+int Luaviton::loadModuleString (const string &_script )
 {
-    return luaL_loadstring ( obj.lua_state, _script.c_str() );
+    return luaL_loadstring ( lua_state, _script.c_str() );
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int runScriptFile (R_LuaObj obj, const string &_file )
+int Luaviton::runScriptFile (const string &_file )
 {
-    return runScript(obj, loadModuleFile(obj, _file));
+    return runScript( loadModuleFile( _file));
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int runScriptString (R_LuaObj obj, const string &_script )
+int Luaviton::runScriptString ( const string &_script )
 {
-    return runScript(obj, loadModuleString(obj, _script));
+    return runScript( loadModuleString( _script));
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-void preloadModule (R_LuaObj obj, const string &module_name, lua_CFunction function_addr)
+void Luaviton::preloadModule (const string &module_name, lua_CFunction function_addr)
 {
-    lua_getfield(obj.lua_state, LUA_GLOBALSINDEX, "package");
-    lua_getfield(obj.lua_state, -1, "preload");
-    lua_pushcfunction(obj.lua_state, function_addr);
-    lua_setfield(obj.lua_state, -2, module_name.c_str());
+    lua_getfield(lua_state, LUA_GLOBALSINDEX, "package");
+    lua_getfield(lua_state, -1, "preload");
+    lua_pushcfunction(lua_state, function_addr);
+    lua_setfield(lua_state, -2, module_name.c_str());
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool regiserFunction (R_LuaObj obj, const string& func_name, const lua_CFunction func_addr )
+bool Luaviton::regiserFunction (const string& func_name, const lua_CFunction func_addr )
 {
-    lua_register (obj.lua_state, func_name.c_str(), func_addr );
+    lua_register (lua_state, func_name.c_str(), func_addr );
     return true;
 }
 
-
-} // Lua
 } // Core
 } // GraVitoN
 

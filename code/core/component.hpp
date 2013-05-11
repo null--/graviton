@@ -1,10 +1,9 @@
 /**
  * @file
- *
+ * 
  * @author  Sina Hatef Matbue ( _null_ ) <sinahatef.cpp@gmail.com>
  *
  * @section License
- *
  * This file is part of GraVitoN.
  *
  * Graviton is free software: you can redistribute it and/or modify
@@ -20,47 +19,51 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief GraVitoN::Socket
+ * @brief GraVitoN Component
  *
- * @todo IT'S NOT COMPELTED YET
 */
 
-#ifndef _GVN_SOCKET_HEAD_
-#define _GVN_SOCKET_HEAD_
+#ifndef _GVN_COMPONENT_HEAD_
+#define _GVN_COMPONENT_HEAD_
 
-#include "graviton.hpp"
-#include "net/Lib.hpp"
+/// TEST
+#pragma once
 
+#include "logger.hpp"
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// GraVitoN Master Nemspace
 namespace GraVitoN
 {
 
 namespace Core
 {
-
-class Socket
+	
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// Father of All Components
+class Component
 {
-    private:
-        ting::net::Lib *socket_lib;
+public:
+	/// Constructor
+    Component();
 
-    public:
-        Socket();
-        ~Socket();
+	/// Destructor
+    virtual ~Component();
+
+    virtual bool run() = 0;
 };
 
-Socket::Socket()
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+Component::Component()
 {
-    if( !ting::net::Lib::IsCreated() )
-        socket_lib = new ting::net::Lib();
-    else
-        socket_lib = &(ting::net::Lib::Inst());
 }
 
-Socket::~Socket()
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+Component::~Component()
 {
-
 }
 
 }
 }
 
-#endif // _GVN_SOCKET_HEAD_
+#endif // _GVN_COMPONENT_HEAD_

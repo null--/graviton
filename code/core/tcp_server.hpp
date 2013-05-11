@@ -29,89 +29,90 @@
 #define _GVN_TCP_SERVER_HEAD_
 
 #include <list>
-#include "../graviton.hpp"
-#include "gvn_tcp_client.hpp"
-#include "gvn_logger.hpp"
-#include "gvn_optparser.hpp"
-//#include "lib_ting/net/Lib.hpp"
-#include "gvn_socket.hpp"
-#include "lib_ting/net/TCPSocket.hpp"
-#include "lib_ting/net/TCPServerSocket.hpp"
-#include "gvn_thread.hpp"
+#include "graviton.hpp"
+#include "tcp_client.hpp"
+#include "logger.hpp"
+#include "socket.hpp"
+#include "net/TCPSocket.hpp"
+#include "net/TCPServerSocket.hpp"
+#include "thread.hpp"
 
 namespace GraVitoN
+{
+
+namespace Core
 {
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
  * @brief TCP Server Component
  */
-class TCP_Server : public Socket
+class TCP_Server : public GraVitoN::Core::Socket, public GraVitoN::Core::Component
 {
 protected:
-	/// Response function
-	virtual bool response(GraVitoN::TCP_Client *client_sock);
+    /// Response function
+    virtual bool response(GraVitoN::Core::TCP_Client *client_sock);
 
-	/// Server socket thread
-	class Server_Thread : public GraVitoN::Thread
-	{
-	private:
-		TCP_Server *server_handle;
-		TCP_Client *sock;
+    /// Server socket thread
+    class Server_Thread : public GraVitoN::Core::Thread
+    {
+    private:
+        TCP_Server *server_handle;
+        TCP_Client *sock;
 
-	protected:
-		bool myMainLoop()
-		{
-			server_handle->response(sock);
-			return true;
-		}
+    protected:
+        bool myMainLoop()
+        {
+            server_handle->response(sock);
+            return true;
+        }
 
-	public:
-		Server_Thread(TCP_Server *_this_server, TCP_Client *client_sock)
-		{
-			server_handle = _this_server;
-			sock = client_sock;
-		}
+    public:
+        Server_Thread(TCP_Server *_this_server, TCP_Client *client_sock)
+        {
+            server_handle = _this_server;
+            sock = client_sock;
+        }
 
-		virtual ~Server_Thread()throw()
-		{
-			sock->close();
-		}
-	};
-	//std::vector<Server_Thread> internal_threads;
-	list<Server_Thread*> internal_threads;
+        virtual ~Server_Thread()throw()
+        {
+            sock->close();
+        }
+    };
+    //std::vector<Server_Thread> internal_threads;
+    list<Server_Thread*> internal_threads;
 
 protected:
-	/// Create IP address for connecting
-	unsigned int port;
+    /// Create IP address for connecting
+    unsigned int port;
 
-	/// Socket
-	ting::net::TCPServerSocket listenSock;
+    /// Socket
+    ting::net::TCPServerSocket listenSock;
 
-	//ting::net::Lib *socket_lib;
+    //ting::net::Lib *socket_lib;
 
 public:
-	TCP_Server();
+    TCP_Server();
 
-	virtual ~TCP_Server() throw();
+    virtual ~TCP_Server() throw();
 
-	/**
-	 * @brief Initialize an TCP Server
-	 *
-	 * @options
-	 * PORT='Remote Port'
-	 *
-	 */
-	virtual bool initialize(const string &client_options);
+    /**
+     * @brief Initialize an TCP Server
+     *
+     * @options
+     * PORT='Remote Port'
+     *
+     */
+    virtual bool initialize(const unsigned int server_port);
 
-	/// Open socket
-	virtual bool open();
+    /// Open socket
+    virtual bool open();
 
-	/// Close socket
-	virtual bool close();
+    /// Close socket
+    virtual bool close();
 
-	/// Listen socket
-	virtual bool listen();
+    /// Listen socket
+    virtual bool listen();
 
 /// Send and Recieve a packet should be handled by a TCP_Client object
 //	/**
@@ -143,15 +144,15 @@ public:
 //	 */
 //	static bool send(TCP_Socket &sock, const unsigned char *data, const unsigned int &data_size);
 
-	/**
-	 * @brief main loop
-	 *
-	 * You can redifine this method, or send/recv methods; and use them after initilialize you inherited
-	 * object.
-	 */
-	virtual bool run();
+    /**
+     * @brief main loop
+     *
+     * You can redifine this method, or send/recv methods; and use them after initilialize you inherited
+     * object.
+     */
+    virtual bool run();
 
-	virtual bool isActive();
+    virtual bool isActive();
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -162,129 +163,125 @@ TCP_Server::TCP_Server()
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 TCP_Server::~TCP_Server() throw()
 {
-	TCP_Server::close();
+    TCP_Server::close();
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool TCP_Server::initialize(const string &client_options)
+bool TCP_Server::initialize(const unsigned int server_port)
 {
-	if( listenSock.IsValid() )
-		this->close();
+    if( listenSock.IsValid() )
+        this->close();
 
-	options = client_options;
+    port = server_port;
 
-	if( !OptParser::getValueAsUInt(options, "PORT", port) )
-		return false;
+    //if( !OptParser::getValueAsUInt(options, "THREADS", max_threads) )
+    //return false;
 
-	//if( !OptParser::getValueAsUInt(options, "THREADS", max_threads) )
-	//return false;
-
-	return true;
+    return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Server::open()
 {
-	try
-	{
-		Logger::logItLn("Openning...");
-		Logger::logVariable("Port", port);
+    try
+    {
+        Logger::logItLn("Openning...");
+        Logger::logVariable("Port", port);
 
-		/// connect to remote listening socket.
-		/// It is an asynchronous operation, so we will use WaitSet
-		/// to wait for its completion.
-		listenSock.Open(port);
+        /// connect to remote listening socket.
+        /// It is an asynchronous operation, so we will use WaitSet
+        /// to wait for its completion.
+        listenSock.Open(port);
 
-		//ting::WaitSet waitSet(1);
-		//waitSet.Add(&listenSock, ting::Waitable::WRITE);
-		//waitSet.Wait(); //< Wait for connection to complete.
+        //ting::WaitSet waitSet(1);
+        //waitSet.Add(&listenSock, ting::Waitable::WRITE);
+        //waitSet.Wait(); //< Wait for connection to complete.
 
-		Logger::logItLn("done");
-	}
-	catch(ting::net::Exc &e)
-	{
-		Logger::logVariable("Network error", e.What());
-		listenSock.Close();
-		return false;
-	}
-	return true;
+        Logger::logItLn("done");
+    }
+    catch(ting::net::Exc &e)
+    {
+        Logger::logVariable("Network error", e.What());
+        listenSock.Close();
+        return false;
+    }
+    return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Server::listen()
 {
-	try
-	{
-		GraVitoN::Logger::logItLn("Listening...");
+    try
+    {
+        Core::Logger::logItLn("Listening...");
 
-		list<TCP_Client*> client_sock;
-		list<TCP_Socket> lsock;
-		while(listenSock.IsValid())
-		//if(listenSock.IsValid())
-		{
-			ting::mt::Thread::Sleep(1);
+        list<TCP_Client*> client_sock;
+        list<TCP_Socket> lsock;
+        while(listenSock.IsValid())
+        //if(listenSock.IsValid())
+        {
+            ting::mt::Thread::Sleep(1);
 
-			/// Check for waiting connection
-			TCP_Socket sck = listenSock.Accept();
+            /// Check for waiting connection
+            TCP_Socket sck = listenSock.Accept();
 
-			/// Validate socket
-			if( !sck.IsValid() )
-				continue;
-			lsock.push_back(sck);
+            /// Validate socket
+            if( !sck.IsValid() )
+                continue;
+            lsock.push_back(sck);
 
-			client_sock.push_back(new TCP_Client( &(lsock.back()) ));
+            client_sock.push_back(new TCP_Client( &(lsock.back()) ));
 
-			/// Initialize and run response thread.
-			internal_threads.push_back( new Server_Thread(this, client_sock.back()) );
-			internal_threads.back()->initialize("");
-			internal_threads.back()->run();
-		}
-	}
-	catch(ting::net::Exc &e)
-	{
-		Logger::logVariable("Network error", e.What());
-		listenSock.Close();
-		return false;
-	}
+            /// Initialize and run response thread.
+            internal_threads.push_back( new Server_Thread(this, client_sock.back()) );
+            internal_threads.back()->run();
+        }
+    }
+    catch(ting::net::Exc &e)
+    {
+        Logger::logVariable("Network error", e.What());
+        listenSock.Close();
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Server::close()
 {
-	try
-	{
-		listenSock.Close();
+    try
+    {
+        listenSock.Close();
 
-		if( !internal_threads.empty() )
-		{
-			for(list<Server_Thread*>::iterator p_trd = internal_threads.begin(); p_trd != internal_threads.end(); ++p_trd)
-				(*p_trd)->stop();
-			internal_threads.clear();
-		}
-	}
-	catch(ting::net::Exc &e)
-	{
-		Logger::logVariable("Network error", e.What());
-		return false;
-	}
-	return true;
+        if( !internal_threads.empty() )
+        {
+            for(list<Server_Thread*>::iterator p_trd = internal_threads.begin(); p_trd != internal_threads.end(); ++p_trd)
+                (*p_trd)->stop();
+            internal_threads.clear();
+        }
+    }
+    catch(ting::net::Exc &e)
+    {
+        Logger::logVariable("Network error", e.What());
+        return false;
+    }
+    return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Server::run()
 {
-	/// Open socket
-	open();
+    /// Open socket
+    open();
 
-	/// Listen
-	listen();
+    /// Listen
+    listen();
 
-	/// Close Socket
-	close();
+    /// Close Socket
+    close();
 
-	return true;
+    return true;
 }
 
 ////-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -338,23 +335,24 @@ bool TCP_Server::run()
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Server::isActive()
 {
-	try
-	{
-		return listenSock.IsValid();
-	}
-	catch(...)
-	{
-		return false;
-	}
-	return false;
+    try
+    {
+        return listenSock.IsValid();
+    }
+    catch(...)
+    {
+        return false;
+    }
+    return false;
 }
 
-bool TCP_Server::response(GraVitoN::TCP_Client *client_sock)
+bool TCP_Server::response(GraVitoN::Core::TCP_Client *client_sock)
 {
-	client_sock->send((const unsigned char*)"Hello Client", 13);
-	return true;
+    client_sock->send((const unsigned char*)"Hello Client", 13);
+    return true;
 }
 
+} // end of Core
 } // end of GraVitoN
 
 #endif // _GVN_TCP_SERVER_HEAD_

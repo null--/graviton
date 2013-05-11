@@ -28,115 +28,127 @@
 #ifndef _GVN_THREAD_HEAD_
 #define _GVN_THREAD_HEAD_
 
-#include <graviton.hpp>
-#include <core/logger.hpp>
-#include <external/ting/net/Lib.hpp>
-#include <external/ting/mt/Thread.hpp>
+#include "graviton.hpp"
+#include "logger.hpp"
+#include "net/Lib.hpp"
+#include "mt/MsgThread.hpp"
 
 namespace GraVitoN
 {
-	
+
 namespace Core
 {
-	
-namespace Thread
-{
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// Cross Platform OS version sleep function
-void Sleep(unsigned msec)
+// Cross Platform OS version sleep function
+/*
+void os_sleep(unsigned int __msec__)
 {
-	ting::mt::Thread::Sleep( msec );
+    ting::mt::Thread::Sleep(__msec__);
 }
+*/
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-typedef struct ThreadObj
+/// @todo Thread
+class Thread: private ting::mt::MsgThread, public GraVitoN::Core::Component
 {
-	class _T_THREAD : public ting::mt::Thread 
-	{
-		void*(void*) prt_mainloop_function;
-		
-	} i_thread;
-	
-	bool i_stop_flag;
-	void*(void*) prt_mainloop_function;
-	
-	ThreadObj()
-	{
-		i_stop_flag = true;
-		ptr_mainloop_func = _null_;
-	}
-} & R_ThreadObj;
+public:
+    /// Sleep for a number of milliseconds
+    void static sleep(unsigned int __msec__)
+    {
+        // os_sleep(__msec__);
+        ting::mt::Thread::Sleep(__msec__);
+    }
+
+private:
+    /// Override ting::mt::Thread::Run()
+    virtual void Run();
+
+protected:
+    /// Stop flag. true means you have to stop your main loop.
+    bool flag_stop;
+
+    virtual bool myMainLoop();
+    //virtual bool initialize();
+
+public:
+    Thread();
+    virtual ~Thread() throw();
+
+    virtual bool run();
+
+    virtual bool isActive();
+
+    /// Wait For Thread To Exit (Like pthread_join)
+    virtual bool waitForEndOfMainLoop();
+
+    /// Stop thread
+    virtual bool stop();
+};
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+Thread::Thread()
+{
+    flag_stop = true;
+}
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 Thread::~Thread() throw()
 {
-	stop();
-}
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Thread::initialize(const string &_options)
-{
-	options = _options;
-
-	if( !flag_stop )
-	{
-		stop();
-	}
-
-	return true;
+    stop();
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool Thread::run()
 {
-	ting::mt::Thread::Start();
-	return true;
+    ting::mt::Thread::Start();
+    return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool Thread::waitForEndOfMainLoop()
 {
-	ting::mt::Thread::Join();
-	return true;
+    ting::mt::Thread::Join();
+    return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 void Thread::Run()
 {
-	flag_stop = false;
+    flag_stop = false;
 
-	this->myMainLoop();
+    this->myMainLoop();
 
-	flag_stop = true;
+    flag_stop = true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool Thread::myMainLoop()
 {
-	if( !flag_stop )
-		Logger::logItLn("[Thread] I'm Running!");
-	return true;
+    if( !flag_stop )
+        Logger::logItLn("[Thread] I'm Running!");
+    return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool Thread::isActive()
 {
-	return !flag_stop;
+    return !flag_stop;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool Thread::stop()
 {
-	flag_stop = true;
+    flag_stop = true;
 
-	waitForEndOfMainLoop();
+    ting::Ptr<ting::mt::Message> quit( new ting::mt::QuitMessage(this) );
+    this->PushMessage(quit);
 
-	return true;
+    //waitForEndOfMainLoop();
+
+    return true;
 }
 
-} // end of Thread
-} // end of Core
+}
 } // end of GraVitoN
 
 #endif // _GVN_THREAD_HEAD_
