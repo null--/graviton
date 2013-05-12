@@ -40,6 +40,7 @@
 #endif
 
 #include <graviton.hpp>
+#include <core/component.hpp>
 #include <core/logger.hpp>
 using namespace std;
 
@@ -49,13 +50,15 @@ namespace Core
 {
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-class Luaviton
+class Luaviton : public Component_Single
 {
 private:
     lua_State *lua_state;
 
-    void initialize();
     bool runScript(const int prev_err = LUA_OK);
+
+protected:
+    void initialize();
 
 public:
     Luaviton()
@@ -73,6 +76,18 @@ public:
     int runScriptString ( const string &_script );
 
     void preloadModule (const string &module_name, lua_CFunction function_addr);
+};
+
+class Luaviton_Module
+{
+protected:
+    Luaviton &luaviton;
+
+public:
+    Luaviton_Module(Luaviton &_luaviton_instance) : luaviton(_luaviton_instance) {}
+    virtual ~Luaviton_Module() {}
+
+    virtual void loadEmAll() = 0;
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//

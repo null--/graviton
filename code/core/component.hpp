@@ -55,7 +55,17 @@ public:
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-class Component_With_Init: public Component
+class Component_Single // : public Component
+{
+protected:
+    virtual void initialize() = 0;
+
+// public:
+    // virtual bool run() = 0;
+};
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+class Component_Custom: public Component
 {
 public:
     /**

@@ -28,6 +28,26 @@
 #define _GVN_HEAD_
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// My Lovely Define!
+#define _null_ 0x00 //NULL
+
+/// Activate Logger
+// #define GVN_ACTIVATE_LOGGER
+#ifdef GVN_ACTIVATE_LOGGER
+    #warning ("[INFO] LOGGER IS AVTIVATED")
+#endif
+/// Path to log file
+// #define GVN_LOG_FILE "graviton.log"
+#ifdef GVN_LOG_FILE
+    #warning ("[INFO] LOG FILE IS SET")
+#endif
+/// ENABLE DEBUG MODE
+#define GVN_DEBUG
+#ifdef GVN_DEBUG
+    #warning ("[WARNING] DEBUG MODE IS ENABLED")
+#endif
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// Detect Artitecture/OS/Compiler
 #include "core/aocinfo.hpp"
 #include "core/component.hpp"
@@ -40,9 +60,6 @@
 // #include <malkit/malkit.hpp>
 // #include <utils/utils.hpp>
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// My Lovely Define!
-#define _null_ 0x00 //NULL
 
 namespace GraVitoN
 {

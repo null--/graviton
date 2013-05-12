@@ -45,7 +45,8 @@ namespace Logger
 {
 
 #ifdef GVN_ACTIVATE_LOGGER	
-	#ifdef GVN_LOG_INTO_FILE
+    // #ifdef GVN_LOG_INTO_FILE
+    #ifdef GVN_LOG_FILE
 		ofstream output(GVN_LOG_FILE);
 	#else
 		ostream &output = cout;
