@@ -87,6 +87,7 @@ public:
     Luaviton_Module(Luaviton &_luaviton_instance) : luaviton(_luaviton_instance) {}
     virtual ~Luaviton_Module() {}
 
+    virtual void registerModule() = 0;
     virtual void loadEmAll() = 0;
 };
 
@@ -204,25 +205,26 @@ bool Luaviton::runScript(const int prev_err)
 int Luaviton::loadModuleFile (const string &_file )
 {
     Logger::logVariable("File",_file);
-    return luaL_loadfile (lua_state, _file.c_str() );
+    return luaL_dofile (lua_state, _file.c_str() );
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 int Luaviton::loadModuleString (const string &_script )
 {
-    return luaL_loadstring ( lua_state, _script.c_str() );
+    return luaL_dostring ( lua_state, _script.c_str() );
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 int Luaviton::runScriptFile (const string &_file )
 {
-    return runScript( loadModuleFile( _file));
+    // return runScript( luaL_dofile(lua_state, _file.c_str()) );
+    return runScript( luaL_loadfile(lua_state, _file.c_str()) );
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 int Luaviton::runScriptString ( const string &_script )
 {
-    return runScript( loadModuleString( _script));
+    return runScript( luaL_loadstring(lua_state, _script.c_str()));
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//

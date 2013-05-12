@@ -16,7 +16,7 @@ namespace Core
 
 class Luaviton_Socket : public Luaviton_Module
 {
-private:
+protected:
     string MODULE_FTP;
     string MODULE_HTTP;
     string MODULE_LTN12;
@@ -31,11 +31,14 @@ public:
 
     virtual ~Luaviton_Socket() {}
 
-    void loadEmAll()
+    void registerModule()
     {
         luaviton.preloadModule("socket.core", luaopen_socket_core);
         luaviton.preloadModule("mime.core", luaopen_mime_core);
+    }
 
+    void loadEmAll()
+    {
         luaviton.runScriptString(MODULE_SOCKET);
         luaviton.runScriptString(MODULE_LTN12);
         luaviton.runScriptString(MODULE_TP);
