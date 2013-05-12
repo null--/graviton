@@ -3,7 +3,7 @@
 #include <graviton.hpp>
 #include <iostream>
 #include <core/luaviton.hpp>
-#include <external/luazlib.hpp>
+#include <core/luaviton_zlib.hpp>
 
 using namespace std;
 
@@ -22,9 +22,10 @@ int main ( int argc , char **argv)
 	file = argv[1];
 
     GraVitoN::Core::Luaviton my_lua;
+    GraVitoN::Core::Luaviton_ZLib luazlib(my_lua);
 
-    my_lua.preloadModule("zlib", luaopen_zlib);
-    my_lua.loadModuleFile ("gzip.lua");
+    luazlib.registerModule();
+    luazlib.loadEmAll();
 
     cout << " done" << endl;
 

@@ -3,7 +3,7 @@
 #include <graviton.hpp>
 #include <iostream>
 #include <core/luaviton.hpp>
-#include <external/luacrypto.hpp>
+#include <core/luaviton_crypto.hpp>
 
 using namespace std;
 
@@ -22,8 +22,9 @@ int main ( int argc , char **argv)
 	file = argv[1];
 
     GraVitoN::Core::Luaviton my_lua;
+    GraVitoN::Core::Luaviton_Crypto luacrypto(my_lua);
 
-    my_lua.preloadModule("crypto", luaopen_crypto);
+    luacrypto.registerModule();
 
     cout << " done" << endl;
 

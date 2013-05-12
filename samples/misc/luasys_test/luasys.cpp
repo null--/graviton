@@ -3,7 +3,7 @@
 #include <graviton.hpp>
 #include <iostream>
 #include <core/luaviton.hpp>
-#include <external/luasys.hpp>
+#include <core/luaviton_sys.hpp>
 
 using namespace std;
 
@@ -22,9 +22,9 @@ int main ( int argc , char **argv)
 	file = argv[1];
 
     GraVitoN::Core::Luaviton my_lua;
+    GraVitoN::Core::Luaviton_Sys luasys(my_lua);
 
-    my_lua.preloadModule("sys", luaopen_sys);
-    my_lua.preloadModule("sys.sock", luaopen_sys_sock);
+    luasys.registerModule();
 
     cout << " done" << endl;
 
