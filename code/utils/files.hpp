@@ -26,7 +26,7 @@
 #ifndef _GVN_FILES_HEAD_
 #define _GVN_FILES_HEAD_
 
-#include "gvn_logger.hpp"
+#include <core/logger.hpp>
 
 #include <iostream>
 #include <cstdio>
@@ -35,6 +35,9 @@
 using namespace std;
 
 namespace GraVitoN
+{
+
+namespace Utils
 {
 
 /// Various file-based operations
@@ -69,7 +72,7 @@ unsigned long loadFile(const string &path, unsigned char **buffer)
 	
 	FILE *file;
 	
-	Logger::logIt("Reading Binary File... ");
+    Core::Logger::logIt("Reading Binary File... ");
 	file = fopen(path.c_str(), "rb");
 	if( file )
 	{
@@ -86,8 +89,8 @@ unsigned long loadFile(const string &path, unsigned char **buffer)
 				size = size + 1;
 			}
 		}
-		Logger::logIt("[Size: "); Logger::logIt(size);
-		Logger::logItLn("] DONE");
+        Core::Logger::logIt("[Size: "); Core::Logger::logIt(size);
+        Core::Logger::logItLn("] DONE");
 		
 		fclose(file);
 	}
@@ -122,13 +125,13 @@ bool saveUChars(const string opath, const unsigned char *buffer, const unsigned 
 	if( !outf )
 		return false;
 	
-	GraVitoN::Logger::logIt("Writing to binary file... ");
+    Core::Logger::logIt("Writing to binary file... ");
 	for(register unsigned long i = 0; i < size; ++i)
 	{
 		fputc(*(buffer + i), outf);
 		//printf("%.9d > %.2x\n", i, buffer[i]);
 	}
-	Logger::logItLn("DONE");
+    Core::Logger::logItLn("DONE");
 	
 	fclose(outf);
 
@@ -164,9 +167,9 @@ bool printUCharsIntoFile(const string opath, const unsigned char *buffer, const 
 	fprintf(outf, "const unsigned long buf_len = %lu;\n"
 					"unsigned char buf[] = \n",
 					size);
-	Logger::logIt("Writing to cpp file... ");
-	Logger::logIt("Size: ");
-	Logger::logIt("Size: ");
+    Core::Logger::logIt("Writing to cpp file... ");
+    Core::Logger::logIt("Size: ");
+    Core::Logger::logIt("Size: ");
 	for(unsigned long i = 0; i < size; ++i)
 	{
 		//printf(".2x\n", buffer[i]);
@@ -192,7 +195,7 @@ bool printUCharsIntoFile(const string opath, const unsigned char *buffer, const 
 		fprintf(outf, "\"");
 		mod = 0;
 	}
-	Logger::logItLn("DONE");
+    Core::Logger::logItLn("DONE");
 
 	fprintf(outf, "\n;");
 	fclose(outf);
@@ -201,7 +204,7 @@ bool printUCharsIntoFile(const string opath, const unsigned char *buffer, const 
 }
 
 }
-
+}
 }
 
 #endif // _GVN_FILES_HEAD_

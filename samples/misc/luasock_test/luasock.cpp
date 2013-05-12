@@ -24,6 +24,8 @@ int main ( int argc , char **argv)
     GraVitoN::Core::Luaviton my_lua;
     GraVitoN::Core::Luaviton_Socket luasoc(my_lua);
 
+    luasoc.registerModule();
+
     luasoc.loadEmAll();
 
     cout <<  " done" << endl;

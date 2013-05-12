@@ -13,16 +13,6 @@ Major:
 
 Minor:
 	- in-memory loading for this modules:
-		code/external/luasec/https.lua
-		code/external/luasec/ssl.lua
-		code/external/luasocket/mime.lua
-		code/external/luasocket/ftp.lua
-		code/external/luasocket/http.lua
-		code/external/luasocket/ltn12.lua
-		code/external/luasocket/smtp.lua
-		code/external/luasocket/socket.lua
-		code/external/luasocket/tp.lua
-		code/external/luasocket/url.lua
 		code/external/lzlib/gzip.lua
 	- lua script encrypter/decrypter modules
 	
