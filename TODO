@@ -1,4 +1,5 @@
 Major:
+	- Low-level: C++, High-level: Lua
 	- ms12-20
 	- Build static lib files (.a, .lib) of external libraries for linux (32/64) and windows (32/64)
 	- port components of "GraVitoN: Resurrection" into "GraVitoN: Scream of Pain"
@@ -12,6 +13,7 @@ Major:
 	- code a polymorphic engine (binary and source)
 
 Minor:
+	- LuaBridge
 	- lua script encrypter/decrypter modules
 	- port AI
 	- port PAYLOAD

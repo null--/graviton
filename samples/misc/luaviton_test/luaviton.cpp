@@ -7,8 +7,6 @@ using namespace std;
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// Test Lua Functionality
-/// DO NOT FORGET TO COPY test.lua to your build directory
-
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 
 string global_data = "UNCHANGED";

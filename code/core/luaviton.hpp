@@ -52,10 +52,12 @@ namespace Core
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 class Luaviton : public Component_Single
 {
-private:
+public:
     lua_State *lua_state;
 
+private:
     bool runScript(const int prev_err = LUA_OK);
+    void printErrorCode (const int err);
 
 protected:
     void initialize();
@@ -67,7 +69,9 @@ public:
         initialize();
     }
 
-    bool regiserFunction (const string& func_name, const lua_CFunction func_addr );
+    ~Luaviton();
+    bool regiserFunction (const string &func_name, const lua_CFunction func_addr );
+    void callLuaFunction (const string &lua_func_name, int nparams, int nreurns);
 
     int loadModuleFile (const string &_file );
     int loadModuleString (const string &_script );
@@ -92,28 +96,20 @@ public:
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// @todo free: Double Free Exception
-/*
-bool free(R_Lua_Obj obj)
+Luaviton::~Luaviton()
 {
-	// Double Free Exception
+    // Double Free Exception
     if( lua_state )
-	{
+    {
         lua_close ( lua_state );
-		return true;
-	}
-	else
-	{
-		return false;
     }
 }
-*/
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 void Luaviton::initialize()
 {
     if ( lua_state == _null_ )
-	{
+    {
         // General
         lua_state = luaL_newstate();
         luaL_openlibs( lua_state );
@@ -140,7 +136,7 @@ void Luaviton::initialize()
         // luaopen_math ( lua_state );
         // // luaopen_debug ( lua_state );
         // luaopen_package ( lua_state );
-	}
+    }
     //return true;
 }
 
@@ -162,43 +158,78 @@ void Luaviton::initialize()
 //}
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+//int Luaviton::traceback ()
+//{
+//    lua_State* L = lua_state;
+
+//    // look up Lua's 'debug.traceback' function
+//    lua_getglobal(L, "debug");
+//    if (!lua_istable(L, -1))
+//    {
+//        lua_pop(L, 1);
+//        return 1;
+//    }
+//    lua_getfield(L, -1, "traceback");
+//    if (!lua_isfunction(L, -1))
+//    {
+//        lua_pop(L, 2);
+//        return 1;
+//    }
+//    lua_pushvalue(L, 1);  /* pass error message */
+//    lua_pushinteger(L, 2);  /* skip this function and traceback */
+//    lua_call(L, 2, 1);  /* call debug.traceback */
+//    return 1;
+//}
+
+void Luaviton::printErrorCode(const int err)
+{
+    GraVitoN::Core::Logger::logItLn("---------------------------------------------------------");
+    switch (err)
+    {
+        case LUA_OK:
+            GraVitoN::Core::Logger::logItLn("[LUA] Success"); break;
+        case LUA_ERRRUN:
+            GraVitoN::Core::Logger::logItLn("[LUA ERROR] Runtime error"); break;
+        case LUA_ERRSYNTAX:
+            GraVitoN::Core::Logger::logItLn("[LUA ERROR] Syntax error"); break;
+        case LUA_ERRERR:
+            GraVitoN::Core::Logger::logItLn("[LUA ERROR] Error while trying to print an error."); break;
+        case LUA_ERRFILE:
+            GraVitoN::Core::Logger::logItLn("[LUA ERROR] Couldn't open or read file"); break;
+        case LUA_ERRMEM:
+            GraVitoN::Core::Logger::logItLn("[LUA ERROR] Memory allocation error"); break;
+        default:
+            GraVitoN::Core::Logger::logVariable("[LUA ERROR] CODE: ", err); break;
+    }
+
+    if( err != LUA_OK ) Logger::logItLn( lua_tostring(lua_state, -1) );
+    GraVitoN::Core::Logger::logItLn("---------------------------------------------------------");
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool Luaviton::runScript(const int prev_err)
 {
+    // Check any previous error
     int err = LUA_OK;
 
-	if ( prev_err != LUA_OK )
-	{
+    if ( prev_err != LUA_OK )
+    {
         lua_pop(lua_state, 1);
-		Logger::logIt("------------------ Lua Error Code: ");
-		Logger::logIt(prev_err);
-		Logger::logItLn(" ------------------");
-
+        printErrorCode(prev_err);
         return false;
-	}
+    }
 
     err = lua_pcall (lua_state, 0, LUA_MULTRET, 0 );
 
+    printErrorCode(err);
+
     if( err != LUA_OK )
     {
-        Logger::logIt("------------------ Lua Error Code: ");
-        Logger::logIt(err);
-        Logger::logItLn(" ------------------");
-        Logger::logItLn( lua_tostring(lua_state, -1) );
-        // printStackInfo(obj);
-        Logger::logItLn(" ----------------------------------------");
-        // lua_pop(lua_state, 1);  /* pop error message from the stack */
-
         return false;
-    }
-    else
-    {
-        Logger::logItLn("------------------ Lua Executed Successfuly ------------------");
     }
 
     lua_pop(lua_state, 1);
-
-    // Logger::logItLn("------------------ Lua Executed Successfuly ------------------");
-	return true;
+    return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
