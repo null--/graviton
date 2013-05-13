@@ -91,6 +91,11 @@ int A::testStaticProp = 47;
  * Test functions
  */
 
+void testData (A * a)
+{
+    a->testPropSet(99);
+}
+
 string testRetStdString ()
 {
     static string ret ("Hello, world");
@@ -120,6 +125,7 @@ void testLuaBridge (lua_State *L)
     luabridge::getGlobalNamespace (L)
         .addFunction ("testRetStdString", &testRetStdString)
         .addFunction ("testParamStdStringRef", &testParamStdStringRef)
+        .addFunction ("testData", &testData)
         .beginClass <A> ("A")
             .addConstructor <void (*) (const string &), RefCountedPtr <A> > ()
             .addFunction ("testVirtual", &A::testVirtual)
@@ -185,7 +191,7 @@ int main ( int argc , char **argv)
 
     file = argv[1];
 
-    GraVitoN::Core::Luaviton my_lua;
+    GraVitoN::Core::Luaviton &my_lua = GraVitoN::Core::Luaviton::getInstance();
 
     /// Register Function
     cout << " Registering function ...";

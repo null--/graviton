@@ -34,8 +34,9 @@
 #ifdef _MSC_VER
 # include <hash_map>
 #else
-# include <stdint.h>
-# include <ext/hash_map>
+    # include <stdint.h>
+    // #include <ext/hash_map>
+    #include <tr1/unordered_map>
 #endif
 
 //==============================================================================
@@ -52,11 +53,15 @@ struct RefCountedPtrBase
   {
     size_t operator () (const void * const v) const
     {
-      static __gnu_cxx::hash<unsigned int> H;
+      // DEPRECATED: ext/hash_map
+      // static  __gnu_cxx::hash<unsigned int> H;
+      static  std::tr1::hash<unsigned int> H;
       return H(uintptr_t(v));
     }
   };
-  typedef __gnu_cxx::hash_map<const void *, int, ptr_hash> RefCountsType;
+  // DEPRECATED: ext/hash_map
+  // typedef __gnu_cxx::hash_map<const void *, int, ptr_hash> RefCountsType;
+  typedef std::tr1::unordered_map<const void *, int, ptr_hash> RefCountsType;
 #endif
 
 protected:

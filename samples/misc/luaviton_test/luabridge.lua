@@ -24,3 +24,6 @@ print(b_obj:testPropGet())
 print ("----- testing funcs -----")
 print( testRetStdString() )
 testParamStdStringRef("Back to C")
+
+testData(a_obj)
+print(a_obj.testProp)

@@ -13,3 +13,7 @@ DEPENDPATH += $$PWD/../../../code/external/lua5.1
 
 unix:!macx:!symbian: PRE_TARGETDEPS += $$PWD/../../../libs/lua51/linux-x86_64/liblua.a
 
+OTHER_FILES += \
+    luabridge.lua \
+    test.lua
+

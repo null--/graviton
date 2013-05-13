@@ -55,14 +55,22 @@ public:
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-class Component_Single // : public Component
+template<class _CS_T_> class Component_Singleton// : public Component
 {
 protected:
-    virtual void initialize() = 0;
+    static _CS_T_ instance;
+    // virtual void initialize() = 0;
 
-// public:
+public:
     // virtual bool run() = 0;
+    static _CS_T_ &getInstance()
+    {
+        // if( !instance )
+            // instance = new _CS_T_();
+        return instance;
+    }
 };
+template<class _CS_T_> _CS_T_ Component_Singleton<_CS_T_>::instance;
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 class Component_Custom: public Component

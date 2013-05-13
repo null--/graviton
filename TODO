@@ -13,7 +13,6 @@ Major:
 	- code a polymorphic engine (binary and source)
 
 Minor:
-	- LuaBridge
 	- lua script encrypter/decrypter modules
 	- port AI
 	- port PAYLOAD

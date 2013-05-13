@@ -14,10 +14,10 @@ namespace Core
 // #ifdef GVN_DEBUG
 // #endif
 
-class Luaviton_Sys : public Luaviton_Module
+class Luaviton_Sys : public Luaviton_Module<Luaviton_Sys>
 {
 public:
-    Luaviton_Sys(Luaviton &_luaviton_instance);
+    Luaviton_Sys ();//(Luaviton &_luaviton_instance);
 
     virtual ~Luaviton_Sys() {}
 
@@ -32,7 +32,7 @@ public:
     }
 };
 
-Luaviton_Sys::Luaviton_Sys(Luaviton &_luaviton_instance) : Luaviton_Module(_luaviton_instance)
+Luaviton_Sys::Luaviton_Sys ()//(Luaviton &_luaviton_instance) : Luaviton_Module(_luaviton_instance)
 {
 }
 

@@ -28,13 +28,12 @@
 #define _GVN_LIBLUA_HEAD_
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-
 #ifdef OPT_LUA_52
     #include <external/liblua/lua.hpp>
-    #include <external/liblua/llimits.h>
+    // #include <external/liblua/llimits.h>
 #else
     #include <external/lua.hpp>
-    #include <external/lua5.1/llimits.h>
+    // #include <external/lua5.1/llimits.h>
 
     #define LUA_OK 0
 #endif
@@ -42,6 +41,7 @@
 #include <graviton.hpp>
 #include <core/component.hpp>
 #include <core/logger.hpp>
+
 #include <external/LuaBridge/LuaBridge.h>
 #include <external/LuaBridge/RefCountedPtr.h>
 
@@ -53,13 +53,15 @@ namespace Core
 {
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-class Luaviton : public Component_Single
+class Luaviton : public Component_Singleton<Luaviton>
 {
 private:
     lua_State *lua_state;
 
     bool runScript(const int prev_err = LUA_OK);
     void printErrorCode (const int err);
+
+    // static Luaviton *instance;
 
 protected:
     void initialize();
@@ -77,6 +79,13 @@ public:
         return lua_state;
     }
 
+//    static Luaviton * getInstance()
+//    {
+//        if( !instance )
+//            instance = new Luaviton();
+//        return instance;
+//    }
+
     ~Luaviton();
     bool regiserFunction (const string &func_name, const lua_CFunction func_addr );
     void callLuaFunction (const string &lua_func_name, int nparams, int nreurns);
@@ -90,13 +99,15 @@ public:
     void preloadModule (const string &module_name, lua_CFunction function_addr);
 };
 
-class Luaviton_Module
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// Beautiful!
+template <class _CS_MOD_> class Luaviton_Module : public Component_Singleton<_CS_MOD_>
 {
 protected:
     Luaviton &luaviton;
 
 public:
-    Luaviton_Module(Luaviton &_luaviton_instance) : luaviton(_luaviton_instance) {}
+    Luaviton_Module() : luaviton(Luaviton::getInstance()) {}
     virtual ~Luaviton_Module() {}
 
     virtual void registerModule() = 0;

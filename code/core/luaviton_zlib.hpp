@@ -14,13 +14,13 @@ namespace Core
 // #ifdef GVN_DEBUG
 // #endif
 
-class Luaviton_ZLib : public Luaviton_Module
+class Luaviton_ZLib : public Luaviton_Module<Luaviton_ZLib>
 {
 protected:
     string MODULE_GZIP;
 
 public:
-    Luaviton_ZLib(Luaviton &_luaviton_instance);
+    Luaviton_ZLib (); // (Luaviton &_luaviton_instance);
 
     virtual ~Luaviton_ZLib() {}
 
@@ -35,7 +35,7 @@ public:
     }
 };
 
-Luaviton_ZLib::Luaviton_ZLib(Luaviton &_luaviton_instance) : Luaviton_Module(_luaviton_instance)
+Luaviton_ZLib::Luaviton_ZLib () // (Luaviton &_luaviton_instance) : Luaviton_Module(_luaviton_instance)
 {
     MODULE_GZIP =
             "--[===================================================================[\n"

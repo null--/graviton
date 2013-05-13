@@ -15,20 +15,20 @@ namespace Core
 // #ifdef GVN_DEBUG
 // #endif
 
-class Luaviton_SSL : public Luaviton_Socket
+class Luaviton_SSL : public Luaviton_Module<Luaviton_SSL>
 {
 protected:
     string MODULE_SSL;
     string MODULE_HTTPS;
 
 public:
-    Luaviton_SSL(Luaviton &_luaviton_instance);
+    Luaviton_SSL ();//(Luaviton &_luaviton_instance);
 
     virtual ~Luaviton_SSL() {}
 
     void registerModule()
     {
-        Luaviton_Socket::registerModule();
+        Luaviton_Socket::getInstance().registerModule();
 
         luaviton.preloadModule("ssl.core", luaopen_ssl_core);
         luaviton.preloadModule("ssl.context", luaopen_ssl_context);
@@ -36,14 +36,14 @@ public:
 
     void loadEmAll()
     {
-        Luaviton_Socket::loadEmAll();
+        Luaviton_Socket::getInstance().loadEmAll();
 
         luaviton.loadModuleString(MODULE_SSL);
         luaviton.loadModuleString(MODULE_HTTPS);
     }
 };
 
-Luaviton_SSL::Luaviton_SSL(Luaviton &_luaviton_instance) : Luaviton_Socket(_luaviton_instance)
+Luaviton_SSL::Luaviton_SSL () //(Luaviton &_luaviton_instance) : Luaviton_Socket(_luaviton_instance)
 {
     MODULE_SSL =
             "------------------------------------------------------------------------------\n"

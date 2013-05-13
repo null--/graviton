@@ -14,9 +14,9 @@ int main ( int argc , char **argv)
 {
     string file;// = "test.lua";
 
-    GraVitoN::Core::Luaviton        my_lua;
+    // GraVitoN::Core::Luaviton        my_lua;
     // GraVitoN::Core::Luaviton_Socket    luasoc(my_lua);
-    GraVitoN::Core::Luaviton_SSL    luassl(my_lua);
+    GraVitoN::Core::Luaviton_SSL &luassl = GraVitoN::Core::Luaviton_SSL::getInstance();
 
     // luasoc.registerModule();
     luassl.registerModule();
@@ -36,7 +36,7 @@ int main ( int argc , char **argv)
 
     /// Run script file: test.lua
     cout << " Running script ...";
-    my_lua.runScriptFile(file);
+    GraVitoN::Core::Luaviton::getInstance().runScriptFile(file);
     cout << " done" << endl;
 
     // my_lua.free(my_lua);

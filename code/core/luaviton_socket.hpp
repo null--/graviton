@@ -14,7 +14,7 @@ namespace Core
 // #ifdef GVN_DEBUG
 // #endif
 
-class Luaviton_Socket : public Luaviton_Module
+class Luaviton_Socket : public Luaviton_Module<Luaviton_Socket>
 {
 protected:
     string MODULE_FTP;
@@ -27,7 +27,7 @@ protected:
     string MODULE_URL;
 
 public:
-    Luaviton_Socket(Luaviton &_luaviton_instance);
+    Luaviton_Socket();
 
     virtual ~Luaviton_Socket() {}
 
@@ -52,7 +52,7 @@ public:
 };
 
 
-Luaviton_Socket::Luaviton_Socket(Luaviton &_luaviton_instance) : Luaviton_Module(_luaviton_instance)
+Luaviton_Socket::Luaviton_Socket()
 {
     MODULE_SOCKET =
             "-----------------------------------------------------------------------------\n"

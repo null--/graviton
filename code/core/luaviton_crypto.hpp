@@ -14,10 +14,10 @@ namespace Core
 // #ifdef GVN_DEBUG
 // #endif
 
-class Luaviton_Crypto : public Luaviton_Module
+class Luaviton_Crypto : public Luaviton_Module<Luaviton_Crypto>
 {
 public:
-    Luaviton_Crypto(Luaviton &_luaviton_instance);
+    Luaviton_Crypto();
 
     virtual ~Luaviton_Crypto() {}
 
@@ -31,7 +31,7 @@ public:
     }
 };
 
-Luaviton_Crypto::Luaviton_Crypto(Luaviton &_luaviton_instance) : Luaviton_Module(_luaviton_instance)
+Luaviton_Crypto::Luaviton_Crypto()
 {
 }
 

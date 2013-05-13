@@ -52,6 +52,13 @@
 #include "core/aocinfo.hpp"
 #include "core/component.hpp"
 
+// SOME COMPILER OPTIONS
+#ifdef INFO_COMPILER_GCC
+    #pragma GCC diagnostic ignored "-Wdeprecated"
+    #pragma GCC diagnostic ignored "-Wcpp"
+    #pragma GCC diagnostic ignored "-Wignored-qualifiers"
+#endif
+
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// @todo: ai, payload, infect, malkit, utils
 // #include <ai/ai.hpp>
