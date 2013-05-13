@@ -26,8 +26,9 @@ public:
         luaviton.preloadModule("crypto", luaopen_crypto);
     }
 
-    void loadEmAll()
+    bool loadEmAll()
     {
+        return true;
     }
 };
 

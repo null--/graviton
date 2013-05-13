@@ -27,8 +27,9 @@ public:
         luaviton.preloadModule("sys.sock", luaopen_sys_sock);
     }
 
-    void loadEmAll()
+    bool loadEmAll()
     {
+        return true;
     }
 };
 

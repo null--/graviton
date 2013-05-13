@@ -29,9 +29,9 @@ public:
         luaviton.preloadModule("zlib", luaopen_zlib);
     }
 
-    void loadEmAll()
+    bool loadEmAll()
     {
-        luaviton.loadModuleString(MODULE_GZIP);
+        return luaviton.loadModuleString(MODULE_GZIP);
     }
 };
 

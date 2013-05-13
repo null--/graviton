@@ -90,11 +90,11 @@ public:
     bool regiserFunction (const string &func_name, const lua_CFunction func_addr );
     void callLuaFunction (const string &lua_func_name, int nparams, int nreurns);
 
-    int loadModuleFile (const string &_file );
-    int loadModuleString (const string &_script );
+    bool loadModuleFile (const string &_file );
+    bool loadModuleString (const string &_script );
 
-    int runScriptFile (const string &_file );
-    int runScriptString ( const string &_script );
+    bool runScriptFile (const string &_file );
+    bool runScriptString ( const string &_script );
 
     void preloadModule (const string &module_name, lua_CFunction function_addr);
 };
@@ -111,7 +111,7 @@ public:
     virtual ~Luaviton_Module() {}
 
     virtual void registerModule() = 0;
-    virtual void loadEmAll() = 0;
+    virtual bool loadEmAll() = 0;
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -256,27 +256,28 @@ bool Luaviton::runScript(const int prev_err)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int Luaviton::loadModuleFile (const string &_file )
+bool Luaviton::loadModuleFile (const string &_file )
 {
-    Logger::logVariable("File",_file);
-    return luaL_dofile (lua_state, _file.c_str() );
+    Logger::logVariable("Loading LUA Module: ",_file);
+    return luaL_dofile (lua_state, _file.c_str() ) == LUA_OK;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int Luaviton::loadModuleString (const string &_script )
+bool Luaviton::loadModuleString (const string &_script )
 {
-    return luaL_dostring ( lua_state, _script.c_str() );
+    Logger::logItLn("Loading LUA Module (string)");
+    return luaL_dostring ( lua_state, _script.c_str() ) == LUA_OK;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int Luaviton::runScriptFile (const string &_file )
+bool Luaviton::runScriptFile (const string &_file )
 {
     // return runScript( luaL_dofile(lua_state, _file.c_str()) );
     return runScript( luaL_loadfile(lua_state, _file.c_str()) );
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int Luaviton::runScriptString ( const string &_script )
+bool Luaviton::runScriptString ( const string &_script )
 {
     return runScript( luaL_loadstring(lua_state, _script.c_str()));
 }

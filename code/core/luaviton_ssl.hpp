@@ -34,12 +34,17 @@ public:
         luaviton.preloadModule("ssl.context", luaopen_ssl_context);
     }
 
-    void loadEmAll()
+    bool loadEmAll()
     {
-        Luaviton_Socket::getInstance().loadEmAll();
+        if( !Luaviton_Socket::getInstance().loadEmAll() )
+        {
+            Logger::logItLn("[Lua SSL Faild] Cannot load Lua Socket");
+            return false;
+        }
 
-        luaviton.loadModuleString(MODULE_SSL);
-        luaviton.loadModuleString(MODULE_HTTPS);
+        return
+                luaviton.loadModuleString(MODULE_SSL) &&
+                luaviton.loadModuleString(MODULE_HTTPS);
     }
 };
 

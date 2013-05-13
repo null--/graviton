@@ -39,15 +39,15 @@ public:
 
     void loadEmAll()
     {
-        luaviton.runScriptString(MODULE_SOCKET);
-        luaviton.runScriptString(MODULE_LTN12);
-        luaviton.runScriptString(MODULE_TP);
-        luaviton.runScriptString(MODULE_MIME);
-        luaviton.runScriptString(MODULE_URL);
-
-        luaviton.runScriptString(MODULE_FTP);
-        luaviton.runScriptString(MODULE_HTTP);
-        luaviton.runScriptString(MODULE_SMTP);
+        return
+                luaviton.runScriptString(MODULE_SOCKET) &&
+                luaviton.runScriptString(MODULE_LTN12) &&
+                luaviton.runScriptString(MODULE_TP) &&
+                luaviton.runScriptString(MODULE_MIME) &&
+                luaviton.runScriptString(MODULE_URL) &&
+                luaviton.runScriptString(MODULE_FTP) &&
+                luaviton.runScriptString(MODULE_HTTP) &&
+                luaviton.runScriptString(MODULE_SMTP);
     }
 };
 
