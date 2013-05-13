@@ -15,8 +15,6 @@ DEPENDPATH += $$PWD/../../../code/external/lua5.1
 
 unix:!macx:!symbian: PRE_TARGETDEPS += $$PWD/../../../libs/lua51/linux-x86_64/liblua.a
 
-
-
 unix:!macx:!symbian: LIBS += -L$$PWD/../../../libs/zlib/linux-x86_64/ -lzlib
 
 INCLUDEPATH += $$PWD/../../../code/external/zlib

@@ -37,7 +37,7 @@ public:
         luaviton.preloadModule("mime.core", luaopen_mime_core);
     }
 
-    void loadEmAll()
+    bool loadEmAll()
     {
         return
                 luaviton.runScriptString(MODULE_SOCKET) &&
