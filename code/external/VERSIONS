@@ -10,6 +10,7 @@ Installed:
 	libtomcrypt-1.17
 	upx-3.0.9
 	ucl-1.03
+	ldigest - BASED ON lmd5 - github 05/13/2013
 	
 Removed:
 	apr-1.4.2

@@ -11,13 +11,13 @@ Major:
 	- Documentation
 	- upx (take a look at upx/src/main.cpp)
 	- code a polymorphic engine (binary and source)
+	- lua script encrypter/decrypter modules
+	- SolarWind
 
 Minor:
-	- lua script encrypter/decrypter modules
 	- port AI
 	- port PAYLOAD
 	- port INFECT
 	- port MALKIT
-	- port UTILS/CORE
 	
 and much more!

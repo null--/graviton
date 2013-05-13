@@ -53,6 +53,9 @@ namespace GraVitoN
  *
  */
 
+namespace Utils
+{
+
 namespace OptParser
 {
 
@@ -296,6 +299,8 @@ bool getValueAsHexString ( const string &option, const string &entity, string &h
     hex_value = buf;
     //Logger::logItLn(hex_value);
     return true;
+}
+
 }
 }
 }
