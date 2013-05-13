@@ -42,6 +42,9 @@
 #include <graviton.hpp>
 #include <core/component.hpp>
 #include <core/logger.hpp>
+#include <external/LuaBridge/LuaBridge.h>
+#include <external/LuaBridge/RefCountedPtr.h>
+
 using namespace std;
 
 namespace GraVitoN
@@ -52,21 +55,26 @@ namespace Core
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 class Luaviton : public Component_Single
 {
-public:
+private:
     lua_State *lua_state;
 
-private:
     bool runScript(const int prev_err = LUA_OK);
     void printErrorCode (const int err);
 
 protected:
     void initialize();
+    static int traceback(lua_State *L);
 
 public:
     Luaviton()
     {
         lua_state = _null_;
         initialize();
+    }
+
+    lua_State * getState()
+    {
+        return lua_state;
     }
 
     ~Luaviton();
@@ -137,6 +145,12 @@ void Luaviton::initialize()
         // // luaopen_debug ( lua_state );
         // luaopen_package ( lua_state );
     }
+
+    /// add traceback
+    /// @todo need more tests
+    lua_pushcfunction (lua_state, &traceback);
+    luaL_ref (lua_state, LUA_REGISTRYINDEX);
+
     //return true;
 }
 
@@ -158,28 +172,26 @@ void Luaviton::initialize()
 //}
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-//int Luaviton::traceback ()
-//{
-//    lua_State* L = lua_state;
-
-//    // look up Lua's 'debug.traceback' function
-//    lua_getglobal(L, "debug");
-//    if (!lua_istable(L, -1))
-//    {
-//        lua_pop(L, 1);
-//        return 1;
-//    }
-//    lua_getfield(L, -1, "traceback");
-//    if (!lua_isfunction(L, -1))
-//    {
-//        lua_pop(L, 2);
-//        return 1;
-//    }
-//    lua_pushvalue(L, 1);  /* pass error message */
-//    lua_pushinteger(L, 2);  /* skip this function and traceback */
-//    lua_call(L, 2, 1);  /* call debug.traceback */
-//    return 1;
-//}
+int Luaviton::traceback (lua_State *L)
+{
+    // look up Lua's 'debug.traceback' function
+    lua_getglobal(L, "debug");
+    if (!lua_istable(L, -1))
+    {
+        lua_pop(L, 1);
+        return 1;
+    }
+    lua_getfield(L, -1, "traceback");
+    if (!lua_isfunction(L, -1))
+    {
+        lua_pop(L, 2);
+        return 1;
+    }
+    lua_pushvalue(L, 1);  /* pass error message */
+    lua_pushinteger(L, 2);  /* skip this function and traceback */
+    lua_call(L, 2, 1);  /* call debug.traceback */
+    return 1;
+}
 
 void Luaviton::printErrorCode(const int err)
 {
