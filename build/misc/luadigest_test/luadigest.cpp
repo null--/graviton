@@ -21,9 +21,9 @@ int main ( int argc , char **argv)
 
 	file = argv[1];
 
-    GraVitoN::Core::Luaviton_Digest &luacrypto = GraVitoN::Core::Luaviton_Digest::getInstance();
+    GraVitoN::Core::Luaviton_Digest &luadigest = GraVitoN::Core::Luaviton_Digest::getInstance();
 
-    luacrypto.registerModule();
+    luadigest.registerModule();
 
     cout << " done" << endl;
 

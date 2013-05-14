@@ -58,6 +58,8 @@ class Luaviton : public Component_Singleton<Luaviton>
 private:
     lua_State *lua_state;
 
+    int lastError;
+
     bool runScript(const int prev_err = LUA_OK);
     void printErrorCode (const int err);
 

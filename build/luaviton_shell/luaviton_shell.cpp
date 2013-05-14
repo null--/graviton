@@ -18,17 +18,19 @@
 using namespace std;
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// Run a Complete Lua Test
+/// @todo Luaviton interactive shell
 int main ( int argc , char **argv)
 {
+    cout << "Luaviton Shell - Part of GraVitoN project" << endl << endl;
 	cout << "Loading LUA modules... ";
+    cout << "\tcrypto, socket, ssl, zlib, sys, digest" << endl;
     /// Get Instances
     GraVitoN::Core::Luaviton_Crypto &luacrypto  = GraVitoN::Core::Luaviton_Crypto   ::getInstance();
     GraVitoN::Core::Luaviton_Socket &luasoc     = GraVitoN::Core::Luaviton_Socket   ::getInstance();
     GraVitoN::Core::Luaviton_SSL    &luassl     = GraVitoN::Core::Luaviton_SSL      ::getInstance();
     GraVitoN::Core::Luaviton_ZLib   &luazlib    = GraVitoN::Core::Luaviton_ZLib     ::getInstance();
     GraVitoN::Core::Luaviton_Sys    &luasys     = GraVitoN::Core::Luaviton_Sys      ::getInstance();
-    GraVitoN::Core::Luaviton_Digest &luadigist  = GraVitoN::Core::Luaviton_Digest   ::getInstance();
+    GraVitoN::Core::Luaviton_Digest &luadigest  = GraVitoN::Core::Luaviton_Digest   ::getInstance();
 
     /// REGISTER'EM ALL BEFOR LOAD'EM ALL
     luacrypto   .registerModule();
@@ -36,7 +38,7 @@ int main ( int argc , char **argv)
     luassl      .registerModule();
     luazlib     .registerModule();
     luasys      .registerModule();
-    luadigist   .registerModule();
+    luadigest   .registerModule();
 
     /// REGISTER'EM ALL BEFOR LOAD'EM ALL
     luacrypto   .loadEmAll();
@@ -44,7 +46,7 @@ int main ( int argc , char **argv)
     luassl      .loadEmAll();
     luazlib     .loadEmAll();
     luasys      .loadEmAll();
-    luadigist   .loadEmAll();
+    luadigest   .loadEmAll();
 
     cout << "[Done]" << endl;
 
@@ -52,18 +54,43 @@ int main ( int argc , char **argv)
 
     if(argc != 2)
     {
-        cout<<"Usage: "<<argv[0]<<" [lua script file]"<<endl;
+        cout<<"Interpreter:"<<endl;
+        cout<<"\tUsage: "<<argv[0]<<" [lua script file]"<<endl;
+        cout<<""<<endl;
+        cout<<"Interactive shell"<<endl;
+        cout<<"\tUsage: "<<argv[0]<<" -i"<<endl;
         return 0;
     }
 
-    file = argv[1];
+    if ( string(argv[1]) != "-i" )
+    {
+        file = argv[1];
 
-    /// Run script file: test.lua
-    cout << " Running script... " << endl;
-    GraVitoN::Core::Luaviton::getInstance().runScriptFile(file);
-    cout << "--- [Done] ---" << endl;
+        /// Run script file: test.lua
+        cout << "--- Running script ---" << endl << endl;
+        GraVitoN::Core::Luaviton::getInstance().runScriptFile(file);
+        cout << endl << "--- [Done] ---" << endl;
 
-    // GraVitoN::Core::Lua::free(my_lua);
+        // GraVitoN::Core::Lua::free(my_lua);
+    }
+    else
+    {
+        cout << "[EXPERIMENTAL]" << endl;
+        cout << "Luaviton Interactive Shell:" << endl;
+        cout << "Type 'gameover' for exit" << endl;
+        cout << "# ";
+        char _cmdline[256];
+        string cmdline;
+        while(cin.getline(_cmdline, 255))
+        {
+            cmdline = _cmdline;
 
+            if( cmdline == "gameover" )
+                break;
+            if( !GraVitoN::Core::Luaviton::getInstance().loadModuleString(cmdline) )
+                cout << "<ERROR>" << endl;
+            cout << "# ";
+        }
+    }
     return 0;
 }
