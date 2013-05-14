@@ -44,6 +44,17 @@ namespace Core
 namespace Logger
 {
 
+void __noLog()
+{
+
+}
+
+#ifndef GVN_ACTIVATE_LOGGER
+    #define logIt(__X__) __noLog()
+    #define logItLn(__X__) __noLog()
+    #define logItEndl(__X__) __noLog()
+    #define logVariable(__X__,__Y__) __noLog()
+#else
 #ifdef GVN_ACTIVATE_LOGGER	
     // #ifdef GVN_LOG_INTO_FILE
     #ifdef GVN_LOG_FILE
@@ -96,6 +107,7 @@ template < class _C_T_ > bool logVariable(const string &name,const _C_T_ & value
 
 	return true;
 }
+#endif
 }
 }
 }

@@ -1,4 +1,9 @@
-#define GVN_ACTIVATE_LOGGER
+/// LOGGER IS DISABLED
+#undef GVN_ACTIVATE_LOGGER
+// #define GVN_ACTIVATE_LOGGER
+
+/// DEBUG MODE IS DISABLED
+#undef GVN_DEBUG
 
 #include <graviton.hpp>
 #include <iostream>
@@ -16,6 +21,7 @@ using namespace std;
 /// Run a Complete Lua Test
 int main ( int argc , char **argv)
 {
+	cout << "Loading LUA modules... ";
     /// Get Instances
     GraVitoN::Core::Luaviton_Crypto &luacrypto  = GraVitoN::Core::Luaviton_Crypto   ::getInstance();
     GraVitoN::Core::Luaviton_Socket &luasoc     = GraVitoN::Core::Luaviton_Socket   ::getInstance();
@@ -40,7 +46,7 @@ int main ( int argc , char **argv)
     luasys      .loadEmAll();
     luadigist   .loadEmAll();
 
-    cout << " done" << endl;
+    cout << "[Done]" << endl;
 
     string file;// = "test.lua";
 
@@ -53,9 +59,9 @@ int main ( int argc , char **argv)
     file = argv[1];
 
     /// Run script file: test.lua
-    cout << " Running script ...";
+    cout << " Running script... " << endl;
     GraVitoN::Core::Luaviton::getInstance().runScriptFile(file);
-    cout << " done" << endl;
+    cout << "--- [Done] ---" << endl;
 
     // GraVitoN::Core::Lua::free(my_lua);
 

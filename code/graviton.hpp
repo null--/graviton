@@ -41,8 +41,8 @@
 #ifdef GVN_LOG_FILE
     #warning ("[INFO] LOG FILE IS SET")
 #endif
-/// ENABLE DEBUG MODE
-#define GVN_DEBUG
+/// DEBUG MODE
+// #define GVN_DEBUG
 #ifdef GVN_DEBUG
     #warning ("[WARNING] DEBUG MODE IS ENABLED")
 #endif
