@@ -9,19 +9,20 @@
 #include <core/luaviton_ssl.hpp>
 #include <core/luaviton_zlib.hpp>
 #include <core/luaviton_sys.hpp>
-
+#include <core/luaviton_digest.hpp>
 using namespace std;
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// Run a Complete Lua Test
 int main ( int argc , char **argv)
 {
-    // Get Instances
+    /// Get Instances
     GraVitoN::Core::Luaviton_Crypto &luacrypto  = GraVitoN::Core::Luaviton_Crypto   ::getInstance();
     GraVitoN::Core::Luaviton_Socket &luasoc     = GraVitoN::Core::Luaviton_Socket   ::getInstance();
     GraVitoN::Core::Luaviton_SSL    &luassl     = GraVitoN::Core::Luaviton_SSL      ::getInstance();
     GraVitoN::Core::Luaviton_ZLib   &luazlib    = GraVitoN::Core::Luaviton_ZLib     ::getInstance();
     GraVitoN::Core::Luaviton_Sys    &luasys     = GraVitoN::Core::Luaviton_Sys      ::getInstance();
+    GraVitoN::Core::Luaviton_Digest &luadigist  = GraVitoN::Core::Luaviton_Digest   ::getInstance();
 
     /// REGISTER'EM ALL BEFOR LOAD'EM ALL
     luacrypto   .registerModule();
@@ -29,6 +30,7 @@ int main ( int argc , char **argv)
     luassl      .registerModule();
     luazlib     .registerModule();
     luasys      .registerModule();
+    luadigist   .registerModule();
 
     /// REGISTER'EM ALL BEFOR LOAD'EM ALL
     luacrypto   .loadEmAll();
@@ -36,6 +38,7 @@ int main ( int argc , char **argv)
     luassl      .loadEmAll();
     luazlib     .loadEmAll();
     luasys      .loadEmAll();
+    luadigist   .loadEmAll();
 
     cout << " done" << endl;
 

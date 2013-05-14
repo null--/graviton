@@ -64,3 +64,10 @@ INCLUDEPATH += $$PWD/../../../code/external/lzlib
 DEPENDPATH += $$PWD/../../../code/external/lzlib
 
 unix:!macx:!symbian: PRE_TARGETDEPS += $$PWD/../../../libs/luazlib/linux-x86_64/libluazlib.a
+
+unix:!macx:!symbian: LIBS += -L$$PWD/../../../libs/ldigest/linux-x86_64/ -lldigest
+
+INCLUDEPATH += $$PWD/../../../code/external/ldigest
+DEPENDPATH += $$PWD/../../../code/external/ldigest
+
+unix:!macx:!symbian: PRE_TARGETDEPS += $$PWD/../../../libs/ldigest/linux-x86_64/libldigest.a

@@ -40,14 +40,14 @@ public:
     bool loadEmAll()
     {
         return
-                luaviton.runScriptString(MODULE_SOCKET) &&
-                luaviton.runScriptString(MODULE_LTN12) &&
-                luaviton.runScriptString(MODULE_TP) &&
-                luaviton.runScriptString(MODULE_MIME) &&
-                luaviton.runScriptString(MODULE_URL) &&
-                luaviton.runScriptString(MODULE_FTP) &&
-                luaviton.runScriptString(MODULE_HTTP) &&
-                luaviton.runScriptString(MODULE_SMTP);
+                luaviton.loadModuleString(MODULE_SOCKET) &&
+                luaviton.loadModuleString(MODULE_LTN12) &&
+                luaviton.loadModuleString(MODULE_TP) &&
+                luaviton.loadModuleString(MODULE_MIME) &&
+                luaviton.loadModuleString(MODULE_URL) &&
+                luaviton.loadModuleString(MODULE_FTP) &&
+                luaviton.loadModuleString(MODULE_HTTP) &&
+                luaviton.loadModuleString(MODULE_SMTP);
     }
 };
 
