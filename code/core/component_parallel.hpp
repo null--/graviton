@@ -132,7 +132,7 @@ bool Component_Parallel::runThis(Component *component)
 {
     internal_threads.push_back( new Component_Thread(component) );
     //internal_threads.back()->initialize();
-	internal_threads.back()->run();
+    return internal_threads.back()->run();
 }
 
 bool Component_Parallel::isActive()

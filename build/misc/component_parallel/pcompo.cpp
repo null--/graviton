@@ -13,6 +13,7 @@ public:
     {
         GraVitoN::Core::Thread::sleep(1000);
         cout << "Compo1 is up" << endl;
+        return true;
     }
 };
 
@@ -23,6 +24,7 @@ public:
     {
         GraVitoN::Core::Thread::sleep(2000);
         cout << "Compo2 is up" << endl;
+        return true;
     }
 };
 
@@ -33,6 +35,7 @@ public:
     {
         GraVitoN::Core::Thread::sleep(3000);
         cout << "Compo3 is up" << endl;
+        return true;
     }
 };
 
