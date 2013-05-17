@@ -208,27 +208,32 @@ int Luaviton::traceback (lua_State *L)
 
 void Luaviton::printErrorCode(const int err)
 {
-    GraVitoN::Core::Logger::logItLn("---------------------------------------------------------");
+#if defined(GVN_VERBOSE_LUA) || defined(GVN_ACTIVATE_LOGGER)
+    cout << "---------------------------------------------------------" << endl;
+#endif
     switch (err)
     {
+#if defined(GVN_VERBOSE_LUA) || defined(GVN_ACTIVATE_LOGGER)
         case LUA_OK:
-            GraVitoN::Core::Logger::logItLn("[LUA] Success"); break;
+            cout << "[LUA] Success" << endl; break;
         case LUA_ERRRUN:
-            GraVitoN::Core::Logger::logItLn("[LUA ERROR] Runtime error"); break;
+            cout << "[LUA ERROR] Runtime error" << endl; break;
         case LUA_ERRSYNTAX:
-            GraVitoN::Core::Logger::logItLn("[LUA ERROR] Syntax error"); break;
+            cout << "[LUA ERROR] Syntax error" << endl; break;
         case LUA_ERRERR:
-            GraVitoN::Core::Logger::logItLn("[LUA ERROR] Error while trying to print an error."); break;
+            cout << "[LUA ERROR] Error while trying to print an error." << endl; break;
         case LUA_ERRFILE:
-            GraVitoN::Core::Logger::logItLn("[LUA ERROR] Couldn't open or read file"); break;
+            cout << "[LUA ERROR] Couldn't open or read file" << endl; break;
         case LUA_ERRMEM:
-            GraVitoN::Core::Logger::logItLn("[LUA ERROR] Memory allocation error"); break;
+            cout << "[LUA ERROR] Memory allocation error" << endl; break;
         default:
-            GraVitoN::Core::Logger::logVariable("[LUA ERROR] CODE: ", err); break;
-    }
-
-    if( err != LUA_OK ) Logger::logItLn( lua_tostring(lua_state, -1) );
-    GraVitoN::Core::Logger::logItLn("---------------------------------------------------------");
+            cout << "[LUA ERROR] CODE: " << err << endl; break;
+#endif
+}
+#if defined(GVN_VERBOSE_LUA) || defined(GVN_ACTIVATE_LOGGER)
+    if( err != LUA_OK ) cout << lua_tostring(lua_state, -1) << endl;
+    cout << "---------------------------------------------------------" << endl;
+#endif
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//

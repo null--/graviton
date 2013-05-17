@@ -34,12 +34,17 @@
 /// Activate Logger
 // #define GVN_ACTIVATE_LOGGER
 #ifdef GVN_ACTIVATE_LOGGER
-    #warning ("[INFO] LOGGER IS AVTIVATED")
+    #warning ("[INFO] LOGGER IS AVTIVATED (GVN_ACTIVATE_LOGGER)")
+#endif
+/// Lua Verbose Mode
+// #define GVN_VERBOSE_LUA
+#ifdef GVN_VERBOSE_LUA
+    #warning ("[INFO] LUA VERBOSE MODE IS ACTIVE (GVN_VERBOSE_LUA)")
 #endif
 /// Path to log file
 // #define GVN_LOG_FILE "graviton.log"
 #ifdef GVN_LOG_FILE
-    #warning ("[INFO] LOG FILE IS SET")
+    #warning ("[INFO] LOG FILE IS SET (GVN_LOG_FILE)")
 #endif
 /// DEBUG MODE
 // #define GVN_DEBUG
