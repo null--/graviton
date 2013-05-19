@@ -28,9 +28,11 @@
 #define _GVN_AI_HEAD_
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#include "../graviton.hpp"
+#include <graviton.hpp>
 
 namespace GraVitoN
+{
+namespace AI
 {
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
@@ -40,26 +42,16 @@ namespace GraVitoN
  * Whatever desicions you think, your malware want to make during an attack,
  * must be chosen inside this class.
  */
-class AI : public Component
+class AI_Component : public Core::Component
 {
-protected:
-	/**
-	 * @brief Initialize Internal Component
-	 *
-	 * Override this function and initialize your internal components (socket, thread, payload, etc.) here.
-	 */
-	virtual bool initializeInternalComponents();
-
 public:
 	/// Constructor
-    AI();
+    AI_Component();
 	
 	/// Destructor
-    virtual ~AI();
+    virtual ~AI_Component();
 
-	virtual bool initialize(const string &_options);
-
-	/**
+    /**
 	 * @brief Run!
 	 *
 	 * Decision-making Main-Loop
@@ -67,43 +59,19 @@ public:
 	 * @return
 	 * true if finished seccessfully
 	 */
-	virtual bool run();
+    virtual bool run() = 0;
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-AI::AI()
+AI_Component::AI_Component()
 {
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-AI::~AI()
+AI_Component::~AI_Component()
 {
 }
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool AI::initialize (const string& _options)
-{
-
-	options = _options;
-	if( !initializeInternalComponents() )
-		return false;
-	return true;
 }
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool AI::initializeInternalComponents()
-{
-	Logger::logItLn("[AI] Default initializeInternalComponents()");
-	return true;
-}
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool AI::run()
-{
-	Logger::logItLn("runing...");
-	
-	return 0;
-}
-
 }
 #endif // _GVN_AI_HEAD_

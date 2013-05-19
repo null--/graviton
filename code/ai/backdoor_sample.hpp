@@ -27,74 +27,50 @@
 #define _GVN_AI_TROJAN_SAMPLE_HEAD_
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#include "gvn_ai.hpp"
-#include "../gvn_payload/gvn_payload.hpp"
-using namespace GraVitoN;
+#include <ai/ai.hpp>
+#include <payload/payload.hpp>
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/**
- * @brief A Sample AI for a trojan-based attacks
- *
- * This AI was designed to do two simple things:\n
- * 0. Derive a class from this component and onerload initializeInternalComponents
- * in order to initialize your components
- * 1. Initializes a payload \n
- * 2. Call that payload \n
- *
- */
-class AI_Trojan_Sample : public GraVitoN::AI
+namespace GraVitoN
+{
+
+namespace AI
+{
+
+class Backdoor_Sample : public GraVitoN::AI::AI_Component
 {
 protected:
 	/// Our payload
-	Payload *payload;
-
-protected:
-	/**
-	  * @brief Initialize internal components
-	  */
-	virtual bool initializeInternalComponents();
+    Payload::Payload_Component &payload;
 
 public:
 	/// Constructor
-    AI_Trojan_Sample();
+    Backdoor_Sample(Payload::Payload_Component &mypayload);
 	
 	/// Destructor
-    virtual ~AI_Trojan_Sample();
+    virtual ~Backdoor_Sample();
 
-	/**
-	 * @brief run
-	 *
-	 * Think, think, think!
-	 */
-	virtual bool run();
+    /// Think!
+    virtual bool run();
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-AI_Trojan_Sample::AI_Trojan_Sample()
-{
-	payload = _null_;
-}
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-AI_Trojan_Sample::~AI_Trojan_Sample()
+Backdoor_Sample::Backdoor_Sample(Payload::Payload_Component &mypayload) : payload(mypayload)
 {
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool AI_Trojan_Sample::initializeInternalComponents()
+Backdoor_Sample::~Backdoor_Sample()
 {
-	Logger::logItLn("[AI_Trojan_Sample::initializeInternalComponents] YOU HAVE TO OVERRIDE ME!");
-	return false;
+}
+
+bool Backdoor_Sample::run()
+{
+    return payload.run();
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool AI_Trojan_Sample::run()
-{
-	GraVitoN::Logger::logItLn ( "Thinking..." );
-	
-	(payload)->run();
-	
-    return true;
-}
 
+}
+}
 #endif // _GVN_AI_TROJAN_SAMPLE_HEAD_

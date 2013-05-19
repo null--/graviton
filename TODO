@@ -7,6 +7,7 @@ Major:
 	- code a cross platform general purpose basic os api
 	- metasploit plugin
 	- metaworm master/slave
+		- multi-node socks proxy: rfc1928
 	- android/ios/osx test
 	- Documentation
 	- upx (take a look at upx/src/main.cpp)
@@ -19,5 +20,6 @@ Minor:
 	- port PAYLOAD
 	- port INFECT
 	- port MALKIT
-	
+	- Combine luabridge with components
+
 and much more!

