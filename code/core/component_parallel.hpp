@@ -26,9 +26,10 @@
 #ifndef _GVN_COMPONENT_PARALLEL_HEAD_
 #define _GVN_COMPONENT_PARALLEL_HEAD_
 
-#include "component.hpp"
-#include "logger.hpp"
-#include "thread.hpp"
+#include <core/component.hpp>
+#include <core/logger.hpp>
+#include <core/thread.hpp>
+
 #include <list>
 #include <string>
 #include <cstring>

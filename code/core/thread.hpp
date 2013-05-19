@@ -28,10 +28,10 @@
 #ifndef _GVN_THREAD_HEAD_
 #define _GVN_THREAD_HEAD_
 
-#include "graviton.hpp"
-#include "logger.hpp"
-#include "net/Lib.hpp"
-#include "mt/MsgThread.hpp"
+#include <graviton.hpp>
+#include <core/logger.hpp>
+#include <external/ting/net/Lib.hpp>
+#include <external/ting/mt/MsgThread.hpp>
 
 namespace GraVitoN
 {

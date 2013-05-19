@@ -20,38 +20,44 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief GraVitoN::Malkit_Reporter_Text
+ * @brief GraVitoN::Reporter_Text
  *
 */
 
-#ifndef _GVN_MALKIT_REPORTER_TEXT_HEAD_
-#define _GVN_MALKIT_REPORTER_TEXT_HEAD_
+#ifndef _GVN_Reporter_Text_HEAD_
+#define _GVN_Reporter_Text_HEAD_
 
-#include "../../gvn_malkit.hpp"
-#include "../../../gvn_utils/gvn_tcp_client.hpp"
+#include <malkit/malkit.hpp>
+#include <core/tcp_client.hpp>
+
+namespace GraVitoN
+{
+
+namespace Malkit
+{
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
- * @brief The Malkit_Reporter_Text class
+ * @brief The Reporter_Text class
  *
  * Send logs and reports to a third party TCP server.
- * 'run' method is useless here.
+ * 'run' method is useless here, so Reporter_Text is not a real Malkit_Component
  * The key method is 'report' which does the job!
  *
  */
-class Malkit_Reporter_Text : public GraVitoN::Malkit
+class Reporter_Text // : public Malkit_Component
 {
 protected:
-	GraVitoN::TCP_Client client;
+    GraVitoN::Core::TCP_Client client;
 	bool stay_connectd;
 
 public:
-	Malkit_Reporter_Text()
+    Reporter_Text()
 	{
 		stay_connectd = false;
 	}
 
-	virtual ~Malkit_Reporter_Text()
+    virtual ~Reporter_Text()
 	{
 	}
 
@@ -61,7 +67,10 @@ public:
 	 *  STAY_CONNECTED: false means, you want to open a new socket for each attempt to report. and
 	 *  true means you want to open a socket at initilizing process and close it after deleting object of this class.
      */
-	virtual bool initialize(const string &_options);
+    virtual bool initialize(
+            const string &ip,
+            const unsigned int &port,
+            const bool &_stay_connectd = false);
 
 	/// @brief Report a message to report-server
 	virtual bool report(const string &message);
@@ -71,18 +80,16 @@ public:
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Malkit_Reporter_Text::initialize(const string &_options)
+bool Reporter_Text::initialize(const string &ip, const unsigned int &port, const bool &_stay_connectd)
 {
-	options = _options;
+    stay_connectd = _stay_connectd;
 
-	if( client.isActive() )
+    if( client.isActive() )
 		client.close();
 
-	if( !GraVitoN::OptParser::getValueAsBool(options, "STAY_CONNECTED", stay_connectd) )
-		stay_connectd = true;
-	//GraVitoN::Logger::logVariable("SC", stay_connectd);
+    stay_connectd = true;
 
-	if(!client.initialize(options))
+    if(!client.initialize(ip, port) )
 		return false;
 
 	if( stay_connectd ) if (!client.open())
@@ -92,7 +99,7 @@ bool Malkit_Reporter_Text::initialize(const string &_options)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Malkit_Reporter_Text::report(const string &message)
+bool Reporter_Text::report(const string &message)
 {
 	if(!stay_connectd)
 		if(!client.open())
@@ -107,9 +114,12 @@ bool Malkit_Reporter_Text::report(const string &message)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Malkit_Reporter_Text::close()
+bool Reporter_Text::close()
 {
     return client.close();
 }
 
-#endif // _GVN_MALKIT_REPORTER_TEXT_HEAD_
+}
+}
+
+#endif // _GVN_Reporter_Text_HEAD_

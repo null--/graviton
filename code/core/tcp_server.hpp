@@ -29,13 +29,14 @@
 #define _GVN_TCP_SERVER_HEAD_
 
 #include <list>
-#include "graviton.hpp"
-#include "tcp_client.hpp"
-#include "logger.hpp"
-#include "socket.hpp"
-#include "net/TCPSocket.hpp"
-#include "net/TCPServerSocket.hpp"
-#include "thread.hpp"
+
+#include <graviton.hpp>
+#include <core/tcp_client.hpp>
+#include <core/logger.hpp>
+#include <core/socket.hpp>
+#include <external/ting/net/TCPSocket.hpp>
+#include <external/ting/net/TCPServerSocket.hpp>
+#include <core/thread.hpp>
 
 namespace GraVitoN
 {

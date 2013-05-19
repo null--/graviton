@@ -29,7 +29,6 @@
 /// TEST
 #pragma once
 
-#include "logger.hpp"
 #include <cstdarg>
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//

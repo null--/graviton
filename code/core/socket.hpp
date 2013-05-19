@@ -28,8 +28,8 @@
 #ifndef _GVN_SOCKET_HEAD_
 #define _GVN_SOCKET_HEAD_
 
-#include "graviton.hpp"
-#include "net/Lib.hpp"
+#include <graviton.hpp>
+#include <external/ting/net/Lib.hpp>
 
 namespace GraVitoN
 {

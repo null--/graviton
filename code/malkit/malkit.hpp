@@ -28,10 +28,15 @@
 #define _GVN_MALKIT_HEAD_
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#include "../graviton.hpp"
+#include <graviton.hpp>
+#include <core/logger.hpp>
 
 namespace GraVitoN
 {
+
+namespace Malkit
+{
+
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
  * @brief MALware toolKIT
@@ -40,14 +45,14 @@ namespace GraVitoN
  * privilage escalation, etc), are a child of this class.
  *
  */
-class Malkit : public Component
+class Malkit_Component : public Core::Component
 {
 public:
 	/// Constructor
-    Malkit();
+    Malkit_Component();
 
 	/// Destructor
-    virtual ~Malkit();
+    virtual ~Malkit_Component();
 
 	/**
 	 * @brief Use your malicious weapon
@@ -56,25 +61,20 @@ public:
 	 * true if job is done!
 	 * 
 	 */
-	virtual bool run();
+    virtual bool run() = 0;
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Malkit::Malkit()
+Malkit_Component::Malkit_Component()
 {
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Malkit::~Malkit()
+Malkit_Component::~Malkit_Component()
 {
 
 }
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Malkit::run()
-{
-	Logger::logItLn("Firing...");
-	return 0;
 }
 }
 #endif //_GVN_MALKIT_HEAD_

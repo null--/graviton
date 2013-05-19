@@ -28,11 +28,11 @@
 #ifndef _GVN_UDP_SOCKET_HEAD_
 #define _GVN_UDP_SOCKET_HEAD_
 
-#include "../graviton.hpp"
-#include "logger.hpp"
-#include "socket.hpp"
-#include "net/UDPSocket.hpp"
-#include "mt/Thread.hpp"
+#include <graviton.hpp>
+#include <core/logger.hpp>
+#include <core/socket.hpp>
+#include <external/ting/net/UDPSocket.hpp>
+#include <external/ting/mt/Thread.hpp>
 
 namespace GraVitoN
 {
