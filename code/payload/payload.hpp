@@ -95,6 +95,8 @@ public:
 class Binary_Payload : public Payload_Component
 {
 protected:
+    virtual bool initPayload() = 0;
+
     /// Payload Hex Array
     unsigned char *payload;
 

@@ -62,6 +62,7 @@
     #pragma GCC diagnostic ignored "-Wdeprecated"
     #pragma GCC diagnostic ignored "-Wcpp"
     #pragma GCC diagnostic ignored "-Wignored-qualifiers"
+    #pragma GCC diagnostic ignored "-Wnarrowing"
 #endif
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//

