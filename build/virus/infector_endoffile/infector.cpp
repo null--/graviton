@@ -36,9 +36,9 @@
 
 #include <iostream>
 #include <sstream>
-#include "../../../graviton.hpp"
-#include "../../../gvn_spread/generic/gvn_spread_endoffile.hpp"
-#include "../../../gvn_utils/gvn_optparser.hpp"
+#include <graviton.hpp>
+#include <infect/generic/endoffile.hpp>
+#include <utils/optparser.hpp>
 
 using namespace std;
 
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     opt += "DecFilePath1='"+ string(argv[4]) + "' ";
     opt += "IsExec1=true ";
 
-    Spread_EndOfFile spread;
+    GraVitoN::Infect::EndOfFile spread;
     spread.initialize(opt);
 
     spread.run();

