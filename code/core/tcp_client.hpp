@@ -168,7 +168,7 @@ bool TCP_Client::connect()
         sock->Close();
 		return false;
 	}
-	return true;
+    return sock->IsValid();
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -217,8 +217,8 @@ bool TCP_Client::send(const unsigned char *data, const size_t &data_size)
 	}
 	catch(ting::net::Exc &e)
 	{
-		Logger::logVariable("Network error", e.What());
-		sock->Close();
+        Logger::logVariable("[TCP_Client] Network error", e.What());
+        // sock->Close();
 		return false;
 	}
 	/*
@@ -236,6 +236,7 @@ bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
 {
 	try
 	{
+        /// @todo to free or not to free...
 		if ( data )
 		{
 			delete data;
@@ -260,8 +261,8 @@ bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
 	}
 	catch(ting::net::Exc &e)
 	{
-		Logger::logVariable("Network error", e.What());
-		sock->Close();
+        Logger::logVariable("[TCP_Client] Network error", e.What());
+        // sock->Close();
 		return false;
 	}
 

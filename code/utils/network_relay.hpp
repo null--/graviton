@@ -14,13 +14,75 @@ namespace Utils
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// bob --> [relay server] --> alice
-/// @todo Network_Relay_Backward
+/// @todo need more test
 class Network_Relay_Tcp : public Core::TCP_Server
 {
 protected:
     string left_ip;
     string right_ip;
     unsigned int right_remote_port;
+
+    class RELAY_THREAD: public Core::Thread
+    {
+    protected:
+        Core::TCP_Client &sock1;
+        Core::TCP_Client &sock2;
+        Core::Semaphore &sema;
+
+        virtual bool myMainLoop()
+        {
+            Core::Logger::logItLn("[Relay Thread] entering relay loop...");
+            while( sock1.isActive()  )
+            {
+                try
+                {
+                    unsigned char *data = _null_;
+                    size_t data_size;
+
+                    // sema.wait();
+                    Core::Logger::logItLn("[Relay Thread] recv");
+                    if( sock1.recv(data, data_size) )
+                    {
+                        Core::Logger::logItLn("[Relay Thread] send");
+
+                        sema.wait();
+                        bool res = sock2.send(data, data_size);
+                        sema.signal();
+
+                        if( !res )
+                        {
+                            break;
+                        }
+                    }
+                    // sema.signal();
+                }
+                catch(Thread::Exception &e)
+                {
+                    // sema.signal();
+                    Core::Logger::logVariable("[Relay Thread] Network error", e.What());
+                    return false;
+                }
+            }
+            return false;
+        }
+
+    public:
+        RELAY_THREAD(
+                Core::TCP_Client &p_sock1,
+                Core::TCP_Client &p_sock2,
+                Core::Semaphore &p_sema
+                ):
+            sock1(p_sock1),
+            sock2(p_sock2),
+            sema(p_sema)
+        {
+
+        }
+        ~RELAY_THREAD()throw()
+        {
+
+        }
+    };
 
 protected:
     /// left --> [relay server] --> right
@@ -35,33 +97,42 @@ protected:
         Core::TCP_Client right(right_ip, right_remote_port);
 
         Core::Logger::logItLn("[Relay] connecting...");
-        right.connect();
+        if( !right.connect() )
+            return false;
 
-        unsigned char *data;
+        Core::Logger::logItLn("[Relay] starting listening thread...");
+        Core::Semaphore sema;
+
+        // RELAY_THREAD l_trd(left, right, sema);
+        RELAY_THREAD r_trd(right, left, sema);
+
+        // l_trd.run();
+        r_trd.run();
+
+        unsigned char *data = _null_;
         size_t data_size;
 
-        while( right.isActive() )
+        Core::Logger::logItLn("[Relay] entering relay loop...");
+        sema.signal();
+        while( left.isActive() )
         {
-            try
+
+            if( left.recv(data, data_size) )
             {
-                // left.send((unsigned char*)"hell", 5);
-                // right.send((unsigned char*)"hell", 5);
-                // break;
-                Core::Logger::logItLn("[Relay] recv left...");
-                left.recv(data, data_size);
-                Core::Logger::logItLn("[Relay] send right...");
-                right.send(data,data_size);
-                Core::Logger::logItLn("[Relay] recv right...");
-                right.recv(data, data_size);
-                Core::Logger::logItLn("[Relay] send left...");
-                left.send(data, data_size);
-            }
-            catch(ting::net::Exc &e)
-            {
-                Core::Logger::logVariable("Network error", e.What());
-                return false;
+                sema.wait();
+                if( !right.send(data, data_size) )
+                {
+                    break;
+                }
+                sema.signal();
             }
         }
+        sema.signal();
+
+        r_trd.stop();
+
+        left.close();
+        right.close();
 
         return true;
     }
@@ -83,14 +154,6 @@ public:
     ~Network_Relay_Tcp()throw()
     {
     }
-};
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// @todo Network_Relay_Bidirectional_TCP
-/// bob <--> [relay server] <--> alice
-class Network_Relay_Bidirectional_TCP
-{
-
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//

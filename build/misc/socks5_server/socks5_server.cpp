@@ -1,4 +1,4 @@
-#define GVN_ACTIVATE_LOGGER
+// #define GVN_ACTIVATE_LOGGER
 
 #include <graviton.hpp>
 #include <utils/socks5_server.hpp>

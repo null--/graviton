@@ -52,6 +52,8 @@ void os_sleep(unsigned int __msec__)
 class Thread: private ting::mt::MsgThread, public GraVitoN::Core::Component
 {
 public:
+    typedef ting::net::Exc Exception;
+
     /// Sleep for a number of milliseconds
     void static sleep(unsigned int __msec__)
     {
@@ -67,7 +69,7 @@ protected:
     /// Stop flag. true means you have to stop your main loop.
     bool flag_stop;
 
-    virtual bool myMainLoop();
+    virtual bool myMainLoop() = 0;
     //virtual bool initialize();
 
 public:
@@ -83,6 +85,26 @@ public:
 
     /// Stop thread
     virtual bool stop();
+};
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+class Semaphore: private ting::mt::Semaphore
+{
+public:
+    Semaphore(const unsigned init_val = 0):ting::mt::Semaphore(init_val){}
+
+    void wait(const unsigned int milisec = 0)
+    {
+        if(milisec == 0)
+            ting::mt::Semaphore::Wait();
+        else
+            ting::mt::Semaphore::Wait(milisec);
+    }
+
+    void signal()
+    {
+        ting::mt::Semaphore::Signal();
+    }
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -122,12 +144,14 @@ void Thread::Run()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/*
 bool Thread::myMainLoop()
 {
     if( !flag_stop )
         Logger::logItLn("[Thread] I'm Running!");
     return true;
 }
+*/
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool Thread::isActive()
