@@ -41,7 +41,7 @@ public:
 
 int main()
 {
-    GraVitoN::Core::Component_Parallel compo_man;
+    GraVitoN::Utils::Component_Parallel compo_man;
 
     compo_man.runThis(new Compo1);
     compo_man.runThis(new Compo2);

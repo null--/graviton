@@ -39,7 +39,7 @@
 namespace GraVitoN
 {
 
-namespace Core
+namespace Utils
 {
 
 /**

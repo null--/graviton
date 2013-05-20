@@ -53,8 +53,23 @@ protected:
 	/// Socket
 	UDP_Socket *sock;
 
+    /**
+     * @brief Initialize an UDP client
+     *
+     * @options
+     * IP='Remote IP'
+     * PORT='Remote Port'
+     * LPORT='Local Port'
+     *
+     * @note
+     * By setting your LPORT to your local port, and IP to '0.0.0.0' you can use UDP_Client as an UDP Listenner,
+     * see gravdev/misc/udp_client for more info.
+     *
+     */
+    virtual bool initialize(const string &ip, const unsigned int port, const unsigned int lport = 0);
+
 public:
-	UDP_Client();
+    UDP_Client(const string &ip, const unsigned int port, const unsigned int lport = 0);
 	/**
 	 * @brief Create an object of UDP_Client with a open socket.
 	 *
@@ -63,21 +78,6 @@ public:
 	UDP_Client(UDP_Socket *_sock);
 
 	virtual ~UDP_Client();
-
-	/**
-	 * @brief Initialize an UDP client
-	 *
-	 * @options
-	 * IP='Remote IP'
-	 * PORT='Remote Port'
-	 * LPORT='Local Port'
-	 *
-	 * @note
-	 * By setting your LPORT to your local port, and IP to '0.0.0.0' you can use UDP_Client as an UDP Listenner,
-	 * see gravdev/misc/udp_client for more info.
-	 *
-	 */
-    virtual bool initialize(const string &ip, const unsigned int port, const unsigned int lport = 0);
 
 	virtual bool open();
 
@@ -95,7 +95,7 @@ public:
 	 *
 	 * @return true if, something recieved.
 	 */
-	virtual bool recv(unsigned char *&data, unsigned int &data_size);
+    virtual bool recv(unsigned char *&data, size_t &data_size);
 
 	/**
 	 * @brief Recieve data
@@ -110,15 +110,7 @@ public:
 	 *
 	 * @return true if data was sended.
 	 */
-	virtual bool send(const unsigned char *data, const unsigned int &data_size);
-
-	/**
-	 * @brief main loop
-	 *
-	 * You can redifine this method, or send/recv methods; and use them after initilialize you inherited
-	 * object.
-	 */
-    virtual bool run() = 0;
+    virtual bool send(const unsigned char *data, const size_t &data_size);
 
 	virtual bool isActive();
 
@@ -129,9 +121,10 @@ public:
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-UDP_Client::UDP_Client()
+UDP_Client::UDP_Client(const string &ip, const unsigned int port, const unsigned int lport)
 {
 	sock = new UDP_Socket();
+    initialize(ip, port, lport);
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -208,7 +201,7 @@ bool UDP_Client::run()
 */
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool UDP_Client::send(const unsigned char *data, const unsigned int &data_size)
+bool UDP_Client::send(const unsigned char *data, const size_t &data_size)
 {
 	try
 	{
@@ -225,7 +218,7 @@ bool UDP_Client::send(const unsigned char *data, const unsigned int &data_size)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool UDP_Client::recv(unsigned char *&data, unsigned int &data_size)
+bool UDP_Client::recv(unsigned char *&data, size_t &data_size)
 {
 	try
 	{
@@ -233,7 +226,7 @@ bool UDP_Client::recv(unsigned char *&data, unsigned int &data_size)
 			//delete data;
 
 		ting::StaticBuffer<unsigned char, MAX_TCP_PACKET_SIZE> data_buf;
-		unsigned int bytes_recved = 0;
+        size_t bytes_recved = 0;
 
 		while( bytes_recved == 0 )
 		{
@@ -243,7 +236,7 @@ bool UDP_Client::recv(unsigned char *&data, unsigned int &data_size)
 		data_size = bytes_recved;
 		data = new unsigned char[data_size];
 
-		for(int i=0; i<bytes_recved; ++i)
+        for(size_t i=0; i<bytes_recved; ++i)
 			data[i] = data_buf[i];
 	}
 	catch(ting::net::Exc &e)

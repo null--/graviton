@@ -52,38 +52,50 @@ class TCP_Server : public GraVitoN::Core::Socket, public GraVitoN::Core::Compone
 {
 protected:
     /// Response function
-    virtual bool response(GraVitoN::Core::TCP_Client *client_sock);
+    virtual bool response(GraVitoN::Core::TCP_Client &client_sock) = 0;
 
     /// Server socket thread
     class Server_Thread : public GraVitoN::Core::Thread
     {
     private:
-        TCP_Server *server_handle;
-        TCP_Client *sock;
+        TCP_Server &server_handle;
+        TCP_Client &sock;
 
     protected:
         bool myMainLoop()
         {
-            server_handle->response(sock);
+            server_handle.response(sock);
             return true;
         }
 
     public:
-        Server_Thread(TCP_Server *_this_server, TCP_Client *client_sock)
+        Server_Thread(TCP_Server &_this_server, TCP_Client &client_sock)
+            :server_handle(_this_server),
+            sock(client_sock)
         {
-            server_handle = _this_server;
-            sock = client_sock;
+            // server_handle = _this_server;
+            // sock = client_sock;
         }
 
         virtual ~Server_Thread()throw()
         {
-            sock->close();
+            sock.close();
         }
     };
     //std::vector<Server_Thread> internal_threads;
     list<Server_Thread*> internal_threads;
 
 protected:
+    /**
+     * @brief Initialize an TCP Server
+     *
+     * @options
+     * unsigned int: port
+     *
+     */
+    virtual bool initialize(unsigned int local_port); // initialize(...);
+
+
     /// Create IP address for connecting
     unsigned int port;
 
@@ -93,18 +105,9 @@ protected:
     //ting::net::Lib *socket_lib;
 
 public:
-    TCP_Server();
+    TCP_Server(unsigned int local_port);
 
     virtual ~TCP_Server() throw();
-
-    /**
-     * @brief Initialize an TCP Server
-     *
-     * @options
-     * unsigned int: port
-     *
-     */
-    virtual bool initialize(unsigned int local_port); // initialize(...);
 
     /// Open socket
     virtual bool open();
@@ -157,8 +160,9 @@ public:
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-TCP_Server::TCP_Server()
+TCP_Server::TCP_Server(unsigned int local_port)
 {
+    initialize(local_port);
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -239,7 +243,7 @@ bool TCP_Server::listen()
             client_sock.push_back(new TCP_Client( &(lsock.back()) ));
 
             /// Initialize and run response thread.
-            internal_threads.push_back( new Server_Thread(this, client_sock.back()) );
+            internal_threads.push_back( new Server_Thread((TCP_Server&)*this, (TCP_Client&)*client_sock.back()) );
             internal_threads.back()->run();
         }
     }
@@ -350,12 +354,6 @@ bool TCP_Server::isActive()
         return false;
     }
     return false;
-}
-
-bool TCP_Server::response(GraVitoN::Core::TCP_Client *client_sock)
-{
-    client_sock->send((const unsigned char*)"Hello Client", 13);
-    return true;
 }
 
 } // end of Core

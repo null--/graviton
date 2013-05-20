@@ -44,7 +44,7 @@ namespace Core
 typedef ting::net::TCPSocket TCP_Socket;
 
 /// @brief TCP Client Component
-class TCP_Client : public Socket, public GraVitoN::Core::Component
+class TCP_Client : public Core::Socket, public GraVitoN::Core::Component
 {
 private:
 	/// Do not copy
@@ -57,28 +57,28 @@ protected:
 	ting::net::IPAddress addr;
 
 	/// Socket
-	TCP_Socket *sock;
+    TCP_Socket *sock;
+
+    /**
+     * @brief Initialize an TCP Client
+     *
+     * @options
+     * IP='Remote IP'
+     * PORT='Remote Port'
+     *
+     */
+    virtual bool initialize(const string ip, unsigned int port);
 
 public:
-	TCP_Client();
+    TCP_Client(const string &ip, unsigned int port);
 	/**
 	 * @brief Create an object of TCP_Client with a open socket.
 	 *
 	 * By calling this constructor, there is no need to call initialize
 	 */
-	TCP_Client(TCP_Socket *_sock);
+    TCP_Client(TCP_Socket *_sock);
 
 	virtual ~TCP_Client();
-
-	/**
-	 * @brief Initialize an TCP Client
-	 *
-	 * @options
-	 * IP='Remote IP'
-	 * PORT='Remote Port'
-	 *
-	 */
-    virtual bool initialize(const string ip, unsigned int port);
 
 	virtual bool open();
 
@@ -96,7 +96,7 @@ public:
 	 *
 	 * @return true if, something recieved.
 	 */
-	virtual bool recv(unsigned char *&data, unsigned int &data_size);
+    virtual bool recv(unsigned char *&data, size_t &data_size);
 
 	/**
 	 * @brief Recieve data
@@ -111,7 +111,7 @@ public:
 	 *
 	 * @return true if data was sended.
 	 */
-	virtual bool send(const unsigned char *data, const unsigned int &data_size);
+    virtual bool send(const unsigned char *data, const size_t &data_size);
 
 	/**
 	 * @brief main loop
@@ -123,29 +123,29 @@ public:
 
 	virtual bool isActive();
 
-	virtual TCP_Socket *getTCPSocket() const
+    virtual TCP_Socket *getTCPSocket() const
 	{
 		return sock;
 	}
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-TCP_Client::TCP_Client()
+TCP_Client::TCP_Client(const string &ip, unsigned int port)
 {
-	sock = new TCP_Socket();
+    sock = new TCP_Socket();
+    initialize(ip, port);
 }
 
 TCP_Client::TCP_Client(TCP_Socket *_sock)
 {
-	TCP_Client();
-	sock = _sock;
-	addr = sock->GetRemoteAddress();
+    sock = _sock;
+    addr = sock->GetRemoteAddress();
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 TCP_Client::~TCP_Client()
 {
-	if( sock->IsValid() )
+    if( sock->IsValid() )
 		TCP_Client::close();
 }
 
@@ -164,7 +164,7 @@ bool TCP_Client::open()
 		/// connect to remote listening socket.
 		/// It is an asynchronous operation, so we will use WaitSet
 		/// to wait for its completion.
-		sock->Open(addr);
+        sock->Open(addr);
 
 		ting::WaitSet waitSet(1);
 		waitSet.Add(sock, ting::Waitable::WRITE);
@@ -173,7 +173,7 @@ bool TCP_Client::open()
 	catch(ting::net::Exc &e)
 	{
 		Logger::logVariable("Network error", e.What());
-		sock->Close();
+        sock->Close();
 		return false;
 	}
 	return true;
@@ -204,7 +204,7 @@ bool TCP_Client::run()
 
 	send((const unsigned char*)"Hello Server", 13);
 
-	unsigned int size;
+    size_t size;
 	unsigned char *data;
 	recv(data, size);
 
@@ -215,7 +215,7 @@ bool TCP_Client::run()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool TCP_Client::send(const unsigned char *data, const unsigned int &data_size)
+bool TCP_Client::send(const unsigned char *data, const size_t &data_size)
 {
 	try
 	{
@@ -240,7 +240,7 @@ bool TCP_Client::send(const unsigned char *data, const unsigned int &data_size)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool TCP_Client::recv(unsigned char *&data, unsigned int &data_size)
+bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
 {
 	try
 	{
@@ -250,7 +250,7 @@ bool TCP_Client::recv(unsigned char *&data, unsigned int &data_size)
 		}
 
 		ting::StaticBuffer<unsigned char, MAX_TCP_PACKET_SIZE> data_buf;
-		unsigned int bytes_recved = 0;
+        size_t bytes_recved = 0;
 
 		while( bytes_recved == 0 )
 		{
