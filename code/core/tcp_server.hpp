@@ -48,8 +48,11 @@ namespace Core
 /**
  * @brief TCP Server Component
  */
-class TCP_Server : public GraVitoN::Core::Socket, public GraVitoN::Core::Component // Component_With_Init
+class TCP_Server : public GraVitoN::Core::Socket ,public GraVitoN::Core::Component // Component_With_Init
 {
+private:
+    bool multi_thread;
+
 protected:
     /// Response function
     virtual bool response(GraVitoN::Core::TCP_Client &client_sock) = 0;
@@ -93,7 +96,7 @@ protected:
      * unsigned int: port
      *
      */
-    virtual bool initialize(unsigned int local_port); // initialize(...);
+    virtual bool initialize(unsigned int local_port, const bool enable_multi_thread = true);
 
 
     /// Create IP address for connecting
@@ -105,7 +108,7 @@ protected:
     //ting::net::Lib *socket_lib;
 
 public:
-    TCP_Server(unsigned int local_port);
+    TCP_Server(const unsigned int local_port, const bool enable_multi_thread = true);
 
     virtual ~TCP_Server() throw();
 
@@ -160,9 +163,9 @@ public:
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-TCP_Server::TCP_Server(unsigned int local_port)
+TCP_Server::TCP_Server(unsigned int local_port, const bool enable_multi_thread)
 {
-    initialize(local_port);
+    initialize(local_port, enable_multi_thread);
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -172,7 +175,7 @@ TCP_Server::~TCP_Server() throw()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool TCP_Server::initialize(unsigned int local_port) // initialize(...)
+bool TCP_Server::initialize(unsigned int local_port, const bool enable_multi_thread) // initialize(...)
 {
     if( listenSock.IsValid() )
         this->close();
@@ -183,6 +186,7 @@ bool TCP_Server::initialize(unsigned int local_port) // initialize(...)
     // va_end(vl);
 
     port = local_port;
+    multi_thread = enable_multi_thread;
 
     //if( !OptParser::getValueAsUInt(options, "THREADS", max_threads) )
     //return false;
@@ -223,28 +227,48 @@ bool TCP_Server::listen()
 {
     try
     {
-        Core::Logger::logItLn("Listening...");
-
-        list<TCP_Client*> client_sock;
-        list<TCP_Socket> lsock;
-        while(listenSock.IsValid())
-        //if(listenSock.IsValid())
+        if( multi_thread )
         {
-            ting::mt::Thread::Sleep(1);
+            Core::Logger::logItLn("Listening (MultiThread)...");
 
-            /// Check for waiting connection
-            TCP_Socket sck = listenSock.Accept();
+            list<TCP_Client*> client_sock;
+            list<TCP_Socket> lsock;
+            while(listenSock.IsValid())
+            //if(listenSock.IsValid())
+            {
+                ting::mt::Thread::Sleep(1);
 
-            /// Validate socket
-            if( !sck.IsValid() )
-                continue;
-            lsock.push_back(sck);
+                /// Check for waiting connection
+                TCP_Socket sck = listenSock.Accept();
 
-            client_sock.push_back(new TCP_Client( &(lsock.back()) ));
+                /// Validate socket
+                if( !sck.IsValid() )
+                    continue;
+                lsock.push_back(sck);
 
-            /// Initialize and run response thread.
-            internal_threads.push_back( new Server_Thread((TCP_Server&)*this, (TCP_Client&)*client_sock.back()) );
-            internal_threads.back()->run();
+                client_sock.push_back(new TCP_Client( &(lsock.back()) ));
+
+                /// Initialize and run response thread.
+                internal_threads.push_back( new Server_Thread((TCP_Server&)*this, (TCP_Client&)*client_sock.back()) );
+                internal_threads.back()->run();
+            }
+        }
+        else
+        {
+            Core::Logger::logItLn("Listening (Single Thread)...");
+            while( listenSock.IsValid() )
+            {
+                ting::mt::Thread::Sleep(1);
+
+                TCP_Socket sck = listenSock.Accept();
+                /// Validate socket
+                if( !sck.IsValid() )
+                    continue;
+
+                TCP_Client *cln = new TCP_Client(&sck);
+                this->response((TCP_Client&)*cln);
+                break;
+            }
         }
     }
     catch(ting::net::Exc &e)

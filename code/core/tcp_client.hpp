@@ -44,9 +44,9 @@ namespace Core
 typedef ting::net::TCPSocket TCP_Socket;
 
 /// @brief TCP Client Component
-class TCP_Client : public Core::Socket, public GraVitoN::Core::Component
+class TCP_Client : public Core::Socket//, public GraVitoN::Core::Component
 {
-private:
+//private:
 	/// Do not copy
 	//TCP_Client & operator = (const TCP_Client &_copy);
 
@@ -80,7 +80,7 @@ public:
 
 	virtual ~TCP_Client();
 
-	virtual bool open();
+    virtual bool connect();
 
 	virtual bool close();
 
@@ -113,17 +113,9 @@ public:
 	 */
     virtual bool send(const unsigned char *data, const size_t &data_size);
 
-	/**
-	 * @brief main loop
-	 *
-	 * You can override this method, and use them after initilialize you inherited
-	 * object. DO NOT forget to call open/close methods.
-	 */
-	virtual bool run();
-
 	virtual bool isActive();
 
-    virtual TCP_Socket *getTCPSocket() const
+    TCP_Socket *getTCPSocket() const
 	{
 		return sock;
 	}
@@ -157,7 +149,7 @@ bool TCP_Client::initialize(const string ip, unsigned int port)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool TCP_Client::open()
+bool TCP_Client::connect()
 {
 	try
 	{
@@ -197,22 +189,22 @@ bool TCP_Client::close()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool TCP_Client::run()
-{
-	/// Open socket
-	open();
+//bool TCP_Client::run()
+//{
+//	/// Open socket
+//	connect();
 
-	send((const unsigned char*)"Hello Server", 13);
+//	send((const unsigned char*)"Hello Server", 13);
 
-    size_t size;
-	unsigned char *data;
-	recv(data, size);
+//    size_t size;
+//	unsigned char *data;
+//	recv(data, size);
 
-	/// Close Socket
-	close();
+//	/// Close Socket
+//	close();
 
-    return size != 0;
-}
+//    return size != 0;
+//}
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Client::send(const unsigned char *data, const size_t &data_size)

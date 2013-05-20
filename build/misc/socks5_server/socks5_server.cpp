@@ -7,9 +7,11 @@ using namespace std;
 
 int main()
 {
-    GraVitoN::Utils::SOCKS5_Server srv(7357);
+    GraVitoN::Utils::Network_Relay_Tcp relay("127.0.0.1", 7358, "127.0.0.1", 7357, false);
+    relay.run();
 
-    srv.run();
+    // GraVitoN::Utils::SOCKS5_Server srv(7357);
+    // srv.run();
 
 	return 0;
 }
