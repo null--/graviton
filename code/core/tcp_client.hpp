@@ -31,6 +31,7 @@
 #include <graviton.hpp>
 #include <core/logger.hpp>
 #include <core/socket.hpp>
+#include <utils/netkit.hpp>
 #include <external/ting/net/TCPSocket.hpp>
 #include <external/ting/net/TCPServerSocket.hpp>
 #include <external/ting/mt/Thread.hpp>
@@ -119,6 +120,36 @@ public:
 	{
 		return sock;
 	}
+
+    string getRemoteIP()
+    {
+        return Utils::Netkit::hexToStrIPv4( sock->GetRemoteAddress().host );
+    }
+
+    unsigned int getRemoteIPHex()
+    {
+        return sock->GetRemoteAddress().host;
+    }
+
+    unsigned int getRemotePort()
+    {
+        return sock->GetRemoteAddress().port;
+    }
+
+    string getLocalIP()
+    {
+        return Utils::Netkit::hexToStrIPv4( sock->GetLocalAddress().host );
+    }
+
+    unsigned int getLocalIPHex()
+    {
+        return sock->GetLocalAddress().host;
+    }
+
+    unsigned int getLocalPort()
+    {
+        return sock->GetLocalAddress().port;
+    }
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -159,7 +190,7 @@ bool TCP_Client::connect()
         sock->Open(addr);
 
 		ting::WaitSet waitSet(1);
-		waitSet.Add(sock, ting::Waitable::WRITE);
+        waitSet.Add(sock, ting::Waitable::WRITE);
 		waitSet.Wait(); //< Wait for connection to complete.
 	}
 	catch(ting::net::Exc &e)

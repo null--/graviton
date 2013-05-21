@@ -54,6 +54,8 @@ private:
     bool multi_thread;
 
 protected:
+    unsigned int port;
+
     /// Response function
     virtual bool response(GraVitoN::Core::TCP_Client &client_sock) = 0;
 
@@ -99,8 +101,6 @@ protected:
     virtual bool initialize(unsigned int local_port, const bool enable_multi_thread = true);
 
 
-    /// Create IP address for connecting
-    unsigned int port;
 
     /// Socket
     ting::net::TCPServerSocket listenSock;

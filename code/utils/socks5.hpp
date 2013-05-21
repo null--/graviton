@@ -9,7 +9,7 @@ namespace Utils
 
 class SOCKS5
 {
-protected:
+public:
     /// rfc1928: REQUEST
     ///    The SOCKS request is formed as follows:
     ///
@@ -76,6 +76,11 @@ protected:
     const static unsigned char REP_TTL_EXPIRED                  = 0x06;
     const static unsigned char REP_COMMAND_NOT_SUPPORTED        = 0x07;
     const static unsigned char REP_ADDRESS_TYPE_NOT_SUPPORTED   = 0x08;
+    const static unsigned char REP_AUTH_UNACCEPTABLE            = 0xFF;
+
+    const static unsigned char AUTH_VER                         = 0x01;
+    const static unsigned char AUTH_USERPASS                    = 0x02;
+    const static unsigned char AUTH_NONE                        = 0x00;
 
 public:
     SOCKS5() {}
