@@ -7,8 +7,8 @@ using namespace std;
 
 int main()
 {
-    cout << GraVitoN::Utils::Netkit::dnsLookup4("www.google.com") << endl;
-    cout << GraVitoN::Utils::Netkit::dnsLookup4("mail.google.com") << endl;
+    // cout << GraVitoN::Utils::Netkit::dnsLookup4("www.google.com") << endl;
+    // cout << GraVitoN::Utils::Netkit::dnsLookup4("mail.google.com") << endl;
 
     // GraVitoN::Utils::Relay_Server_Tcp relay("127.0.0.1", 7357, "127.0.0.1", 80, false);
     // relay.run();

@@ -34,7 +34,7 @@
 /// Activate Logger
 // #define GVN_ACTIVATE_LOGGER
 #ifdef GVN_ACTIVATE_LOGGER
-    #warning ("[INFO] LOGGER IS AVTIVATED (GVN_ACTIVATE_LOGGER)")
+    #warning ("[INFO] LOGGER IS ACTIVATED (GVN_ACTIVATE_LOGGER)")
 #endif
 /// Lua Verbose Mode
 // #define GVN_VERBOSE_LUA
@@ -76,7 +76,7 @@
 
 namespace GraVitoN
 {
-	const unsigned int MAX_TCP_PACKET_SIZE = 60000;
+    const unsigned int MAX_TCP_PACKET_SIZE = 4069;
 }
 
 

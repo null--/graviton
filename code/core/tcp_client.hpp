@@ -243,7 +243,12 @@ bool TCP_Client::send(const unsigned char *data, const size_t &data_size)
 	try
 	{
 		ting::Buffer<const unsigned char> data_buf(data, (size_t)data_size);
-		sock->Send(data_buf);
+        ting::WaitSet waitSet(1);
+        waitSet.Add(sock, ting::Waitable::WRITE);
+        Logger::logItLn("[Send] Waiting...");
+        waitSet.Wait();
+
+        sock->Send(data_buf);
 		//ting::mt::Thread::Sleep(1);
 	}
 	catch(ting::net::Exc &e)
@@ -265,6 +270,8 @@ bool TCP_Client::send(const unsigned char *data, const size_t &data_size)
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
 {
+    size_t bytes_recved = 0;
+
 	try
 	{
         /// @todo to free or not to free...
@@ -274,14 +281,21 @@ bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
 		}
 
 		ting::StaticBuffer<unsigned char, MAX_TCP_PACKET_SIZE> data_buf;
-        size_t bytes_recved = 0;
 
-		while( bytes_recved == 0 )
-		{
+        /*
+        while( bytes_recved == 0 )
+        {
 			bytes_recved += sock->Recv(data_buf, bytes_recved);
-			ting::mt::Thread::Sleep(1);
+            // ting::mt::Thread::Sleep(1);
 		}
-		//Logger::logVariable("Bytes Recved: ", bytes_recved);
+        */
+        ting::WaitSet waitSet(1);
+        waitSet.Add(sock, ting::Waitable::READ);
+        Logger::logItLn("[Recv] Waiting...");
+        waitSet.Wait();
+        bytes_recved = sock->Recv(data_buf, bytes_recved);
+
+        Logger::logVariable("Bytes Recved: ", bytes_recved);
 		data_size = bytes_recved;
 		data = new unsigned char[data_size];
 
@@ -297,7 +311,7 @@ bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
 		return false;
 	}
 
-	return true;
+    return bytes_recved != 0;
 }
 
 bool TCP_Client::isActive()

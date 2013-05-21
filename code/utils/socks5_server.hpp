@@ -168,14 +168,16 @@ bool SOCKS5_Server::cmdConnect(Core::TCP_Client &client_sock, const string &remo
     memcpy( (void*)(repdata+8), (void*)&(nhbp), 2);
 
     Core::TCP_Client rhost(remote_ip, remote_port);
+    /*
     if( !rhost.connect() )
     {
         repdata[1] = SOCKS5::REP_CONNECTION_REFUSED;
         client_sock.send(repdata, repdata_size);
         return false;
     }
+    */
 
-    Network_Relay_Tcp_Bidirectional rel(client_sock, rhost);
+    Network_Relay_TCP rel(client_sock, rhost);
     if( client_sock.send(repdata, repdata_size) )
         rel.run();
     else
@@ -218,7 +220,7 @@ bool SOCKS5_Server::cmdUDP(Core::TCP_Client &client_sock, const string &remote_i
         return false;
     }
 
-    Network_Relay_Udp rel(client_sock, rhost);
+    Network_Relay_TCP_To_UDP rel(client_sock, rhost);
     if( client_sock.send(repdata, repdata_size) )
         rel.run();
     else
