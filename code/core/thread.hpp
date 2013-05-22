@@ -48,11 +48,9 @@ void os_sleep(unsigned int __msec__)
 */
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// @todo Thread
 class Thread: private ting::mt::MsgThread, public GraVitoN::Core::Component
 {
 public:
-    typedef ting::net::Exc Exception;
 
     /// Sleep for a number of milliseconds
     void static sleep(unsigned int __msec__)
@@ -85,6 +83,31 @@ public:
 
     /// Stop thread
     virtual bool stop();
+};
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+typedef void *(*THREAD_FUNC_P) (void *);
+class QuickThread : public Thread
+{
+private:
+    THREAD_FUNC_P loop_func_addr;
+    void *args;
+
+protected:
+    virtual bool myMainLoop()
+    {
+        if(!loop_func_addr)
+            return false;
+        loop_func_addr( args );
+        return true;
+    }
+
+public:
+    QuickThread(THREAD_FUNC_P loop_function, void *loop_args)
+    {
+        loop_func_addr = loop_function;
+        args = loop_args;
+    }
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//

@@ -47,18 +47,20 @@ typedef ting::net::TCPSocket TCP_Socket;
 /// @brief TCP Client Component
 class TCP_Client : public Core::Socket//, public GraVitoN::Core::Component
 {
+typedef ting::net::Exc Exception;
 //private:
 	/// Do not copy
 	//TCP_Client & operator = (const TCP_Client &_copy);
 
 protected:
+    bool is_dead;
 	//ting::net::Lib *socket_lib;
 
 	/// Create IP address for connecting
 	ting::net::IPAddress addr;
 
 	/// Socket
-    TCP_Socket *sock;
+    TCP_Socket sock;
 
     /**
      * @brief Initialize an TCP Client
@@ -77,7 +79,7 @@ public:
 	 *
 	 * By calling this constructor, there is no need to call initialize
 	 */
-    TCP_Client(TCP_Socket *_sock);
+    TCP_Client(TCP_Socket _sock);
 
 	virtual ~TCP_Client();
 
@@ -116,65 +118,67 @@ public:
 
 	virtual bool isActive();
 
-    TCP_Socket *getTCPSocket() const
+    TCP_Socket getTCPSocket() const
 	{
 		return sock;
 	}
 
     string getRemoteIP()
     {
-        return Utils::Netkit::hexToStrIPv4( sock->GetRemoteAddress().host );
+        return Utils::Netkit::hexToStrIPv4( sock.GetRemoteAddress().host );
     }
 
     unsigned int getRemoteIPHex()
     {
-        return sock->GetRemoteAddress().host;
+        return sock.GetRemoteAddress().host;
     }
 
     unsigned int getRemotePort()
     {
-        return sock->GetRemoteAddress().port;
+        return sock.GetRemoteAddress().port;
     }
 
     string getLocalIP()
     {
-        return Utils::Netkit::hexToStrIPv4( sock->GetLocalAddress().host );
+        return Utils::Netkit::hexToStrIPv4( sock.GetLocalAddress().host );
     }
 
     unsigned int getLocalIPHex()
     {
-        return sock->GetLocalAddress().host;
+        return sock.GetLocalAddress().host;
     }
 
     unsigned int getLocalPort()
     {
-        return sock->GetLocalAddress().port;
+        return sock.GetLocalAddress().port;
     }
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 TCP_Client::TCP_Client(const string &ip, unsigned int port)
 {
-    sock = new TCP_Socket();
+    // sock = new TCP_Socket();
     initialize(ip, port);
 }
 
-TCP_Client::TCP_Client(TCP_Socket *_sock)
+TCP_Client::TCP_Client(TCP_Socket _sock)
 {
     sock = _sock;
-    addr = sock->GetRemoteAddress();
+    addr = sock.GetRemoteAddress();
+    is_dead = sock.IsNotValid();
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 TCP_Client::~TCP_Client()
 {
-    if( sock->IsValid() )
+    if( sock.IsValid() )
 		TCP_Client::close();
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Client::initialize(const string ip, unsigned int port)
 {
+    is_dead = true;
 	addr = ting::net::IPAddress(ip.c_str(), port);
 	return true;
 }
@@ -187,27 +191,33 @@ bool TCP_Client::connect()
 		/// connect to remote listening socket.
 		/// It is an asynchronous operation, so we will use WaitSet
 		/// to wait for its completion.
-        sock->Open(addr);
+        sock.Open(addr);
 
 		ting::WaitSet waitSet(1);
-        waitSet.Add(sock, ting::Waitable::WRITE);
+        waitSet.Add(&sock, ting::Waitable::WRITE);
 		waitSet.Wait(); //< Wait for connection to complete.
 	}
 	catch(ting::net::Exc &e)
 	{
 		Logger::logVariable("Network error", e.What());
-        sock->Close();
+        sock.Close();
+
+        is_dead = false;
 		return false;
 	}
-    return sock->IsValid();
+
+    is_dead = sock.IsNotValid();
+    return sock.IsValid();
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Client::close()
 {
+    is_dead = true;
+
 	try
 	{
-		sock->Close();
+        sock.Close();
 		//delete sock;
 		//sock = _null_;
 	}
@@ -216,6 +226,7 @@ bool TCP_Client::close()
 		Logger::logVariable("Network error", e.What());
 		return false;
 	}
+
 	return true;
 }
 
@@ -240,21 +251,24 @@ bool TCP_Client::close()
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Client::send(const unsigned char *data, const size_t &data_size)
 {
+    if(!isActive()) return false;
+
 	try
 	{
 		ting::Buffer<const unsigned char> data_buf(data, (size_t)data_size);
         ting::WaitSet waitSet(1);
-        waitSet.Add(sock, ting::Waitable::WRITE);
-        Logger::logItLn("[Send] Waiting...");
+        waitSet.Add(&sock, ting::Waitable::WRITE);
+        // Logger::logItLn("[Send] Waiting...");
         waitSet.Wait();
 
-        sock->Send(data_buf);
+        sock.Send(data_buf);
 		//ting::mt::Thread::Sleep(1);
 	}
 	catch(ting::net::Exc &e)
 	{
         Logger::logVariable("[TCP_Client] Network error", e.What());
         // sock->Close();
+        close();
 		return false;
 	}
 	/*
@@ -270,6 +284,8 @@ bool TCP_Client::send(const unsigned char *data, const size_t &data_size)
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
 {
+    if(!isActive()) return false;
+
     size_t bytes_recved = 0;
 
 	try
@@ -290,12 +306,12 @@ bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
 		}
         */
         ting::WaitSet waitSet(1);
-        waitSet.Add(sock, ting::Waitable::READ);
-        Logger::logItLn("[Recv] Waiting...");
+        waitSet.Add(&sock, ting::Waitable::READ);
+        // Logger::logItLn("[Recv] Waiting...");
         waitSet.Wait();
-        bytes_recved = sock->Recv(data_buf, bytes_recved);
+        bytes_recved = sock.Recv(data_buf, bytes_recved);
 
-        Logger::logVariable("Bytes Recved: ", bytes_recved);
+        // Logger::logVariable("Bytes Recved: ", bytes_recved);
 		data_size = bytes_recved;
 		data = new unsigned char[data_size];
 
@@ -308,9 +324,12 @@ bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
 	{
         Logger::logVariable("[TCP_Client] Network error", e.What());
         // sock->Close();
+        close();
 		return false;
 	}
 
+    if( bytes_recved == 0 )
+        close();
     return bytes_recved != 0;
 }
 
@@ -318,8 +337,9 @@ bool TCP_Client::isActive()
 {
 	try
 	{
-		if(!sock) return false;
-		return sock->IsValid();
+        // if(!sock) return false;
+        // std::cout << (!is_dead && sock.IsValid()) << endl;
+        return !is_dead && sock.IsValid();
 	}
 	catch(...)
 	{

@@ -31,6 +31,11 @@
 /// My Lovely Define!
 #define _null_ 0x00 //NULL
 
+/// ACTIVATE LUA BRIDGE
+#define GVN_ACTIVATE_LUABRIDGE
+#ifndef GVN_ACTIVATE_LUABRIDGE
+    #warning ("[WARNING] LUABRIDGE is not activated")
+#endif
 /// Activate Logger
 // #define GVN_ACTIVATE_LOGGER
 #ifdef GVN_ACTIVATE_LOGGER

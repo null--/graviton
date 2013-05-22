@@ -85,22 +85,23 @@ int SOCKS5_Server::processRequest(
         string &dstip,
         unsigned int &dstport)
 {
-    Core::Logger::logItLn("Processing Packet");
+    Core::Logger::logItLn("[SOCKS5] Processing Packet");
     if( data_size < 4 )
         return SOCKS5::REP_COMMAND_NOT_SUPPORTED;
 
     ver = data[0];
-    Core::Logger::logVariable("ver",(int)ver);
+    // Core::Logger::logVariable("ver",(int)ver);
     cmd = data[1];
-    Core::Logger::logVariable("cmd",(int)cmd);
+    // Core::Logger::logVariable("cmd",(int)cmd);
     atyp = data[3];
-    Core::Logger::logVariable("atyp",(int)atyp);
+    // Core::Logger::logVariable("atyp",(int)atyp);
 
     if( ver != SOCKS5::VER )
         return SOCKS5::REP_COMMAND_NOT_SUPPORTED;
 
     /// @todo SOCKS5::CMD_UDP
     if( cmd != SOCKS5::CMD_UDP &&
+        cmd != SOCKS5::CMD_BIND &&
         cmd != SOCKS5::CMD_CONNECT )
         return SOCKS5::REP_COMMAND_NOT_SUPPORTED;
 
@@ -133,16 +134,16 @@ int SOCKS5_Server::processRequest(
 
         domain[domsz] = '\0';
 
-        Core::Logger::logVariable("Domain",(char*)domain);
-        Core::Logger::logVariable("Domain Len",string((char*)domain).size());
+        Core::Logger::logVariable("[SOCKS5] Domain",(char*)domain);
+        // Core::Logger::logVariable("Domain Len",string((char*)domain).size());
         dstip = Netkit::dnsLookup4(domain);
         dstport = Netkit::netToHost_16(hport);
         if( dstip.size() == 0 )
             return SOCKS5::REP_HOST_UNREACHABLE;
     }
 
-    Core::Logger::logVariable("IP: ", dstip);
-    Core::Logger::logVariable("Port: ", dstport);
+    Core::Logger::logVariable("[SOCKS5] IP", dstip);
+    Core::Logger::logVariable("[SOCKS5] Port", dstport);
 
     return SOCKS5::REP_SUCCEEDED;
 }
@@ -150,7 +151,7 @@ int SOCKS5_Server::processRequest(
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool SOCKS5_Server::cmdConnect(Core::TCP_Client &client_sock, const string &remote_ip, const unsigned int &remote_port)
 {
-    Core::Logger::logItLn("Connecting");
+    Core::Logger::logItLn("[SOCKS5] Connecting...");
 
     /// @todo find a random closed port
     unsigned int bind_port = port;
@@ -187,15 +188,19 @@ bool SOCKS5_Server::cmdConnect(Core::TCP_Client &client_sock, const string &remo
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// @todo cmdBind implement
 bool SOCKS5_Server::cmdBind(Core::TCP_Client &client_sock, const string &remote_ip, const unsigned int &client_port)
 {
+    Core::Logger::logItLn("[SOCKS5] Binding...");
 
+    return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// @todo cmdUDP test
 bool SOCKS5_Server::cmdUDP(Core::TCP_Client &client_sock, const string &remote_ip, const unsigned int &remote_port)
 {
-    Core::Logger::logItLn("Connecting");
+    Core::Logger::logItLn("[SOCKS5] UDP Connecting...");
 
     /// @todo find a random closed port
     unsigned int bind_port = port;
@@ -234,7 +239,7 @@ bool SOCKS5_Server::authenticate(Core::TCP_Client &client_sock)
 {
     unsigned char *data = _null_;
     size_t data_size;
-    Core::Logger::logItLn("Authenticating");
+    Core::Logger::logItLn("[SOCKS5] Authenticating...");
 
     if( !client_sock.recv(data, data_size) )
         return false;
@@ -265,8 +270,8 @@ bool SOCKS5_Server::authenticate(Core::TCP_Client &client_sock)
     for(size_t i = 0; i < plen; ++i)
         pss += data[3 + len + i];
 
-    Core::Logger::logVariable("Username", usr);
-    Core::Logger::logVariable("Password", pss);
+    // Core::Logger::logVariable("[SOCKS5] Username", usr);
+    // Core::Logger::logVariable("[SOCKS5] Password", pss);
     bool res = (user == usr) && (pass == pss);
     // Core::Logger::logVariable("Result",res);
     unsigned char repdata[2];
@@ -281,7 +286,7 @@ bool SOCKS5_Server::greeting(Core::TCP_Client &client_sock)
 {
     unsigned char *data = _null_;
     size_t data_size;
-    Core::Logger::logItLn("Greeting");
+    Core::Logger::logItLn("[SOCKS5] Greeting...");
 
     if( !client_sock.recv(data, data_size) )
         return false;
@@ -326,14 +331,14 @@ bool SOCKS5_Server::response(Core::TCP_Client &client_sock)
 {
     unsigned char *data = _null_;
     size_t data_size;
-    Core::Logger::logItLn("New Connection");
+    Core::Logger::logItLn("[SOCKS5] New Connection");
 
     int res;
 
     /// Greeting and Authentication
     if( !greeting(client_sock) )
     {
-        Core::Logger::logItLn("[FAILED]");
+        Core::Logger::logItLn("[SOCKS5] [FAILED]");
         client_sock.close();
         return false;
     }
@@ -352,7 +357,7 @@ bool SOCKS5_Server::response(Core::TCP_Client &client_sock)
 
     if( res )
     {
-        Core::Logger::logItLn("[FAILED]");
+        Core::Logger::logItLn("[SOCKS5] [FAILED]");
         client_sock.close();
         return false;
     }
@@ -371,7 +376,7 @@ bool SOCKS5_Server::response(Core::TCP_Client &client_sock)
             return false;
     }
     /// UDP
-    if( cmd == SOCKS5::CMD_UDP )
+    else if( cmd == SOCKS5::CMD_UDP )
     {
         if( !cmdUDP(client_sock, dstip, dstport) )
             return false;

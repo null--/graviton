@@ -21,6 +21,7 @@ public:
         while( sock.isActive())
 		{
             sock.recv(data, data_size);
+
             cout << data << endl;
             sock.send(data, data_size);
 

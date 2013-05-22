@@ -42,9 +42,6 @@
 #include <core/component.hpp>
 #include <core/logger.hpp>
 
-#include <external/LuaBridge/LuaBridge.h>
-#include <external/LuaBridge/RefCountedPtr.h>
-
 using namespace std;
 
 namespace GraVitoN

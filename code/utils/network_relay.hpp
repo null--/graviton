@@ -23,29 +23,28 @@ private:
 protected:
     virtual void relay()
     {
-        Core::Logger::logItLn("Relaying...");
-
-        Core::Logger::logItLn("[Relay] starting listening thread...");
+        Core::Logger::logItLn("Relaying (FW)...");
 
         right.connect();
 
         unsigned char *data = _null_;
         size_t data_size;
 
-        Core::Logger::logItLn("[Relay] entering relay loop...");
+        Core::Logger::logItLn("[Relay (FW)] entering relay loop...");
         // while( left.isActive() )
         while ( 1 )
         {
-            Core::Logger::logItLn("[Relay] left recv");
+            // Core::Logger::logItLn("[Relay] left recv");
             if( !left.recv(data, data_size) )
                 break;
-            Core::Logger::logItLn("[Relay] right send");
+            // Core::Logger::logItLn("[Relay] right send");
             right.send(data, data_size);
-            Core::Logger::logItLn("[Relay] right recv");
+            // Core::Logger::logItLn("[Relay] right recv");
             right.recv(data, data_size);
-            Core::Logger::logItLn("[Relay] left send");
+            // Core::Logger::logItLn("[Relay] left send");
             left.send(data, data_size);
         }
+        Core::Logger::logItLn("[Relay (FW)] loop done");
 
         Core::Thread::sleep(10);
         if( left.isActive() ) left.close();
@@ -85,17 +84,17 @@ private:
 
         virtual bool myMainLoop()
         {
-            Core::Logger::logItLn("[Relay Thread] entering relay loop...");
+            // Core::Logger::logItLn("[Relay Thread] entering relay loop...");
             while( sock1.isActive()  )
             {
                 unsigned char *data = _null_;
                 size_t data_size;
 
                 // sema.wait();
-                Core::Logger::logItLn("[Relay Thread] recv");
+                // Core::Logger::logItLn("[Relay Thread] recv");
                 if( sock1.recv(data, data_size) )
                 {
-                    Core::Logger::logItLn("[Relay Thread] send");
+                    // Core::Logger::logItLn("[Relay Thread] send");
 
                     // sema.wait();
                     bool res = sock2.send(data, data_size);
@@ -112,7 +111,7 @@ private:
                 }
                 // sema.signal();
             }
-            Core::Logger::logItLn("[Relay Thread] Done");
+            // Core::Logger::logItLn("[Relay Thread] Done");
             return false;
         }
 
@@ -139,7 +138,7 @@ protected:
     {
         Core::Logger::logItLn("Relaying...");
 
-        Core::Logger::logItLn("[Relay] starting listening thread...");
+        // Core::Logger::logItLn("[Relay] starting listening thread...");
         // Core::Semaphore sema;
 
         RELAY_THREAD l_trd(left, right); //, sema);
@@ -176,6 +175,7 @@ protected:
                 break;
             */
         }
+        Core::Logger::logItLn("[Relay] loop done");
         // sema.signal();
 
         r_trd.stop();
@@ -239,10 +239,10 @@ public:
             const bool              multi_thread = true):
         TCP_Server(client_port, multi_thread)
     {
-        Core::Logger::logVariable("Left", client_ip);
-        Core::Logger::logVariable("Right", server_ip);
-        Core::Logger::logVariable("LPort", client_port);
-        Core::Logger::logVariable("RPort", server_port);
+        // Core::Logger::logVariable("Left", client_ip);
+        // Core::Logger::logVariable("Right", server_ip);
+        // Core::Logger::logVariable("LPort", client_port);
+        // Core::Logger::logVariable("RPort", server_port);
 
         right_ip = server_ip;
         left_ip = client_ip;
@@ -272,7 +272,7 @@ private:
 
         virtual bool myMainLoop()
         {
-            Core::Logger::logItLn("[Relay UDP Thread] entering relay loop...");
+            // Core::Logger::logItLn("[Relay (TCP/UDP) Thread] entering relay loop...");
             if( reverse )
             {
                 while( sock2.isActive()  )
@@ -280,10 +280,10 @@ private:
                     unsigned char *data = _null_;
                     size_t data_size;
 
-                    Core::Logger::logItLn("[Relay UDP Thread] recv (udp)");
+                    // Core::Logger::logItLn("[Relay UDP Thread] recv (udp)");
                     if( sock2.recv(data, data_size) )
                     {
-                        Core::Logger::logItLn("[Relay UDP Thread] send (tcp)");
+                        // Core::Logger::logItLn("[Relay UDP Thread] send (tcp)");
 
                         if( sock1.send(data, data_size) )
                             break;
@@ -299,10 +299,10 @@ private:
                     unsigned char *data = _null_;
                     size_t data_size;
 
-                    Core::Logger::logItLn("[Relay UDP Thread] recv (tcp)");
+                    // Core::Logger::logItLn("[Relay UDP Thread] recv (tcp)");
                     if( sock1.recv(data, data_size) )
                     {
-                        Core::Logger::logItLn("[Relay UDP Thread] send (udp)");
+                        // Core::Logger::logItLn("[Relay UDP Thread] send (udp)");
 
                         if( sock2.send(data, data_size) )
                             break;
@@ -311,7 +311,7 @@ private:
                         break;
                 }
             }
-            Core::Logger::logItLn("[Relay UDP Thread] Done");
+            // Core::Logger::logItLn("[Relay (TCP/UDP) Thread] Done");
             return false;
         }
 
@@ -344,9 +344,7 @@ private:
 protected:
     virtual void relay()
     {
-        Core::Logger::logItLn("Relaying...");
-
-        Core::Logger::logItLn("[Relay UDP] starting listening thread...");
+        Core::Logger::logItLn("Relaying (TCP/UDP)...");
 
         RELAY_THREAD l_trd(left, right);
         RELAY_THREAD r_trd(right, left);
@@ -357,10 +355,12 @@ protected:
         l_trd.run();
         r_trd.run();
 
-        Core::Logger::logItLn("[Relay] entering relay loop...");
+        Core::Logger::logItLn("[Relay (TCP/UDP)] entering relay loop...");
 
         while ( r_trd.isActive() && l_trd.isActive() )
             Core::Thread::sleep(10);
+
+        Core::Logger::logItLn("[Relay (TCP/UDP)] loop done");
 
         r_trd.stop();
         l_trd.stop();

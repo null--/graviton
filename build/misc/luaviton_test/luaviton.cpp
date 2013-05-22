@@ -3,7 +3,7 @@
 #include <iostream>
 #include <graviton.hpp>
 #include <core/luaviton.hpp>
-
+#include <core/luabridge.hpp>
 using namespace std;
 
 // using namespace luabridge;
@@ -85,6 +85,15 @@ public:
     }
 };
 
+class C
+{
+public:
+    C(int)
+    {
+
+    }
+};
+
 int A::testStaticProp = 47;
 
 /*
@@ -119,6 +128,19 @@ RefCountedPtr <A const> testRetSharedPtrConstA ()
   return sp_A;
 }
 
+void function()
+{
+    cout << "HELL YEAH!" << endl;
+}
+
+void callback_func( void *func )
+{
+    cout << func << endl;
+    void (*func_p) (void *);
+    func_p = (void (*) (void*))func;
+    func_p(NULL);
+}
+
 // add our own functions and classes to a Lua environment
 void testLuaBridge (lua_State *L)
 {
@@ -142,6 +164,9 @@ void testLuaBridge (lua_State *L)
             .addFunction ("testVirtual", &B::testVirtual)
             .addStaticFunction ("testStatic", &B::testStatic)
         .endClass ()
+        .beginClass <C> ("C")
+            .addConstructor <void (*) (int), RefCountedPtr <C> > ()
+        .endClass()
         .addFunction ("testRetSharedPtrA", &testRetSharedPtrA)
         .addFunction ("testRetSharedPtrConstA", &testRetSharedPtrConstA)
         ;
@@ -181,6 +206,8 @@ int testFunc ( lua_State *stt )
 /// Run a Lua Test
 int main ( int argc , char **argv)
 {
+    callback_func((void*)&function);
+
     string file;// = "test.lua";
 
     if(argc != 2)

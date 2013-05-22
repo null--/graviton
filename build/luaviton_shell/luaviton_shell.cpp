@@ -10,6 +10,7 @@
 #include <graviton.hpp>
 #include <iostream>
 #include <core/luaviton.hpp>
+#include <core/luabridge.hpp>
 
 #include <core/luaviton_crypto.hpp>
 #include <core/luaviton_socket.hpp>
@@ -17,6 +18,8 @@
 #include <core/luaviton_zlib.hpp>
 #include <core/luaviton_sys.hpp>
 #include <core/luaviton_digest.hpp>
+
+#include <core/component.hpp>
 using namespace std;
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -24,7 +27,11 @@ using namespace std;
 int main ( int argc , char **argv)
 {
     cout << "Luaviton Shell - Part of GraVitoN project" << endl << endl;
-	cout << "Loading LUA modules... ";
+
+    cout << "Initializing LUABridge... ";
+    GraVitoN::Core::LUABridge::addClass_Component();
+
+    cout << "Loading LUA modules... ";
     cout << "\tcrypto, socket, ssl, zlib, sys, digest" << endl;
     /// Get Instances
     GraVitoN::Core::Luaviton_Crypto &luacrypto  = GraVitoN::Core::Luaviton_Crypto   ::getInstance();

@@ -1,10 +1,15 @@
 print("Beginning Test...")
 
-print ("----- testing A -----")
-A.testStatic()
-print(A.testStaticProp)
+print ("----- testing callback -----")
+print(func)
+f1 = func
+callback_func(f1)
 
-a_obj = A("HELL'o C")
+print ("----- testing A -----")
+gvn.A.testStatic()
+print(gvn.A.testStaticProp)
+
+a_obj = gvn:A("HELL'o C")
 a_obj:testVirtual()
 
 name = a_obj:getName()

@@ -45,22 +45,56 @@ namespace Core
 {
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// Basie of TCP_Server Component
+class TCP_Server_Base: public GraVitoN::Core::Socket
+{
+protected:
+    unsigned int port;
+
+    /// Socket
+    ting::net::TCPServerSocket listenSock;
+
+    //ting::net::Lib *socket_lib;
+
+public:
+    TCP_Server_Base(unsigned int _port)
+    {
+        port = _port;
+    }
+
+    ~TCP_Server_Base() throw()
+    {
+        close();
+    }
+
+    /// Listen socket
+    TCP_Client accept();
+
+    /// Open socket
+    virtual bool open();
+
+    /// Open socket
+    virtual bool close();
+
+    virtual bool isActive();
+};
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
  * @brief TCP Server Component
  */
-class TCP_Server : public GraVitoN::Core::Socket ,public GraVitoN::Core::Component // Component_With_Init
+class TCP_Server : public TCP_Server_Base ,public GraVitoN::Core::Component // Component_With_Init
 {
 private:
     bool multi_thread;
 
 protected:
-    unsigned int port;
 
     /// Response function
     virtual bool response(GraVitoN::Core::TCP_Client &client_sock) = 0;
 
     /// Server socket thread
-    class Server_Thread : public GraVitoN::Core::Thread
+    class SERVER_INTERNAL_THREAD : public GraVitoN::Core::Thread
     {
     private:
         TCP_Server &server_handle;
@@ -74,7 +108,7 @@ protected:
         }
 
     public:
-        Server_Thread(TCP_Server &_this_server, TCP_Client &client_sock)
+        SERVER_INTERNAL_THREAD(TCP_Server &_this_server, TCP_Client &client_sock)
             :server_handle(_this_server),
             sock(client_sock)
         {
@@ -82,74 +116,24 @@ protected:
             // sock = client_sock;
         }
 
-        virtual ~Server_Thread()throw()
+        virtual ~SERVER_INTERNAL_THREAD()throw()
         {
             sock.close();
         }
     };
-    //std::vector<Server_Thread> internal_threads;
-    list<Server_Thread*> internal_threads;
-
-protected:
-    /**
-     * @brief Initialize an TCP Server
-     *
-     * @options
-     * unsigned int: port
-     *
-     */
-    virtual bool initialize(unsigned int local_port, const bool enable_multi_thread = true);
-
-
-
-    /// Socket
-    ting::net::TCPServerSocket listenSock;
-
-    //ting::net::Lib *socket_lib;
+    //std::vector<SERVER_INTERNAL_THREAD> internal_threads;
+    list<SERVER_INTERNAL_THREAD*> internal_threads;
 
 public:
     TCP_Server(const unsigned int local_port, const bool enable_multi_thread = true);
 
     virtual ~TCP_Server() throw();
 
-    /// Open socket
-    virtual bool open();
-
     /// Close socket
     virtual bool close();
 
     /// Listen socket
     virtual bool listen();
-
-/// Send and Recieve a packet should be handled by a TCP_Client object
-//	/**
-//	 * @brief Recieve data
-//	 *
-//	 * Do not forget to call open method, before call this function.
-//	 *
-//	 * @param [out] data
-//	 * Recieved data
-//	 *
-//	 * @param [out] data_size
-//	 *
-//	 * @return true if, something recieved.
-//	 */
-//	static bool recv(TCP_Socket &sock, unsigned char *&data, unsigned int &data_size);
-
-//	/**
-//	 * @brief Recieve data
-//	 *
-//	 * Do not forget to call open method, before call this function.
-//	 *
-//	 * @param [in] data
-//	 * Send data
-//	 *
-//	 * @param [in] data_size
-//	 * Size of data
-//	 *
-//	 * @return true if data was sended.
-//	 */
-//	static bool send(TCP_Socket &sock, const unsigned char *data, const unsigned int &data_size);
 
     /**
      * @brief main loop
@@ -158,44 +142,21 @@ public:
      * object.
      */
     virtual bool run();
-
-    virtual bool isActive();
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-TCP_Server::TCP_Server(unsigned int local_port, const bool enable_multi_thread)
+TCP_Server::TCP_Server(unsigned int local_port, const bool enable_multi_thread) : TCP_Server_Base(local_port)
 {
-    initialize(local_port, enable_multi_thread);
+    multi_thread = enable_multi_thread;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 TCP_Server::~TCP_Server() throw()
 {
-    TCP_Server::close();
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool TCP_Server::initialize(unsigned int local_port, const bool enable_multi_thread) // initialize(...)
-{
-    if( listenSock.IsValid() )
-        this->close();
-
-    // va_list vl;
-    // va_start(vl, 1); /// Only one argument
-    // port = va_arg(vl, unsigned int);
-    // va_end(vl);
-
-    port = local_port;
-    multi_thread = enable_multi_thread;
-
-    //if( !OptParser::getValueAsUInt(options, "THREADS", max_threads) )
-    //return false;
-
-    return true;
-}
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool TCP_Server::open()
+bool TCP_Server_Base::open()
 {
     try
     {
@@ -223,6 +184,18 @@ bool TCP_Server::open()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+TCP_Client TCP_Server_Base::accept()
+{
+    TCP_Socket sock;
+    while( (sock = listenSock.Accept() ).IsNotValid() )
+    {
+        ting::mt::Thread::Sleep(1);
+    }
+
+    return TCP_Client(sock);
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Server::listen()
 {
     try
@@ -231,25 +204,19 @@ bool TCP_Server::listen()
         {
             Core::Logger::logItLn("Listening (MultiThread)...");
 
-            list<TCP_Client*> client_sock;
-            list<TCP_Socket> lsock;
+            // list<TCP_Socket> lsock;
+            list<TCP_Client> client_sock;
+
             while(listenSock.IsValid())
             //if(listenSock.IsValid())
             {
-                ting::mt::Thread::Sleep(1);
-
                 /// Check for waiting connection
-                TCP_Socket sck = listenSock.Accept();
 
-                /// Validate socket
-                if( !sck.IsValid() )
-                    continue;
-                lsock.push_back(sck);
-
-                client_sock.push_back(new TCP_Client( &(lsock.back()) ));
+                // lsock.push_back ( accept() );
+                client_sock.push_back( accept() );
 
                 /// Initialize and run response thread.
-                internal_threads.push_back( new Server_Thread((TCP_Server&)*this, (TCP_Client&)*client_sock.back()) );
+                internal_threads.push_back( new SERVER_INTERNAL_THREAD((TCP_Server&)*this, client_sock.back() ));
                 internal_threads.back()->run();
             }
         }
@@ -260,13 +227,8 @@ bool TCP_Server::listen()
             {
                 ting::mt::Thread::Sleep(1);
 
-                TCP_Socket sck = listenSock.Accept();
-                /// Validate socket
-                if( !sck.IsValid() )
-                    continue;
-
-                TCP_Client *cln = new TCP_Client(&sck);
-                this->response((TCP_Client&)*cln);
+                TCP_Client cln = accept();
+                this->response( cln );
                 break;
             }
         }
@@ -282,15 +244,22 @@ bool TCP_Server::listen()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool TCP_Server_Base::close()
+{
+    listenSock.Close();
+    return true;
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Server::close()
 {
     try
     {
-        listenSock.Close();
+        TCP_Server_Base::close();
 
         if( !internal_threads.empty() )
         {
-            for(list<Server_Thread*>::iterator p_trd = internal_threads.begin(); p_trd != internal_threads.end(); ++p_trd)
+            for(list<SERVER_INTERNAL_THREAD*>::iterator p_trd = internal_threads.begin(); p_trd != internal_threads.end(); ++p_trd)
                 (*p_trd)->stop();
             internal_threads.clear();
         }
@@ -318,56 +287,8 @@ bool TCP_Server::run()
     return true;
 }
 
-////-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-//bool TCP_Server::send(TCP_Socket &sock, const unsigned char *data, const unsigned int &data_size)
-//{
-//	try
-//	{
-//		ting::Buffer<const unsigned char> data_buf(data, (size_t)data_size);
-//		sock.Send(data_buf);
-//	}
-//	catch(ting::net::Exc &e)
-//	{
-//		Logger::logVariable("Network error", e.What());
-//		return false;
-//	}
-
-//	return true;
-//}
-
-////-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-//bool TCP_Server::recv(TCP_Socket &sock, unsigned char *&data, unsigned int &data_size)
-//{
-//	try
-//	{
-//		if ( data )
-//			delete data;
-
-//		ting::StaticBuffer<unsigned char, MAX_TCP_PACKET_SIZE> data_buf;
-//		unsigned int bytes_recved = 0;
-
-//		while( bytes_recved == 0 )
-//		{
-//			bytes_recved += sock.Recv(data_buf, bytes_recved);
-//		}
-//		//Logger::logVariable("Bytes Recved: ", bytes_recved);
-//		data_size = bytes_recved;
-//		data = new unsigned char[data_size];
-
-//		for(int i=0; i<bytes_recved; ++i)
-//			data[i] = data_buf[i];
-//	}
-//	catch(ting::net::Exc &e)
-//	{
-//		Logger::logVariable("Network error", e.What());
-//		return false;
-//	}
-
-//	return true;
-//}
-
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool TCP_Server::isActive()
+bool TCP_Server_Base::isActive()
 {
     try
     {

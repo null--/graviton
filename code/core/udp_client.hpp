@@ -207,7 +207,7 @@ bool UDP_Client::send(const unsigned char *data, const size_t &data_size)
 	{
         ting::WaitSet waitSet(1);
         waitSet.Add(sock, ting::Waitable::WRITE);
-        Logger::logItLn("[Recv UDP] Waiting...");
+        // Logger::logItLn("[Recv UDP] Waiting...");
         waitSet.Wait();
 
 		ting::Buffer<const unsigned char> data_buf(data, (size_t)data_size);
@@ -242,7 +242,7 @@ bool UDP_Client::recv(unsigned char *&data, size_t &data_size)
 
         ting::WaitSet waitSet(1);
         waitSet.Add(sock, ting::Waitable::READ);
-        Logger::logItLn("[Recv UDP] Waiting...");
+        // Logger::logItLn("[Recv UDP] Waiting...");
         waitSet.Wait();
         bytes_recved = sock->Recv(data_buf, addr);
         if( bytes_recved == 0 )
