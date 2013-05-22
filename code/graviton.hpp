@@ -32,9 +32,12 @@
 #define _null_ 0x00 //NULL
 
 /// ACTIVATE LUA BRIDGE
-#define GVN_ACTIVATE_LUABRIDGE
+// #define GVN_ACTIVATE_LUABRIDGE
 #ifndef GVN_ACTIVATE_LUABRIDGE
     #warning ("[WARNING] LUABRIDGE is not activated")
+#else
+    #include <core/luaviton.hpp>
+    #include <core/luabridge.hpp>
 #endif
 /// Activate Logger
 // #define GVN_ACTIVATE_LOGGER

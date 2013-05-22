@@ -71,3 +71,13 @@ INCLUDEPATH += $$PWD/../../code/external/ldigest
 DEPENDPATH += $$PWD/../../code/external/ldigest
 
 unix:!macx:!symbian: PRE_TARGETDEPS += $$PWD/../../libs/ldigest/linux-x86_64/libldigest.a
+
+unix:!macx:!symbian: LIBS += -L$$PWD/../../libs/ting/linux-x86_64/ -lting
+
+INCLUDEPATH += $$PWD/../../code/external/ting
+DEPENDPATH += $$PWD/../../code/external/ting
+
+unix:!macx:!symbian: PRE_TARGETDEPS += $$PWD/../../libs/ting/linux-x86_64/libting.a
+
+OTHER_FILES += \
+    helltest.lua

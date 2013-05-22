@@ -42,8 +42,22 @@ namespace GraVitoN
 namespace Core
 {
 
-typedef ting::net::TCPSocket TCP_Socket;
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+class TCP_Socket : public ting::net::TCPSocket
+{
+public:
+    TCP_Socket() : ting::net::TCPSocket()
+    {
 
+    }
+
+    TCP_Socket(const ting::net::TCPSocket &_tsock) : ting::net::TCPSocket(_tsock)
+    {
+
+    }
+};
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// @brief TCP Client Component
 class TCP_Client : public Core::Socket//, public GraVitoN::Core::Component
 {
@@ -101,6 +115,8 @@ public:
 	 */
     virtual bool recv(unsigned char *&data, size_t &data_size);
 
+    virtual bool recvString(string &data);
+
 	/**
 	 * @brief Recieve data
 	 *
@@ -115,6 +131,8 @@ public:
 	 * @return true if data was sended.
 	 */
     virtual bool send(const unsigned char *data, const size_t &data_size);
+
+    virtual bool sendString(const string &data);
 
 	virtual bool isActive();
 
@@ -282,6 +300,31 @@ bool TCP_Client::send(const unsigned char *data, const size_t &data_size)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool TCP_Client::sendString(const string &data)
+{
+    return TCP_Client::send((unsigned char*)data.c_str(), data.size());
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool TCP_Client::recvString(string &sdata)
+{
+    sdata = "";
+
+    unsigned char *data = _null_;
+    size_t data_size;
+    if( recv(data, data_size) )
+    {
+        for(size_t i = 0; i<data_size; ++i)
+        {
+            sdata += (char)data[i];
+        }
+        return true;
+    }
+
+    return false;
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
 {
     if(!isActive()) return false;
@@ -361,6 +404,40 @@ bool TCP_Client::isActive()
 //}
 
 } // Core
+
+//=============================================================================//
+#ifdef GVN_ACTIVATE_LUABRIDGE
+namespace LUABridge
+{
+void addClass_TCP_Client()
+{
+    luabridge::getGlobalNamespace ( Core::Luaviton::getInstance().getState() )
+            .beginNamespace("gvn")
+            .beginNamespace("core")
+            .beginClass <Core::TCP_Socket> ("TCP_Socket")
+            // .addConstructor < void(*) (), RefCountedPtr<Core::TCP_Socket> > ()
+            .endClass()
+            .beginClass <Core::TCP_Client> ("TCP_Client")
+            .addConstructor < void(*) (const string&, const unsigned int), RefCountedPtr<Core::TCP_Client> > ()
+            // .addConstructor < void(*) (Core::TCP_Socket), RefCountedPtr<Core::TCP_Client> > ()
+            .addFunction("connect", &Core::TCP_Client::connect)
+            .addFunction("close", &Core::TCP_Client::close)
+            .addFunction("sendString", &Core::TCP_Client::sendString)
+            .addFunction("recvString", &Core::TCP_Client::recvString)
+            .addFunction("isActive", &Core::TCP_Client::isActive)
+            .addFunction("getLocalIP", &Core::TCP_Client::getLocalIP)
+            .addFunction("getLocalIPHex", &Core::TCP_Client::getLocalIPHex)
+            .addFunction("getLocalPort", &Core::TCP_Client::getLocalPort)
+            .addFunction("getRemoteIP", &Core::TCP_Client::getRemoteIP)
+            .addFunction("getRemoteIPHex", &Core::TCP_Client::getRemoteIPHex)
+            .addFunction("getRemotePort", &Core::TCP_Client::getRemotePort)
+            .endClass()
+            .endNamespace()
+            .endNamespace()
+            ;
+}
+}
+#endif
 } // end of GraVitoN
 
 #endif // _GVN_TCP_CLIENT_HEAD_

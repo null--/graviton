@@ -1,5 +1,7 @@
+#define GVN_ACTIVATE_LUABRIDGE
+
 /// LOGGER IS DISABLED
-// #undef GVN_ACTIVATE_LOGGER
+#undef GVN_ACTIVATE_LOGGER
 
 /// LUA Verbose Mode
 #define GVN_VERBOSE_LUA
@@ -11,6 +13,15 @@
 #include <iostream>
 #include <core/luaviton.hpp>
 #include <core/luabridge.hpp>
+
+#include <core/tcp_client.hpp>
+#include <core/tcp_server.hpp>
+#include <core/udp_client.hpp>
+
+#include <utils/network_relay.hpp>
+#include <utils/socks5_server.hpp>
+#include <utils/files.hpp>
+#include <utils/optparser.hpp>
 
 #include <core/luaviton_crypto.hpp>
 #include <core/luaviton_socket.hpp>
@@ -28,8 +39,8 @@ int main ( int argc , char **argv)
 {
     cout << "Luaviton Shell - Part of GraVitoN project" << endl << endl;
 
-    cout << "Initializing LUABridge... ";
-    GraVitoN::Core::LUABridge::addClass_Component();
+    cout << "Initializing LUABridge... " << endl;
+    GraVitoN::LUABridge::addClass_TCP_Client();
 
     cout << "Loading LUA modules... ";
     cout << "\tcrypto, socket, ssl, zlib, sys, digest" << endl;

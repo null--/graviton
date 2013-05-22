@@ -8,26 +8,11 @@
 #include <external/LuaBridge/LuaBridge.h>
 #include <external/LuaBridge/RefCountedPtr.h>
 
-// #include <core/thread.hpp>
 namespace GraVitoN
-{
-namespace Core
 {
 namespace LUABridge
 {
-
-void addClass_Component()
-{
-    luabridge::getGlobalNamespace ( Core::Luaviton::getInstance().getState() )
-            .beginNamespace("gvn")
-            .beginNamespace("core")
-
-            .endNamespace()
-            .endNamespace()
-    ;
-}
     
-}
 }
 }
 
