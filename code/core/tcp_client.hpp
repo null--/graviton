@@ -87,7 +87,7 @@ protected:
     virtual bool initialize(const string ip, unsigned int port);
 
 public:
-    TCP_Client(const string &ip, unsigned int port);
+    TCP_Client(const string &ip, const unsigned int port);
 	/**
 	 * @brief Create an object of TCP_Client with a open socket.
 	 *
@@ -99,7 +99,7 @@ public:
 
     virtual bool connect();
 
-	virtual bool close();
+    virtual bool close();
 
 	/**
 	 * @brief Recieve data
@@ -376,6 +376,7 @@ bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
     return bytes_recved != 0;
 }
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Client::isActive()
 {
 	try

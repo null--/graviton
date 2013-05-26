@@ -10,6 +10,7 @@
 
 namespace GraVitoN
 {
+/// @todo LUABridge alloc problems
 namespace LUABridge
 {
     

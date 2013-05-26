@@ -2,6 +2,11 @@
 #define _GVN_NETKIT_HEAD_
 
 #include <graviton.hpp>
+#include <cstring>
+#include <string>
+#include <cstdio>
+#include <cstdlib>
+using namespace std;
 
 /// @todo android, windows, bsd, solaris
 #if defined(INFO_OS_LINUX) || defined(INFO_OS_OSX)
@@ -23,6 +28,23 @@ namespace Utils
 
 namespace Netkit
 {
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool isAValidIPv4(const string &str)
+{
+    if( str.size() < 7 )
+        return false;
+    if( str.size() > 15 )
+        return false;
+
+    int dot = 0;
+    for(size_t i = str.size() - 1; i >= 0; --i)
+        if( str[i] == '.' )
+            ++dot;
+        else if( !isdigit(str[i]) )
+            return false;
+    return dot == 3;
+}
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 string dnsLookup4(const char *domain)
@@ -91,13 +113,20 @@ string hexToStrIPv4(const unsigned int hex)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-void strToHexIPv4(const string &str, unsigned char hex[4])
+unsigned int strToHexIPv4(string str)
 {
+    string res;
+
+    unsigned int hexip;
+    unsigned char hex[4];
     sscanf (str.c_str(), "%u.%u.%u.%u",
-            (unsigned int *)&hex[0],
-            (unsigned int *)&hex[1],
+            (unsigned int *)&hex[3],
             (unsigned int *)&hex[2],
-            (unsigned int *)&hex[3]);
+            (unsigned int *)&hex[1],
+            (unsigned int *)&hex[0]);
+
+    memcpy((void*)&hexip, (void*)hex, 4);
+    return hexip;
 }
 
 }

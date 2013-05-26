@@ -1,4 +1,6 @@
-/// @todo socks5
+#ifndef _GVN_SOCKS5_HEAD_
+#define _GVN_SOCKS5_HEAD_
+
 #include <graviton.hpp>
 
 namespace GraVitoN
@@ -89,3 +91,5 @@ public:
 
 }
 }
+
+#endif
