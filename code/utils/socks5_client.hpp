@@ -38,8 +38,8 @@ public:
             const unsigned int _port,
             const string _remote_host,
             const unsigned _remote_port,
-            const string &_username,
-            const string &_pass,
+            const string &_username = "",
+            const string &_pass = "",
             const unsigned char _socks_type = SOCKS5::CMD_CONNECT):
         TCP_Client(_socks_server_ip, _port)
     {
@@ -100,7 +100,9 @@ bool SOCKS5_Client::greeting()
         {
             if( sz <= 1 || data[1] == SOCKS5::REP_AUTH_UNACCEPTABLE )
                 return false;
-            auth_mod = (data[1] == SOCKS5::AUTH_USERPASS);
+            auth_mod = (data[1] == SOCKS5::AUTH_USERPASS) && (!username.empty() || !pass.empty());
+            cout << "AUTH MOD: " << auth_mod << endl;
+            Core::Logger::logItLn("[SOCKS5 Client] Done");
             return true;
         }
 
@@ -129,10 +131,15 @@ bool SOCKS5_Client::authenticate()
         if( TCP_Client::recv(data, sz) )
         {
             if( sz <= 1 || data[1] != SOCKS5::REP_SUCCEEDED )
+            {
+                Core::Logger::logItLn("[SOCKS5 Client] FAILED");
+                cout << "size: " << sz << ", DATA: " << (int)data[1] << endl;
                 return false;
+            }
+            Core::Logger::logItLn("[SOCKS5 Client] Done");
             return true;
         }
-
+        Core::Logger::logItLn("[SOCKS5 Client] NO ANSWER");
         return false;
     }
     return false;
@@ -191,12 +198,14 @@ bool SOCKS5_Client::askConnect()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// @todo Request BIND
 bool SOCKS5_Client::askBind()
 {
     Core::Logger::logItLn("[SOCKS5 Client] Ask BIND...");
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// @todo Request UDP
 bool SOCKS5_Client::askUDP()
 {
     Core::Logger::logItLn("[SOCKS5 Client] Ask UDP...");

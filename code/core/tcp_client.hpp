@@ -312,7 +312,7 @@ bool TCP_Client::recvString(string &sdata)
 
     unsigned char *data = _null_;
     size_t data_size;
-    if( recv(data, data_size) )
+    if( TCP_Client::recv(data, data_size) )
     {
         for(size_t i = 0; i<data_size; ++i)
         {
@@ -344,12 +344,13 @@ bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
         /*
         while( bytes_recved == 0 )
         {
-			bytes_recved += sock->Recv(data_buf, bytes_recved);
+            bytes_recved += sock.Recv(data_buf, bytes_recved);
             // ting::mt::Thread::Sleep(1);
 		}
         */
         ting::WaitSet waitSet(1);
         waitSet.Add(&sock, ting::Waitable::READ);
+
         // Logger::logItLn("[Recv] Waiting...");
         waitSet.Wait();
         bytes_recved = sock.Recv(data_buf, bytes_recved);

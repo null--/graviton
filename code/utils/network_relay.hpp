@@ -94,11 +94,14 @@ private:
                 // Core::Logger::logItLn("[Relay Thread] recv");
                 if( sock1.recv(data, data_size) )
                 {
+                    Core::Logger::logVariable("[Relay Thread] recv from: ", sock1.getRemoteIP());
                     // Core::Logger::logItLn("[Relay Thread] send");
 
                     // sema.wait();
                     bool res = sock2.send(data, data_size);
                     // sema.signal();
+
+                    Core::Logger::logVariable("[Relay Thread] send to: ", sock2.getRemoteIP());
 
                     if( !res )
                     {
