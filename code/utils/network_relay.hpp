@@ -207,10 +207,10 @@ public:
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// bob <--> [relay server] <--> alice
 /// @todo need more test
-class Relay_Server_Tcp : public Core::TCP_Server
+class Network_Relay_TCP_Server : public Core::TCP_Server
 {
 protected:
-    string left_ip;
+    // string left_ip;
     string right_ip;
     unsigned int right_remote_port;
 
@@ -234,13 +234,12 @@ protected:
     }
 
 public:
-    Relay_Server_Tcp(
-            const string &          client_ip,
-            const unsigned int &    client_port,
+    Network_Relay_TCP_Server(
+            const unsigned int &    listen_port,
             const string &          server_ip,
             const unsigned int &    server_port,
             const bool              multi_thread = true):
-        TCP_Server(client_port, multi_thread)
+        TCP_Server(listen_port, multi_thread)
     {
         // Core::Logger::logVariable("Left", client_ip);
         // Core::Logger::logVariable("Right", server_ip);
@@ -248,142 +247,211 @@ public:
         // Core::Logger::logVariable("RPort", server_port);
 
         right_ip = server_ip;
-        left_ip = client_ip;
+        // left_ip = client_ip;
         right_remote_port = server_port;
     }
 
-    ~Relay_Server_Tcp()throw()
+    ~Network_Relay_TCP_Server()throw()
     {
     }
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// bob <-- tcp --> [relay server] <-- udp --> alice
-class Network_Relay_TCP_To_UDP : public Core::Component
+/// bob <-- udp --> [relay server] <-- udp --> alice
+/// @todo more tests
+class Network_Relay_UDP : public Core::Component
 {
 private:
-    Core::TCP_Client &left;
-    Core::UDP_Client &right;
-
-    class RELAY_THREAD: public Core::Thread
-    {
-    protected:
-        Core::TCP_Client &sock1;
-        Core::UDP_Client &sock2;
-
-        bool reverse;
-
-        virtual bool myMainLoop()
-        {
-            // Core::Logger::logItLn("[Relay (TCP/UDP) Thread] entering relay loop...");
-            if( reverse )
-            {
-                while( sock2.isActive()  )
-                {
-                    unsigned char *data = _null_;
-                    size_t data_size;
-
-                    // Core::Logger::logItLn("[Relay UDP Thread] recv (udp)");
-                    if( sock2.recv(data, data_size) )
-                    {
-                        // Core::Logger::logItLn("[Relay UDP Thread] send (tcp)");
-
-                        if( sock1.send(data, data_size) )
-                            break;
-                    }
-                    else
-                        break;
-                }
-            }
-            else
-            {
-                while( sock1.isActive()  )
-                {
-                    unsigned char *data = _null_;
-                    size_t data_size;
-
-                    // Core::Logger::logItLn("[Relay UDP Thread] recv (tcp)");
-                    if( sock1.recv(data, data_size) )
-                    {
-                        // Core::Logger::logItLn("[Relay UDP Thread] send (udp)");
-
-                        if( sock2.send(data, data_size) )
-                            break;
-                    }
-                    else
-                        break;
-                }
-            }
-            // Core::Logger::logItLn("[Relay (TCP/UDP) Thread] Done");
-            return false;
-        }
-
-    public:
-        RELAY_THREAD(
-                Core::TCP_Client &p_sock1,
-                Core::UDP_Client &p_sock2
-                ):
-            sock1(p_sock1),
-            sock2(p_sock2)
-        {
-            reverse = false;
-        }
-
-        RELAY_THREAD(
-                Core::UDP_Client &p_sock2,
-                Core::TCP_Client &p_sock1
-                ):
-            sock1(p_sock1),
-            sock2(p_sock2)
-        {
-            reverse = true;
-        }
-        ~RELAY_THREAD()throw()
-        {
-
-        }
-    };
+    unsigned int    local_port;
+    string          left_ip;
+    unsigned int    left_port;
+    string          right_ip;
+    unsigned int    right_port;
 
 protected:
     virtual void relay()
     {
         Core::Logger::logItLn("Relaying (TCP/UDP)...");
 
-        RELAY_THREAD l_trd(left, right);
-        RELAY_THREAD r_trd(right, left);
+        Core::UDP_Socket server;
 
-        if( !right.open() )
+        if( !server.open(local_port) )
             return;
 
-        l_trd.run();
-        r_trd.run();
+        unsigned char *data = _null_;
+        size_t data_size;
+        unsigned int sender_port, dest_port;
+        string sender_ip, dest_ip;
+        while( server.isActive() )
+        {
+            if( !server.recv(data, data_size, sender_ip, sender_port) )
+            {
+                break;
+            }
 
-        Core::Logger::logItLn("[Relay (TCP/UDP)] entering relay loop...");
+            Core::Logger::logVariable("[Relay UDP] Recv IP: ", sender_ip);
+            Core::Logger::logVariable("[Relay UDP] Recv Port: ", sender_port);
 
-        while ( r_trd.isActive() && l_trd.isActive() )
-            Core::Thread::sleep(10);
+            if( sender_ip == right_ip && sender_port == right_port)
+            {
+                dest_ip = left_ip;
+                dest_port = left_port;
+            }
+            else
+            {
+                dest_ip = right_ip;
+                dest_port = right_port;
+            }
 
-        Core::Logger::logItLn("[Relay (TCP/UDP)] loop done");
+            Core::Logger::logVariable("[Relay UDP] Send IP: ", dest_ip);
+            Core::Logger::logVariable("[Relay UDP] Send Port: ", dest_port);
 
-        r_trd.stop();
-        l_trd.stop();
+            if( !server.send(data, data_size, dest_ip, dest_port) )
+            {
+                break;
+            }
+        }
 
+        server.close();
         Core::Thread::sleep(50);
-        if( left.isActive() ) left.close();
-        if( right.isActive() ) right.close();
     }
 
 public:
-    Network_Relay_TCP_To_UDP(Core::TCP_Client &_left, Core::UDP_Client &_right):
-        left(_left),
-        right(_right)
+    Network_Relay_UDP(const unsigned int &_local_port,
+                      const string &_left_ip,
+                      const unsigned int &_left_port,
+                      const string &_right_ip,
+                      const unsigned int &_right_port)
     {
-
+        local_port = _local_port;
+        left_ip = _left_ip;
+        left_port = _left_port;
+        right_ip = _right_ip;
+        right_port = _right_port;
     }
 
     virtual bool run()
     {
+        // Core::Logger::logVariable("[Relay UDP] Left IP: ", left_ip);
+        // Core::Logger::logVariable("[Relay UDP] Right IP: ", right_ip);
+
         relay();
+        return true;
+    }
+};
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// bob <-- tcp --> [relay server] <-- udp --> alice
+/// @todo more tests
+class Network_Relay_TCP_To_UDP : public Core::Component
+{
+private:
+    Core::TCP_Client &left;
+    string right_ip;
+    unsigned int right_port;
+    unsigned int udp_port;
+
+    class RELAY_THREAD: public Core::Thread
+    {
+    protected:
+        Core::TCP_Client &sock1;
+        Core::UDP_Socket &sock2;
+        string right_ip;
+        unsigned int right_port;
+
+        virtual bool myMainLoop()
+        {
+            while( sock1.isActive()  )
+            {
+                unsigned char *data = _null_;
+                size_t data_size;
+
+                if( sock1.recv(data, data_size) )
+                {
+                    Core::Logger::logVariable("[Relay [TUDP] Thread] recv from: ", sock1.getRemoteIP());
+
+                    bool res = sock2.send(data, data_size, right_ip, right_port);
+
+                    Core::Logger::logVariable("[Relay [TUDP] Thread] send to IP: ", right_ip);
+                    Core::Logger::logVariable("[Relay [TUDP] Thread] send to PORT: ", right_port);
+
+                    if( !res )
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return false;
+        }
+
+    public:
+        RELAY_THREAD(
+                Core::TCP_Client &p_sock1,
+                Core::UDP_Socket &p_sock2,
+                const string &_right_ip,
+                const unsigned int &_right_port
+                ):
+            sock1(p_sock1),
+            sock2(p_sock2)
+        {
+            right_ip = _right_ip;
+            right_port = _right_port;
+        }
+
+        ~RELAY_THREAD()throw()
+        {
+
+        }
+    };
+
+public:
+    /// udp_port == 0 --> random port
+    Network_Relay_TCP_To_UDP(Core::TCP_Client &_left,
+                             const string &_right_ip,
+                             const unsigned int &_right_port,
+                             const unsigned int &_udp_port = 0):
+        left(_left)
+    {
+        right_ip = _right_ip;
+        right_port = _right_port;
+        udp_port = _udp_port;
+    }
+
+    virtual bool run()
+    {
+        Core::UDP_Socket right;
+        if( !right.open(udp_port) )
+            return false;
+
+        // cout << "F1" << endl;
+        RELAY_THREAD trd(left, right, right_ip, right_port);
+        // cout << "F2" << endl;
+        trd.run();
+
+        unsigned char *data = _null_;
+        size_t data_size;
+
+        // cout << "F3" << endl;
+        while( trd.isActive() )
+        {
+            // cout << "F4" << endl;
+            if( right.recv(data,data_size) )
+            {
+                // cout << "F5" << endl;
+                if( !left.send(data, data_size) )
+                {
+                    break;
+                }
+            }
+        }
+
+        left.close();
+        right.close();
+
         return true;
     }
 };

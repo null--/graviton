@@ -217,15 +217,7 @@ bool SOCKS5_Server::cmdUDP(Core::TCP_Client &client_sock, const string &remote_i
     memcpy( (void*)(repdata+4), (void*)&lip, 4);
     memcpy( (void*)(repdata+8), (void*)&(nhbp), 2);
 
-    Core::UDP_Client rhost(remote_ip, remote_port);
-    if( !rhost.open() )
-    {
-        repdata[1] = SOCKS5::REP_CONNECTION_REFUSED;
-        client_sock.send(repdata, repdata_size);
-        return false;
-    }
-
-    Network_Relay_TCP_To_UDP rel(client_sock, rhost);
+    Network_Relay_TCP_To_UDP rel(client_sock, remote_ip, remote_port);
     if( client_sock.send(repdata, repdata_size) )
         rel.run();
     else

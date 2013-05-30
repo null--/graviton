@@ -81,7 +81,7 @@
 // #include <malkit/malkit.hpp>
 // #include <utils/utils.hpp>
 
-
+/// One namespace to rule them all
 namespace GraVitoN
 {
     const unsigned int MAX_TCP_PACKET_SIZE = 4069;

@@ -26,8 +26,7 @@
 #ifndef _GVN_COMPONENT_HEAD_
 #define _GVN_COMPONENT_HEAD_
 
-/// TEST
-#pragma once
+// #pragma once
 
 #include <cstdarg>
 
@@ -51,6 +50,9 @@ public:
     virtual ~Component() {}
 
     virtual bool run() = 0;
+
+    /// @todo isActive to be or not to be
+    // virtual bool isActive() = 0;
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -91,6 +93,7 @@ public:
      */
     virtual bool initialize(...) = 0;
 	virtual bool run() = 0;
+    // virtual bool isActive() = 0;
 };
 
 }

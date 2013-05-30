@@ -45,7 +45,8 @@ namespace Core
 {
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// Basie of TCP_Server Component
+/// Base of TCP_Server
+/// It's NOT a GraVitoN::Component
 class TCP_Server_Base: public GraVitoN::Core::Socket
 {
 protected:

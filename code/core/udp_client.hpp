@@ -33,6 +33,7 @@
 #include <core/socket.hpp>
 #include <external/ting/net/UDPSocket.hpp>
 #include <external/ting/mt/Thread.hpp>
+#include <utils/netkit.hpp>
 
 namespace GraVitoN
 {
@@ -40,46 +41,37 @@ namespace GraVitoN
 namespace Core
 {
 
-typedef ting::net::UDPSocket UDP_Socket;
+// typedef ting::net::UDPSocket UDP_Socket_Base;
 
 /// @todo UDP_Socket
-class UDP_Client: public Socket
+class UDP_Socket: public Core::Socket
 {
 protected:
-	/// Create IP address for connecting
-	ting::net::IPAddress addr;
-	unsigned int local_port;
-
 	/// Socket
-	UDP_Socket *sock;
+    ting::net::UDPSocket sock;
 
-    /**
-     * @brief Initialize an UDP client
-     *
-     * @options
-     * IP='Remote IP'
-     * PORT='Remote Port'
-     * LPORT='Local Port'
-     *
-     * @note
-     * By setting your LPORT to your local port, and IP to '0.0.0.0' you can use UDP_Client as an UDP Listenner,
-     * see gravdev/misc/udp_client for more info.
-     *
-     */
-    virtual bool initialize(const string &ip, const unsigned int port, const unsigned int lport = 0);
+    /// recv packet
+    virtual bool doRecv(unsigned char *&data, size_t &data_size, ting::net::IPAddress &sender_addr);
 
 public:
-    UDP_Client(const string &ip, const unsigned int port, const unsigned int lport = 0);
+    /// Empty constructor
+    UDP_Socket() {}
+
 	/**
-	 * @brief Create an object of UDP_Client with a open socket.
+     * @brief Create an object of UDP_Socket with a open socket.
 	 *
 	 * By calling this constructor, there is no need to call initialize
 	 */
-	UDP_Client(UDP_Socket *_sock);
+    //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+    // UDP_Socket::UDP_Socket(UDP_Socket_Base _sock)
+    // {
+    //    sock = _sock;
+    // }
 
-	virtual ~UDP_Client();
+    virtual ~UDP_Socket();
 
-	virtual bool open();
+    /// local_port == 0 means use a random port
+    virtual bool open(const unsigned int &local_port = 0);
 
 	virtual bool close();
 
@@ -97,64 +89,37 @@ public:
 	 */
     virtual bool recv(unsigned char *&data, size_t &data_size);
 
-	/**
-	 * @brief Recieve data
-	 *
-	 * Do not forget to call open method, before call this function.
-	 *
-	 * @param [in] data
-	 * Send data
-	 *
-	 * @param [in] data_size
-	 * Size of data
-	 *
-	 * @return true if data was sended.
-	 */
-    virtual bool send(const unsigned char *data, const size_t &data_size);
+    /// Like recv but also stored ip address and port number of sender
+    virtual bool recv(unsigned char *&data, size_t &data_size, string &_sender_ip, unsigned int &_sender_port);
+
+    /// Send data to client
+    virtual bool send(const unsigned char *data, const size_t &data_size, const string &ip, const unsigned int &port);
 
 	virtual bool isActive();
 
-	virtual UDP_Socket *getTCPSocket() const
-	{
-		return sock;
-	}
+    // virtual UDP_Socket_Base getUDPSocketBase() const
+    // {
+    // 	return sock;
+    // }
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-UDP_Client::UDP_Client(const string &ip, const unsigned int port, const unsigned int lport)
+UDP_Socket::~UDP_Socket()
 {
-	sock = new UDP_Socket();
-    initialize(ip, port, lport);
+    if( sock.IsValid() )
+        UDP_Socket::close();
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-UDP_Client::~UDP_Client()
-{
-	if( sock->IsValid() )
-		UDP_Client::close();
-}
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool UDP_Client::initialize(const string &ip, const unsigned int port, const unsigned int lport)
-{
-    local_port = lport;
-
-	addr = ting::net::IPAddress(ip.c_str(), port);
-	return true;
-}
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool UDP_Client::open()
+/// Open a port for incomming/outgoing UDP connections
+bool UDP_Socket::open(const unsigned int &_local_port)
 {
 	try
 	{
-		/// connect to remote listening socket.
-		/// It is an asynchronous operation, so we will use WaitSet
-		/// to wait for its completion.
-		sock->Open( local_port );
+        sock.Open( _local_port );
 
 		ting::WaitSet waitSet(1);
-		waitSet.Add(sock, ting::Waitable::WRITE);
+        waitSet.Add(&sock, ting::Waitable::WRITE);
 		waitSet.Wait(); //< Wait for connection to complete.
 	}
 	catch(ting::net::Exc &e)
@@ -166,11 +131,11 @@ bool UDP_Client::open()
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool UDP_Client::close()
+bool UDP_Socket::close()
 {
 	try
 	{
-		sock->Close();
+        sock.Close();
 	}
 	catch(ting::net::Exc &e)
 	{
@@ -182,7 +147,7 @@ bool UDP_Client::close()
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /*
-bool UDP_Client::run()
+bool UDP_Socket::run()
 {
 	/// Open socket
 	open();
@@ -201,17 +166,18 @@ bool UDP_Client::run()
 */
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool UDP_Client::send(const unsigned char *data, const size_t &data_size)
+bool UDP_Socket::send(const unsigned char *data, const size_t &data_size, const string &ip, const unsigned int &port)
 {
 	try
 	{
         ting::WaitSet waitSet(1);
-        waitSet.Add(sock, ting::Waitable::WRITE);
+        waitSet.Add(&sock, ting::Waitable::WRITE);
         // Logger::logItLn("[Recv UDP] Waiting...");
         waitSet.Wait();
 
-		ting::Buffer<const unsigned char> data_buf(data, (size_t)data_size);
-		sock->Send(data_buf, addr);
+        ting::Buffer<const unsigned char> data_buf(data, (size_t)data_size);
+        ting::net::IPAddress m_addr(ip.c_str(), port);
+        sock.Send(data_buf, m_addr);
 	}
 	catch(ting::net::Exc &e)
 	{
@@ -223,7 +189,7 @@ bool UDP_Client::send(const unsigned char *data, const size_t &data_size)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool UDP_Client::recv(unsigned char *&data, size_t &data_size)
+bool UDP_Socket::doRecv(unsigned char *&data, size_t &data_size, ting::net::IPAddress &sender_addr)
 {
 	try
 	{
@@ -236,15 +202,16 @@ bool UDP_Client::recv(unsigned char *&data, size_t &data_size)
         /*
         while( bytes_recved == 0 )
 		{
-			bytes_recved = sock->Recv(data_buf, addr);
+            bytes_recved = sock.Recv(data_buf, addr);
 		}
         */
 
         ting::WaitSet waitSet(1);
-        waitSet.Add(sock, ting::Waitable::READ);
+        waitSet.Add(&sock, ting::Waitable::READ);
         // Logger::logItLn("[Recv UDP] Waiting...");
         waitSet.Wait();
-        bytes_recved = sock->Recv(data_buf, addr);
+
+        bytes_recved = sock.Recv(data_buf, sender_addr);
         if( bytes_recved == 0 )
             return false;
 		//Logger::logVariable("Bytes Recved: ", bytes_recved);
@@ -262,10 +229,33 @@ bool UDP_Client::recv(unsigned char *&data, size_t &data_size)
 
 	return true;
 }
-
-bool UDP_Client::isActive()
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool UDP_Socket::recv(unsigned char *&data, size_t &data_size)
 {
-	return sock->IsValid();
+    ting::net::IPAddress sender_addr;
+    return doRecv(data, data_size, sender_addr);
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool UDP_Socket::recv(unsigned char *&data, size_t &data_size, string &_sender_ip, unsigned int &_sender_port)
+{
+    ting::net::IPAddress sender_addr;
+    bool res = doRecv(data, data_size, sender_addr);
+
+    if(res)
+    {
+        _sender_ip = Utils::Netkit::hexToStrIPv4(sender_addr.host);
+        _sender_port = sender_addr.port;
+
+        return true;
+    }
+    return false;
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool UDP_Socket::isActive()
+{
+    return sock.IsValid();
 }
 
 } // Core

@@ -145,6 +145,8 @@ Thread::~Thread() throw()
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool Thread::run()
 {
+    flag_stop = false;
+
     ting::mt::Thread::Start();
     return true;
 }

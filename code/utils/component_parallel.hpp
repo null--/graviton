@@ -56,34 +56,34 @@ private:
     class Component_Thread : public GraVitoN::Core::Thread
 	{
 	private:
-		Component *c_handle;
+        Core::Component &c_handle;
 
 	protected:
 		bool myMainLoop()
 		{
 			try
-			{
-				if( c_handle->run() )
-					return false;
+            {
+                if( c_handle.run() )
+                    return false;
 			}
 			catch(...)
 			{
-				Logger::logItLn("Thread::MainLoop Exceptions");
+                Core::Logger::logItLn("Thread::MainLoop Exceptions");
 			}
 
 			return true;
 		}
 
 	public:
-        Component_Thread(Component *_valid_component_pointer)
-		{
-			c_handle = _valid_component_pointer;
+        Component_Thread(Core::Component &_valid_component):
+            c_handle(_valid_component)
+        {
 		}
 
         virtual ~Component_Thread()throw()
 		{
 
-		}
+        }
 	};
 
     list<Component_Thread*> internal_threads;
@@ -93,10 +93,10 @@ public:
 	~Component_Parallel();
 
 	/// Run this component on a new thread
-    bool runThis(Component *component);
+    bool runThis(GraVitoN::Core::Component &component);
 
 	/// Is there any active thread?
-	bool isActive();
+    bool isActive();
 
 	/// Stop all threads
 	bool stopAll();
@@ -129,7 +129,7 @@ bool Component_Parallel::stopAll()
 	return true;
 }
 
-bool Component_Parallel::runThis(Component *component)
+bool Component_Parallel::runThis(GraVitoN::Core::Component &component)
 {
     internal_threads.push_back( new Component_Thread(component) );
     //internal_threads.back()->initialize();
