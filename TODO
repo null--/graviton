@@ -2,9 +2,7 @@ Major:
 	- Low-level: C++, High-level: Lua
 	- ms12-20
 	- Build static lib files (.a, .lib) of external libraries for linux (32/64) and windows (32/64)
-	- port components of "GraVitoN: Resurrection" into "GraVitoN: Scream of Pain"
 	- code a cross platform raw socket lib
-	- code a cross platform general purpose basic os api
 	- metasploit plugin
 	- metaworm master/slave
 		- multi-node socks proxy: rfc1928
@@ -16,10 +14,6 @@ Major:
 	- SolarWind
 
 Minor:
-	- port AI
-	- port PAYLOAD
-	- port INFECT
-	- port MALKIT
-	- Combine luabridge with components
-
+	- Combine luabridge with components ---> BRAINSTORM
+    
 and much more!

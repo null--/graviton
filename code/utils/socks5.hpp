@@ -9,9 +9,11 @@ namespace GraVitoN
 namespace Utils
 {
 
-class SOCKS5
+// class SOCKS5
+// {
+// public:
+namespace SOCKS5
 {
-public:
     /// rfc1928: REQUEST
     ///    The SOCKS request is formed as follows:
     ///
@@ -84,10 +86,11 @@ public:
     const static unsigned char AUTH_USERPASS                    = 0x02;
     const static unsigned char AUTH_NONE                        = 0x00;
 
-public:
-    SOCKS5() {}
-    virtual ~SOCKS5() {}
-};
+// public:
+//    SOCKS5() {}
+//
+//    virtual ~SOCKS5() {}
+} //;
 
 }
 }

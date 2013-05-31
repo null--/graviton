@@ -94,27 +94,33 @@ private:
                 // Core::Logger::logItLn("[Relay Thread] recv");
                 if( sock1.recv(data, data_size) )
                 {
-                    Core::Logger::logVariable("[Relay Thread] recv from: ", sock1.getRemoteIP());
+                    Core::Logger::logVariable("[Relay Thread] recv from IP: ", sock1.getRemoteIP());
+                    Core::Logger::logVariable("[Relay Thread] recv from PORT: ", sock1.getRemotePort());
                     // Core::Logger::logItLn("[Relay Thread] send");
 
                     // sema.wait();
                     bool res = sock2.send(data, data_size);
                     // sema.signal();
 
-                    Core::Logger::logVariable("[Relay Thread] send to: ", sock2.getRemoteIP());
+                    Core::Logger::logVariable("[Relay Thread] send IP: ", sock2.getRemoteIP());
+                    Core::Logger::logVariable("[Relay Thread] send PORT: ", sock2.getRemotePort());
 
                     if( !res )
                     {
-                        break;
+                        Core::Logger::logVariable("[Relay Thread] Connection Died! ", sock2.getRemoteIP());
+                        // if( !sock2.connect() )
+                            break;
                     }
                 }
                 else
                 {
-                    break;
+                    // if( !sock1.connect() )
+                    Core::Logger::logVariable("[Relay Thread] Connection Died! ", sock2.getRemoteIP());
+                        break;
                 }
                 // sema.signal();
             }
-            // Core::Logger::logItLn("[Relay Thread] Done");
+            Core::Logger::logItLn("[Relay Thread] Done");
             return false;
         }
 
@@ -205,8 +211,9 @@ public:
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// bob <--> [relay server] <--> alice
-/// @todo need more test
+/// 1) bob ---> [relay server] --- alice
+/// 2) bob <---> [relay server] <---> alice
+/// @todo needs more test
 class Network_Relay_TCP_Server : public Core::TCP_Server
 {
 protected:
@@ -236,8 +243,8 @@ protected:
 public:
     Network_Relay_TCP_Server(
             const unsigned int &    listen_port,
-            const string &          server_ip,
-            const unsigned int &    server_port,
+            const string &          remote_ip,
+            const unsigned int &    remote_port,
             const bool              multi_thread = true):
         TCP_Server(listen_port, multi_thread)
     {
@@ -246,9 +253,9 @@ public:
         // Core::Logger::logVariable("LPort", client_port);
         // Core::Logger::logVariable("RPort", server_port);
 
-        right_ip = server_ip;
+        right_ip = remote_ip;
         // left_ip = client_ip;
-        right_remote_port = server_port;
+        right_remote_port = remote_port;
     }
 
     ~Network_Relay_TCP_Server()throw()

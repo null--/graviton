@@ -99,13 +99,13 @@ int SOCKS5_Server::processRequest(
     if( ver != SOCKS5::VER )
         return SOCKS5::REP_COMMAND_NOT_SUPPORTED;
 
-    /// @todo SOCKS5::CMD_UDP
+    /// @todo SOCKS5::CMD_BIND
     if( cmd != SOCKS5::CMD_UDP &&
         cmd != SOCKS5::CMD_BIND &&
         cmd != SOCKS5::CMD_CONNECT )
         return SOCKS5::REP_COMMAND_NOT_SUPPORTED;
 
-    /// @todo SOCKS5::ATYP_IPV6, SOCKS5::ATYP_DOMAINNAME
+    /// @todo SOCKS5::ATYP_IPV6
     if( atyp != SOCKS5::ATYP_IPV4 &&
         atyp != SOCKS5::ATYP_DOMAINNAME )
         return SOCKS5::REP_COMMAND_NOT_SUPPORTED;
@@ -153,12 +153,11 @@ bool SOCKS5_Server::cmdConnect(Core::TCP_Client &client_sock, const string &remo
 {
     Core::Logger::logItLn("[SOCKS5] Connecting...");
 
-    /// @todo find a random closed port
     unsigned int bind_port = port;
     unsigned int nhbp = Netkit::hostToNet_16(bind_port);
     unsigned int lip = Netkit::hostToNet_32(client_sock.getLocalIPHex());
 
-    /// @todo IPv6, DomainName
+    /// @todo IPv6
     size_t repdata_size = 1 + 1 + 1 + 1 + 4 + 2;
     unsigned char repdata[repdata_size];
     repdata[0] = SOCKS5::VER;
@@ -188,11 +187,9 @@ bool SOCKS5_Server::cmdConnect(Core::TCP_Client &client_sock, const string &remo
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// @todo cmdBind implement
+/// @todo cmdBind implement (using Network_Relay_TCP_Server)
 bool SOCKS5_Server::cmdBind(Core::TCP_Client &client_sock, const string &remote_ip, const unsigned int &client_port)
 {
-    Core::Logger::logItLn("[SOCKS5] Binding...");
-
     return true;
 }
 
@@ -268,7 +265,7 @@ bool SOCKS5_Server::authenticate(Core::TCP_Client &client_sock)
     // Core::Logger::logVariable("Result",res);
     unsigned char repdata[2];
     repdata[0] = SOCKS5::AUTH_VER;
-    repdata[1] = res ? SOCKS5::REP_SUCCEEDED : SOCKS5::REP_AUTH_UNACCEPTABLE;
+    repdata[1] = (res) ? (SOCKS5::REP_SUCCEEDED) : (SOCKS5::REP_AUTH_UNACCEPTABLE);
 
     return res && client_sock.send(repdata, 2);
 }
