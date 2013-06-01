@@ -5,7 +5,7 @@ Major:
 	- code a cross platform raw socket lib
 	- metasploit plugin
 	- metaworm master/slave
-		- multi-node socks proxy: rfc1928
+		- exploit-and-infect shellcode
 	- android/ios/osx test
 	- Documentation
 	- upx (take a look at upx/src/main.cpp)
@@ -15,5 +15,8 @@ Major:
 
 Minor:
 	- Combine luabridge with components ---> BRAINSTORM
-    
+    - mini http(s) web server
+    - interface for ssl/tls and md4/md5/sha1/sha224/sha256/sha386/sha512/ripemd160
+    - interface for zlib
+
 and much more!

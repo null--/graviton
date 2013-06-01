@@ -277,11 +277,25 @@ bool getValueAsInt64 ( const string &option, const string &entity, long &value )
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-string toHex(const unsigned int val)
+/// former: toHex
+string UintToHexStr(const unsigned int val)
 {
     char buf[256];
     snprintf (buf, 255, "%x", val);
     return string(buf);
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+string hexToStr(const unsigned char *data, size_t data_size)
+{
+    char buff[2 * data_size + 2];
+    for (size_t i = 0; i < data_size; i++)
+    {
+        snprintf((buff+i*2), 4, "%02x", (unsigned int)data[i]);
+        //cout << (unsigned int)data[i] << ": " << buff[i*2] << buff[i*2 + 1] << endl;
+    }
+    buff[2*data_size] = '\0';
+    return string(buff);
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -301,7 +315,7 @@ bool getValueAsHexString ( const string &option, const string &entity, string &h
         return false;
     }
 
-    hex_value = toHex(tmp_value);
+    hex_value = UintToHexStr(tmp_value);
     //Logger::logItLn(hex_value);
     return true;
 }
