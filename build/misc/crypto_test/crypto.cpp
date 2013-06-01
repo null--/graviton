@@ -57,6 +57,13 @@ int main ( int argc , char **argv)
 
     cout << endl;
     cout << "-------------------- Testing Symmetrical Algorithms --------------------" << endl;
+    string dec, enc;
+    enc = Utils::Crypto::base64Encode(test);
+    cout << "BASE64 ENC:\t" << enc << endl;
+    dec = Utils::Crypto::base64Decode(enc);
+    cout << "BASE64 DEC:\t" << dec << endl;
+    cout << ((dec == test)?("Passed!"):("-=> FAILED! <=-")) << endl << endl;
+
     string aes_key = "THE GODDAMN SECRET KEY";
 
     string cipher, plain;
@@ -64,31 +71,31 @@ int main ( int argc , char **argv)
     cout << "AES ENC:\t" << Utils::OptParser::hexToStr((unsigned char*)cipher.c_str(), cipher.size()) << endl;
     plain = Utils::Crypto::aesDecrypt(cipher, aes_key);
     cout << "AES DEC:\t" << plain << endl;// Utils::OptParser::hexToStr((unsigned char*)cipher.c_str(), cipher.size()) << endl;
-    cout << ((plain == test)?("Passed!"):("FAILED!")) << endl << endl;
+    cout << ((plain == test)?("Passed!"):("-=> FAILED! <=-")) << endl << endl;
 
     cipher = Utils::Crypto::des3Encrypt(test, aes_key);
     cout << "DES3 ENC:\t" << Utils::OptParser::hexToStr((unsigned char*)cipher.c_str(), cipher.size()) << endl;
     plain = Utils::Crypto::des3Decrypt(cipher, aes_key);
     cout << "DES3 DEC:\t" << plain << endl;// Utils::OptParser::hexToStr((unsigned char*)cipher.c_str(), cipher.size()) << endl;
-    cout << ((plain == test)?("Passed!"):("FAILED!")) << endl << endl;
+    cout << ((plain == test)?("Passed!"):("-=> FAILED! <=-")) << endl << endl;
 
     cipher = Utils::Crypto::blowfishEncrypt(test, aes_key);
     cout << "BLOWFISH ENC:\t" << Utils::OptParser::hexToStr((unsigned char*)cipher.c_str(), cipher.size()) << endl;
     plain = Utils::Crypto::blowfishDecrypt(cipher, aes_key);
     cout << "BLOWFISH DEC:\t" << plain << endl;// Utils::OptParser::hexToStr((unsigned char*)cipher.c_str(), cipher.size()) << endl;
-    cout << ((plain == test)?("Passed!"):("FAILED!")) << endl << endl;
+    cout << ((plain == test)?("Passed!"):("-=> FAILED! <=-")) << endl << endl;
 
     cipher = Utils::Crypto::rc2Encrypt(test, aes_key);
     cout << "RC2 ENC:\t" << Utils::OptParser::hexToStr((unsigned char*)cipher.c_str(), cipher.size()) << endl;
     plain = Utils::Crypto::rc2Decrypt(cipher, aes_key);
     cout << "RC2 DEC:\t" << plain << endl;// Utils::OptParser::hexToStr((unsigned char*)cipher.c_str(), cipher.size()) << endl;
-    cout << ((plain == test)?("Passed!"):("FAILED!")) << endl << endl;
+    cout << ((plain == test)?("Passed!"):("-=> FAILED! <=-")) << endl << endl;
 
     cipher = Utils::Crypto::rc4Encrypt(test, aes_key);
     cout << "RC4 ENC:\t" << Utils::OptParser::hexToStr((unsigned char*)cipher.c_str(), cipher.size()) << endl;
     plain = Utils::Crypto::rc4Decrypt(cipher, aes_key);
     cout << "RC4 DEC:\t" << plain << endl;// Utils::OptParser::hexToStr((unsigned char*)cipher.c_str(), cipher.size()) << endl;
-    cout << ((plain == test)?("Passed!"):("FAILED!")) << endl << endl;
+    cout << ((plain == test)?("Passed!"):("-=> FAILED! <=-")) << endl << endl;
 
     cout << endl;
     cout << "-------------------- Testing Asymmetrical Algorithms --------------------" << endl;

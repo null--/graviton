@@ -38,7 +38,7 @@ bool isAValidIPv4(const string &str)
         return false;
 
     int dot = 0;
-    for(size_t i = str.size() - 1; i >= 0; --i)
+    for(size_t i = 0; i < str.size(); ++i)
         if( str[i] == '.' )
             ++dot;
         else if( !isdigit(str[i]) )

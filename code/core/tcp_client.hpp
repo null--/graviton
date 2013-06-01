@@ -46,6 +46,8 @@ namespace Core
 class TCP_Socket : public ting::net::TCPSocket
 {
 public:
+    typedef ting::net::Exc Exception;
+public:
     TCP_Socket() : ting::net::TCPSocket()
     {
 
@@ -55,13 +57,27 @@ public:
     {
 
     }
+
+#ifdef INFO_OS_WINDOWS
+    /// Use carefully
+    SOCKET getSocketHandle()
+    {
+        return (SOCKET)socket;
+    }
+
+#else
+    /// Use carefully
+    int getSocketHandle()
+    {
+       return (int)socket;
+    }
+#endif
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// @brief TCP Client Component
 class TCP_Client : public Core::Socket//, public GraVitoN::Core::Component
 {
-typedef ting::net::Exc Exception;
 //private:
 	/// Do not copy
 	//TCP_Client & operator = (const TCP_Client &_copy);

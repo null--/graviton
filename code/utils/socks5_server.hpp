@@ -22,6 +22,12 @@ protected:
     string user;
     string pass;
 
+    unsigned char ver;
+    unsigned char cmd;
+    unsigned char atyp;
+    unsigned int dstport;
+    string dstip;
+
 protected:
     bool authenticate(Core::TCP_Client &client_sock);
     void reply(Core::TCP_Client &client_sock, const unsigned char reply_code);
@@ -51,6 +57,7 @@ protected:
             unsigned int &dstport);
 
     bool greeting(Core::TCP_Client &client_sock);
+    bool initializeConnection(Core::TCP_Client &client_sock);
     bool response(Core::TCP_Client &client_sock);
 
 public:
@@ -316,7 +323,7 @@ bool SOCKS5_Server::greeting(Core::TCP_Client &client_sock)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool SOCKS5_Server::response(Core::TCP_Client &client_sock)
+bool SOCKS5_Server::initializeConnection(Core::TCP_Client &client_sock)
 {
     unsigned char *data = _null_;
     size_t data_size;
@@ -333,12 +340,6 @@ bool SOCKS5_Server::response(Core::TCP_Client &client_sock)
     }
 
     /// Initializing Tunnel
-    unsigned char ver;
-    unsigned char cmd;
-    unsigned char atyp;
-    unsigned int dstport;
-    string dstip;
-
     if( !client_sock.recv(data, data_size) )
         return false;
 
@@ -351,6 +352,11 @@ bool SOCKS5_Server::response(Core::TCP_Client &client_sock)
         return false;
     }
 
+    return true;
+}
+
+bool SOCKS5_Server::response(Core::TCP_Client &client_sock)
+{
     /// CONNECT
     if( cmd == SOCKS5::CMD_CONNECT )
     {
@@ -370,8 +376,6 @@ bool SOCKS5_Server::response(Core::TCP_Client &client_sock)
         if( !cmdUDP(client_sock, dstip, dstport) )
             return false;
     }
-
-    return true;
 }
 
 }

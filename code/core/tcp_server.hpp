@@ -53,7 +53,7 @@ protected:
     unsigned int port;
 
     /// Socket
-    ting::net::TCPServerSocket listenSock;
+    ting::net::TCPServerSocket listen_sock;
 
     //ting::net::Lib *socket_lib;
 
@@ -94,6 +94,24 @@ protected:
     /// Response function
     virtual bool response(GraVitoN::Core::TCP_Client &client_sock) = 0;
 
+    /// Things that should be done before calling response (e.g. SSL Handshake)
+    virtual bool initializeConnection(GraVitoN::Core::TCP_Client &client_sock)
+    {
+        /// Sample Code
+        if( !client_sock.isActive() )
+            return false;
+        return true;
+    }
+
+    /// Things that should be done before calling response (e.g.
+    virtual bool finalizeConnection(GraVitoN::Core::TCP_Client &client_sock)
+    {
+        /// Sample Code
+        if( client_sock.isActive() )
+            client_sock.close();
+        return true;
+    }
+
     /// Server socket thread
     class SERVER_INTERNAL_THREAD : public GraVitoN::Core::Thread
     {
@@ -104,8 +122,24 @@ protected:
     protected:
         bool myMainLoop()
         {
-            server_handle.response(sock);
-            return true;
+            try
+            {
+                if( !server_handle.initializeConnection(sock) )
+                    return false;
+
+                bool res = server_handle.response(sock);
+
+                if( !server_handle.finalizeConnection(sock) )
+                        return false;
+                return res;
+            }
+            catch(ting::net::Exc &e)
+            {
+                Logger::logVariable("Network error", e.What());
+                sock.close();
+            }
+
+            return false;
         }
 
     public:
@@ -167,10 +201,10 @@ bool TCP_Server_Base::open()
         /// connect to remote listening socket.
         /// It is an asynchronous operation, so we will use WaitSet
         /// to wait for its completion.
-        listenSock.Open(port);
+        listen_sock.Open(port);
 
         //ting::WaitSet waitSet(1);
-        //waitSet.Add(&listenSock, ting::Waitable::WRITE);
+        //waitSet.Add(&listen_sock, ting::Waitable::WRITE);
         //waitSet.Wait(); //< Wait for connection to complete.
 
         Logger::logItLn("done");
@@ -178,7 +212,7 @@ bool TCP_Server_Base::open()
     catch(ting::net::Exc &e)
     {
         Logger::logVariable("Network error", e.What());
-        listenSock.Close();
+        listen_sock.Close();
         return false;
     }
     return true;
@@ -188,9 +222,15 @@ bool TCP_Server_Base::open()
 TCP_Client TCP_Server_Base::accept()
 {
     TCP_Socket sock;
-    while( (sock = listenSock.Accept() ).IsNotValid() )
+    // while( (sock =listen_sock.Accept()).IsNotValid() )
     {
-        ting::mt::Thread::Sleep(1);
+        ting::WaitSet waitSet(1);
+        waitSet.Add(&listen_sock, ting::Waitable::READ);
+        waitSet.Wait(); //< Wait for connection to complete.
+
+        sock = listen_sock.Accept();
+
+        // ting::mt::Thread::Sleep(1);
     }
 
     return TCP_Client(sock);
@@ -208,23 +248,34 @@ bool TCP_Server::listen()
             // list<TCP_Socket> lsock;
             list<TCP_Client> client_sock;
 
-            while(listenSock.IsValid())
-            //if(listenSock.IsValid())
+            while(listen_sock.IsValid())
+            //if(listen_sock.IsValid())
             {
-                /// Check for waiting connection
+                /// @todo Bugfix: nmap -sV causes crash! (this try/catch solution is not geek!)
+                try
+                {
+                    /// Check for waiting connection
 
-                // lsock.push_back ( accept() );
-                client_sock.push_back( accept() );
+                    // lsock.push_back ( accept() );
+                    client_sock.push_back( accept() );
 
-                /// Initialize and run response thread.
-                internal_threads.push_back( new SERVER_INTERNAL_THREAD((TCP_Server&)*this, client_sock.back() ));
-                internal_threads.back()->run();
+                    /// Initialize and run response thread.
+                    internal_threads.push_back( new SERVER_INTERNAL_THREAD((TCP_Server&)*this, client_sock.back() ));
+                    cout << "Running..." << endl;
+                    internal_threads.back()->run();
+                }
+                catch(ting::net::Exc &e)
+                {
+                    Logger::logVariable("[Listen Loop] Network error", e.What());
+                    close();
+                    open();
+                }
             }
         }
         else
         {
             Core::Logger::logItLn("Listening (Single Thread)...");
-            while( listenSock.IsValid() )
+            while( listen_sock.IsValid() )
             {
                 ting::mt::Thread::Sleep(1);
 
@@ -236,8 +287,8 @@ bool TCP_Server::listen()
     }
     catch(ting::net::Exc &e)
     {
-        Logger::logVariable("Network error", e.What());
-        listenSock.Close();
+        Logger::logVariable("[Listen] Network error", e.What());
+        listen_sock.Close();
         return false;
     }
 
@@ -247,7 +298,7 @@ bool TCP_Server::listen()
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool TCP_Server_Base::close()
 {
-    listenSock.Close();
+    listen_sock.Close();
     return true;
 }
 
@@ -293,7 +344,7 @@ bool TCP_Server_Base::isActive()
 {
     try
     {
-        return listenSock.IsValid();
+        return listen_sock.IsValid();
     }
     catch(...)
     {
