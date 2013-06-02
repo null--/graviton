@@ -125,12 +125,19 @@ protected:
             try
             {
                 if( !server_handle.initializeConnection(sock) )
+                {
+                    sock.close();
                     return false;
+                }
 
                 bool res = server_handle.response(sock);
 
                 if( !server_handle.finalizeConnection(sock) )
-                        return false;
+                {
+                    sock.close();
+                    return false;
+                }
+
                 return res;
             }
             catch(ting::net::Exc &e)
@@ -261,7 +268,7 @@ bool TCP_Server::listen()
 
                     /// Initialize and run response thread.
                     internal_threads.push_back( new SERVER_INTERNAL_THREAD((TCP_Server&)*this, client_sock.back() ));
-                    cout << "Running..." << endl;
+                    // cout << "Running..." << endl;
                     internal_threads.back()->run();
                 }
                 catch(ting::net::Exc &e)
@@ -279,9 +286,17 @@ bool TCP_Server::listen()
             {
                 ting::mt::Thread::Sleep(1);
 
-                TCP_Client cln = accept();
-                this->response( cln );
-                break;
+                try
+                {
+                    TCP_Client cln = accept();
+                    if( this->initializeConnection( cln ) )
+                        if( this->response( cln ) )
+                            this->finalizeConnection( cln );
+                }
+                catch(ting::net::Exc &e)
+                {
+                    Logger::logVariable("[Listen Loop] Network error", e.What());
+                }
             }
         }
     }

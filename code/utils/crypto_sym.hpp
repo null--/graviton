@@ -15,6 +15,7 @@ using namespace std;
 
 namespace GraVitoN
 {
+
 namespace Utils
 {
 
@@ -22,79 +23,64 @@ namespace Crypto
 {
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// Source: stackoverflow - Omnifarious
-string base64Encode(const string &bindata)
+int base64Decode(const unsigned char *data,
+                 const int data_size,
+                 unsigned char *&res)
 {
-   if (bindata.size() > (numeric_limits<string::size_type>::max() / 4u) * 3u) {
-      Core::Logger::logItLn("Converting too large a string to base64.");
-      return "";
-   }
+    res = new unsigned char[data_size+24];
+    int ebuflen;
+    EVP_ENCODE_CTX ectx;
 
-   const ::std::size_t binlen = bindata.size();
-   /// Use = signs so the end is properly padded.
-   string retval((((binlen + 2) / 3) * 4), '=');
-   ::std::size_t outpos = 0;
-   int bits_collected = 0;
-   unsigned int accumulator = 0;
-   const string::const_iterator binend = bindata.end();
+    if( data_size < 0 ) return -1;
 
-   for (string::const_iterator i = bindata.begin(); i != binend; ++i)
-   {
-      accumulator = (accumulator << 8) | (*i & 0xffu);
-      bits_collected += 8;
-      while (bits_collected >= 6)
-      {
-         bits_collected -= 6;
-         retval[outpos++] = BASE64_TABLE[(accumulator >> bits_collected) & 0x3fu];
-      }
-   }
-   if (bits_collected > 0)
-   { /// Any trailing bits that are missing.
-      assert(bits_collected < 6);
-      accumulator <<= 6 - bits_collected;
-      retval[outpos++] = BASE64_TABLE[accumulator & 0x3fu];
-   }
-   assert(outpos >= (retval.size() - 2));
-   assert(outpos <= retval.size());
-   return retval;
+    // unsigned char *cdata = (unsigned char*) malloc(data_size+3);
+    // memcpy((void*)cdata, (void*)data, (size_t)data_size);
+    // cdata[data_size] = 10;
+    // cdata[data_size+1] = 0;
+
+    EVP_DecodeInit(&ectx);
+    EVP_DecodeUpdate(&ectx, (unsigned char*)res, &ebuflen, (unsigned char *)data, (int)data_size);
+    EVP_DecodeFinal(&ectx, (unsigned char*)res, &ebuflen);
+
+    // free(cdata);
+
+    return ebuflen;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// Source: stackoverflow - Omnifarious
-string base64Decode(const string &ascdata)
+int base64Encode(const unsigned char *data,
+                 const int data_size,
+                 unsigned char *&res)
 {
-   string retval;
-   const string::const_iterator last = ascdata.end();
-   int bits_collected = 0;
-   unsigned int accumulator = 0;
+    res = new unsigned char[data_size+24];
+    int ebuflen;
+    EVP_ENCODE_CTX ectx;
 
-   for (string::const_iterator i = ascdata.begin(); i != last; ++i)
-   {
-      const int c = *i;
-      if (::std::isspace(c) || c == '=')
-      {
-         /// Skip whitespace and padding. Be liberal in what you accept.
-         continue;
-      }
-      if ((c > 127) || (c < 0) || (BASE64_TABLE_REV[c] > 63))
-      {
-         Core::Logger::logItLn("This contains characters not legal in a base64 encoded string.");
-         return "";
-      }
-      accumulator = (accumulator << 6) | BASE64_TABLE_REV[c];
-      bits_collected += 6;
-      if (bits_collected >= 8)
-      {
-         bits_collected -= 8;
-         retval += (char)((accumulator >> bits_collected) & 0xffu);
-      }
-   }
-   return retval;
+    EVP_EncodeInit(&ectx);
+    EVP_EncodeUpdate(&ectx, (unsigned char*)res, &ebuflen, (unsigned char *)data, (int)data_size);
+    EVP_EncodeFinal(&ectx, (unsigned char*)res, &ebuflen);
+
+    for(int i=ebuflen-4; i<ebuflen; ++i)
+    {
+        // cout << i << ":" << (int)res[i] << endl;
+        if(res[i] == '\n' || res[i] == '\r' )
+        {
+            res[i] = '\0';
+            ebuflen = i;
+            break;
+        }
+    }
+    return ebuflen;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// AES 128 CBC + SHA1 Salt
-string aesEncrypt(const string &data, const string &key_data, const string &salt = "")
+int aesEncrypt(const unsigned char *data,
+               const int data_size,
+               const unsigned char *key_data,
+               const int key_size,
+               const string &salt,
+               unsigned char *&res)
 {
     EVP_CIPHER_CTX e_ctx;
 
@@ -104,39 +90,44 @@ string aesEncrypt(const string &data, const string &key_data, const string &salt
     i = EVP_BytesToKey(
                 EVP_aes_128_cbc(),
                 EVP_sha1(),
-                (unsigned char*)salt.c_str(),
-                (unsigned char*)key_data.c_str(),
-                key_data.size(),
+                ((salt.empty()) ? _null_ : (unsigned char*)salt.c_str()),
+                (unsigned char*)key_data,
+                key_size,
                 nrounds,
                 key,
                 iv);
     if (i != 16) {
         Core::Logger::logVariable("[AES ENC] Invalid Key Size", i);
-        return "";
+        return -1;
     }
 
     EVP_CIPHER_CTX_init(&e_ctx);
     EVP_EncryptInit_ex(&e_ctx, EVP_aes_128_cbc(), NULL, key, iv);
 
-    int c_len = data.size() + AES_BLOCK_SIZE + 1, f_len = 0;
-    unsigned char *ciphertext = (unsigned char *)malloc(c_len);
+    int c_len = data_size + AES_BLOCK_SIZE + 1, f_len = 0;
+    res =  (unsigned char *)malloc(c_len);
     EVP_EncryptInit_ex(&e_ctx, NULL, NULL, NULL, NULL);
-    EVP_EncryptUpdate(&e_ctx, ciphertext, &c_len, (unsigned char*)data.c_str(), data.size());
-    EVP_EncryptFinal_ex(&e_ctx, ciphertext+c_len, &f_len);
+    // cout << data << data_size << endl;
+    EVP_EncryptUpdate(&e_ctx, res, &c_len, (unsigned char*)data, data_size);
+    EVP_EncryptFinal_ex(&e_ctx, res+c_len, &f_len);
 
     EVP_CIPHER_CTX_cleanup(&e_ctx);
 
     int len = c_len + f_len;
 
-    ciphertext[len] = '\0';
-    string res = ((char*)ciphertext);
-    free(ciphertext);
-    return res;
+    res[len] = '\0';
+
+    return len;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// AES 128 CBC + SHA1 Salt
-string aesDecrypt(const string &cipher, const string &key_data, const string &salt = "")
+int aesDecrypt(const unsigned char *secret,
+               const int secret_size,
+               const unsigned char *key_data,
+               const int key_size,
+               const string &salt,
+               unsigned char *&res)
 {
     EVP_CIPHER_CTX d_ctx;
 
@@ -146,38 +137,37 @@ string aesDecrypt(const string &cipher, const string &key_data, const string &sa
     i = EVP_BytesToKey(
                 EVP_aes_128_cbc(),
                 EVP_sha1(),
-                (unsigned char*)salt.c_str(),
-                (unsigned char*)key_data.c_str(),
-                key_data.size(),
+                ((salt.empty()) ? _null_ : (unsigned char*)salt.c_str()),
+                (unsigned char*)key_data,
+                key_size,
                 nrounds,
                 key,
                 iv);
     if (i != 16 ) {
         Core::Logger::logVariable("[AES DEC] Invalid Key Size", i);
-        return "";
+        return -1;;
     }
 
     EVP_CIPHER_CTX_init(&d_ctx);
     EVP_DecryptInit_ex(&d_ctx, EVP_aes_128_cbc(), NULL, key, iv);
 
-    int p_len = cipher.size(), f_len = 0;
-    unsigned char *plaintext = (unsigned char*)malloc(p_len);
+    int p_len = secret_size, f_len = 0;
+    res =  (unsigned char*)malloc(p_len);
     EVP_DecryptInit_ex(&d_ctx, NULL, NULL, NULL, NULL);
-    EVP_DecryptUpdate(&d_ctx, plaintext, &p_len, (unsigned char*)cipher.c_str(), cipher.size());
-    EVP_DecryptFinal_ex(&d_ctx, plaintext+p_len, &f_len);
+    EVP_DecryptUpdate(&d_ctx, res, &p_len, (unsigned char*)secret, secret_size);
+    EVP_DecryptFinal_ex(&d_ctx, res+p_len, &f_len);
 
     EVP_CIPHER_CTX_cleanup(&d_ctx);
 
     int len = p_len + f_len;
-    plaintext[len] = '\0';
-    string res = ((char*)plaintext);
-    free(plaintext);
-    return res;
+    res[len] = '\0';
+
+    return len;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// DES EDE3 CBC + SHA1 Salt
-string des3Encrypt(const string &data, const string &key_data, const string &salt = "")
+int des3Encrypt(const unsigned char *data, const int data_size, const unsigned char *key_data, const int key_size, const string &salt, unsigned char *&res)
 {
     EVP_CIPHER_CTX e_ctx;
 
@@ -187,39 +177,39 @@ string des3Encrypt(const string &data, const string &key_data, const string &sal
     i = EVP_BytesToKey(
                 EVP_des_ede3_cbc(),
                 EVP_sha1(),
-                (unsigned char*)salt.c_str(),
-                (unsigned char*)key_data.c_str(),
-                key_data.size(),
+                ((salt.empty()) ? _null_ : (unsigned char*)salt.c_str()),
+                (unsigned char*)key_data,
+                key_size,
                 nrounds,
                 key,
                 iv);
     if (i != 24) {
         Core::Logger::logVariable("[DES ENC] Invalid Key Size", i);
-        return "";
+        return -1;;
     }
 
     EVP_CIPHER_CTX_init(&e_ctx);
     EVP_EncryptInit_ex(&e_ctx, EVP_des_ede3_cbc(), NULL, key, iv);
 
-    int c_len = data.size() + 8 + 1, f_len = 0;
-    unsigned char *ciphertext = (unsigned char *)malloc(c_len);
+    int c_len = data_size + 8 + 1, f_len = 0;
+    res =  (unsigned char *)malloc(c_len);
     EVP_EncryptInit_ex(&e_ctx, NULL, NULL, NULL, NULL);
-    EVP_EncryptUpdate(&e_ctx, ciphertext, &c_len, (unsigned char*)data.c_str(), data.size());
-    EVP_EncryptFinal_ex(&e_ctx, ciphertext+c_len, &f_len);
+    EVP_EncryptUpdate(&e_ctx, res, &c_len, (unsigned char*)data, data_size);
+    EVP_EncryptFinal_ex(&e_ctx, res+c_len, &f_len);
 
     EVP_CIPHER_CTX_cleanup(&e_ctx);
 
     int len = c_len + f_len;
 
-    ciphertext[len] = '\0';
-    string res = ((char*)ciphertext);
-    free(ciphertext);
-    return res;
+    res[len] = '\0';
+
+
+    return len;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// DES EDE3 CBC + SHA1 Salt
-string des3Decrypt(const string &cipher, const string &key_data, const string &salt = "")
+int des3Decrypt(const unsigned char *secret, const int secret_size, const unsigned char *key_data, const int key_size, const string &salt, unsigned char *&res)
 {
     EVP_CIPHER_CTX d_ctx;
 
@@ -229,39 +219,39 @@ string des3Decrypt(const string &cipher, const string &key_data, const string &s
     i = EVP_BytesToKey(
                 EVP_des_ede3_cbc(),
                 EVP_sha1(),
-                (unsigned char*)salt.c_str(),
-                (unsigned char*)key_data.c_str(),
-                key_data.size(),
+                ((salt.empty()) ? _null_ : (unsigned char*)salt.c_str()),
+                (unsigned char*)key_data,
+                key_size,
                 nrounds,
                 key,
                 iv);
     if (i != 24) {
         Core::Logger::logVariable("[DES DEC] Invalid Key Size", i);
-        return "";
+        return -1;;
     }
 
     EVP_CIPHER_CTX_init(&d_ctx);
     EVP_DecryptInit_ex(&d_ctx, EVP_des_ede3_cbc(), NULL, key, iv);
 
-    int p_len = cipher.size(), f_len = 0;
-    unsigned char *plaintext = (unsigned char*)malloc(p_len);
+    int p_len = secret_size, f_len = 0;
+    res =  (unsigned char*)malloc(p_len);
     EVP_DecryptInit_ex(&d_ctx, NULL, NULL, NULL, NULL);
-    EVP_DecryptUpdate(&d_ctx, plaintext, &p_len, (unsigned char*)cipher.c_str(), cipher.size());
-    EVP_DecryptFinal_ex(&d_ctx, plaintext+p_len, &f_len);
+    EVP_DecryptUpdate(&d_ctx, res, &p_len, (unsigned char*)secret, secret_size);
+    EVP_DecryptFinal_ex(&d_ctx, res+p_len, &f_len);
 
     EVP_CIPHER_CTX_cleanup(&d_ctx);
 
     int len = p_len + f_len;
-    plaintext[len] = '\0';
+    res[len] = '\0';
 
-    string res = ((char*)plaintext);
-    free(plaintext);
-    return res;
+
+
+    return len;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// Blowfish CBC + SHA1 Salt
-string blowfishEncrypt(const string &data, const string &key_data, const string &salt = "")
+int blowfishEncrypt(const unsigned char *data, const int data_size, const unsigned char *key_data, const int key_size, const string &salt, unsigned char *&res)
 {
     EVP_CIPHER_CTX e_ctx;
 
@@ -271,40 +261,40 @@ string blowfishEncrypt(const string &data, const string &key_data, const string 
     i = EVP_BytesToKey(
                 EVP_bf_cbc(),
                 EVP_sha1(),
-                (unsigned char*)salt.c_str(),
-                (unsigned char*)key_data.c_str(),
-                key_data.size(),
+                ((salt.empty()) ? _null_ : (unsigned char*)salt.c_str()),
+                (unsigned char*)key_data,
+                key_size,
                 nrounds,
                 key,
                 iv);
     if (i != 16) {
         Core::Logger::logVariable("[BF ENC] Invalid Key Size", i);
-        return "";
+        return -1;;
     }
 
     EVP_CIPHER_CTX_init(&e_ctx);
     EVP_EncryptInit_ex(&e_ctx, EVP_bf_cbc(), NULL, key, iv);
 
-    int c_len = data.size() + BF_BLOCK + 1, f_len = 0;
-    unsigned char *ciphertext = (unsigned char *)malloc(c_len);
+    int c_len = data_size + BF_BLOCK + 1, f_len = 0;
+    res =  (unsigned char *)malloc(c_len);
     EVP_EncryptInit_ex(&e_ctx, NULL, NULL, NULL, NULL);
-    EVP_EncryptUpdate(&e_ctx, ciphertext, &c_len, (unsigned char*)data.c_str(), data.size());
-    EVP_EncryptFinal_ex(&e_ctx, ciphertext+c_len, &f_len);
+    EVP_EncryptUpdate(&e_ctx, res, &c_len, (unsigned char*)data, data_size);
+    EVP_EncryptFinal_ex(&e_ctx, res+c_len, &f_len);
 
     EVP_CIPHER_CTX_cleanup(&e_ctx);
 
     int len = c_len + f_len;
 
-    ciphertext[len] = '\0';
+    res[len] = '\0';
 
-    string res = ((char*)ciphertext);
-    free(ciphertext);
-    return res;
+
+
+    return len;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// Blowfish CBC + SHA1 Salt
-string blowfishDecrypt(const string &cipher, const string &key_data, const string &salt = "")
+int blowfishDecrypt(const unsigned char *secret, const int secret_size, const unsigned char *key_data, const int key_size, const string &salt, unsigned char *&res)
 {
     EVP_CIPHER_CTX d_ctx;
 
@@ -314,39 +304,39 @@ string blowfishDecrypt(const string &cipher, const string &key_data, const strin
     i = EVP_BytesToKey(
                 EVP_bf_cbc(),
                 EVP_sha1(),
-                (unsigned char*)salt.c_str(),
-                (unsigned char*)key_data.c_str(),
-                key_data.size(),
+                ((salt.empty()) ? _null_ : (unsigned char*)salt.c_str()),
+                (unsigned char*)key_data,
+                key_size,
                 nrounds,
                 key,
                 iv);
     if (i != 16) {
         Core::Logger::logVariable("[BF ENC] Invalid Key Size", i);
-        return "";
+        return -1;;
     }
 
     EVP_CIPHER_CTX_init(&d_ctx);
     EVP_DecryptInit_ex(&d_ctx, EVP_bf_cbc(), NULL, key, iv);
 
-    int p_len = cipher.size(), f_len = 0;
-    unsigned char *plaintext = (unsigned char*)malloc(p_len);
+    int p_len = secret_size, f_len = 0;
+    res =  (unsigned char*)malloc(p_len);
     EVP_DecryptInit_ex(&d_ctx, NULL, NULL, NULL, NULL);
-    EVP_DecryptUpdate(&d_ctx, plaintext, &p_len, (unsigned char*)cipher.c_str(), cipher.size());
-    EVP_DecryptFinal_ex(&d_ctx, plaintext+p_len, &f_len);
+    EVP_DecryptUpdate(&d_ctx, res, &p_len, (unsigned char*)secret, secret_size);
+    EVP_DecryptFinal_ex(&d_ctx, res+p_len, &f_len);
 
     EVP_CIPHER_CTX_cleanup(&d_ctx);
 
     int len = p_len + f_len;
-    plaintext[len] = '\0';
+    res[len] = '\0';
 
-    string res = ((char*)plaintext);
-    free(plaintext);
-    return res;
+
+
+    return len;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// RC2 CBC + SHA1 Salt
-string rc2Encrypt(const string &data, const string &key_data, const string &salt = "")
+int rc2Encrypt(const unsigned char *data, const int data_size, const unsigned char *key_data, const int key_size, const string &salt, unsigned char *&res)
 {
     EVP_CIPHER_CTX e_ctx;
 
@@ -356,40 +346,40 @@ string rc2Encrypt(const string &data, const string &key_data, const string &salt
     i = EVP_BytesToKey(
                 EVP_rc2_cbc(),
                 EVP_sha1(),
-                (unsigned char*)salt.c_str(),
-                (unsigned char*)key_data.c_str(),
-                key_data.size(),
+                ((salt.empty()) ? _null_ : (unsigned char*)salt.c_str()),
+                (unsigned char*)key_data,
+                key_size,
                 nrounds,
                 key,
                 iv);
     if (i != 16) {
         Core::Logger::logVariable("[BF ENC] Invalid Key Size", i);
-        return "";
+        return -1;;
     }
 
     EVP_CIPHER_CTX_init(&e_ctx);
     EVP_EncryptInit_ex(&e_ctx, EVP_rc2_cbc(), NULL, key, iv);
 
-    int c_len = data.size() + RC2_BLOCK + 1, f_len = 0;
-    unsigned char *ciphertext = (unsigned char *)malloc(c_len);
+    int c_len = data_size + RC2_BLOCK + 1, f_len = 0;
+    res =  (unsigned char *)malloc(c_len);
     EVP_EncryptInit_ex(&e_ctx, NULL, NULL, NULL, NULL);
-    EVP_EncryptUpdate(&e_ctx, ciphertext, &c_len, (unsigned char*)data.c_str(), data.size());
-    EVP_EncryptFinal_ex(&e_ctx, ciphertext+c_len, &f_len);
+    EVP_EncryptUpdate(&e_ctx, res, &c_len, (unsigned char*)data, data_size);
+    EVP_EncryptFinal_ex(&e_ctx, res+c_len, &f_len);
 
     EVP_CIPHER_CTX_cleanup(&e_ctx);
 
     int len = c_len + f_len;
 
-    ciphertext[len] = '\0';
+    res[len] = '\0';
 
-    string res = ((char*)ciphertext);
-    free(ciphertext);
-    return res;
+
+
+    return len;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// RC2 CBC + SHA1 Salt
-string rc2Decrypt(const string &cipher, const string &key_data, const string &salt = "")
+int rc2Decrypt(const unsigned char *secret, const int secret_size, const unsigned char *key_data, const int key_size, const string &salt, unsigned char *&res)
 {
     EVP_CIPHER_CTX d_ctx;
 
@@ -399,39 +389,39 @@ string rc2Decrypt(const string &cipher, const string &key_data, const string &sa
     i = EVP_BytesToKey(
                 EVP_rc2_cbc(),
                 EVP_sha1(),
-                (unsigned char*)salt.c_str(),
-                (unsigned char*)key_data.c_str(),
-                key_data.size(),
+                ((salt.empty()) ? _null_ : (unsigned char*)salt.c_str()),
+                (unsigned char*)key_data,
+                key_size,
                 nrounds,
                 key,
                 iv);
     if (i != 16) {
         Core::Logger::logVariable("[BF ENC] Invalid Key Size", i);
-        return "";
+        return -1;;
     }
 
     EVP_CIPHER_CTX_init(&d_ctx);
     EVP_DecryptInit_ex(&d_ctx, EVP_rc2_cbc(), NULL, key, iv);
 
-    int p_len = cipher.size(), f_len = 0;
-    unsigned char *plaintext = (unsigned char*)malloc(p_len);
+    int p_len = secret_size, f_len = 0;
+    res =  (unsigned char*)malloc(p_len);
     EVP_DecryptInit_ex(&d_ctx, NULL, NULL, NULL, NULL);
-    EVP_DecryptUpdate(&d_ctx, plaintext, &p_len, (unsigned char*)cipher.c_str(), cipher.size());
-    EVP_DecryptFinal_ex(&d_ctx, plaintext+p_len, &f_len);
+    EVP_DecryptUpdate(&d_ctx, res, &p_len, (unsigned char*)secret, secret_size);
+    EVP_DecryptFinal_ex(&d_ctx, res+p_len, &f_len);
 
     EVP_CIPHER_CTX_cleanup(&d_ctx);
 
     int len = p_len + f_len;
-    plaintext[len] = '\0';
+    res[len] = '\0';
 
-    string res = ((char*)plaintext);
-    free(plaintext);
-    return res;
+
+
+    return len;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// RC4 HMAC MD5 + SHA1 Salt
-string rc4Encrypt(const string &data, const string &key_data, const string &salt = "")
+int rc4Encrypt(const unsigned char *data, const int data_size, const unsigned char *key_data, const int key_size, const string &salt, unsigned char *&res)
 {
     EVP_CIPHER_CTX e_ctx;
 
@@ -441,40 +431,40 @@ string rc4Encrypt(const string &data, const string &key_data, const string &salt
     i = EVP_BytesToKey(
                 EVP_rc4_hmac_md5(),
                 EVP_sha1(),
-                (unsigned char*)salt.c_str(),
-                (unsigned char*)key_data.c_str(),
-                key_data.size(),
+                ((salt.empty()) ? _null_ : (unsigned char*)salt.c_str()),
+                (unsigned char*)key_data,
+                key_size,
                 nrounds,
                 key,
                 iv);
     if (i != 16) {
         Core::Logger::logVariable("[BF ENC] Invalid Key Size", i);
-        return "";
+        return -1;;
     }
 
     EVP_CIPHER_CTX_init(&e_ctx);
     EVP_EncryptInit_ex(&e_ctx, EVP_rc4_hmac_md5(), NULL, key, iv);
 
-    int c_len = data.size() + 1, f_len = 0;
-    unsigned char *ciphertext = (unsigned char *)malloc(c_len);
+    int c_len = data_size + 1, f_len = 0;
+    res =  (unsigned char *)malloc(c_len);
     EVP_EncryptInit_ex(&e_ctx, NULL, NULL, NULL, NULL);
-    EVP_EncryptUpdate(&e_ctx, ciphertext, &c_len, (unsigned char*)data.c_str(), data.size());
-    EVP_EncryptFinal_ex(&e_ctx, ciphertext+c_len, &f_len);
+    EVP_EncryptUpdate(&e_ctx, res, &c_len, (unsigned char*)data, data_size);
+    EVP_EncryptFinal_ex(&e_ctx, res+c_len, &f_len);
 
     EVP_CIPHER_CTX_cleanup(&e_ctx);
 
     int len = c_len + f_len;
 
-    ciphertext[len] = '\0';
+    res[len] = '\0';
 
-    string res = ((char*)ciphertext);
-    free(ciphertext);
-    return res;
+
+
+    return len;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// RC4 HMAC MD5 + SHA1 Salt
-string rc4Decrypt(const string &cipher, const string &key_data, const string &salt = "")
+int rc4Decrypt(const unsigned char *secret, const int secret_size, const unsigned char *key_data, const int key_size, const string &salt, unsigned char *&res)
 {
     EVP_CIPHER_CTX d_ctx;
 
@@ -484,34 +474,34 @@ string rc4Decrypt(const string &cipher, const string &key_data, const string &sa
     i = EVP_BytesToKey(
                 EVP_rc4_hmac_md5(),
                 EVP_sha1(),
-                (unsigned char*)salt.c_str(),
-                (unsigned char*)key_data.c_str(),
-                key_data.size(),
+                ((salt.empty()) ? _null_ : (unsigned char*)salt.c_str()),
+                (unsigned char*)key_data,
+                key_size,
                 nrounds,
                 key,
                 iv);
     if (i != 16) {
         Core::Logger::logVariable("[BF ENC] Invalid Key Size", i);
-        return "";
+        return -1;;
     }
 
     EVP_CIPHER_CTX_init(&d_ctx);
     EVP_DecryptInit_ex(&d_ctx, EVP_rc4_hmac_md5(), NULL, key, iv);
 
-    int p_len = cipher.size(), f_len = 0;
-    unsigned char *plaintext = (unsigned char*)malloc(p_len);
+    int p_len = secret_size, f_len = 0;
+    res =  (unsigned char*)malloc(p_len);
     EVP_DecryptInit_ex(&d_ctx, NULL, NULL, NULL, NULL);
-    EVP_DecryptUpdate(&d_ctx, plaintext, &p_len, (unsigned char*)cipher.c_str(), cipher.size());
-    EVP_DecryptFinal_ex(&d_ctx, plaintext+p_len, &f_len);
+    EVP_DecryptUpdate(&d_ctx, res, &p_len, (unsigned char*)secret, secret_size);
+    EVP_DecryptFinal_ex(&d_ctx, res+p_len, &f_len);
 
     EVP_CIPHER_CTX_cleanup(&d_ctx);
 
     int len = p_len + f_len;
-    plaintext[len] = '\0';
+    res[len] = '\0';
 
-    string res = ((char*)plaintext);
-    free(plaintext);
-    return res;
+
+
+    return len;
 }
 
 }

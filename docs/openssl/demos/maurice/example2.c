@@ -57,6 +57,8 @@ int main()
 
 	len = RSA_public_encrypt(strlen(ct)+1, ct, buf, pubKey->pkey.rsa,RSA_PKCS1_PADDING);
 
+	printf(ct);
+	
 	if (len != EVP_PKEY_size(pubKey))
 	{
 	    fprintf(stderr,"Error: ciphertext should match length of key\n");

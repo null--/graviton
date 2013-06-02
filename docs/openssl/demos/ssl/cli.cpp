@@ -13,6 +13,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <unistd.h>
 
 #include <openssl/crypto.h>
 #include <openssl/x509.h>
@@ -25,7 +26,7 @@
 #define CHK_ERR(err,s) if ((err)==-1) { perror(s); exit(1); }
 #define CHK_SSL(err) if ((err)==-1) { ERR_print_errors_fp(stderr); exit(2); }
 
-void main ()
+int main ()
 {
   int err;
   int sd;
@@ -38,9 +39,8 @@ void main ()
   SSL_METHOD *meth;
 
   SSLeay_add_ssl_algorithms();
-  meth = SSLv2_client_method();
   SSL_load_error_strings();
-  ctx = SSL_CTX_new (meth);                        CHK_NULL(ctx);
+  ctx = SSL_CTX_new (SSLv23_client_method());                        CHK_NULL(ctx);
 
   CHK_SSL(err);
   

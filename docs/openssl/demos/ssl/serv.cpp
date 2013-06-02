@@ -16,6 +16,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <unistd.h>
 
 #include <openssl/rsa.h>       /* SSLeay stuff */
 #include <openssl/crypto.h>
@@ -36,14 +37,14 @@
 #define CHK_ERR(err,s) if ((err)==-1) { perror(s); exit(1); }
 #define CHK_SSL(err) if ((err)==-1) { ERR_print_errors_fp(stderr); exit(2); }
 
-void main ()
+int main ()
 {
   int err;
   int listen_sd;
   int sd;
   struct sockaddr_in sa_serv;
   struct sockaddr_in sa_cli;
-  size_t client_len;
+  socklen_t client_len;
   SSL_CTX* ctx;
   SSL*     ssl;
   X509*    client_cert;
@@ -55,8 +56,7 @@ void main ()
 
   SSL_load_error_strings();
   SSLeay_add_ssl_algorithms();
-  meth = SSLv23_server_method();
-  ctx = SSL_CTX_new (meth);
+  ctx = SSL_CTX_new (SSLv23_server_method());
   if (!ctx) {
     ERR_print_errors_fp(stderr);
     exit(2);
@@ -148,5 +148,7 @@ void main ()
   close (sd);
   SSL_free (ssl);
   SSL_CTX_free (ctx);
+  
+  return 0;
 }
 /* EOF - serv.cpp */

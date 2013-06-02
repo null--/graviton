@@ -47,6 +47,7 @@ class TCP_Socket : public ting::net::TCPSocket
 {
 public:
     typedef ting::net::Exc Exception;
+
 public:
     TCP_Socket() : ting::net::TCPSocket()
     {
@@ -57,21 +58,6 @@ public:
     {
 
     }
-
-#ifdef INFO_OS_WINDOWS
-    /// Use carefully
-    SOCKET getSocketHandle()
-    {
-        return (SOCKET)socket;
-    }
-
-#else
-    /// Use carefully
-    int getSocketHandle()
-    {
-       return (int)socket;
-    }
-#endif
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -152,9 +138,10 @@ public:
 
 	virtual bool isActive();
 
-    TCP_Socket getTCPSocket() const
+    /// HIGHLY DANGEROUS
+    TCP_Socket *getTCPSocket()
 	{
-		return sock;
+        return &sock;
 	}
 
     string getRemoteIP()
