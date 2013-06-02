@@ -47,6 +47,16 @@ namespace File
 const unsigned long MAX_FILE_SIZE = 32 * 1024 * 1024 * sizeof(unsigned char); // 64 MB
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+size_t getSize(const string &file_name)
+{
+    FILE *file = fopen(file_name.c_str(), "rb");
+    fseek (file, 0, SEEK_END);
+    size_t size = ftell(file);
+    fclose (file);
+    return size;
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
  * @brief Load a binary file into an unsigned char array
  * 
