@@ -32,6 +32,7 @@
 #include <string>
 #include <cstdio>
 #include <cstdlib>
+#include <vector>
 #include <ios>
 using namespace std;
 
@@ -58,6 +59,45 @@ namespace Utils
 
 namespace OptParser
 {
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool splitArgument(const string &arg, vector<string> &splited_args)
+{
+    splited_args.clear();
+
+    int pos = 0;
+    bool in_qoutes = false;
+    string tmp;
+    while ( arg[pos] != '\0' )
+    {
+        if( (arg[pos] == ' ' || arg[pos] == '\t') && !in_qoutes )
+        {
+            if( !tmp.empty() )
+                splited_args.push_back(tmp);
+            tmp.clear();
+        }
+        else if ( arg[pos] == '"' && !in_qoutes )
+        {
+            in_qoutes = true;
+        }
+        else if ( arg[pos] == '"' && in_qoutes )
+        {
+            splited_args.push_back(tmp);
+            tmp.clear();
+        }
+        else
+        {
+            tmp += arg[pos];
+        }
+
+        ++pos;
+    }
+
+    if( !tmp.empty() )
+        splited_args.push_back(tmp);
+
+    return true;
+}
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// String to lower

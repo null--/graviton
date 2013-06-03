@@ -1,0 +1,16 @@
+1. copy all object files from upx and ucl libraries into one folder
+2. link'm all!
+
+e.g.:
+	# cd ucl/
+	# make
+	# cd src/
+	# cp *.o ../../../../libs/upx/linux-x86_64/
+	# cd ../../upx/
+	# make all 
+	# cd src/
+	# cp *.o ../../../../libs/upx/linux-x86_64/
+	# cd ../../../../libs/upx/linux-x86_64/
+	# rm main.o
+	# rc rcs libupxucl.a *.o
+

@@ -14,9 +14,7 @@ Major:
 	- SolarWind
 
 Minor:
-	- Combine luabridge with components ---> BRAINSTORM
+    - Combine luabridge with components ---> BRAINSTORM
     - mini http(s) web server
-    - interface for ssl/tls and md4/md5/sha1/sha224/sha256/sha386/sha512/ripemd160
-    - interface for zlib
 
 and much more!
