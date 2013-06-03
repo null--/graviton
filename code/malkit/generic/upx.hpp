@@ -16,16 +16,13 @@
 /// @todo HELL OF A MESSED UP CODE
 /// @todo remove asserts
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 #if 1 && defined(__DJGPP__)
 #include <crt0.h>
 int _crt0_startup_flags = _CRT0_FLAG_UNIX_SBRK;
 #endif
 
-
-/*************************************************************************
-// options
-**************************************************************************/
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 void options_t::reset()
 {
     options_t *o = this;
@@ -63,20 +60,34 @@ void options_t::reset()
     o->win32_pe.keep_resource = "";
 }
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// UPX Globl Values
 static options_t global_options;
 options_t *opt = &global_options;
-
-static int done_output_name = 0;
-static int done_script_name = 0;
-
-
-const char *argv0 = "";
+static int exit_code = EXIT_OK;
 const char *progname = "";
 
+#define EXIT_FATAL  3
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+namespace GraVitoN
+{
+namespace  Malkit
+{
+namespace  UPX
+{
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+static int done_output_name = 0;
+static int done_script_name = 0;
+const char *argv0 = "";
 static acc_getopt_t mfx_getopt;
 #define mfx_optarg      mfx_getopt.optarg
 #define mfx_optind      mfx_getopt.optind
 #define mfx_option      acc_getopt_longopt_t
+static int num_files = -1;
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static void handle_opterr(acc_getopt_p g, const char *f, void *v)
 {
     struct A { va_list ap; };
@@ -86,15 +97,8 @@ static void handle_opterr(acc_getopt_p g, const char *f, void *v)
     fprintf( stderr, "\n");
 }
 
-
-static int num_files = -1;
-static int exit_code = EXIT_OK;
-
-
-/*************************************************************************
-// exit handlers
-**************************************************************************/
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// Exit Handlers
 #if defined(__GNUC__)
 static void do_exit(void) __attribute__((__noreturn__));
 #endif
@@ -116,9 +120,7 @@ static void do_exit(void)
     exit(exit_code);
 }
 
-
-#define EXIT_FATAL  3
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static bool set_eec(int ec, int *eec)
 {
     if (ec == EXIT_FATAL)
@@ -147,26 +149,14 @@ static bool set_eec(int ec, int *eec)
     return 0;
 }
 
-bool set_ec(int ec)
-{
-    return set_eec(ec,&exit_code);
-}
-
-
-void e_exit(int ec)
-{
-    (void) set_ec(ec);
-    do_exit();
-}
-
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 void e_usage(void)
 {
     show_usage();
     e_exit(EXIT_USAGE);
 }
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 void e_memory(void)
 {
     show_head();
@@ -175,7 +165,7 @@ void e_memory(void)
     e_exit(EXIT_MEMORY);
 }
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static void e_method(int m, int l)
 {
     fflush(con_term);
@@ -183,7 +173,7 @@ static void e_method(int m, int l)
     e_usage();
 }
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static void e_optarg(const char *n)
 {
     fflush(con_term);
@@ -191,7 +181,7 @@ static void e_optarg(const char *n)
     e_exit(EXIT_USAGE);
 }
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static void e_optval(const char *n)
 {
     fflush(con_term);
@@ -199,7 +189,7 @@ static void e_optval(const char *n)
     e_exit(EXIT_USAGE);
 }
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 #if defined(OPTIONS_VAR)
 void e_envopt(const char *n)
 {
@@ -214,18 +204,15 @@ void e_envopt(const char *n)
 }
 #endif /* defined(OPTIONS_VAR) */
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 void __acc_cdecl_sighandler e_sighandler(int signum)
 {
     UNUSED(signum);
     e_exit(EXIT_FATAL);
 }
 
-
-/*************************************************************************
-// check options
-**************************************************************************/
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// Check options
 void check_not_both(bool e1, bool e2, const char *c1, const char *c2)
 {
     if (e1 && e2)
@@ -236,7 +223,7 @@ void check_not_both(bool e1, bool e2, const char *c1, const char *c2)
     }
 }
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 void check_options(int i, int argc)
 {
     assert(i <= argc);
@@ -282,18 +269,15 @@ void check_options(int i, int argc)
     }
 }
 
-
-/*************************************************************************
-// misc
-**************************************************************************/
-
+/// Misc
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 void e_help(void)
 {
     show_help();
     e_exit(EXIT_USAGE);
 }
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static void set_term(FILE *f)
 {
     if (f)
@@ -302,14 +286,14 @@ static void set_term(FILE *f)
         con_term = acc_isatty(STDIN_FILENO) ? stderr : stdout;
 }
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static void set_cmd(int cmd)
 {
     if (cmd > opt->cmd)
         opt->cmd = cmd;
 }
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static bool set_method(int m, int l)
 {
     if (m > 0)
@@ -331,7 +315,7 @@ static bool set_method(int m, int l)
     return true;
 }
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static void set_output_name(const char *n, bool allow_m)
 {
 #if 1
@@ -355,6 +339,7 @@ static void set_output_name(const char *n, bool allow_m)
     done_output_name++;
 }
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static void set_script_name(const char *n, bool allow_m)
 {
 #if 1
@@ -378,11 +363,8 @@ static void set_script_name(const char *n, bool allow_m)
     done_script_name++;
 }
 
-
-/*************************************************************************
-// get options
-**************************************************************************/
-
+/// Get Options
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static
 char* prepare_shortopts(char *buf, const char *n,
                         const struct mfx_option *longopts)
@@ -426,7 +408,7 @@ char* prepare_shortopts(char *buf, const char *n,
     return buf;
 }
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 template <class T>
 int getoptvar(T *var, const T min_value, const T max_value, const char *arg_fatal)
 {
@@ -458,6 +440,7 @@ done:
     return r;
 }
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 #if 1 && (ACC_CC_GNUC >= 0x030300)
 template <class T, T default_value, T min_value, T max_value>
 int getoptvar(OptVar<T,default_value,min_value,max_value> *var, const char *arg_fatal)
@@ -480,7 +463,7 @@ int getoptvar(T *var, const char *arg_fatal)
 }
 #endif
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static int do_option(int optc, const char *arg)
 {
     int i = 0;
@@ -904,7 +887,7 @@ static int do_option(int optc, const char *arg)
     return 0;
 }
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static int get_options(int argc, char **argv)
 {
 
@@ -1083,6 +1066,7 @@ static const struct mfx_option longopts[] =
 }
 
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 #if defined(OPTIONS_VAR)
 static void get_envoptions(int argc, char **argv)
 {
@@ -1235,7 +1219,7 @@ static const struct mfx_option longopts[] =
 }
 #endif /* defined(OPTIONS_VAR) */
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 static void first_options(int argc, char **argv)
 {
     int i;
@@ -1260,10 +1244,8 @@ static void first_options(int argc, char **argv)
 }
 
 
-/*************************************************************************
-// assert a sane architecture and compiler
-**************************************************************************/
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// assert a sane architecture and compiler
 template <class T> struct TestBELE {
 static bool test(void)
 {
@@ -1310,11 +1292,12 @@ static bool test(void)
     return true;
 }};
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 #define ACC_WANT_ACC_CHK_CH 1
 #undef ACCCHK_ASSERT
 #include <external/upx/src/miniacc.h>
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 void upx_sanity_check(void)
 {
 #define ACC_WANT_ACC_CHK_CH 1
@@ -1411,24 +1394,12 @@ void upx_sanity_check(void)
 #endif
 }
 
-namespace GraVitoN
-{
-namespace  Malkit
-{
-namespace  UPX
-{
-
-/*************************************************************************
-// main entry point
-**************************************************************************/
-
-#if !(WITH_GUI)
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// MAIN
 #if (ACC_ARCH_M68K && ACC_OS_TOS && ACC_CC_GNUC) && defined(__MINT__)
 extern "C" { extern long _stksize; long _stksize = 256 * 1024L; }
 #endif
-
-int __acc_cdecl_main run(string cmd_line)
+int run(string cmd_line)
 {
     cmd_line = "upx " + cmd_line;
 
@@ -1594,10 +1565,21 @@ int __acc_cdecl_main run(string cmd_line)
     return exit_code;
 }
 
-#endif /* !(WITH_GUI) */
+} // end of UPX
+} // end of Malkit
+} // end of GraVitoN
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool set_ec(int ec)
+{
+    return GraVitoN::Malkit::UPX::set_eec(ec,&exit_code);
 }
-}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+void e_exit(int ec)
+{
+    (void) set_ec(ec);
+    GraVitoN::Malkit::UPX::do_exit();
 }
 
 #endif

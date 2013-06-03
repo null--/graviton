@@ -44,16 +44,16 @@ namespace Core
 namespace Logger
 {
 
-void __noLog()
+void __noLog(...)
 {
 
 }
 
 #ifndef GVN_ACTIVATE_LOGGER
-    #define logIt(__X__) __noLog()
-    #define logItLn(__X__) __noLog()
-    #define logItEndl(__X__) __noLog()
-    #define logVariable(__X__,__Y__) __noLog()
+    #define logIt           __noLog
+    #define logItLn         __noLog
+    #define logItEndl       __noLog
+    #define logVariable     __noLog
 #else
 #ifdef GVN_ACTIVATE_LOGGER	
     // #ifdef GVN_LOG_INTO_FILE
@@ -102,11 +102,69 @@ template < class _C_T_ > bool logItLn ( const _C_T_ &log )
 template < class _C_T_ > bool logVariable(const string &name,const _C_T_ & value)
 {
 	logIt(name);
-	logIt("= ");
+    logIt(": ");
 	logItLn(value);
 
 	return true;
 }
+
+template < class _C_T_ > bool logVariable(const string &name,const _C_T_ & value,
+                                           const string &name2,const _C_T_ & value2)
+{
+    logIt(name);
+    logIt(": ");
+    logIt(value);
+    logIt(", ");
+    logIt(name2);
+    logIt(": ");
+    logItLn(value2);
+
+    return true;
+}
+
+template < class _C_T_ > bool logVariable(const string &name,const _C_T_ & value,
+                                           const string &name2,const _C_T_ & value2,
+                                           const string &name3,const _C_T_ & value3)
+{
+    logIt(name);
+    logIt(": ");
+    logIt(value);
+    logIt(", ");
+    logIt(name2);
+    logIt(": ");
+    logIt(value2);
+    logIt(", ");
+    logIt(name3);
+    logIt(": ");
+    logItLn(value3);
+
+    return true;
+}
+
+template < class _C_T_ > bool logVariable(const string &name,const _C_T_ & value,
+                                           const string &name2,const _C_T_ & value2,
+                                           const string &name3,const _C_T_ & value3,
+                                           const string &name4,const _C_T_ & value4)
+{
+    logIt(name);
+    logIt(": ");
+    logIt(value);
+    logIt(", ");
+    logIt(name2);
+    logIt(": ");
+    logIt(value2);
+    logIt(", ");
+    logIt(name3);
+    logIt(": ");
+    logIt(value3);
+    logIt(", ");
+    logIt(name4);
+    logIt(": ");
+    logItLn(value4);
+
+    return true;
+}
+
 #endif
 }
 }

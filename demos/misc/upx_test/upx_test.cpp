@@ -1,5 +1,6 @@
 #define GVN_ACTIVATE_LOGGER
 
+#include <core/logger.hpp>
 #include <graviton.hpp>
 #include <malkit/generic/upx.hpp>
 
