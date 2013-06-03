@@ -8,7 +8,6 @@ Major:
 		- exploit-and-infect shellcode
 	- android/ios/osx test
 	- Documentation
-	- upx (take a look at upx/src/main.cpp)
 	- code a polymorphic engine (binary and source)
 	- lua script encrypter/decrypter modules
 	- SolarWind

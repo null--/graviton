@@ -7,7 +7,6 @@ Installed:
 	luasys-1.6
 	lzlib - github 05/07/2013
 	zlip - 1.2.8
-	libtomcrypt-1.17
 	upx-3.0.9
 	ucl-1.03
 	ldigest - BASED ON lmd5 - github 05/13/2013
@@ -19,4 +18,4 @@ Removed:
 	lua-apr-0.23.1-1
 	libapreq2-2.13
 	lcrypt - gitub 05/07/2013
-
+	libtomcrypt-1.17

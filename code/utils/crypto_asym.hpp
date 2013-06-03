@@ -5,6 +5,7 @@
 #include <core/logger.hpp>
 #include <string>
 #include <external/openssl/include/openssl/rsa.h>
+#include <external/openssl/include/openssl/dsa.h>
 #include <external/openssl/include/openssl/x509v3.h>
 #include <external/openssl/include/openssl/pem.h>
 #include <external/openssl/include/openssl/pem2.h>
