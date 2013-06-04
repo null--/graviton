@@ -10,7 +10,6 @@ namespace Core
 {
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// @todo SSL client
 class SSL_Client
 {
 protected:
@@ -433,10 +432,10 @@ bool SSL_Client::recv(unsigned char *&data, size_t &data_size)
             delete data;
 
         // Logger::logVariable("[SSL_Client] recving", ssl);
-        unsigned char buf[ MAX_TCP_PACKET_SIZE ];
+        unsigned char buf[ Config::MAX_TCP_PACKET_SIZE ];
         int err = -1;
 
-        err = SSL_read (ssl, buf, MAX_TCP_PACKET_SIZE - 1);
+        err = SSL_read (ssl, buf, Config::MAX_TCP_PACKET_SIZE - 1);
         if( err == -1 )
         {
             // close();

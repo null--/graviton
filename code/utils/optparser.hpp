@@ -27,6 +27,7 @@
 #ifndef _GVN_OPTPARSER_HEAD_
 #define _GVN_OPTPARSER_HEAD_
 
+#include <stdexcept>
 #include <iostream>
 #include <cstring>
 #include <string>
@@ -84,6 +85,7 @@ bool splitArgument(const string &arg, vector<string> &splited_args)
         {
             splited_args.push_back(tmp);
             tmp.clear();
+            in_qoutes = false;
         }
         else
         {
@@ -328,6 +330,8 @@ string UintToHexStr(const unsigned int val)
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 string hexToStr(const unsigned char *data, size_t data_size)
 {
+    if(!data) return "";
+
     char buff[2 * data_size + 2];
     for (size_t i = 0; i < data_size; i++)
     {

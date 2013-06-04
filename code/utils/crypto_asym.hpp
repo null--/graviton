@@ -12,6 +12,7 @@
 #include <external/openssl/include/openssl/pkcs7.h>
 #include <external/openssl/include/openssl/pkcs12.h>
 #include <external/openssl/include/openssl/evp.h>
+#include <external/openssl/include/openssl/rand.h>
 
 using namespace std;
 
@@ -75,19 +76,21 @@ EVP_PKEY *loadPrivateKey(const string &keyfile)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int rsaEncrypt_Public(const unsigned char *data, int data_size, const string &publickey_file, unsigned char *&buf)
+int rsaEncrypt_Public(const unsigned char *data, int data_size, const string &publickey_file, unsigned char *&buf,
+                      int padding = RSA_PKCS1_PADDING)
 {
     EVP_PKEY *pubkey;
     pubkey = loadPublicKey(publickey_file);
 
-    if( !pubkey )
+    if( !pubkey || !data)
     {
         Core::Logger::logItLn("RSA ENC: Unable to load pkey files");
+        buf = _null_;
         return -1;
     }
 
     buf = (unsigned char*)malloc(EVP_PKEY_size(pubkey) + 1);
-    int len = RSA_public_encrypt(data_size, (unsigned char*)data, (unsigned char*)buf, pubkey->pkey.rsa,RSA_PKCS1_PADDING);
+    int len = RSA_public_encrypt(data_size, (unsigned char*)data, (unsigned char*)buf, pubkey->pkey.rsa,padding);
 
     if(len != EVP_PKEY_size(pubkey) )
     {
@@ -105,22 +108,26 @@ int rsaEncrypt_Public(const unsigned char *data, int data_size, const string &pu
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int rsaDecrypt_Private(const unsigned char *data, int data_size, const string &privatekey_file, unsigned char *&buf)
+int rsaDecrypt_Private(const unsigned char *data, int data_size, const string &privatekey_file, unsigned char *&buf,
+                       int padding = RSA_PKCS1_PADDING)
 {
     EVP_PKEY *privkey;
     privkey = loadPrivateKey(privatekey_file);
 
-    if( !privkey )
+    if( !privkey || !data )
     {
-        Core::Logger::logItLn("RSA ENC: Unable to load pkey files");
+        Core::Logger::logItLn("RSA DEC: Unable to load pkey files");
         return -1;
+        buf = _null_;
     }
 
+    cout << "F1" << endl;
     buf = (unsigned char*)malloc(EVP_PKEY_size(privkey) + 1);
-    int len = RSA_private_decrypt(data_size, (unsigned char*)data, (unsigned char*)buf, privkey->pkey.rsa,RSA_PKCS1_PADDING);
+    cout << "F1" << endl;
+    int len = RSA_private_decrypt(data_size, (unsigned char*)data, (unsigned char*)buf, privkey->pkey.rsa,padding);
 
     EVP_PKEY_free(privkey);
-    free(buf);
+    // free(buf);
 
     return len;
 }

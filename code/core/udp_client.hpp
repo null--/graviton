@@ -20,9 +20,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief GraVitoN::Lib_Ting
+ * @brief GraVitoN::UDP_Client
  *
- * @todo IT'S NOT COMPELTED YET
 */
 
 #ifndef _GVN_UDP_SOCKET_HEAD_

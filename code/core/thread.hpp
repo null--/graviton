@@ -22,7 +22,6 @@
  *
  * @brief GraVitoN::Thread
  *
- * @todo IT'S NOT COMPELTED YET
 */
 
 #ifndef _GVN_THREAD_HEAD_

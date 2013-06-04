@@ -44,10 +44,7 @@
 #include <cstring>
 using namespace std;
 
-/// @note Do Not test remote payloads against '127.0.0.1' always set some non-localhost IP!
-/// @note Remember, you should set 'CXXFLAGS=-O0' when compiling Bin_Payloads
-
-/// @todo Run Bin_Payloads even if optimization flags are set.
+/// @note Never test remote payloads on '127.0.0.1' always set some non-localhost IP!
 
 namespace GraVitoN
 {

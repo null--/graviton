@@ -22,7 +22,6 @@
  *
  * @brief GraVitoN::TCP_Server
  *
- * @todo IT'S NOT COMPELTED YET
 */
 
 #ifndef _GVN_TCP_SERVER_HEAD_

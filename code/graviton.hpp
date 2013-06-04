@@ -27,17 +27,12 @@
 #ifndef _GVN_HEAD_
 #define _GVN_HEAD_
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// My Lovely Define!
-#define _null_ 0x00 //NULL
+#include "config.hpp"
 
 /// ACTIVATE LUA BRIDGE
 // #define GVN_ACTIVATE_LUABRIDGE
 #ifndef GVN_ACTIVATE_LUABRIDGE
-    #warning ("[WARNING] LUABRIDGE is not activated")
-#else
-    #include <core/luaviton.hpp>
-    #include <core/luabridge.hpp>
+    #warning ("[WARNING] LUABRIDGE IS NOT ACTIVATED")
 #endif
 /// Activate Logger
 // #define GVN_ACTIVATE_LOGGER
@@ -62,29 +57,20 @@
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// Detect Artitecture/OS/Compiler
-#include "core/aocinfo.hpp"
-#include "core/component.hpp"
-
-// SOME COMPILER OPTIONS
-#ifdef INFO_COMPILER_GCC
-    #pragma GCC diagnostic ignored "-Wdeprecated"
-    #pragma GCC diagnostic ignored "-Wcpp"
-    #pragma GCC diagnostic ignored "-Wignored-qualifiers"
-    #pragma GCC diagnostic ignored "-Wnarrowing"
-#endif
+#include <core/aocinfo.hpp>
+#include <core/component.hpp>
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// @todo: ai, payload, infect, malkit, utils
-// #include <ai/ai.hpp>
-// #include <payload/payload.hpp>
-// #include <infect/infect.hpp>
-// #include <malkit/malkit.hpp>
-// #include <utils/utils.hpp>
+#include <core/logger.hpp>
+#include <ai/ai.hpp>
+#include <payload/payload.hpp>
+#include <infect/infect.hpp>
+#include <malkit/malkit.hpp>
 
 /// One namespace to rule them all
 namespace GraVitoN
 {
-    const unsigned int MAX_TCP_PACKET_SIZE = 4069;
+
 }
 
 

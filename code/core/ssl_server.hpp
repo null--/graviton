@@ -14,7 +14,7 @@ namespace GraVitoN
 namespace Core
 {
 
-/// @todo SSL Server
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 class SSL_Server : public Core::Component
 {
 protected:
@@ -110,6 +110,7 @@ public:
     virtual bool close();
 };
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool SSL_Server::run()
 {
     if( open() )
@@ -127,6 +128,7 @@ bool SSL_Server::run()
     return true;
 }
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool SSL_Server::open()
 {
     try
@@ -150,6 +152,7 @@ bool SSL_Server::open()
     return true;
 }
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool SSL_Server::listen()
 {
     try
@@ -232,6 +235,7 @@ bool SSL_Server::listen()
     return true;
 }
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool SSL_Server::accept(SSL_Socket::Handle &handle, SSL_Socket::Address &addr)
 {
     try
@@ -252,6 +256,7 @@ bool SSL_Server::accept(SSL_Socket::Handle &handle, SSL_Socket::Address &addr)
     return true;
 }
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool SSL_Server::close()
 {
     try
@@ -272,6 +277,7 @@ bool SSL_Server::close()
     return true;
 }
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool SSL_Server::initializeConnection(GraVitoN::Core::SSL_Client &client_sock)
 {
     client_sock.loadPemFromFile(cert_file, key_file);

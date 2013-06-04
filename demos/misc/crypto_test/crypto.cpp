@@ -112,13 +112,20 @@ int main ( int argc , char **argv)
 
     cout << endl;
     cout << "-------------------- Testing Asymmetrical Algorithms --------------------" << endl;
-    string pub_key = "cert.pem", priv_key = "privkey.pem";
-    // string pub_key = "cert.pem", priv_key = "privkey.pem";
+    /// openssl genrsa -out server.key 2048
+    /// openssl req -new -key server.key -out server.csr
+    /// openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+    string pub_key = "server.crt", priv_key = "server.key";
+    // string pub_key = "key.pem", priv_key = "key.pem";
+
     len = Utils::Crypto::rsaEncrypt_Public((unsigned char*)test.c_str(), (int)test.size() + 1, pub_key, secret);
-    cout << "RSA ENC:\t" << Utils::OptParser::hexToStr(secret, len) << endl;
-    len = Utils::Crypto::rsaDecrypt_Private(secret, len, priv_key, plain);
-    cout << "RSA DEC:\t" << plain << endl;
-    cout << ((test == string((char*)plain))?("Passed!"):("-=> FAILED! <=-")) << endl << endl;
+    if( len > 0 )
+    {
+        cout << "RSA ENC:\t" << Utils::OptParser::hexToStr(secret, len) << endl;
+        len = Utils::Crypto::rsaDecrypt_Private(secret, len, priv_key, plain);
+        cout << "RSA DEC:\t" << plain << endl;
+        cout << ((test == string((char*)plain))?("Passed!"):("-=> FAILED! <=-")) << endl << endl;
+    }
 
     return 0;
 }

@@ -22,7 +22,6 @@
  *
  * @brief GraVitoN::TCP_Client
  *
- * @todo IT'S NOT COMPELTED YET
 */
 
 #ifndef _GVN_TCP_CLIENT_HEAD_
@@ -342,7 +341,7 @@ bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
 			delete data;
 		}
 
-		ting::StaticBuffer<unsigned char, MAX_TCP_PACKET_SIZE> data_buf;
+		ting::StaticBuffer<unsigned char, Config::MAX_TCP_PACKET_SIZE> data_buf;
 
         /*
         while( bytes_recved == 0 )

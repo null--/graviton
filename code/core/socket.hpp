@@ -22,7 +22,6 @@
  *
  * @brief GraVitoN::Socket
  *
- * @todo IT'S NOT COMPELTED YET
 */
 
 #ifndef _GVN_SOCKET_HEAD_

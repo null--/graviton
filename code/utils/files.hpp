@@ -44,8 +44,6 @@ namespace Utils
 namespace File
 {
 
-const unsigned long MAX_FILE_SIZE = 32 * 1024 * 1024 * sizeof(unsigned char); // 64 MB
-
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 size_t getSize(const string &file_name)
 {
@@ -86,7 +84,7 @@ unsigned long loadFile(const string &path, unsigned char **buffer)
 	file = fopen(path.c_str(), "rb");
 	if( file )
 	{
-		*buffer = (unsigned char*)malloc(MAX_FILE_SIZE);
+		*buffer = (unsigned char*)malloc(Config::MAX_FILE_SIZE);
 		size = 0;
 		
 		while( !feof(file) )
