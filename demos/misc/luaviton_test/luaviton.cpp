@@ -7,6 +7,9 @@
 #include <core/luabridge.hpp>
 
 #include <core/tcp_client.hpp>
+#include <core/thread.hpp>
+#include <core/tcp_server.hpp>
+#include <core/udp_client.hpp>
 
 using namespace std;
 
@@ -132,17 +135,11 @@ RefCountedPtr <A const> testRetSharedPtrConstA ()
   return sp_A;
 }
 
-void function()
+void callLua(luabridge::LuaRef callback )
 {
-    cout << "HELL YEAH!" << endl;
-}
-
-void callback_func( void *func )
-{
-    cout << func << endl;
-    void (*func_p) (void *);
-    func_p = (void (*) (void*))func;
-    func_p(NULL);
+    cout << "--- BACK IN C++ " << endl;
+    A a("HELL'O LUA");
+    callback(a);
 }
 
 // add our own functions and classes to a Lua environment
@@ -173,6 +170,7 @@ void testLuaBridge (lua_State *L)
         .endClass()
         .addFunction ("testRetSharedPtrA", &testRetSharedPtrA)
         .addFunction ("testRetSharedPtrConstA", &testRetSharedPtrConstA)
+        .addFunction ("callLua", &callLua)
         ;
 }
 
@@ -210,7 +208,7 @@ int testFunc ( lua_State *stt )
 /// Run a Lua Test
 int main ( int argc , char **argv)
 {
-    callback_func((void*)&function);
+    // callback_func((void*)&function);
 
     string file;// = "test.lua";
 
@@ -228,7 +226,10 @@ int main ( int argc , char **argv)
     cout << " Registering function ...";
     my_lua.regiserFunction ( "testFunc", &testFunc );
 
+    GraVitoN::LUABridge::addClass_UDP_Socket();
     GraVitoN::LUABridge::addClass_TCP_Client();
+    GraVitoN::LUABridge::addClass_Thread();
+    GraVitoN::LUABridge::addClass_TCP_Server();
 
     cout << " done" << endl;
 

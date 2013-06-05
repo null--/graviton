@@ -1,10 +1,9 @@
 //==============================================================================
 /*
   https://github.com/vinniefalco/LuaBridge
-  https://github.com/vinniefalco/LuaBridgeDemo
   
-  Copyright (C) 2012, Vinnie Falco <vinnie.falco@gmail.com>
-  Copyright (C) 2007, Nathan Reed
+  Copyright 2012, Vinnie Falco <vinnie.falco@gmail.com>
+  Copyright 2007, Nathan Reed
 
   License: The MIT License (http://www.opensource.org/licenses/mit-license.php)
 
@@ -34,9 +33,9 @@
 #ifdef _MSC_VER
 # include <hash_map>
 #else
-    # include <stdint.h>
-    // #include <ext/hash_map>
-    #include <tr1/unordered_map>
+# include <stdint.h>
+// #include <ext/hash_map>
+#include <tr1/unordered_map>
 #endif
 
 //==============================================================================
@@ -54,8 +53,8 @@ struct RefCountedPtrBase
     size_t operator () (const void * const v) const
     {
       // DEPRECATED: ext/hash_map
-      // static  __gnu_cxx::hash<unsigned int> H;
-      static  std::tr1::hash<unsigned int> H;
+      // static __gnu_cxx::hash<unsigned int> H;
+      static std::tr1::hash<unsigned int> H;
       return H(uintptr_t(v));
     }
   };
@@ -236,6 +235,10 @@ private:
 
 namespace luabridge
 {
+
+// forward declaration
+template <class T>
+struct ContainerTraits;
 
 template <class T>
 struct ContainerTraits <RefCountedPtr <T> >

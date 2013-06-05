@@ -368,6 +368,74 @@ bool TCP_Server_Base::isActive()
 }
 
 } // end of Core
+
+//=============================================================================//
+#ifdef GVN_ACTIVATE_LUABRIDGE
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+namespace LUABridge
+{
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+class LUATCPServer : public Core::TCP_Server
+{
+private:
+    luabridge::LuaRef lua_response;
+
+protected:
+    virtual bool response(Core::TCP_Client &client_sock)
+    {
+        return lua_response(client_sock);
+    }
+
+public:
+    LUATCPServer(const unsigned int local_port, luabridge::LuaRef callback, const bool enable_multi_thread = true):
+        TCP_Server(local_port, enable_multi_thread),
+        lua_response(callback)
+    {
+
+    }
+
+    ~LUATCPServer() throw()
+    {
+
+    }
+
+    virtual bool run()
+    {
+        return Core::TCP_Server::run();
+    }
+
+    virtual bool isActive()
+    {
+        return Core::TCP_Server::isActive();
+    }
+
+    virtual bool close()
+    {
+        return Core::TCP_Server::close();
+    }
+};
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+void addClass_TCP_Server()
+{
+    luabridge::getGlobalNamespace ( Core::Luaviton::getInstance().getState() )
+            .beginNamespace("GraVitoN")
+            .beginNamespace("Core")
+            .beginClass <LUATCPServer> ("TCP_Server")
+            .addConstructor < void(*) (const unsigned int, luabridge::LuaRef, const bool), RefCountedPtr<LUATCPServer> > ()
+            .addFunction("run", &LUATCPServer::run)
+            .addFunction("isActive", &LUATCPServer::isActive)
+            .addFunction("close", &LUATCPServer::close)
+            .endClass()
+            .endNamespace()
+            .endNamespace()
+            ;
+}
+
+} // LUABridge
+#endif
 } // end of GraVitoN
 
 #endif // _GVN_TCP_SERVER_HEAD_

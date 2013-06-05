@@ -1,6 +1,8 @@
 #ifndef _GVN_CONFIG_HEAD_
 #define _GVN_CONFIG_HEAD_
 
+#define GVN_ACTIVATE_LUABRIDGE
+
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// My Lovely Define!
 #define _null_ 0x00 //NULL
@@ -12,11 +14,6 @@
     #pragma GCC diagnostic ignored "-Wcpp"
     #pragma GCC diagnostic ignored "-Wignored-qualifiers"
     #pragma GCC diagnostic ignored "-Wnarrowing"
-#endif
-
-#ifdef GVN_ACTIVATE_LUABRIDGE
-    #include <core/luaviton.hpp>
-    #include <core/luabridge.hpp>
 #endif
 
 namespace GraVitoN

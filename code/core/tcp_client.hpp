@@ -420,8 +420,8 @@ namespace LUABridge
 void addClass_TCP_Client()
 {
     luabridge::getGlobalNamespace ( Core::Luaviton::getInstance().getState() )
-            .beginNamespace("gvn")
-            .beginNamespace("core")
+            .beginNamespace("GraVitoN")
+            .beginNamespace("Core")
             .beginClass <Core::TCP_Socket> ("TCP_Socket")
             .addConstructor < void(*) (), RefCountedPtr<Core::TCP_Socket> > ()
             .endClass()

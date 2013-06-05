@@ -54,7 +54,10 @@ protected:
 
 public:
     /// Empty constructor
-    UDP_Socket() {}
+    UDP_Socket(const unsigned int &_local_port = 0)
+    {
+        open(_local_port);
+    }
 
 	/**
      * @brief Create an object of UDP_Socket with a open socket.
@@ -91,8 +94,26 @@ public:
     /// Like recv but also stored ip address and port number of sender
     virtual bool recv(unsigned char *&data, size_t &data_size, string &_sender_ip, unsigned int &_sender_port);
 
+    // virtual string recvString(string &_sender_ip, unsigned int &_sender_port)
+    virtual string recvString()
+    {
+        unsigned char *data = _null_;
+        size_t data_size;
+
+        // if( !recv(data, data_size, _sender_ip, _sender_port) )
+        if( !recv(data, data_size) )
+            return "";
+        return string((char*)data);
+    }
+
     /// Send data to client
     virtual bool send(const unsigned char *data, const size_t &data_size, const string &ip, const unsigned int &port);
+
+    /// send string
+    virtual bool sendString(const string &data, const string &ip, const unsigned int &port)
+    {
+        return send((unsigned char*)data.c_str(), data.size(), ip, port);
+    }
 
 	virtual bool isActive();
 
@@ -195,7 +216,7 @@ bool UDP_Socket::doRecv(unsigned char *&data, size_t &data_size, ting::net::IPAd
 		//if ( data )
 			//delete data;
 
-		ting::StaticBuffer<unsigned char, MAX_TCP_PACKET_SIZE> data_buf;
+        ting::StaticBuffer<unsigned char, GraVitoN::Config::MAX_TCP_PACKET_SIZE> data_buf;
         size_t bytes_recved = 0;
 
         /*
@@ -215,10 +236,11 @@ bool UDP_Socket::doRecv(unsigned char *&data, size_t &data_size, ting::net::IPAd
             return false;
 		//Logger::logVariable("Bytes Recved: ", bytes_recved);
 		data_size = bytes_recved;
-		data = new unsigned char[data_size];
+        data = new unsigned char[data_size + 1];
 
         for(size_t i=0; i<bytes_recved; ++i)
 			data[i] = data_buf[i];
+        data[data_size] = '\0';
 	}
 	catch(ting::net::Exc &e)
 	{
@@ -246,6 +268,9 @@ bool UDP_Socket::recv(unsigned char *&data, size_t &data_size, string &_sender_i
         _sender_ip = Utils::Netkit::hexToStrIPv4(sender_addr.host);
         _sender_port = sender_addr.port;
 
+        cout << _sender_ip << endl;
+        cout << _sender_port << endl;
+
         return true;
     }
     return false;
@@ -258,6 +283,34 @@ bool UDP_Socket::isActive()
 }
 
 } // Core
+
+//=============================================================================//
+#ifdef GVN_ACTIVATE_LUABRIDGE
+namespace LUABridge
+{
+
+void addClass_UDP_Socket()
+{
+    luabridge::getGlobalNamespace ( Core::Luaviton::getInstance().getState() )
+            .beginNamespace("GraVitoN")
+            .beginNamespace("Core")
+            .beginClass <Core::UDP_Socket> ("UDP_Socket")
+            .addConstructor < void(*) (), RefCountedPtr<Core::UDP_Socket> > ()
+            .addConstructor < void(*) (const unsigned int&), RefCountedPtr<Core::UDP_Socket> > ()
+            // .addConstructor < void(*) (Core::TCP_Socket), RefCountedPtr<Core::UDP_Socket> > ()
+            .addFunction("open", &Core::UDP_Socket::open)
+            .addFunction("close", &Core::UDP_Socket::close)
+            .addFunction("sendString", &Core::UDP_Socket::sendString)
+            .addFunction("recvString", &Core::UDP_Socket::recvString)
+            .addFunction("isActive", &Core::UDP_Socket::isActive)
+            .endClass()
+            .endNamespace()
+            .endNamespace()
+            ;
+}
+}
+#endif
+
 } // end of GraVitoN
 
 #endif // _GVN_UDP_SOCKET_HEAD_

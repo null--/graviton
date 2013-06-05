@@ -196,7 +196,77 @@ bool Thread::stop()
     return true;
 }
 
+} // end of Core
+
+//=============================================================================//
+#ifdef GVN_ACTIVATE_LUABRIDGE
+namespace LUABridge
+{
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+class LuaThread : public Core::Thread
+{
+private:
+    luabridge::LuaRef loop_func_addr;
+
+protected:
+    virtual bool myMainLoop()
+    {
+        loop_func_addr();
+        return true;
+    }
+
+public:
+    LuaThread(luabridge::LuaRef callback) : loop_func_addr(callback)
+    {
+    }
+
+    virtual bool run()
+    {
+
+        bool res =Core::Thread::run();
+        /// Avoid segmentation fault at lua
+        Core::Thread::sleep(50);
+        return res;
+    }
+
+    virtual bool isActive()
+    {
+        return Core::Thread::isActive();
+    }
+
+    virtual bool stop()
+    {
+        return Core::Thread::stop();
+    }
+
+    ~LuaThread() throw()
+    {
+        Core::Thread::stop();
+    }
+};
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// @todo
+void addClass_Thread()
+{
+    luabridge::getGlobalNamespace ( Core::Luaviton::getInstance().getState() )
+            .beginNamespace("GraVitoN")
+            .beginNamespace("Core")
+            .addFunction("sleep", &Core::Thread::sleep)
+            .beginClass <LuaThread> ("Thread")
+            .addConstructor < void(*) (luabridge::LuaRef), RefCountedPtr<LuaThread> > ()
+            .addFunction("run", &LuaThread::run)
+            .addFunction("isActive", &LuaThread::isActive)
+            .addFunction("stop", &LuaThread::stop)
+            .endClass()
+            .endNamespace()
+            .endNamespace()
+            ;
 }
+}
+#endif
+
 } // end of GraVitoN
 
 #endif // _GVN_THREAD_HEAD_

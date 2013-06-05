@@ -1,37 +1,58 @@
 print("Beginning Test...")
 
-print ("----- testing A -----")
-A.testStatic()
-print(A.testStaticProp)
+------------------------ CALLBACK ------------------------
+--print ("----- testing CallBack -----")
+--local callBack=function(a)
+--    print ("--- LUA CallBack")
+--    s  = a:getName()
+--    print ("--> ", s)
+--end
+--callLua(callBack)
 
-a_obj = A("HELL'o C")
-a_obj:testVirtual()
+------------------------ THREAD ------------------------
+--print ("----- testing Thread -----")
 
-name = a_obj:getName()
-print(name)
+--local mainLoop=function()
+--    print("Inside Main Loop")
+--    return;
+--end
 
-print(a_obj.testProp)
-a_obj:testPropSet(23)
-print(a_obj:testPropGet())
+--trd = GraVitoN.Core.Thread(mainLoop);
 
-print ("----- testing B -----")
-B.testStatic()
-b_obj = B("I'm B!")
-b_obj:testVirtual()
-b_obj:testPropSet(24)
-print(b_obj:testPropGet())
+--trd:run();
 
-print ("----- testing funcs -----")
-print( testRetStdString() )
-testParamStdStringRef("Back to C")
+--while trd:isActive() do
+--    print("*")
+--    gvn.core.sleep(10)
+--end
 
-testData(a_obj)
-print(a_obj.testProp)
+--trd:stop()
 
-print ("----- testing TCP client -----")
-cli = gvn.core.TCP_Client("127.0.0.1", 7357)
+------------------------ TCP CLIENT ------------------------
+print ("----- testing TCP Client -----")
+cli = GraVitoN.Core.TCP_Client("127.0.0.1", 7357)
 cli:connect()
+data = cli:recvString()
+print (data)
+cli:sendString(data)
 
-test = cli:recvString()
-cli:sendString(test)
-print(test)
+------------------------ TCP SERVER ------------------------
+--print ("----- testing TCP Server -----")
+
+--local response=function(cli)
+--    print ("RESPONSE CALLED:")
+--    d = cli:recvString()
+--    print( d )
+--    cli:sendString(d)
+--    cli:close()
+--end
+
+--srv = GraVitoN.Core.TCP_Server(7357,response,true)
+--srv:run()
+
+------------------------ UDP SOCKET ------------------------
+--print ("----- testing UDP Socket -----")
+--uds = GraVitoN.Core.UDP_Socket(7357)
+--uds:sendString("hell'o peer!\n", "127.0.0.1", 7358)
+--s = uds:recvString ()
+--print (s)
