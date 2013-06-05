@@ -30,7 +30,9 @@ public:
     {
         Luaviton_Socket::getInstance().registerModule();
 
+        GraVitoN::Core::Logger::logItLn("Loading Module: ssl.core");
         luaviton.preloadModule("ssl.core", luaopen_ssl_core);
+        GraVitoN::Core::Logger::logItLn("Loading Module: ssl.context");
         luaviton.preloadModule("ssl.context", luaopen_ssl_context);
     }
 
@@ -42,6 +44,8 @@ public:
             return false;
         }
 
+        GraVitoN::Core::Logger::logItLn("Loading Module: ssl");
+        GraVitoN::Core::Logger::logItLn("Loading Module: https");
         return
                 luaviton.loadModuleString(MODULE_SSL) &&
                 luaviton.loadModuleString(MODULE_HTTPS);

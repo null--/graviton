@@ -250,6 +250,8 @@ public:
 /// @todo
 void addClass_Thread()
 {
+    Core::Logger::logItLn("Loaing GraVitoN.Core.Thread");
+
     luabridge::getGlobalNamespace ( Core::Luaviton::getInstance().getState() )
             .beginNamespace("GraVitoN")
             .beginNamespace("Core")

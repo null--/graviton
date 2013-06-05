@@ -44,16 +44,19 @@ namespace Core
 namespace Logger
 {
 
-void __noLog(...)
+void __noLog()
 {
 
 }
 
 #ifndef GVN_ACTIVATE_LOGGER
-    #define logIt           __noLog
-    #define logItLn         __noLog
-    #define logItEndl       __noLog
-    #define logVariable     __noLog
+    #define logIt(_V1_)           __noLog()
+    #define logItLn(_V1_)         __noLog()
+    #define logItEndl(_V1_)       __noLog()
+    #define logVariable(_N1_,_V1_)     __noLog()
+    #define logVariable2(_N1_,_V1_,_N2_,_V2_)     __noLog()
+    #define logVariable3(_N1_,_V1_,_N2_,_V2_,_N3_,_V3_)     __noLog()
+    #define logVariable4(_N1_,_V1_,_N2_,_V2_,_N3_,_V3_,_N4_,_V4_)     __noLog()
 #else
 #ifdef GVN_ACTIVATE_LOGGER	
     // #ifdef GVN_LOG_INTO_FILE
@@ -108,7 +111,7 @@ template < class _C_T_ > bool logVariable(const string &name,const _C_T_ & value
 	return true;
 }
 
-template < class _C_T_ > bool logVariable(const string &name,const _C_T_ & value,
+template < class _C_T_ > bool logVariable2(const string &name,const _C_T_ & value,
                                            const string &name2,const _C_T_ & value2)
 {
     logIt(name);
@@ -122,7 +125,7 @@ template < class _C_T_ > bool logVariable(const string &name,const _C_T_ & value
     return true;
 }
 
-template < class _C_T_ > bool logVariable(const string &name,const _C_T_ & value,
+template < class _C_T_ > bool logVariable3(const string &name,const _C_T_ & value,
                                            const string &name2,const _C_T_ & value2,
                                            const string &name3,const _C_T_ & value3)
 {
@@ -141,7 +144,7 @@ template < class _C_T_ > bool logVariable(const string &name,const _C_T_ & value
     return true;
 }
 
-template < class _C_T_ > bool logVariable(const string &name,const _C_T_ & value,
+template < class _C_T_ > bool logVariable4(const string &name,const _C_T_ & value,
                                            const string &name2,const _C_T_ & value2,
                                            const string &name3,const _C_T_ & value3,
                                            const string &name4,const _C_T_ & value4)

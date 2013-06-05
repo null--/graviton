@@ -59,8 +59,8 @@
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 #ifdef GVN_ACTIVATE_LUABRIDGE
-    #include <core/luaviton.hpp>
     #include <core/luabridge.hpp>
+    #include <core/luaviton.hpp>
 #endif
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//

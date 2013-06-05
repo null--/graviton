@@ -420,6 +420,8 @@ public:
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 void addClass_TCP_Server()
 {
+    Core::Logger::logItLn("Loaing GraVitoN.Core.TCP_Server");
+
     luabridge::getGlobalNamespace ( Core::Luaviton::getInstance().getState() )
             .beginNamespace("GraVitoN")
             .beginNamespace("Core")

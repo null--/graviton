@@ -1,7 +1,7 @@
 #ifndef _GVN_CONFIG_HEAD_
 #define _GVN_CONFIG_HEAD_
 
-#define GVN_ACTIVATE_LUABRIDGE
+//#define GVN_ACTIVATE_LUABRIDGE
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// My Lovely Define!

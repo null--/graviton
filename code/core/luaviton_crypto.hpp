@@ -23,6 +23,7 @@ public:
 
     void registerModule()
     {
+        GraVitoN::Core::Logger::logItLn("Loading Module: crypto");
         luaviton.preloadModule("crypto", luaopen_crypto);
     }
 

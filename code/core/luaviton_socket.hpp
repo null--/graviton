@@ -33,12 +33,21 @@ public:
 
     void registerModule()
     {
+        GraVitoN::Core::Logger::logItLn("Loading Module: socket.core");
         luaviton.preloadModule("socket.core", luaopen_socket_core);
+        GraVitoN::Core::Logger::logItLn("Loading Module: mime.core");
         luaviton.preloadModule("mime.core", luaopen_mime_core);
     }
 
     bool loadEmAll()
     {
+        GraVitoN::Core::Logger::logItLn("Loading Module: socket");
+        GraVitoN::Core::Logger::logItLn("Loading Module: mime");
+        GraVitoN::Core::Logger::logItLn("Loading Module: url");
+        GraVitoN::Core::Logger::logItLn("Loading Module: ftp");
+        GraVitoN::Core::Logger::logItLn("Loading Module: http");
+        GraVitoN::Core::Logger::logItLn("Loading Module: smtp");
+
         return
                 luaviton.loadModuleString(MODULE_SOCKET) &&
                 luaviton.loadModuleString(MODULE_LTN12) &&

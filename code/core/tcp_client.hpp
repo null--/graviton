@@ -419,6 +419,8 @@ namespace LUABridge
 {
 void addClass_TCP_Client()
 {
+    Core::Logger::logItLn("Loaing GraVitoN.Core.TCP_Client");
+
     luabridge::getGlobalNamespace ( Core::Luaviton::getInstance().getState() )
             .beginNamespace("GraVitoN")
             .beginNamespace("Core")

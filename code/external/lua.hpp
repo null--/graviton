@@ -6,11 +6,12 @@
 #define _LUA_HPP_
 
 #ifdef __cplusplus
+
 extern "C" {
 #endif
-    #include "lua5.1/lua.h"
-    #include "lua5.1/lualib.h"
-    #include "lua5.1/lauxlib.h"
+    #include <external/lua5.1/lua.h>
+    #include <external/lua5.1/lauxlib.h>
+    #include <external/lua5.1/lualib.h>
 #ifdef __cplusplus
 }
 #endif

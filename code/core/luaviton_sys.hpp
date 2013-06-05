@@ -23,7 +23,9 @@ public:
 
     void registerModule()
     {
+        GraVitoN::Core::Logger::logItLn("Loading Module: sys");
         luaviton.preloadModule("sys", luaopen_sys);
+        GraVitoN::Core::Logger::logItLn("Loading Module: sys.sock");
         luaviton.preloadModule("sys.sock", luaopen_sys_sock);
     }
 

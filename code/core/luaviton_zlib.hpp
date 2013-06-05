@@ -26,11 +26,13 @@ public:
 
     void registerModule()
     {
+        GraVitoN::Core::Logger::logItLn("Loading Module: zlib");
         luaviton.preloadModule("zlib", luaopen_zlib);
     }
 
     bool loadEmAll()
     {
+        GraVitoN::Core::Logger::logItLn("Loading Module: gzip");
         return luaviton.loadModuleString(MODULE_GZIP);
     }
 };

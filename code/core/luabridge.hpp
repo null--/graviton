@@ -4,7 +4,7 @@
 #include <graviton.hpp>
 #ifdef GVN_ACTIVATE_LUABRIDGE
 
-#include <core/luaviton.hpp>
+#include <external/lua.hpp>
 #include <external/LuaBridge/LuaBridge.h>
 #include <external/LuaBridge/RefCountedPtr.h>
 

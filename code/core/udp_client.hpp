@@ -291,6 +291,8 @@ namespace LUABridge
 
 void addClass_UDP_Socket()
 {
+    Core::Logger::logItLn("Loaing GraVitoN.Core.UDP_Socket");
+
     luabridge::getGlobalNamespace ( Core::Luaviton::getInstance().getState() )
             .beginNamespace("GraVitoN")
             .beginNamespace("Core")
