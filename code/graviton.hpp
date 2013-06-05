@@ -27,6 +27,8 @@
 #ifndef _GVN_HEAD_
 #define _GVN_HEAD_
 
+/// Detect Artitecture/OS/Compiler
+#include <core/aocinfo.hpp>
 #include "config.hpp"
 
 /// ACTIVATE LUA BRIDGE
@@ -56,8 +58,6 @@
 #endif
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// Detect Artitecture/OS/Compiler
-#include <core/aocinfo.hpp>
 #include <core/component.hpp>
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//

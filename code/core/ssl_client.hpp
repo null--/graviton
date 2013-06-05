@@ -39,22 +39,25 @@ public:
 
     virtual bool recv(unsigned char *&data, size_t &data_size);
 
-    virtual bool recvString(string &sdata)
+    virtual string recvString()
     {
-        sdata = "";
+        // sdata = "";
 
         unsigned char *data = _null_;
         size_t data_size;
         if( SSL_Client::recv(data, data_size) )
         {
+            /*
             for(size_t i = 0; i<data_size; ++i)
             {
                 sdata += (char)data[i];
             }
             return true;
+            */
+            return string((char*)data);
         }
 
-        return false;
+        return "";
     }
 
     virtual bool send(const unsigned char *data, const size_t &data_size);
@@ -444,9 +447,10 @@ bool SSL_Client::recv(unsigned char *&data, size_t &data_size)
         }
         // Logger::logVariable("[SSL_Client] recv", err);
 
-        data = new unsigned char[err];
+        data = new unsigned char[err + 1];
         data_size = err;
         memcpy((void*)data, (void*)buf, data_size);
+        data[ data_size ] = '\0';
     }
     catch(...)
     {

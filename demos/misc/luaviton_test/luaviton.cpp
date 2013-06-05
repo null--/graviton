@@ -1,9 +1,13 @@
 #define GVN_ACTIVATE_LOGGER
+#define GVN_ACTIVATE_LUABRIDGE
 
 #include <iostream>
 #include <graviton.hpp>
 #include <core/luaviton.hpp>
 #include <core/luabridge.hpp>
+
+#include <core/tcp_client.hpp>
+
 using namespace std;
 
 // using namespace luabridge;
@@ -223,6 +227,9 @@ int main ( int argc , char **argv)
     /// Register Function
     cout << " Registering function ...";
     my_lua.regiserFunction ( "testFunc", &testFunc );
+
+    GraVitoN::LUABridge::addClass_TCP_Client();
+
     cout << " done" << endl;
 
     testLuaBridge(my_lua.getState());

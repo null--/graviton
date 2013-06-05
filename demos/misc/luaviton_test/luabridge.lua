@@ -1,13 +1,8 @@
 print("Beginning Test...")
 
-print ("----- testing callback -----")
-print(func)
-f1 = func
--- callback_func(f1)
-
 print ("----- testing A -----")
-gvn.A.testStatic()
-print(gvn.A.testStaticProp)
+A.testStatic()
+print(A.testStaticProp)
 
 a_obj = A("HELL'o C")
 a_obj:testVirtual()
@@ -32,3 +27,11 @@ testParamStdStringRef("Back to C")
 
 testData(a_obj)
 print(a_obj.testProp)
+
+print ("----- testing TCP client -----")
+cli = gvn.core.TCP_Client("127.0.0.1", 7357)
+cli:connect()
+
+test = cli:recvString()
+cli:sendString(test)
+print(test)

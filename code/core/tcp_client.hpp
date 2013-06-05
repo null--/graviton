@@ -116,7 +116,7 @@ public:
 	 */
     virtual bool recv(unsigned char *&data, size_t &data_size);
 
-    virtual bool recvString(string &data);
+    virtual string recvString();
 
 	/**
 	 * @brief Recieve data
@@ -308,22 +308,25 @@ bool TCP_Client::sendString(const string &data)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool TCP_Client::recvString(string &sdata)
+string TCP_Client::recvString()
 {
-    sdata = "";
+    // sdata = "";
 
     unsigned char *data = _null_;
     size_t data_size;
     if( TCP_Client::recv(data, data_size) )
     {
+        /*
         for(size_t i = 0; i<data_size; ++i)
         {
             sdata += (char)data[i];
         }
         return true;
+        */
+        return string((char*)data);
     }
 
-    return false;
+    return "";
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -359,11 +362,12 @@ bool TCP_Client::recv(unsigned char *&data, size_t &data_size)
 
         // Logger::logVariable("Bytes Recved: ", bytes_recved);
 		data_size = bytes_recved;
-		data = new unsigned char[data_size];
+        data = new unsigned char[data_size + 1];
 
         for(size_t i=0; i<bytes_recved; ++i)
 			data[i] = data_buf[i];
 
+        data[data_size] = '\0';
 		//ting::mt::Thread::Sleep(1);
 	}
 	catch(ting::net::Exc &e)
@@ -419,7 +423,7 @@ void addClass_TCP_Client()
             .beginNamespace("gvn")
             .beginNamespace("core")
             .beginClass <Core::TCP_Socket> ("TCP_Socket")
-            // .addConstructor < void(*) (), RefCountedPtr<Core::TCP_Socket> > ()
+            .addConstructor < void(*) (), RefCountedPtr<Core::TCP_Socket> > ()
             .endClass()
             .beginClass <Core::TCP_Client> ("TCP_Client")
             .addConstructor < void(*) (const string&, const unsigned int), RefCountedPtr<Core::TCP_Client> > ()
