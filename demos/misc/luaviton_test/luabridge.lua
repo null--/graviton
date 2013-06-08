@@ -1,5 +1,9 @@
 print("Beginning Test...")
 
+ss = "1"
+testStrRef(ss)
+print(ss)
+
 ------------------------ CALLBACK ------------------------
 --print ("----- testing CallBack -----")
 --local callBack=function(a)
@@ -29,12 +33,12 @@ print("Beginning Test...")
 --trd:stop()
 
 ------------------------ TCP CLIENT ------------------------
-print ("----- testing TCP Client -----")
-cli = GraVitoN.Core.TCP_Client("127.0.0.1", 7357)
-cli:connect()
-data = cli:recvString()
-print (data)
-cli:sendString(data)
+--print ("----- testing TCP Client -----")
+--cli = GraVitoN.Core.TCP_Client("127.0.0.1", 7357)
+--cli:connect()
+--data = cli:recvString()
+--print (data)
+--cli:sendString(data)
 
 ------------------------ TCP SERVER ------------------------
 --print ("----- testing TCP Server -----")

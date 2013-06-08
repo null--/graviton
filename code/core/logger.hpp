@@ -50,13 +50,13 @@ void __noLog()
 }
 
 #ifndef GVN_ACTIVATE_LOGGER
-    #define logIt(_V1_)           __noLog()
-    #define logItLn(_V1_)         __noLog()
-    #define logItEndl(_V1_)       __noLog()
-    #define logVariable(_N1_,_V1_)     __noLog()
-    #define logVariable2(_N1_,_V1_,_N2_,_V2_)     __noLog()
-    #define logVariable3(_N1_,_V1_,_N2_,_V2_,_N3_,_V3_)     __noLog()
-    #define logVariable4(_N1_,_V1_,_N2_,_V2_,_N3_,_V3_,_N4_,_V4_)     __noLog()
+    #define logIt(_V1_)                                             __noLog()
+    #define logItLn(_V1_)                                           __noLog()
+    #define logItEndl(_V1_)                                         __noLog()
+    #define logVariable(_N1_,_V1_)                                  __noLog()
+    #define logVariable2(_N1_,_V1_,_N2_,_V2_)                       __noLog()
+    #define logVariable3(_N1_,_V1_,_N2_,_V2_,_N3_,_V3_)             __noLog()
+    #define logVariable4(_N1_,_V1_,_N2_,_V2_,_N3_,_V3_,_N4_,_V4_)   __noLog()
 #else
 #ifdef GVN_ACTIVATE_LOGGER	
     // #ifdef GVN_LOG_INTO_FILE

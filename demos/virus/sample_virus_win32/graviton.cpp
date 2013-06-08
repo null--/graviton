@@ -25,7 +25,7 @@
  */
 
 /// Activate/Deactivate GraVitoN logger
-// #define GVN_ACTIVATE_LOGGER
+#define GVN_ACTIVATE_LOGGER
 /// Print logs into a file
 // #define GVN_LOG_INTO_FILE
 /// Path to Log File

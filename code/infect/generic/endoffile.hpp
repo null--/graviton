@@ -172,7 +172,7 @@ bool EndOfFile::initialize ( const string &_options )
 
     if ( sval == "win32" )
     {
-        decom = ( unsigned char* ) DECOM_EOF_WIN32;
+        decom = ( unsigned char* ) DECOM_EOF_WIN32.c_str();
         decom_size = DECOM_EOF_WIN32_SIZE;
     }
     else if ( sval == "osx32" )

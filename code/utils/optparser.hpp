@@ -295,7 +295,7 @@ bool getValueAsFloat ( const string &option, const string &entity, float &value 
         return false;
     }
 
-    value = atof ( tmp_value.c_str() );
+    value = (float)atof ( tmp_value.c_str() );
     return true;
 }
 
@@ -328,11 +328,12 @@ string UintToHexStr(const unsigned int val)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-string hexToStr(const unsigned char *data, size_t data_size)
+string hexToStr(const unsigned char *data, const size_t &data_size)
 {
     if(!data) return "";
 
-    char buff[2 * data_size + 2];
+    char *buff;
+    buff = new char[2 * data_size + 2];
     for (size_t i = 0; i < data_size; i++)
     {
         snprintf((buff+i*2), 4, "%02x", (unsigned int)data[i]);

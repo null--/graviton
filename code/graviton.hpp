@@ -34,27 +34,38 @@
 /// ACTIVATE LUA BRIDGE
 // #define GVN_ACTIVATE_LUABRIDGE
 #ifndef GVN_ACTIVATE_LUABRIDGE
-    #warning ("[WARNING] LUABRIDGE IS NOT ACTIVATED")
+    #if defined(INFO_COMPILER_GCC)
+        #warning ("[WARNING] LUABRIDGE IS NOT ACTIVATED")
+    #else
+    #endif
 #endif
 /// Activate Logger
 // #define GVN_ACTIVATE_LOGGER
 #ifdef GVN_ACTIVATE_LOGGER
-    #warning ("[INFO] LOGGER IS ACTIVATED (GVN_ACTIVATE_LOGGER)")
+    #if defined(INFO_COMPILER_GCC)
+        #warning ("[INFO] LOGGER IS ACTIVATED (GVN_ACTIVATE_LOGGER)")
+    #endif
 #endif
 /// Lua Verbose Mode
 // #define GVN_VERBOSE_LUA
 #ifdef GVN_VERBOSE_LUA
-    #warning ("[INFO] LUA VERBOSE MODE IS ACTIVE (GVN_VERBOSE_LUA)")
+    #if defined(INFO_COMPILER_GCC)
+        #warning ("[INFO] LUA VERBOSE MODE IS ACTIVE (GVN_VERBOSE_LUA)")
+    #endif
 #endif
 /// Path to log file
 // #define GVN_LOG_FILE "graviton.log"
 #ifdef GVN_LOG_FILE
-    #warning ("[INFO] LOG FILE IS SET (GVN_LOG_FILE)")
+    #if defined(INFO_COMPILER_GCC)
+        #warning ("[INFO] LOG FILE IS SET (GVN_LOG_FILE)")
+    #endif
 #endif
 /// DEBUG MODE
 // #define GVN_DEBUG
 #ifdef GVN_DEBUG
-    #warning ("[WARNING] DEBUG MODE IS ENABLED")
+    #if defined(INFO_COMPILER_GCC)
+        #warning ("[WARNING] DEBUG MODE IS ENABLED")
+    #endif
 #endif
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -73,6 +84,9 @@
 #include <infect/infect.hpp>
 #include <malkit/malkit.hpp>
 
+#ifdef INFO_COMPILER_MSVC
+    #define snprintf _snprintf
+#endif
 /// One namespace to rule them all
 namespace GraVitoN
 {

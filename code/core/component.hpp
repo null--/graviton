@@ -27,7 +27,7 @@
 #define _GVN_COMPONENT_HEAD_
 
 // #pragma once
-
+#include <graviton.hpp>
 #include <cstdarg>
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -96,7 +96,7 @@ public:
     // virtual bool isActive() = 0;
 };
 
-}
-}
+} // Core
+} // GraVitoN
 
 #endif // _GVN_COMPONENT_HEAD_

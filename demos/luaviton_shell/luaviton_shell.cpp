@@ -20,6 +20,7 @@
 #include <core/luaviton.hpp>
 #include <core/luabridge.hpp>
 
+#include <core/logger.hpp>
 #include <core/tcp_client.hpp>
 #include <core/tcp_server.hpp>
 #include <core/udp_client.hpp>

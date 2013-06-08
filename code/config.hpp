@@ -16,6 +16,9 @@
     #pragma GCC diagnostic ignored "-Wnarrowing"
 #endif
 
+#ifdef INFO_COMPILER_MSVC
+    #pragma warning( disable : 4996)
+#endif
 namespace GraVitoN
 {
 	namespace Config
