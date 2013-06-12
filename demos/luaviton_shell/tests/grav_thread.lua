@@ -11,7 +11,7 @@ trd:run();
 
 while trd:isActive() do
     print("*")
-    gvn.core.sleep(10)
+    GraVitoN.Core.sleep(10)
 end
 
 trd:stop()
