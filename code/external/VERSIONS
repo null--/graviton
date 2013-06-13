@@ -10,7 +10,8 @@ Installed:
 	upx-3.0.9
 	ucl-1.03
 	ldigest - BASED ON lmd5 - github 05/13/2013
-	
+	rapidxml - 1.13	
+
 Removed:
 	apr-1.4.2
 	apr-iconv-1.2.1
