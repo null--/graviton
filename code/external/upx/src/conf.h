@@ -31,7 +31,6 @@
 
 #include "version.h"
 
-
 /*************************************************************************
 // ACC
 **************************************************************************/
@@ -145,7 +144,7 @@
 #include "miniacc.h"
 #if (ACC_OS_CYGWIN || ACC_OS_DOS16 || ACC_OS_DOS32 || ACC_OS_EMX || ACC_OS_OS2 || ACC_OS_OS216 || ACC_OS_WIN16 || ACC_OS_WIN32 || ACC_OS_WIN64)
 #  if defined(INVALID_HANDLE_VALUE) || defined(MAKEWORD) || defined(RT_CURSOR)
-#    error "something pulled in <windows.h>"
+#    warning "something pulled in <windows.h>" // error "something pulled in <windows.h>"
 #  endif
 #endif
 
@@ -825,7 +824,7 @@ int upx_test_overlap       ( const upx_bytep buf,
 
 #if (ACC_OS_CYGWIN || ACC_OS_DOS16 || ACC_OS_DOS32 || ACC_OS_EMX || ACC_OS_OS2 || ACC_OS_OS216 || ACC_OS_WIN16 || ACC_OS_WIN32 || ACC_OS_WIN64)
 #  if defined(INVALID_HANDLE_VALUE) || defined(MAKEWORD) || defined(RT_CURSOR)
-#    error "something pulled in <windows.h>"
+#    warning "something pulled in <windows.h>" // error "something pulled in <windows.h>"
 #  endif
 #endif
 

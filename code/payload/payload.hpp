@@ -39,7 +39,8 @@
     #include <sys/mman.h>
     #include <errno.h>
 #elif defined(INFO_OS_WINDOWS)
-    #include <WinBase.h>
+    // #include <WinBase.h>
+    #include <windows.h>
 #endif
 
 #include <string>

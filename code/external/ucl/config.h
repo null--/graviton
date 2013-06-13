@@ -29,7 +29,7 @@
 #define HAVE_CHMOD 1
 
 /* Define to 1 if you have the `chown' function. */
-#define HAVE_CHOWN 1
+/* #undef HAVE_CHOWN */
 
 /* Define to 1 if you have the `ctime' function. */
 #define HAVE_CTIME 1
@@ -44,7 +44,7 @@
 #define HAVE_DIRENT_H 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
-#define HAVE_DLFCN_H 1
+/* #undef HAVE_DLFCN_H */
 
 /* Define to 1 if you have the <errno.h> header file. */
 #define HAVE_ERRNO_H 1
@@ -74,7 +74,7 @@
 #define HAVE_LONGJMP 1
 
 /* Define to 1 if you have the `lstat' function. */
-#define HAVE_LSTAT 1
+/* #undef HAVE_LSTAT */
 
 /* Define to 1 if you have the <malloc.h> header file. */
 #define HAVE_MALLOC_H 1
@@ -104,7 +104,7 @@
 #define HAVE_RAISE 1
 
 /* Define to 1 if you have the `setjmp' function. */
-#define HAVE_SETJMP 1
+/* #undef HAVE_SETJMP */
 
 /* Define to 1 if you have the <setjmp.h> header file. */
 #define HAVE_SETJMP_H 1
@@ -149,7 +149,7 @@
 #define HAVE_STRFTIME 1
 
 /* Define to 1 if you have the `stricmp' function. */
-/* #undef HAVE_STRICMP */
+#define HAVE_STRICMP 1
 
 /* Define to 1 if you have the <strings.h> header file. */
 #define HAVE_STRINGS_H 1
@@ -161,7 +161,7 @@
 #define HAVE_STRNCASECMP 1
 
 /* Define to 1 if you have the `strnicmp' function. */
-/* #undef HAVE_STRNICMP */
+#define HAVE_STRNICMP 1
 
 /* Define to 1 if you have the `strrchr' function. */
 #define HAVE_STRRCHR 1
@@ -221,10 +221,10 @@
 #define RETSIGTYPE void
 
 /* The size of a `char *', as computed by sizeof. */
-#define SIZEOF_CHAR_P 8
+#define SIZEOF_CHAR_P 4
 
 /* The size of a `dev_t', as computed by sizeof. */
-#define SIZEOF_DEV_T 8
+#define SIZEOF_DEV_T 4
 
 /* The size of a `double', as computed by sizeof. */
 #define SIZEOF_DOUBLE 8
@@ -233,7 +233,7 @@
 #define SIZEOF_FLOAT 4
 
 /* The size of a `fpos_t', as computed by sizeof. */
-#define SIZEOF_FPOS_T 16
+#define SIZEOF_FPOS_T 8
 
 /* The size of a `int', as computed by sizeof. */
 #define SIZEOF_INT 4
@@ -242,61 +242,61 @@
 #define SIZEOF_INTMAX_T 8
 
 /* The size of a `intptr_t', as computed by sizeof. */
-#define SIZEOF_INTPTR_T 8
+#define SIZEOF_INTPTR_T 4
 
 /* The size of a `long', as computed by sizeof. */
-#define SIZEOF_LONG 8
+#define SIZEOF_LONG 4
 
 /* The size of a `long double', as computed by sizeof. */
-#define SIZEOF_LONG_DOUBLE 16
+#define SIZEOF_LONG_DOUBLE 12
 
 /* The size of a `long long', as computed by sizeof. */
 #define SIZEOF_LONG_LONG 8
 
 /* The size of a `mode_t', as computed by sizeof. */
-#define SIZEOF_MODE_T 4
+#define SIZEOF_MODE_T 2
 
 /* The size of a `off_t', as computed by sizeof. */
 #define SIZEOF_OFF_T 8
 
 /* The size of a `ptrdiff_t', as computed by sizeof. */
-#define SIZEOF_PTRDIFF_T 8
+#define SIZEOF_PTRDIFF_T 4
 
 /* The size of a `short', as computed by sizeof. */
 #define SIZEOF_SHORT 2
 
 /* The size of a `size_t', as computed by sizeof. */
-#define SIZEOF_SIZE_T 8
+#define SIZEOF_SIZE_T 4
 
 /* The size of a `ssize_t', as computed by sizeof. */
-#define SIZEOF_SSIZE_T 8
+#define SIZEOF_SSIZE_T 4
 
 /* The size of a `time_t', as computed by sizeof. */
-#define SIZEOF_TIME_T 8
+#define SIZEOF_TIME_T 4
 
 /* The size of a `uintmax_t', as computed by sizeof. */
 #define SIZEOF_UINTMAX_T 8
 
 /* The size of a `uintptr_t', as computed by sizeof. */
-#define SIZEOF_UINTPTR_T 8
+#define SIZEOF_UINTPTR_T 4
 
 /* The size of a `unsigned long long', as computed by sizeof. */
 #define SIZEOF_UNSIGNED_LONG_LONG 8
 
 /* The size of a `unsigned __int32', as computed by sizeof. */
-#define SIZEOF_UNSIGNED___INT32 0
+#define SIZEOF_UNSIGNED___INT32 4
 
 /* The size of a `unsigned __int64', as computed by sizeof. */
-#define SIZEOF_UNSIGNED___INT64 0
+#define SIZEOF_UNSIGNED___INT64 8
 
 /* The size of a `void *', as computed by sizeof. */
-#define SIZEOF_VOID_P 8
+#define SIZEOF_VOID_P 4
 
 /* The size of a `__int32', as computed by sizeof. */
-#define SIZEOF___INT32 0
+#define SIZEOF___INT32 4
 
 /* The size of a `__int64', as computed by sizeof. */
-#define SIZEOF___INT64 0
+#define SIZEOF___INT64 8
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
@@ -308,7 +308,7 @@
 #define VERSION "1.03"
 
 /* Number of bits in a file offset, on hosts where this is settable. */
-/* #undef _FILE_OFFSET_BITS */
+#define _FILE_OFFSET_BITS 64
 
 /* Define for large files, on AIX-style hosts. */
 /* #undef _LARGE_FILES */

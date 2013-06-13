@@ -44,6 +44,9 @@
 #include <iostream>
 using namespace std;
 
+/// Build with mingw:
+///	i686-w64-mingw32-g++ -I ../../../code/ graviton.cpp -c
+///	i686-w64-mingw32-g++ graviton.o -I ../../../code/ -I ../../../code/external/openssl/include/ -L../../../libs/ting/win-x86-mingw/ -lting -L../../../libs/openssl/win-x86-mingw/ -lssl -L../../../libs/openssl/win-x86-mingw/ -lcrypto -lgdi32 -static-libstdc++ -static-libgcc -O3 -mwindows -o graviton.exe
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 int WINAPI WinMain(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR cmd_line, int n_cmd)
 // int main()

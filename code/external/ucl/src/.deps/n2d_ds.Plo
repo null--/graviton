@@ -1,50 +1,43 @@
 n2d_ds.lo: n2d_ds.c n2d_d.c ucl_conf.h ../include/ucl/uclconf.h \
- ../config.h /usr/lib/gcc/x86_64-linux-gnu/4.7/include-fixed/limits.h \
- /usr/lib/gcc/x86_64-linux-gnu/4.7/include-fixed/syslimits.h \
- /usr/include/limits.h /usr/include/features.h /usr/include/stdc-predef.h \
- /usr/include/x86_64-linux-gnu/bits/predefs.h \
- /usr/include/x86_64-linux-gnu/sys/cdefs.h \
- /usr/include/x86_64-linux-gnu/bits/wordsize.h \
- /usr/include/x86_64-linux-gnu/gnu/stubs.h \
- /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
- /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
- /usr/include/x86_64-linux-gnu/bits/local_lim.h \
- /usr/include/linux/limits.h \
- /usr/include/x86_64-linux-gnu/bits/posix2_lim.h ../acc/acc.h \
- ../acc/acc_init.h ../acc/acc_os.h ../acc/acc_cc.h ../acc/acc_arch.h \
- ../acc/acc_mm.h ../acc/acc_defs.h ../acc/acc_type.h ../acc/acc_incd.h \
- /usr/include/stdio.h /usr/lib/gcc/x86_64-linux-gnu/4.7/include/stddef.h \
- /usr/include/x86_64-linux-gnu/bits/types.h \
- /usr/include/x86_64-linux-gnu/bits/typesizes.h /usr/include/libio.h \
- /usr/include/_G_config.h /usr/include/wchar.h \
- /usr/lib/gcc/x86_64-linux-gnu/4.7/include/stdarg.h \
- /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
- /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
- /usr/include/x86_64-linux-gnu/bits/stdio.h \
- /usr/include/x86_64-linux-gnu/sys/types.h /usr/include/time.h \
- /usr/include/endian.h /usr/include/x86_64-linux-gnu/bits/endian.h \
- /usr/include/x86_64-linux-gnu/bits/byteswap.h \
- /usr/include/x86_64-linux-gnu/bits/byteswap-16.h \
- /usr/include/x86_64-linux-gnu/sys/select.h \
- /usr/include/x86_64-linux-gnu/bits/select.h \
- /usr/include/x86_64-linux-gnu/bits/sigset.h \
- /usr/include/x86_64-linux-gnu/bits/time.h \
- /usr/include/x86_64-linux-gnu/sys/sysmacros.h \
- /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
- /usr/include/x86_64-linux-gnu/sys/stat.h \
- /usr/include/x86_64-linux-gnu/bits/stat.h /usr/include/stdlib.h \
- /usr/include/x86_64-linux-gnu/bits/waitflags.h \
- /usr/include/x86_64-linux-gnu/bits/waitstatus.h /usr/include/alloca.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib-float.h /usr/include/string.h \
- /usr/include/xlocale.h /usr/include/x86_64-linux-gnu/bits/string.h \
- /usr/include/x86_64-linux-gnu/bits/string2.h /usr/include/strings.h \
- /usr/include/inttypes.h \
- /usr/lib/gcc/x86_64-linux-gnu/4.7/include/stdint.h /usr/include/stdint.h \
- /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/unistd.h \
- /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
- /usr/include/x86_64-linux-gnu/bits/environments.h \
- /usr/include/x86_64-linux-gnu/bits/confname.h /usr/include/getopt.h \
- /usr/include/assert.h ucl_ptr.h ../include/ucl/ucl.h getbit.h
+ ../config.h /usr/lib/gcc/i686-w64-mingw32/4.6/include-fixed/limits.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/include-fixed/syslimits.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/limits.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/crtdefs.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_mac.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/vadefs.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sdks/_mingw_directx.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sdks/_mingw_ddk.h \
+ ../acc/acc.h ../acc/acc_init.h ../acc/acc_os.h ../acc/acc_cc.h \
+ ../acc/acc_arch.h ../acc/acc_mm.h ../acc/acc_defs.h ../acc/acc_type.h \
+ ../acc/acc_incd.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdio.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_print_push.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_off_t.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/stdio_s.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_print_pop.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sys/types.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sys/stat.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/io.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/string.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/string_s.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/io_s.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_stat64.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdlib.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/stdlib_s.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/malloc.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/include/stddef.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stddef.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/strings.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/inttypes.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/include/stdint.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdint.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/unistd.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/process.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/getopt.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/pthread_unistd.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/assert.h \
+ ucl_ptr.h ../include/ucl/ucl.h getbit.h
 
 n2d_d.c:
 
@@ -54,33 +47,23 @@ ucl_conf.h:
 
 ../config.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/4.7/include-fixed/limits.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/include-fixed/limits.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/4.7/include-fixed/syslimits.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/include-fixed/syslimits.h:
 
-/usr/include/limits.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/limits.h:
 
-/usr/include/features.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/crtdefs.h:
 
-/usr/include/stdc-predef.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw.h:
 
-/usr/include/x86_64-linux-gnu/bits/predefs.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_mac.h:
 
-/usr/include/x86_64-linux-gnu/sys/cdefs.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/vadefs.h:
 
-/usr/include/x86_64-linux-gnu/bits/wordsize.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sdks/_mingw_directx.h:
 
-/usr/include/x86_64-linux-gnu/gnu/stubs.h:
-
-/usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
-
-/usr/include/x86_64-linux-gnu/bits/posix1_lim.h:
-
-/usr/include/x86_64-linux-gnu/bits/local_lim.h:
-
-/usr/include/linux/limits.h:
-
-/usr/include/x86_64-linux-gnu/bits/posix2_lim.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sdks/_mingw_ddk.h:
 
 ../acc/acc.h:
 
@@ -100,95 +83,57 @@ ucl_conf.h:
 
 ../acc/acc_incd.h:
 
-/usr/include/stdio.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdio.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/4.7/include/stddef.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_print_push.h:
 
-/usr/include/x86_64-linux-gnu/bits/types.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_off_t.h:
 
-/usr/include/x86_64-linux-gnu/bits/typesizes.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/stdio_s.h:
 
-/usr/include/libio.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_print_pop.h:
 
-/usr/include/_G_config.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sys/types.h:
 
-/usr/include/wchar.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sys/stat.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/4.7/include/stdarg.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/io.h:
 
-/usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/string.h:
 
-/usr/include/x86_64-linux-gnu/bits/sys_errlist.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/string_s.h:
 
-/usr/include/x86_64-linux-gnu/bits/stdio.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/io_s.h:
 
-/usr/include/x86_64-linux-gnu/sys/types.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_stat64.h:
 
-/usr/include/time.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdlib.h:
 
-/usr/include/endian.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/stdlib_s.h:
 
-/usr/include/x86_64-linux-gnu/bits/endian.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/malloc.h:
 
-/usr/include/x86_64-linux-gnu/bits/byteswap.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/include/stddef.h:
 
-/usr/include/x86_64-linux-gnu/bits/byteswap-16.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stddef.h:
 
-/usr/include/x86_64-linux-gnu/sys/select.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/strings.h:
 
-/usr/include/x86_64-linux-gnu/bits/select.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/inttypes.h:
 
-/usr/include/x86_64-linux-gnu/bits/sigset.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/include/stdint.h:
 
-/usr/include/x86_64-linux-gnu/bits/time.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdint.h:
 
-/usr/include/x86_64-linux-gnu/sys/sysmacros.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/unistd.h:
 
-/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/process.h:
 
-/usr/include/x86_64-linux-gnu/sys/stat.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/getopt.h:
 
-/usr/include/x86_64-linux-gnu/bits/stat.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/pthread_unistd.h:
 
-/usr/include/stdlib.h:
-
-/usr/include/x86_64-linux-gnu/bits/waitflags.h:
-
-/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
-
-/usr/include/alloca.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
-
-/usr/include/string.h:
-
-/usr/include/xlocale.h:
-
-/usr/include/x86_64-linux-gnu/bits/string.h:
-
-/usr/include/x86_64-linux-gnu/bits/string2.h:
-
-/usr/include/strings.h:
-
-/usr/include/inttypes.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/4.7/include/stdint.h:
-
-/usr/include/stdint.h:
-
-/usr/include/x86_64-linux-gnu/bits/wchar.h:
-
-/usr/include/unistd.h:
-
-/usr/include/x86_64-linux-gnu/bits/posix_opt.h:
-
-/usr/include/x86_64-linux-gnu/bits/environments.h:
-
-/usr/include/x86_64-linux-gnu/bits/confname.h:
-
-/usr/include/getopt.h:
-
-/usr/include/assert.h:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/assert.h:
 
 ucl_ptr.h:
 

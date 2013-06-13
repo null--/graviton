@@ -13,9 +13,12 @@ using namespace std;
 
 namespace GraVitoN
 {
+
 namespace Utils
 {
 
+namespace Crypto
+{
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 const size_t MD5_LEN = MD5_DIGEST_LENGTH;
 void md5Hex(const unsigned char *data, const int data_size, unsigned char digest[MD5_LEN])
@@ -69,8 +72,7 @@ void ripemd160Hex(const unsigned char *data, const int data_size, unsigned char 
     RIPEMD160((const unsigned char*)data, data_size, (unsigned char*)digest);
 }
 
-}
-
-}
-}
+} // crypto
+} // utils
+} // grav
 #endif

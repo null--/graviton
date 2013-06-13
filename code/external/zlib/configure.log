@@ -348,3 +348,74 @@ uname = Linux
 --------------------
 
 
+--------------------
+./configure --help
+Wed Jun 12 16:00:29 IRDT 2013
+usage:
+  configure [--const] [--zprefix] [--prefix=PREFIX]  [--eprefix=EXPREFIX]
+    [--static] [--64] [--libdir=LIBDIR] [--sharedlibdir=LIBDIR]
+    [--includedir=INCLUDEDIR] [--archs="-arch i386 -arch x86_64"]
+--------------------
+./configure --help
+Wed Jun 12 16:00:29 IRDT 2013
+usage:
+  configure [--const] [--zprefix] [--prefix=PREFIX]  [--eprefix=EXPREFIX]
+    [--static] [--64] [--libdir=LIBDIR] [--sharedlibdir=LIBDIR]
+    [--includedir=INCLUDEDIR] [--archs="-arch i386 -arch x86_64"]
+--------------------
+./configure --help
+Wed Jun 12 16:00:29 IRDT 2013
+usage:
+  configure [--const] [--zprefix] [--prefix=PREFIX]  [--eprefix=EXPREFIX]
+    [--static] [--64] [--libdir=LIBDIR] [--sharedlibdir=LIBDIR]
+    [--includedir=INCLUDEDIR] [--archs="-arch i386 -arch x86_64"]
+--------------------
+./configure --cross-compile-prefix=i686-w64-mingw32-
+Wed Jun 12 16:00:39 IRDT 2013
+unknown option: --cross-compile-prefix=i686-w64-mingw32-
+./configure --help for help
+** ./configure aborting.
+--------------------
+
+
+--------------------
+./configure --help
+Wed Jun 12 16:00:49 IRDT 2013
+usage:
+  configure [--const] [--zprefix] [--prefix=PREFIX]  [--eprefix=EXPREFIX]
+    [--static] [--64] [--libdir=LIBDIR] [--sharedlibdir=LIBDIR]
+    [--includedir=INCLUDEDIR] [--archs="-arch i386 -arch x86_64"]
+--------------------
+./configure --cross-compile=i686-w64-mingw32-
+Wed Jun 12 16:00:57 IRDT 2013
+unknown option: --cross-compile=i686-w64-mingw32-
+./configure --help for help
+** ./configure aborting.
+--------------------
+
+
+--------------------
+./configure --cross-compile=i686-w64-mingw32-
+Wed Jun 12 16:01:39 IRDT 2013
+unknown option: --cross-compile=i686-w64-mingw32-
+./configure --help for help
+** ./configure aborting.
+--------------------
+
+
+--------------------
+./configure --cross-compile=i686-w64-mingw32-
+Thu Jun 13 09:09:50 IRDT 2013
+unknown option: --cross-compile=i686-w64-mingw32-
+./configure --help for help
+** ./configure aborting.
+--------------------
+
+
+--------------------
+./configure -h
+Thu Jun 13 09:09:55 IRDT 2013
+usage:
+  configure [--const] [--zprefix] [--prefix=PREFIX]  [--eprefix=EXPREFIX]
+    [--static] [--64] [--libdir=LIBDIR] [--sharedlibdir=LIBDIR]
+    [--includedir=INCLUDEDIR] [--archs="-arch i386 -arch x86_64"]

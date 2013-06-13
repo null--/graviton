@@ -27,7 +27,6 @@ hostinfo               = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
 
-PATH: /usr/lib/x86_64-linux-gnu/libfm
 PATH: /usr/local/bin
 PATH: /usr/bin
 PATH: /bin
@@ -50,73 +49,76 @@ configure:1625: result: x86_64-unknown-linux-gnu
 configure:1639: checking whether to enable maintainer-specific portions of Makefiles
 configure:1648: result: no
 configure:1781: checking for gcc
-configure:1797: found /usr/bin/gcc
-configure:1807: result: gcc
+configure:1807: result: i686-w64-mingw32-gcc
 configure:2051: checking for C compiler version
-configure:2054: gcc --version </dev/null >&5
-gcc (Debian 4.7.3-4) 4.7.3
-Copyright (C) 2012 Free Software Foundation, Inc.
+configure:2054: i686-w64-mingw32-gcc --version </dev/null >&5
+i686-w64-mingw32-gcc (GCC) 4.6.3
+Copyright (C) 2011 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 configure:2057: $? = 0
-configure:2059: gcc -v </dev/null >&5
+configure:2059: i686-w64-mingw32-gcc -v </dev/null >&5
 Using built-in specs.
-COLLECT_GCC=gcc
-COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.7/lto-wrapper
-Target: x86_64-linux-gnu
-Configured with: ../src/configure -v --with-pkgversion='Debian 4.7.3-4' --with-bugurl=file:///usr/share/doc/gcc-4.7/README.Bugs --enable-languages=c,c++,go,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.7 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.7 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --enable-plugin --with-system-zlib --enable-objc-gc --with-cloog --enable-cloog-backend=ppl --disable-cloog-version-check --disable-ppl-version-check --enable-multiarch --with-arch-32=i586 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
-Thread model: posix
-gcc version 4.7.3 (Debian 4.7.3-4) 
+COLLECT_GCC=i686-w64-mingw32-gcc
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/i686-w64-mingw32/4.6/lto-wrapper
+Target: i686-w64-mingw32
+Configured with: ../../src/configure --build=x86_64-linux-gnu --prefix=/usr --includedir='/usr/include' --mandir='/usr/share/man' --infodir='/usr/share/info' --sysconfdir=/etc --localstatedir=/var --libexecdir='/usr/lib/gcc-mingw-w64' --disable-maintainer-mode --disable-dependency-tracking --prefix=/usr --enable-shared --enable-static --disable-multilib --enable-linker-build-id --with-system-zlib --libexecdir=/usr/lib --without-included-gettext --libdir=/usr/lib --enable-libstdcxx-time=yes --with-tune=generic --enable-version-specific-runtime-libs --enable-threads=win32 --enable-fully-dynamic-string --enable-sjlj-exceptions --enable-languages=c,c++,fortran,objc,obj-c++,ada --enable-lto --with-plugin-ld --target=i686-w64-mingw32 --with-gxx-include-dir=/usr/include/c++/4.6 --with-as=/usr/bin/i686-w64-mingw32-as --with-ld=/usr/bin/i686-w64-mingw32-ld
+Thread model: win32
+gcc version 4.6.3 (GCC) 
 configure:2062: $? = 0
-configure:2064: gcc -V </dev/null >&5
-gcc: error: unrecognized command line option '-V'
-gcc: fatal error: no input files
+configure:2064: i686-w64-mingw32-gcc -V </dev/null >&5
+i686-w64-mingw32-gcc: error: unrecognized option '-V'
+i686-w64-mingw32-gcc: fatal error: no input files
 compilation terminated.
 configure:2067: $? = 4
 configure:2090: checking for C compiler default output file name
-configure:2093: gcc    conftest.c  >&5
+configure:2093: i686-w64-mingw32-gcc    conftest.c  >&5
 configure:2096: $? = 0
-configure:2142: result: a.out
+configure:2142: result: a.exe
 configure:2147: checking whether the C compiler works
-configure:2153: ./a.out
+configure:2153: ./a.exe
+err:module:import_dll Library TDI.SYS (which is needed by L"C:\\windows\\system32\\drivers\\idmtdi.sys") not found
+err:winedevice:ServiceMain driver L"IDMTDI" failed to load
+err:service:service_send_start_message service L"PanService" failed to start
+fixme:service:scmdatabase_autostart_services Auto-start service L"PanService" failed to start: 1053
 configure:2156: $? = 0
 configure:2173: result: yes
 configure:2180: checking whether we are cross compiling
 configure:2182: result: no
 configure:2185: checking for suffix of executables
-configure:2187: gcc -o conftest    conftest.c  >&5
+configure:2187: i686-w64-mingw32-gcc -o conftest.exe    conftest.c  >&5
 configure:2190: $? = 0
-configure:2215: result: 
+configure:2215: result: .exe
 configure:2221: checking for suffix of object files
-configure:2242: gcc -c   conftest.c >&5
+configure:2242: i686-w64-mingw32-gcc -c   conftest.c >&5
 configure:2245: $? = 0
 configure:2267: result: o
 configure:2271: checking whether we are using the GNU C compiler
-configure:2295: gcc -c   conftest.c >&5
+configure:2295: i686-w64-mingw32-gcc -c   conftest.c >&5
 configure:2301: $? = 0
 configure:2304: test -z 			 || test ! -s conftest.err
 configure:2307: $? = 0
 configure:2310: test -s conftest.o
 configure:2313: $? = 0
 configure:2326: result: yes
-configure:2332: checking whether gcc accepts -g
-configure:2353: gcc -c -g  conftest.c >&5
+configure:2332: checking whether i686-w64-mingw32-gcc accepts -g
+configure:2353: i686-w64-mingw32-gcc -c -g  conftest.c >&5
 configure:2359: $? = 0
 configure:2362: test -z 			 || test ! -s conftest.err
 configure:2365: $? = 0
 configure:2368: test -s conftest.o
 configure:2371: $? = 0
 configure:2382: result: yes
-configure:2399: checking for gcc option to accept ANSI C
-configure:2469: gcc  -c -g -O2  conftest.c >&5
+configure:2399: checking for i686-w64-mingw32-gcc option to accept ANSI C
+configure:2469: i686-w64-mingw32-gcc  -c -g -O2  conftest.c >&5
 configure:2475: $? = 0
 configure:2478: test -z 			 || test ! -s conftest.err
 configure:2481: $? = 0
 configure:2484: test -s conftest.o
 configure:2487: $? = 0
 configure:2505: result: none needed
-configure:2523: gcc -c -g -O2  conftest.c >&5
+configure:2523: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 conftest.c:2:3: error: unknown type name 'choke'
 conftest.c:2:3: error: expected '=', ',', ';', 'asm' or '__attribute__' at end of input
 configure:2529: $? = 1
@@ -125,9 +127,9 @@ configure: failed program was:
 |   choke me
 | #endif
 configure:2664: checking how to run the C preprocessor
-configure:2699: gcc -E  conftest.c
+configure:2699: i686-w64-mingw32-gcc -E  conftest.c
 configure:2705: $? = 0
-configure:2737: gcc -E  conftest.c
+configure:2737: i686-w64-mingw32-gcc -E  conftest.c
 conftest.c:9:28: fatal error: ac_nonexistent.h: No such file or directory
 compilation terminated.
 configure:2743: $? = 1
@@ -141,10 +143,10 @@ configure: failed program was:
 | #define PACKAGE_BUGREPORT "markus@oberhumer.com"
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
-configure:2782: result: gcc -E
-configure:2806: gcc -E  conftest.c
+configure:2782: result: i686-w64-mingw32-gcc -E
+configure:2806: i686-w64-mingw32-gcc -E  conftest.c
 configure:2812: $? = 0
-configure:2844: gcc -E  conftest.c
+configure:2844: i686-w64-mingw32-gcc -E  conftest.c
 conftest.c:9:28: fatal error: ac_nonexistent.h: No such file or directory
 compilation terminated.
 configure:2850: $? = 1
@@ -159,7 +161,7 @@ configure: failed program was:
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
 configure:2894: checking whether the C preprocessor needs special flags
-configure:2928: gcc -c -g -O2   conftest.c >&5
+configure:2928: i686-w64-mingw32-gcc -c -g -O2   conftest.c >&5
 configure:2934: $? = 0
 configure:2937: test -z 			 || test ! -s conftest.err
 configure:2940: $? = 0
@@ -167,7 +169,7 @@ configure:2943: test -s conftest.o
 configure:2946: $? = 0
 configure:2961: result: none needed
 configure:2978: checking for an ANSI C-conforming const
-configure:3045: gcc -c -g -O2  conftest.c >&5
+configure:3045: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:3051: $? = 0
 configure:3054: test -z 			 || test ! -s conftest.err
 configure:3057: $? = 0
@@ -175,13 +177,13 @@ configure:3060: test -s conftest.o
 configure:3063: $? = 0
 configure:3074: result: yes
 configure:3085: checking whether byte ordering is bigendian
-configure:3112: gcc -c -g -O2  conftest.c >&5
+configure:3112: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:3118: $? = 0
 configure:3121: test -z 			 || test ! -s conftest.err
 configure:3124: $? = 0
 configure:3127: test -s conftest.o
 configure:3130: $? = 0
-configure:3154: gcc -c -g -O2  conftest.c >&5
+configure:3154: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:16:2: error: unknown type name 'not'
 conftest.c:16:10: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'endian'
@@ -212,15 +214,48 @@ configure:3293: result: no
 configure:3324: checking for special C compiler options needed for large files
 configure:3421: result: no
 configure:3427: checking for _FILE_OFFSET_BITS value needed for large files
-configure:3458: gcc -c -g -O2  conftest.c >&5
-configure:3464: $? = 0
-configure:3467: test -z 			 || test ! -s conftest.err
-configure:3470: $? = 0
-configure:3473: test -s conftest.o
-configure:3476: $? = 0
-configure:3540: result: no
+configure:3458: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
+conftest.c:16:3: warning: left shift count >= width of type [enabled by default]
+conftest.c:16:3: warning: left shift count >= width of type [enabled by default]
+conftest.c:17:10: warning: left shift count >= width of type [enabled by default]
+conftest.c:17:10: warning: left shift count >= width of type [enabled by default]
+conftest.c:16:7: error: variably modified 'off_t_is_large' at file scope
+configure:3464: $? = 1
+configure: failed program was:
+| /* confdefs.h.  */
+| 
+| #define PACKAGE_NAME "ucl"
+| #define PACKAGE_TARNAME "ucl"
+| #define PACKAGE_VERSION "1.03"
+| #define PACKAGE_STRING "ucl 1.03"
+| #define PACKAGE_BUGREPORT "markus@oberhumer.com"
+| #define ACC_ENDIAN_LITTLE_ENDIAN 1
+| /* end confdefs.h.  */
+| #include <sys/types.h>
+|  /* Check that off_t can represent 2**63 - 1 correctly.
+|     We can't simply define LARGE_OFF_T to be 9223372036854775807,
+|     since some C++ compilers masquerading as C compilers
+|     incorrectly reject 9223372036854775807.  */
+| #define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
+|   int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
+| 		       && LARGE_OFF_T % 2147483647 == 1)
+| 		      ? 1 : -1];
+| int
+| main ()
+| {
+| 
+|   ;
+|   return 0;
+| }
+configure:3510: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
+configure:3516: $? = 0
+configure:3519: test -z 			 || test ! -s conftest.err
+configure:3522: $? = 0
+configure:3525: test -s conftest.o
+configure:3528: $? = 0
+configure:3540: result: 64
 configure:3550: checking for _LARGE_FILES value needed for large files
-configure:3581: gcc -c -g -O2  conftest.c >&5
+configure:3581: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:3587: $? = 0
 configure:3590: test -z 			 || test ! -s conftest.err
 configure:3593: $? = 0
@@ -238,17 +273,17 @@ configure:3892: checking whether make sets $(MAKE)
 configure:3912: result: yes
 configure:3942: checking for style of include used by make
 configure:3970: result: GNU
-configure:4142: checking dependency style of gcc
+configure:4142: checking dependency style of i686-w64-mingw32-gcc
 configure:4232: result: gcc3
 configure:4326: checking for a sed that does not truncate output
 configure:4380: result: /bin/sed
 configure:4383: checking for egrep
 configure:4393: result: grep -E
-configure:4409: checking for ld used by gcc
-configure:4476: result: /usr/bin/ld
-configure:4485: checking if the linker (/usr/bin/ld) is GNU ld
+configure:4409: checking for ld used by i686-w64-mingw32-gcc
+configure:4476: result: /usr/bin/i686-w64-mingw32-ld
+configure:4485: checking if the linker (/usr/bin/i686-w64-mingw32-ld) is GNU ld
 configure:4500: result: yes
-configure:4505: checking for /usr/bin/ld option to reload object files
+configure:4505: checking for /usr/bin/i686-w64-mingw32-ld option to reload object files
 configure:4512: result: -r
 configure:4521: checking for BSD-compatible nm
 configure:4563: result: /usr/bin/nm -B
@@ -256,24 +291,24 @@ configure:4567: checking whether ln -s works
 configure:4571: result: yes
 configure:4578: checking how to recognise dependent libraries
 configure:4752: result: pass_all
-configure:4836: gcc -c -g -O2  conftest.c >&5
+configure:4836: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:4839: $? = 0
 configure:4960: checking for ANSI C header files
-configure:4985: gcc -c -g -O2  conftest.c >&5
+configure:4985: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:4991: $? = 0
 configure:4994: test -z 			 || test ! -s conftest.err
 configure:4997: $? = 0
 configure:5000: test -s conftest.o
 configure:5003: $? = 0
-configure:5092: gcc -o conftest -g -O2   conftest.c  >&5
+configure:5092: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 conftest.c: In function 'main':
-conftest.c:29:7: warning: incompatible implicit declaration of built-in function 'exit' [enabled by default]
+conftest.c:30:7: warning: incompatible implicit declaration of built-in function 'exit' [enabled by default]
 configure:5095: $? = 0
-configure:5097: ./conftest
+configure:5097: ./conftest.exe
 configure:5100: $? = 0
 configure:5115: result: yes
 configure:5139: checking for sys/types.h
-configure:5155: gcc -c -g -O2  conftest.c >&5
+configure:5155: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:5161: $? = 0
 configure:5164: test -z 			 || test ! -s conftest.err
 configure:5167: $? = 0
@@ -281,7 +316,7 @@ configure:5170: test -s conftest.o
 configure:5173: $? = 0
 configure:5184: result: yes
 configure:5139: checking for sys/stat.h
-configure:5155: gcc -c -g -O2  conftest.c >&5
+configure:5155: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:5161: $? = 0
 configure:5164: test -z 			 || test ! -s conftest.err
 configure:5167: $? = 0
@@ -289,7 +324,7 @@ configure:5170: test -s conftest.o
 configure:5173: $? = 0
 configure:5184: result: yes
 configure:5139: checking for stdlib.h
-configure:5155: gcc -c -g -O2  conftest.c >&5
+configure:5155: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:5161: $? = 0
 configure:5164: test -z 			 || test ! -s conftest.err
 configure:5167: $? = 0
@@ -297,7 +332,7 @@ configure:5170: test -s conftest.o
 configure:5173: $? = 0
 configure:5184: result: yes
 configure:5139: checking for string.h
-configure:5155: gcc -c -g -O2  conftest.c >&5
+configure:5155: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:5161: $? = 0
 configure:5164: test -z 			 || test ! -s conftest.err
 configure:5167: $? = 0
@@ -305,7 +340,7 @@ configure:5170: test -s conftest.o
 configure:5173: $? = 0
 configure:5184: result: yes
 configure:5139: checking for memory.h
-configure:5155: gcc -c -g -O2  conftest.c >&5
+configure:5155: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:5161: $? = 0
 configure:5164: test -z 			 || test ! -s conftest.err
 configure:5167: $? = 0
@@ -313,7 +348,7 @@ configure:5170: test -s conftest.o
 configure:5173: $? = 0
 configure:5184: result: yes
 configure:5139: checking for strings.h
-configure:5155: gcc -c -g -O2  conftest.c >&5
+configure:5155: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:5161: $? = 0
 configure:5164: test -z 			 || test ! -s conftest.err
 configure:5167: $? = 0
@@ -321,7 +356,7 @@ configure:5170: test -s conftest.o
 configure:5173: $? = 0
 configure:5184: result: yes
 configure:5139: checking for inttypes.h
-configure:5155: gcc -c -g -O2  conftest.c >&5
+configure:5155: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:5161: $? = 0
 configure:5164: test -z 			 || test ! -s conftest.err
 configure:5167: $? = 0
@@ -329,7 +364,7 @@ configure:5170: test -s conftest.o
 configure:5173: $? = 0
 configure:5184: result: yes
 configure:5139: checking for stdint.h
-configure:5155: gcc -c -g -O2  conftest.c >&5
+configure:5155: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:5161: $? = 0
 configure:5164: test -z 			 || test ! -s conftest.err
 configure:5167: $? = 0
@@ -337,7 +372,7 @@ configure:5170: test -s conftest.o
 configure:5173: $? = 0
 configure:5184: result: yes
 configure:5139: checking for unistd.h
-configure:5155: gcc -c -g -O2  conftest.c >&5
+configure:5155: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:5161: $? = 0
 configure:5164: test -z 			 || test ! -s conftest.err
 configure:5167: $? = 0
@@ -345,67 +380,146 @@ configure:5170: test -s conftest.o
 configure:5173: $? = 0
 configure:5184: result: yes
 configure:5210: checking dlfcn.h usability
-configure:5222: gcc -c -g -O2  conftest.c >&5
-configure:5228: $? = 0
-configure:5231: test -z 			 || test ! -s conftest.err
-configure:5234: $? = 0
-configure:5237: test -s conftest.o
-configure:5240: $? = 0
-configure:5250: result: yes
+configure:5222: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
+conftest.c:57:19: fatal error: dlfcn.h: No such file or directory
+compilation terminated.
+configure:5228: $? = 1
+configure: failed program was:
+| /* confdefs.h.  */
+| 
+| #define PACKAGE_NAME "ucl"
+| #define PACKAGE_TARNAME "ucl"
+| #define PACKAGE_VERSION "1.03"
+| #define PACKAGE_STRING "ucl 1.03"
+| #define PACKAGE_BUGREPORT "markus@oberhumer.com"
+| #define ACC_ENDIAN_LITTLE_ENDIAN 1
+| #define _FILE_OFFSET_BITS 64
+| #define PACKAGE "ucl"
+| #define VERSION "1.03"
+| #define STDC_HEADERS 1
+| #define HAVE_SYS_TYPES_H 1
+| #define HAVE_SYS_STAT_H 1
+| #define HAVE_STDLIB_H 1
+| #define HAVE_STRING_H 1
+| #define HAVE_MEMORY_H 1
+| #define HAVE_STRINGS_H 1
+| #define HAVE_INTTYPES_H 1
+| #define HAVE_STDINT_H 1
+| #define HAVE_UNISTD_H 1
+| /* end confdefs.h.  */
+| #include <stdio.h>
+| #if HAVE_SYS_TYPES_H
+| # include <sys/types.h>
+| #endif
+| #if HAVE_SYS_STAT_H
+| # include <sys/stat.h>
+| #endif
+| #if STDC_HEADERS
+| # include <stdlib.h>
+| # include <stddef.h>
+| #else
+| # if HAVE_STDLIB_H
+| #  include <stdlib.h>
+| # endif
+| #endif
+| #if HAVE_STRING_H
+| # if !STDC_HEADERS && HAVE_MEMORY_H
+| #  include <memory.h>
+| # endif
+| # include <string.h>
+| #endif
+| #if HAVE_STRINGS_H
+| # include <strings.h>
+| #endif
+| #if HAVE_INTTYPES_H
+| # include <inttypes.h>
+| #else
+| # if HAVE_STDINT_H
+| #  include <stdint.h>
+| # endif
+| #endif
+| #if HAVE_UNISTD_H
+| # include <unistd.h>
+| #endif
+| #include <dlfcn.h>
+configure:5250: result: no
 configure:5254: checking dlfcn.h presence
-configure:5264: gcc -E  conftest.c
-configure:5270: $? = 0
-configure:5290: result: yes
+configure:5264: i686-w64-mingw32-gcc -E  conftest.c
+conftest.c:23:19: fatal error: dlfcn.h: No such file or directory
+compilation terminated.
+configure:5270: $? = 1
+configure: failed program was:
+| /* confdefs.h.  */
+| 
+| #define PACKAGE_NAME "ucl"
+| #define PACKAGE_TARNAME "ucl"
+| #define PACKAGE_VERSION "1.03"
+| #define PACKAGE_STRING "ucl 1.03"
+| #define PACKAGE_BUGREPORT "markus@oberhumer.com"
+| #define ACC_ENDIAN_LITTLE_ENDIAN 1
+| #define _FILE_OFFSET_BITS 64
+| #define PACKAGE "ucl"
+| #define VERSION "1.03"
+| #define STDC_HEADERS 1
+| #define HAVE_SYS_TYPES_H 1
+| #define HAVE_SYS_STAT_H 1
+| #define HAVE_STDLIB_H 1
+| #define HAVE_STRING_H 1
+| #define HAVE_MEMORY_H 1
+| #define HAVE_STRINGS_H 1
+| #define HAVE_INTTYPES_H 1
+| #define HAVE_STDINT_H 1
+| #define HAVE_UNISTD_H 1
+| /* end confdefs.h.  */
+| #include <dlfcn.h>
+configure:5290: result: no
 configure:5325: checking for dlfcn.h
-configure:5332: result: yes
-configure:5397: checking for g++
-configure:5413: found /usr/bin/g++
-configure:5423: result: g++
+configure:5332: result: no
 configure:5439: checking for C++ compiler version
-configure:5442: g++ --version </dev/null >&5
-g++ (Debian 4.7.3-4) 4.7.3
-Copyright (C) 2012 Free Software Foundation, Inc.
+configure:5442: i686-w64-mingw32-g++ --version </dev/null >&5
+i686-w64-mingw32-g++ (GCC) 4.6.3
+Copyright (C) 2011 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 configure:5445: $? = 0
-configure:5447: g++ -v </dev/null >&5
+configure:5447: i686-w64-mingw32-g++ -v </dev/null >&5
 Using built-in specs.
-COLLECT_GCC=g++
-COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.7/lto-wrapper
-Target: x86_64-linux-gnu
-Configured with: ../src/configure -v --with-pkgversion='Debian 4.7.3-4' --with-bugurl=file:///usr/share/doc/gcc-4.7/README.Bugs --enable-languages=c,c++,go,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.7 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.7 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --enable-plugin --with-system-zlib --enable-objc-gc --with-cloog --enable-cloog-backend=ppl --disable-cloog-version-check --disable-ppl-version-check --enable-multiarch --with-arch-32=i586 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
-Thread model: posix
-gcc version 4.7.3 (Debian 4.7.3-4) 
+COLLECT_GCC=i686-w64-mingw32-g++
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/i686-w64-mingw32/4.6/lto-wrapper
+Target: i686-w64-mingw32
+Configured with: ../../src/configure --build=x86_64-linux-gnu --prefix=/usr --includedir='/usr/include' --mandir='/usr/share/man' --infodir='/usr/share/info' --sysconfdir=/etc --localstatedir=/var --libexecdir='/usr/lib/gcc-mingw-w64' --disable-maintainer-mode --disable-dependency-tracking --prefix=/usr --enable-shared --enable-static --disable-multilib --enable-linker-build-id --with-system-zlib --libexecdir=/usr/lib --without-included-gettext --libdir=/usr/lib --enable-libstdcxx-time=yes --with-tune=generic --enable-version-specific-runtime-libs --enable-threads=win32 --enable-fully-dynamic-string --enable-sjlj-exceptions --enable-languages=c,c++,fortran,objc,obj-c++,ada --enable-lto --with-plugin-ld --target=i686-w64-mingw32 --with-gxx-include-dir=/usr/include/c++/4.6 --with-as=/usr/bin/i686-w64-mingw32-as --with-ld=/usr/bin/i686-w64-mingw32-ld
+Thread model: win32
+gcc version 4.6.3 (GCC) 
 configure:5450: $? = 0
-configure:5452: g++ -V </dev/null >&5
-g++: error: unrecognized command line option '-V'
-g++: fatal error: no input files
+configure:5452: i686-w64-mingw32-g++ -V </dev/null >&5
+i686-w64-mingw32-g++: error: unrecognized option '-V'
+i686-w64-mingw32-g++: fatal error: no input files
 compilation terminated.
 configure:5455: $? = 4
 configure:5458: checking whether we are using the GNU C++ compiler
-configure:5482: g++ -c   conftest.cc >&5
+configure:5482: i686-w64-mingw32-g++ -c   conftest.cc >&5
 configure:5488: $? = 0
 configure:5491: test -z 			 || test ! -s conftest.err
 configure:5494: $? = 0
 configure:5497: test -s conftest.o
 configure:5500: $? = 0
 configure:5513: result: yes
-configure:5519: checking whether g++ accepts -g
-configure:5540: g++ -c -g  conftest.cc >&5
+configure:5519: checking whether i686-w64-mingw32-g++ accepts -g
+configure:5540: i686-w64-mingw32-g++ -c -g  conftest.cc >&5
 configure:5546: $? = 0
 configure:5549: test -z 			 || test ! -s conftest.err
 configure:5552: $? = 0
 configure:5555: test -s conftest.o
 configure:5558: $? = 0
 configure:5569: result: yes
-configure:5611: g++ -c -g -O2  conftest.cc >&5
+configure:5611: i686-w64-mingw32-g++ -c -g -O2  conftest.cc >&5
 configure:5617: $? = 0
 configure:5620: test -z 			 || test ! -s conftest.err
 configure:5623: $? = 0
 configure:5626: test -s conftest.o
 configure:5629: $? = 0
-configure:5655: g++ -c -g -O2  conftest.cc >&5
+configure:5655: i686-w64-mingw32-g++ -c -g -O2  conftest.cc >&5
 conftest.cc: In function 'int main()':
 conftest.cc:27:9: error: 'exit' was not declared in this scope
 configure:5661: $? = 1
@@ -418,6 +532,7 @@ configure: failed program was:
 | #define PACKAGE_STRING "ucl 1.03"
 | #define PACKAGE_BUGREPORT "markus@oberhumer.com"
 | #define ACC_ENDIAN_LITTLE_ENDIAN 1
+| #define _FILE_OFFSET_BITS 64
 | #define PACKAGE "ucl"
 | #define VERSION "1.03"
 | #define STDC_HEADERS 1
@@ -430,7 +545,6 @@ configure: failed program was:
 | #define HAVE_INTTYPES_H 1
 | #define HAVE_STDINT_H 1
 | #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
 | /* end confdefs.h.  */
 | 
 | int
@@ -440,8 +554,11 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:5611: g++ -c -g -O2  conftest.cc >&5
+configure:5611: i686-w64-mingw32-g++ -c -g -O2  conftest.cc >&5
 conftest.cc:23:40: error: 'void std::exit(int)' should have been declared inside 'std'
+In file included from conftest.cc:24:0:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdlib.h:302:48: error: declaration of 'void std::exit(int)' has a different exception specifier
+conftest.cc:23:17: error: from previous declaration 'void std::exit(int) throw ()'
 configure:5617: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -452,6 +569,7 @@ configure: failed program was:
 | #define PACKAGE_STRING "ucl 1.03"
 | #define PACKAGE_BUGREPORT "markus@oberhumer.com"
 | #define ACC_ENDIAN_LITTLE_ENDIAN 1
+| #define _FILE_OFFSET_BITS 64
 | #define PACKAGE "ucl"
 | #define VERSION "1.03"
 | #define STDC_HEADERS 1
@@ -464,7 +582,6 @@ configure: failed program was:
 | #define HAVE_INTTYPES_H 1
 | #define HAVE_STDINT_H 1
 | #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
 | /* end confdefs.h.  */
 | extern "C" void std::exit (int) throw (); using std::exit;
 | #include <stdlib.h>
@@ -475,11 +592,8 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:5611: g++ -c -g -O2  conftest.cc >&5
+configure:5611: i686-w64-mingw32-g++ -c -g -O2  conftest.cc >&5
 conftest.cc:23:31: error: 'void std::exit(int)' should have been declared inside 'std'
-In file included from conftest.cc:24:0:
-/usr/include/stdlib.h:542:70: error: declaration of 'void std::exit(int) throw ()' has a different exception specifier
-conftest.cc:23:17: error: from previous declaration 'void std::exit(int)'
 configure:5617: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -490,6 +604,7 @@ configure: failed program was:
 | #define PACKAGE_STRING "ucl 1.03"
 | #define PACKAGE_BUGREPORT "markus@oberhumer.com"
 | #define ACC_ENDIAN_LITTLE_ENDIAN 1
+| #define _FILE_OFFSET_BITS 64
 | #define PACKAGE "ucl"
 | #define VERSION "1.03"
 | #define STDC_HEADERS 1
@@ -502,7 +617,6 @@ configure: failed program was:
 | #define HAVE_INTTYPES_H 1
 | #define HAVE_STDINT_H 1
 | #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
 | /* end confdefs.h.  */
 | extern "C" void std::exit (int); using std::exit;
 | #include <stdlib.h>
@@ -513,24 +627,61 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:5611: g++ -c -g -O2  conftest.cc >&5
+configure:5611: i686-w64-mingw32-g++ -c -g -O2  conftest.cc >&5
+In file included from conftest.cc:24:0:
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdlib.h:302:48: error: declaration of 'void exit(int)' has a different exception specifier
+conftest.cc:23:17: error: from previous declaration 'void exit(int) throw ()'
+configure:5617: $? = 1
+configure: failed program was:
+| /* confdefs.h.  */
+| 
+| #define PACKAGE_NAME "ucl"
+| #define PACKAGE_TARNAME "ucl"
+| #define PACKAGE_VERSION "1.03"
+| #define PACKAGE_STRING "ucl 1.03"
+| #define PACKAGE_BUGREPORT "markus@oberhumer.com"
+| #define ACC_ENDIAN_LITTLE_ENDIAN 1
+| #define _FILE_OFFSET_BITS 64
+| #define PACKAGE "ucl"
+| #define VERSION "1.03"
+| #define STDC_HEADERS 1
+| #define HAVE_SYS_TYPES_H 1
+| #define HAVE_SYS_STAT_H 1
+| #define HAVE_STDLIB_H 1
+| #define HAVE_STRING_H 1
+| #define HAVE_MEMORY_H 1
+| #define HAVE_STRINGS_H 1
+| #define HAVE_INTTYPES_H 1
+| #define HAVE_STDINT_H 1
+| #define HAVE_UNISTD_H 1
+| /* end confdefs.h.  */
+| extern "C" void exit (int) throw ();
+| #include <stdlib.h>
+| int
+| main ()
+| {
+| exit (42);
+|   ;
+|   return 0;
+| }
+configure:5611: i686-w64-mingw32-g++ -c -g -O2  conftest.cc >&5
 configure:5617: $? = 0
 configure:5620: test -z 			 || test ! -s conftest.err
 configure:5623: $? = 0
 configure:5626: test -s conftest.o
 configure:5629: $? = 0
-configure:5655: g++ -c -g -O2  conftest.cc >&5
+configure:5655: i686-w64-mingw32-g++ -c -g -O2  conftest.cc >&5
 configure:5661: $? = 0
 configure:5664: test -z 			 || test ! -s conftest.err
 configure:5667: $? = 0
 configure:5670: test -s conftest.o
 configure:5673: $? = 0
-configure:5698: checking dependency style of g++
+configure:5698: checking dependency style of i686-w64-mingw32-g++
 configure:5788: result: gcc3
 configure:5810: checking how to run the C++ preprocessor
-configure:5841: g++ -E  conftest.cc
+configure:5841: i686-w64-mingw32-g++ -E  conftest.cc
 configure:5847: $? = 0
-configure:5879: g++ -E  conftest.cc
+configure:5879: i686-w64-mingw32-g++ -E  conftest.cc
 conftest.cc:26:28: fatal error: ac_nonexistent.h: No such file or directory
 compilation terminated.
 configure:5885: $? = 1
@@ -543,6 +694,7 @@ configure: failed program was:
 | #define PACKAGE_STRING "ucl 1.03"
 | #define PACKAGE_BUGREPORT "markus@oberhumer.com"
 | #define ACC_ENDIAN_LITTLE_ENDIAN 1
+| #define _FILE_OFFSET_BITS 64
 | #define PACKAGE "ucl"
 | #define VERSION "1.03"
 | #define STDC_HEADERS 1
@@ -555,16 +707,15 @@ configure: failed program was:
 | #define HAVE_INTTYPES_H 1
 | #define HAVE_STDINT_H 1
 | #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
 | #ifdef __cplusplus
-| extern "C" void exit (int) throw ();
+| extern "C" void exit (int);
 | #endif
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
-configure:5924: result: g++ -E
-configure:5948: g++ -E  conftest.cc
+configure:5924: result: i686-w64-mingw32-g++ -E
+configure:5948: i686-w64-mingw32-g++ -E  conftest.cc
 configure:5954: $? = 0
-configure:5986: g++ -E  conftest.cc
+configure:5986: i686-w64-mingw32-g++ -E  conftest.cc
 conftest.cc:26:28: fatal error: ac_nonexistent.h: No such file or directory
 compilation terminated.
 configure:5992: $? = 1
@@ -577,6 +728,7 @@ configure: failed program was:
 | #define PACKAGE_STRING "ucl 1.03"
 | #define PACKAGE_BUGREPORT "markus@oberhumer.com"
 | #define ACC_ENDIAN_LITTLE_ENDIAN 1
+| #define _FILE_OFFSET_BITS 64
 | #define PACKAGE "ucl"
 | #define VERSION "1.03"
 | #define STDC_HEADERS 1
@@ -589,9 +741,8 @@ configure: failed program was:
 | #define HAVE_INTTYPES_H 1
 | #define HAVE_STDINT_H 1
 | #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
 | #ifdef __cplusplus
-| extern "C" void exit (int) throw ();
+| extern "C" void exit (int);
 | #endif
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
@@ -668,14 +819,20 @@ configure: failed program was:
 configure:6245: result: no
 configure:6275: checking the maximum length of command line arguments
 configure:6340: result: 32768
-configure:6351: checking command to parse /usr/bin/nm -B output from gcc object
-configure:6440: gcc -c -g -O2  conftest.c >&5
+configure:6351: checking command to parse /usr/bin/nm -B output from i686-w64-mingw32-gcc object
+configure:6440: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:6443: $? = 0
 configure:6447: /usr/bin/nm -B conftest.o \| sed -n -e 's/^.*[ 	]\([ABCDGIRSTW][ABCDGIRSTW]*\)[ 	][ 	]*\(\)\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2\3 \3/p' \> conftest.nm
+/usr/bin/nm: conftest.o: File format not recognized
 configure:6450: $? = 0
-configure:6502: gcc -o conftest -g -O2   conftest.c conftstm.o >&5
-configure:6505: $? = 0
-configure:6543: result: ok
+cannot run sed -n -e 's/^.*[ 	]\([ABCDGIRSTW][ABCDGIRSTW]*\)[ 	][ 	]*\(\)\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2\3 \3/p'
+configure:6440: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
+configure:6443: $? = 0
+configure:6447: /usr/bin/nm -B conftest.o \| sed -n -e 's/^.*[ 	]\([ABCDGIRSTW][ABCDGIRSTW]*\)[ 	][ 	]*\(_\)\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2\3 \3/p' \> conftest.nm
+/usr/bin/nm: conftest.o: File format not recognized
+configure:6450: $? = 0
+cannot run sed -n -e 's/^.*[ 	]\([ABCDGIRSTW][ABCDGIRSTW]*\)[ 	][ 	]*\(_\)\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2\3 \3/p'
+configure:6540: result: failed
 configure:6547: checking for objdir
 configure:6562: result: .libs
 configure:6652: checking for ar
@@ -687,24 +844,25 @@ configure:6759: result: ranlib
 configure:6812: checking for strip
 configure:6828: found /usr/bin/strip
 configure:6839: result: strip
-configure:7101: checking if gcc static flag  works
+configure:7101: checking if i686-w64-mingw32-gcc static flag  works
 configure:7124: result: yes
-configure:7142: checking if gcc supports -fno-rtti -fno-exceptions
-configure:7160: gcc -c -g -O2  -fno-rtti -fno-exceptions conftest.c >&5
+configure:7142: checking if i686-w64-mingw32-gcc supports -fno-rtti -fno-exceptions
+configure:7160: i686-w64-mingw32-gcc -c -g -O2  -fno-rtti -fno-exceptions conftest.c >&5
 cc1: warning: command line option '-fno-rtti' is valid for C++/ObjC++ but not for C [enabled by default]
 configure:7164: $? = 0
 configure:7175: result: no
-configure:7190: checking for gcc option to produce PIC
+configure:7190: checking for i686-w64-mingw32-gcc option to produce PIC
 configure:7367: result: -fPIC
-configure:7375: checking if gcc PIC flag -fPIC works
-configure:7393: gcc -c -g -O2  -fPIC -DPIC conftest.c >&5
+configure:7375: checking if i686-w64-mingw32-gcc PIC flag -fPIC works
+configure:7393: i686-w64-mingw32-gcc -c -g -O2  -fPIC -DPIC conftest.c >&5
+conftest.c:1:0: warning: -fPIC ignored for target (all code is position independent) [enabled by default]
 configure:7397: $? = 0
-configure:7408: result: yes
-configure:7432: checking if gcc supports -c -o file.o
-configure:7453: gcc -c -g -O2  -o out/conftest2.o conftest.c >&5
+configure:7408: result: no
+configure:7432: checking if i686-w64-mingw32-gcc supports -c -o file.o
+configure:7453: i686-w64-mingw32-gcc -c -g -O2  -o out/conftest2.o conftest.c >&5
 configure:7457: $? = 0
 configure:7477: result: yes
-configure:7503: checking whether the gcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
+configure:7503: checking whether the i686-w64-mingw32-gcc linker (/usr/bin/i686-w64-mingw32-ld) supports shared libraries
 configure:8350: result: yes
 configure:8421: checking dynamic linker characteristics
 configure:8973: result: GNU/Linux ld.so
@@ -719,25 +877,26 @@ configure:9907: result: no
 configure:9910: checking whether to build static libraries
 configure:9914: result: yes
 configure:10006: creating libtool
-configure:10553: checking for ld used by g++
-configure:10620: result: /usr/bin/ld -m elf_x86_64
-configure:10629: checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld
+configure:10553: checking for ld used by i686-w64-mingw32-g++
+configure:10620: result: /usr/bin/i686-w64-mingw32-ld
+configure:10629: checking if the linker (/usr/bin/i686-w64-mingw32-ld) is GNU ld
 configure:10644: result: yes
-configure:10695: checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
+configure:10695: checking whether the i686-w64-mingw32-g++ linker (/usr/bin/i686-w64-mingw32-ld) supports shared libraries
 configure:11521: result: yes
-configure:11539: g++ -c -g -O2  conftest.cc >&5
+configure:11539: i686-w64-mingw32-g++ -c -g -O2  conftest.cc >&5
 configure:11542: $? = 0
-configure:11638: checking for g++ option to produce PIC
+configure:11638: checking for i686-w64-mingw32-g++ option to produce PIC
 configure:11890: result: -fPIC
-configure:11898: checking if g++ PIC flag -fPIC works
-configure:11916: g++ -c -g -O2  -fPIC -DPIC conftest.cc >&5
+configure:11898: checking if i686-w64-mingw32-g++ PIC flag -fPIC works
+configure:11916: i686-w64-mingw32-g++ -c -g -O2  -fPIC -DPIC conftest.cc >&5
+conftest.cc:1:0: warning: -fPIC ignored for target (all code is position independent) [enabled by default]
 configure:11920: $? = 0
-configure:11931: result: yes
-configure:11955: checking if g++ supports -c -o file.o
-configure:11976: g++ -c -g -O2  -o out/conftest2.o conftest.cc >&5
+configure:11931: result: no
+configure:11955: checking if i686-w64-mingw32-g++ supports -c -o file.o
+configure:11976: i686-w64-mingw32-g++ -c -g -O2  -o out/conftest2.o conftest.cc >&5
 configure:11980: $? = 0
 configure:12000: result: yes
-configure:12026: checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
+configure:12026: checking whether the i686-w64-mingw32-g++ linker (/usr/bin/i686-w64-mingw32-ld) supports shared libraries
 configure:12054: result: yes
 configure:12125: checking dynamic linker characteristics
 configure:12677: result: GNU/Linux ld.so
@@ -748,7 +907,7 @@ configure:12725: result: yes
 configure:19985: checking whether to build i386 assembly versions
 configure:20014: result: no
 configure:20035: checking whether time.h and sys/time.h may both be included
-configure:20060: gcc -c -g -O2  conftest.c >&5
+configure:20060: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20066: $? = 0
 configure:20069: test -z 			 || test ! -s conftest.err
 configure:20072: $? = 0
@@ -756,7 +915,7 @@ configure:20075: test -s conftest.o
 configure:20078: $? = 0
 configure:20089: result: yes
 configure:20135: checking assert.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -764,13 +923,13 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking assert.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for assert.h
 configure:20257: result: yes
 configure:20135: checking ctype.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -778,13 +937,13 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking ctype.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for ctype.h
 configure:20257: result: yes
 configure:20135: checking dirent.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -792,13 +951,13 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking dirent.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for dirent.h
 configure:20257: result: yes
 configure:20135: checking errno.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -806,13 +965,13 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking errno.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for errno.h
 configure:20257: result: yes
 configure:20135: checking fcntl.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -820,13 +979,13 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking fcntl.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for fcntl.h
 configure:20257: result: yes
 configure:20135: checking limits.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -834,13 +993,13 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking limits.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for limits.h
 configure:20257: result: yes
 configure:20135: checking malloc.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -848,7 +1007,7 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking malloc.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for malloc.h
@@ -856,7 +1015,7 @@ configure:20257: result: yes
 configure:20126: checking for memory.h
 configure:20131: result: yes
 configure:20135: checking setjmp.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -864,13 +1023,13 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking setjmp.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for setjmp.h
 configure:20257: result: yes
 configure:20135: checking signal.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -878,13 +1037,13 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking signal.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for signal.h
 configure:20257: result: yes
 configure:20135: checking stdarg.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -892,13 +1051,13 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking stdarg.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for stdarg.h
 configure:20257: result: yes
 configure:20135: checking stddef.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -906,7 +1065,7 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking stddef.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for stddef.h
@@ -914,7 +1073,7 @@ configure:20257: result: yes
 configure:20126: checking for stdint.h
 configure:20131: result: yes
 configure:20135: checking stdio.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -922,7 +1081,7 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking stdio.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for stdio.h
@@ -934,7 +1093,7 @@ configure:20131: result: yes
 configure:20126: checking for strings.h
 configure:20131: result: yes
 configure:20135: checking time.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -942,7 +1101,7 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking time.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for time.h
@@ -950,7 +1109,7 @@ configure:20257: result: yes
 configure:20126: checking for unistd.h
 configure:20131: result: yes
 configure:20135: checking utime.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -958,7 +1117,7 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking utime.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for utime.h
@@ -966,7 +1125,7 @@ configure:20257: result: yes
 configure:20126: checking for sys/stat.h
 configure:20131: result: yes
 configure:20135: checking sys/time.h usability
-configure:20147: gcc -c -g -O2  conftest.c >&5
+configure:20147: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20153: $? = 0
 configure:20156: test -z 			 || test ! -s conftest.err
 configure:20159: $? = 0
@@ -974,7 +1133,7 @@ configure:20162: test -s conftest.o
 configure:20165: $? = 0
 configure:20175: result: yes
 configure:20179: checking sys/time.h presence
-configure:20189: gcc -E  conftest.c
+configure:20189: i686-w64-mingw32-gcc -E  conftest.c
 configure:20195: $? = 0
 configure:20215: result: yes
 configure:20250: checking for sys/time.h
@@ -982,7 +1141,7 @@ configure:20257: result: yes
 configure:20126: checking for sys/types.h
 configure:20131: result: yes
 configure:20277: checking whether limits.h is sane
-configure:20393: gcc -c -g -O2  conftest.c >&5
+configure:20393: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20399: $? = 0
 configure:20402: test -z 			 || test ! -s conftest.err
 configure:20405: $? = 0
@@ -990,7 +1149,7 @@ configure:20408: test -s conftest.o
 configure:20411: $? = 0
 configure:20422: result: yes
 configure:20436: checking for off_t
-configure:20460: gcc -c -g -O2  conftest.c >&5
+configure:20460: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20466: $? = 0
 configure:20469: test -z 			 || test ! -s conftest.err
 configure:20472: $? = 0
@@ -998,7 +1157,7 @@ configure:20475: test -s conftest.o
 configure:20478: $? = 0
 configure:20489: result: yes
 configure:20501: checking for ptrdiff_t
-configure:20525: gcc -c -g -O2  conftest.c >&5
+configure:20525: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20531: $? = 0
 configure:20534: test -z 			 || test ! -s conftest.err
 configure:20537: $? = 0
@@ -1006,7 +1165,7 @@ configure:20540: test -s conftest.o
 configure:20543: $? = 0
 configure:20554: result: yes
 configure:20566: checking for size_t
-configure:20590: gcc -c -g -O2  conftest.c >&5
+configure:20590: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20596: $? = 0
 configure:20599: test -z 			 || test ! -s conftest.err
 configure:20602: $? = 0
@@ -1014,7 +1173,7 @@ configure:20605: test -s conftest.o
 configure:20608: $? = 0
 configure:20619: result: yes
 configure:20631: checking return type of signal handlers
-configure:20662: gcc -c -g -O2  conftest.c >&5
+configure:20662: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20668: $? = 0
 configure:20671: test -z 			 || test ! -s conftest.err
 configure:20674: $? = 0
@@ -1022,7 +1181,7 @@ configure:20677: test -s conftest.o
 configure:20680: $? = 0
 configure:20691: result: void
 configure:20701: checking for short
-configure:20725: gcc -c -g -O2  conftest.c >&5
+configure:20725: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:20731: $? = 0
 configure:20734: test -z 			 || test ! -s conftest.err
 configure:20737: $? = 0
@@ -1030,13 +1189,15 @@ configure:20740: test -s conftest.o
 configure:20743: $? = 0
 configure:20754: result: yes
 configure:20757: checking size of short
-configure:21069: gcc -o conftest -g -O2   conftest.c  >&5
+configure:21069: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:21072: $? = 0
-configure:21074: ./conftest
+configure:21074: ./conftest.exe
+err:module:import_dll Library TDI.SYS (which is needed by L"C:\\windows\\system32\\drivers\\idmtdi.sys") not found
+err:winedevice:ServiceMain driver L"IDMTDI" failed to load
 configure:21077: $? = 0
 configure:21100: result: 2
 configure:21107: checking for int
-configure:21131: gcc -c -g -O2  conftest.c >&5
+configure:21131: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:21137: $? = 0
 configure:21140: test -z 			 || test ! -s conftest.err
 configure:21143: $? = 0
@@ -1044,13 +1205,15 @@ configure:21146: test -s conftest.o
 configure:21149: $? = 0
 configure:21160: result: yes
 configure:21163: checking size of int
-configure:21475: gcc -o conftest -g -O2   conftest.c  >&5
+configure:21475: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:21478: $? = 0
-configure:21480: ./conftest
+configure:21480: ./conftest.exe
+fixme:netsh:wmain stub: L"netsh" L"firewall" L"add" L"allowedprogram" L"program=C:\\Program Files\\PANDORA.TV\\PanService\\PandoraService.exe" L"name=PandoraService"
 configure:21483: $? = 0
 configure:21506: result: 4
 configure:21513: checking for long
-configure:21537: gcc -c -g -O2  conftest.c >&5
+configure:21537: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
+fixme:netsh:wmain stub: L"netsh" L"firewall" L"show" L"all"
 configure:21543: $? = 0
 configure:21546: test -z 			 || test ! -s conftest.err
 configure:21549: $? = 0
@@ -1058,29 +1221,29 @@ configure:21552: test -s conftest.o
 configure:21555: $? = 0
 configure:21566: result: yes
 configure:21569: checking size of long
-configure:21881: gcc -o conftest -g -O2   conftest.c  >&5
+configure:21881: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:21884: $? = 0
-configure:21886: ./conftest
+configure:21886: ./conftest.exe
 configure:21889: $? = 0
-configure:21912: result: 8
+configure:21912: result: 4
 configure:21920: checking for ptrdiff_t
 configure:21973: result: yes
 configure:21976: checking size of ptrdiff_t
-configure:22288: gcc -o conftest -g -O2   conftest.c  >&5
+configure:22288: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:22291: $? = 0
-configure:22293: ./conftest
+configure:22293: ./conftest.exe
 configure:22296: $? = 0
-configure:22319: result: 8
+configure:22319: result: 4
 configure:22326: checking for size_t
 configure:22379: result: yes
 configure:22382: checking size of size_t
-configure:22694: gcc -o conftest -g -O2   conftest.c  >&5
+configure:22694: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:22697: $? = 0
-configure:22699: ./conftest
+configure:22699: ./conftest.exe
 configure:22702: $? = 0
-configure:22725: result: 8
+configure:22725: result: 4
 configure:22732: checking for void *
-configure:22756: gcc -c -g -O2  conftest.c >&5
+configure:22756: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:22762: $? = 0
 configure:22765: test -z 			 || test ! -s conftest.err
 configure:22768: $? = 0
@@ -1088,13 +1251,13 @@ configure:22771: test -s conftest.o
 configure:22774: $? = 0
 configure:22785: result: yes
 configure:22788: checking size of void *
-configure:23100: gcc -o conftest -g -O2   conftest.c  >&5
+configure:23100: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:23103: $? = 0
-configure:23105: ./conftest
+configure:23105: ./conftest.exe
 configure:23108: $? = 0
-configure:23131: result: 8
+configure:23131: result: 4
 configure:23138: checking for char *
-configure:23162: gcc -c -g -O2  conftest.c >&5
+configure:23162: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:23168: $? = 0
 configure:23171: test -z 			 || test ! -s conftest.err
 configure:23174: $? = 0
@@ -1102,13 +1265,13 @@ configure:23177: test -s conftest.o
 configure:23180: $? = 0
 configure:23191: result: yes
 configure:23194: checking size of char *
-configure:23506: gcc -o conftest -g -O2   conftest.c  >&5
+configure:23506: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:23509: $? = 0
-configure:23511: ./conftest
+configure:23511: ./conftest.exe
 configure:23514: $? = 0
-configure:23537: result: 8
+configure:23537: result: 4
 configure:23545: checking for long long
-configure:23569: gcc -c -g -O2  conftest.c >&5
+configure:23569: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:23575: $? = 0
 configure:23578: test -z 			 || test ! -s conftest.err
 configure:23581: $? = 0
@@ -1116,13 +1279,13 @@ configure:23584: test -s conftest.o
 configure:23587: $? = 0
 configure:23598: result: yes
 configure:23601: checking size of long long
-configure:23913: gcc -o conftest -g -O2   conftest.c  >&5
+configure:23913: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:23916: $? = 0
-configure:23918: ./conftest
+configure:23918: ./conftest.exe
 configure:23921: $? = 0
 configure:23944: result: 8
 configure:23951: checking for unsigned long long
-configure:23975: gcc -c -g -O2  conftest.c >&5
+configure:23975: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:23981: $? = 0
 configure:23984: test -z 			 || test ! -s conftest.err
 configure:23987: $? = 0
@@ -1130,473 +1293,69 @@ configure:23990: test -s conftest.o
 configure:23993: $? = 0
 configure:24004: result: yes
 configure:24007: checking size of unsigned long long
-configure:24319: gcc -o conftest -g -O2   conftest.c  >&5
+configure:24319: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:24322: $? = 0
-configure:24324: ./conftest
+configure:24324: ./conftest.exe
 configure:24327: $? = 0
 configure:24350: result: 8
 configure:24357: checking for __int64
-configure:24381: gcc -c -g -O2  conftest.c >&5
-conftest.c: In function 'main':
-conftest.c:97:6: error: '__int64' undeclared (first use in this function)
-conftest.c:97:6: note: each undeclared identifier is reported only once for each function it appears in
-conftest.c:97:15: error: expected expression before ')' token
-configure:24387: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-| 
-| #define PACKAGE_NAME "ucl"
-| #define PACKAGE_TARNAME "ucl"
-| #define PACKAGE_VERSION "1.03"
-| #define PACKAGE_STRING "ucl 1.03"
-| #define PACKAGE_BUGREPORT "markus@oberhumer.com"
-| #define ACC_ENDIAN_LITTLE_ENDIAN 1
-| #define PACKAGE "ucl"
-| #define VERSION "1.03"
-| #define STDC_HEADERS 1
-| #define HAVE_SYS_TYPES_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_INTTYPES_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
-| #ifdef __cplusplus
-| extern "C" void exit (int) throw ();
-| #endif
-| #define TIME_WITH_SYS_TIME 1
-| #define HAVE_ASSERT_H 1
-| #define HAVE_CTYPE_H 1
-| #define HAVE_DIRENT_H 1
-| #define HAVE_ERRNO_H 1
-| #define HAVE_FCNTL_H 1
-| #define HAVE_LIMITS_H 1
-| #define HAVE_MALLOC_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_SETJMP_H 1
-| #define HAVE_SIGNAL_H 1
-| #define HAVE_STDARG_H 1
-| #define HAVE_STDDEF_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_STDIO_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_TIME_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_UTIME_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_SYS_TIME_H 1
-| #define HAVE_SYS_TYPES_H 1
-| #define RETSIGTYPE void
-| #define SIZEOF_SHORT 2
-| #define SIZEOF_INT 4
-| #define SIZEOF_LONG 8
-| #define SIZEOF_PTRDIFF_T 8
-| #define SIZEOF_SIZE_T 8
-| #define SIZEOF_VOID_P 8
-| #define SIZEOF_CHAR_P 8
-| #define SIZEOF_LONG_LONG 8
-| #define SIZEOF_UNSIGNED_LONG_LONG 8
-| /* end confdefs.h.  */
-| #include <stdio.h>
-| #if HAVE_SYS_TYPES_H
-| # include <sys/types.h>
-| #endif
-| #if HAVE_SYS_STAT_H
-| # include <sys/stat.h>
-| #endif
-| #if STDC_HEADERS
-| # include <stdlib.h>
-| # include <stddef.h>
-| #else
-| # if HAVE_STDLIB_H
-| #  include <stdlib.h>
-| # endif
-| #endif
-| #if HAVE_STRING_H
-| # if !STDC_HEADERS && HAVE_MEMORY_H
-| #  include <memory.h>
-| # endif
-| # include <string.h>
-| #endif
-| #if HAVE_STRINGS_H
-| # include <strings.h>
-| #endif
-| #if HAVE_INTTYPES_H
-| # include <inttypes.h>
-| #else
-| # if HAVE_STDINT_H
-| #  include <stdint.h>
-| # endif
-| #endif
-| #if HAVE_UNISTD_H
-| # include <unistd.h>
-| #endif
-| int
-| main ()
-| {
-| if ((__int64 *) 0)
-|   return 0;
-| if (sizeof (__int64))
-|   return 0;
-|   ;
-|   return 0;
-| }
-configure:24410: result: no
+configure:24381: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
+configure:24387: $? = 0
+configure:24390: test -z 			 || test ! -s conftest.err
+configure:24393: $? = 0
+configure:24396: test -s conftest.o
+configure:24399: $? = 0
+configure:24410: result: yes
 configure:24413: checking size of __int64
-configure:24756: result: 0
+configure:24725: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+configure:24728: $? = 0
+configure:24730: ./conftest.exe
+configure:24733: $? = 0
+configure:24756: result: 8
 configure:24763: checking for unsigned __int64
-configure:24787: gcc -c -g -O2  conftest.c >&5
-conftest.c: In function 'main':
-conftest.c:98:15: error: expected ')' before '__int64'
-conftest.c:100:22: error: expected ')' before '__int64'
-configure:24793: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-| 
-| #define PACKAGE_NAME "ucl"
-| #define PACKAGE_TARNAME "ucl"
-| #define PACKAGE_VERSION "1.03"
-| #define PACKAGE_STRING "ucl 1.03"
-| #define PACKAGE_BUGREPORT "markus@oberhumer.com"
-| #define ACC_ENDIAN_LITTLE_ENDIAN 1
-| #define PACKAGE "ucl"
-| #define VERSION "1.03"
-| #define STDC_HEADERS 1
-| #define HAVE_SYS_TYPES_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_INTTYPES_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
-| #ifdef __cplusplus
-| extern "C" void exit (int) throw ();
-| #endif
-| #define TIME_WITH_SYS_TIME 1
-| #define HAVE_ASSERT_H 1
-| #define HAVE_CTYPE_H 1
-| #define HAVE_DIRENT_H 1
-| #define HAVE_ERRNO_H 1
-| #define HAVE_FCNTL_H 1
-| #define HAVE_LIMITS_H 1
-| #define HAVE_MALLOC_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_SETJMP_H 1
-| #define HAVE_SIGNAL_H 1
-| #define HAVE_STDARG_H 1
-| #define HAVE_STDDEF_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_STDIO_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_TIME_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_UTIME_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_SYS_TIME_H 1
-| #define HAVE_SYS_TYPES_H 1
-| #define RETSIGTYPE void
-| #define SIZEOF_SHORT 2
-| #define SIZEOF_INT 4
-| #define SIZEOF_LONG 8
-| #define SIZEOF_PTRDIFF_T 8
-| #define SIZEOF_SIZE_T 8
-| #define SIZEOF_VOID_P 8
-| #define SIZEOF_CHAR_P 8
-| #define SIZEOF_LONG_LONG 8
-| #define SIZEOF_UNSIGNED_LONG_LONG 8
-| #define SIZEOF___INT64 0
-| /* end confdefs.h.  */
-| #include <stdio.h>
-| #if HAVE_SYS_TYPES_H
-| # include <sys/types.h>
-| #endif
-| #if HAVE_SYS_STAT_H
-| # include <sys/stat.h>
-| #endif
-| #if STDC_HEADERS
-| # include <stdlib.h>
-| # include <stddef.h>
-| #else
-| # if HAVE_STDLIB_H
-| #  include <stdlib.h>
-| # endif
-| #endif
-| #if HAVE_STRING_H
-| # if !STDC_HEADERS && HAVE_MEMORY_H
-| #  include <memory.h>
-| # endif
-| # include <string.h>
-| #endif
-| #if HAVE_STRINGS_H
-| # include <strings.h>
-| #endif
-| #if HAVE_INTTYPES_H
-| # include <inttypes.h>
-| #else
-| # if HAVE_STDINT_H
-| #  include <stdint.h>
-| # endif
-| #endif
-| #if HAVE_UNISTD_H
-| # include <unistd.h>
-| #endif
-| int
-| main ()
-| {
-| if ((unsigned __int64 *) 0)
-|   return 0;
-| if (sizeof (unsigned __int64))
-|   return 0;
-|   ;
-|   return 0;
-| }
-configure:24816: result: no
+configure:24787: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
+configure:24793: $? = 0
+configure:24796: test -z 			 || test ! -s conftest.err
+configure:24799: $? = 0
+configure:24802: test -s conftest.o
+configure:24805: $? = 0
+configure:24816: result: yes
 configure:24819: checking size of unsigned __int64
-configure:25162: result: 0
+configure:25131: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+configure:25134: $? = 0
+configure:25136: ./conftest.exe
+configure:25139: $? = 0
+configure:25162: result: 8
 configure:25171: checking for __int32
-configure:25195: gcc -c -g -O2  conftest.c >&5
-conftest.c: In function 'main':
-conftest.c:99:6: error: '__int32' undeclared (first use in this function)
-conftest.c:99:6: note: each undeclared identifier is reported only once for each function it appears in
-conftest.c:99:15: error: expected expression before ')' token
-configure:25201: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-| 
-| #define PACKAGE_NAME "ucl"
-| #define PACKAGE_TARNAME "ucl"
-| #define PACKAGE_VERSION "1.03"
-| #define PACKAGE_STRING "ucl 1.03"
-| #define PACKAGE_BUGREPORT "markus@oberhumer.com"
-| #define ACC_ENDIAN_LITTLE_ENDIAN 1
-| #define PACKAGE "ucl"
-| #define VERSION "1.03"
-| #define STDC_HEADERS 1
-| #define HAVE_SYS_TYPES_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_INTTYPES_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
-| #ifdef __cplusplus
-| extern "C" void exit (int) throw ();
-| #endif
-| #define TIME_WITH_SYS_TIME 1
-| #define HAVE_ASSERT_H 1
-| #define HAVE_CTYPE_H 1
-| #define HAVE_DIRENT_H 1
-| #define HAVE_ERRNO_H 1
-| #define HAVE_FCNTL_H 1
-| #define HAVE_LIMITS_H 1
-| #define HAVE_MALLOC_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_SETJMP_H 1
-| #define HAVE_SIGNAL_H 1
-| #define HAVE_STDARG_H 1
-| #define HAVE_STDDEF_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_STDIO_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_TIME_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_UTIME_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_SYS_TIME_H 1
-| #define HAVE_SYS_TYPES_H 1
-| #define RETSIGTYPE void
-| #define SIZEOF_SHORT 2
-| #define SIZEOF_INT 4
-| #define SIZEOF_LONG 8
-| #define SIZEOF_PTRDIFF_T 8
-| #define SIZEOF_SIZE_T 8
-| #define SIZEOF_VOID_P 8
-| #define SIZEOF_CHAR_P 8
-| #define SIZEOF_LONG_LONG 8
-| #define SIZEOF_UNSIGNED_LONG_LONG 8
-| #define SIZEOF___INT64 0
-| #define SIZEOF_UNSIGNED___INT64 0
-| /* end confdefs.h.  */
-| #include <stdio.h>
-| #if HAVE_SYS_TYPES_H
-| # include <sys/types.h>
-| #endif
-| #if HAVE_SYS_STAT_H
-| # include <sys/stat.h>
-| #endif
-| #if STDC_HEADERS
-| # include <stdlib.h>
-| # include <stddef.h>
-| #else
-| # if HAVE_STDLIB_H
-| #  include <stdlib.h>
-| # endif
-| #endif
-| #if HAVE_STRING_H
-| # if !STDC_HEADERS && HAVE_MEMORY_H
-| #  include <memory.h>
-| # endif
-| # include <string.h>
-| #endif
-| #if HAVE_STRINGS_H
-| # include <strings.h>
-| #endif
-| #if HAVE_INTTYPES_H
-| # include <inttypes.h>
-| #else
-| # if HAVE_STDINT_H
-| #  include <stdint.h>
-| # endif
-| #endif
-| #if HAVE_UNISTD_H
-| # include <unistd.h>
-| #endif
-| int
-| main ()
-| {
-| if ((__int32 *) 0)
-|   return 0;
-| if (sizeof (__int32))
-|   return 0;
-|   ;
-|   return 0;
-| }
-configure:25224: result: no
+configure:25195: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
+configure:25201: $? = 0
+configure:25204: test -z 			 || test ! -s conftest.err
+configure:25207: $? = 0
+configure:25210: test -s conftest.o
+configure:25213: $? = 0
+configure:25224: result: yes
 configure:25227: checking size of __int32
-configure:25570: result: 0
+configure:25539: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+configure:25542: $? = 0
+configure:25544: ./conftest.exe
+configure:25547: $? = 0
+configure:25570: result: 4
 configure:25577: checking for unsigned __int32
-configure:25601: gcc -c -g -O2  conftest.c >&5
-conftest.c: In function 'main':
-conftest.c:100:15: error: expected ')' before '__int32'
-conftest.c:102:22: error: expected ')' before '__int32'
-configure:25607: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-| 
-| #define PACKAGE_NAME "ucl"
-| #define PACKAGE_TARNAME "ucl"
-| #define PACKAGE_VERSION "1.03"
-| #define PACKAGE_STRING "ucl 1.03"
-| #define PACKAGE_BUGREPORT "markus@oberhumer.com"
-| #define ACC_ENDIAN_LITTLE_ENDIAN 1
-| #define PACKAGE "ucl"
-| #define VERSION "1.03"
-| #define STDC_HEADERS 1
-| #define HAVE_SYS_TYPES_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_INTTYPES_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
-| #ifdef __cplusplus
-| extern "C" void exit (int) throw ();
-| #endif
-| #define TIME_WITH_SYS_TIME 1
-| #define HAVE_ASSERT_H 1
-| #define HAVE_CTYPE_H 1
-| #define HAVE_DIRENT_H 1
-| #define HAVE_ERRNO_H 1
-| #define HAVE_FCNTL_H 1
-| #define HAVE_LIMITS_H 1
-| #define HAVE_MALLOC_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_SETJMP_H 1
-| #define HAVE_SIGNAL_H 1
-| #define HAVE_STDARG_H 1
-| #define HAVE_STDDEF_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_STDIO_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_TIME_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_UTIME_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_SYS_TIME_H 1
-| #define HAVE_SYS_TYPES_H 1
-| #define RETSIGTYPE void
-| #define SIZEOF_SHORT 2
-| #define SIZEOF_INT 4
-| #define SIZEOF_LONG 8
-| #define SIZEOF_PTRDIFF_T 8
-| #define SIZEOF_SIZE_T 8
-| #define SIZEOF_VOID_P 8
-| #define SIZEOF_CHAR_P 8
-| #define SIZEOF_LONG_LONG 8
-| #define SIZEOF_UNSIGNED_LONG_LONG 8
-| #define SIZEOF___INT64 0
-| #define SIZEOF_UNSIGNED___INT64 0
-| #define SIZEOF___INT32 0
-| /* end confdefs.h.  */
-| #include <stdio.h>
-| #if HAVE_SYS_TYPES_H
-| # include <sys/types.h>
-| #endif
-| #if HAVE_SYS_STAT_H
-| # include <sys/stat.h>
-| #endif
-| #if STDC_HEADERS
-| # include <stdlib.h>
-| # include <stddef.h>
-| #else
-| # if HAVE_STDLIB_H
-| #  include <stdlib.h>
-| # endif
-| #endif
-| #if HAVE_STRING_H
-| # if !STDC_HEADERS && HAVE_MEMORY_H
-| #  include <memory.h>
-| # endif
-| # include <string.h>
-| #endif
-| #if HAVE_STRINGS_H
-| # include <strings.h>
-| #endif
-| #if HAVE_INTTYPES_H
-| # include <inttypes.h>
-| #else
-| # if HAVE_STDINT_H
-| #  include <stdint.h>
-| # endif
-| #endif
-| #if HAVE_UNISTD_H
-| # include <unistd.h>
-| #endif
-| int
-| main ()
-| {
-| if ((unsigned __int32 *) 0)
-|   return 0;
-| if (sizeof (unsigned __int32))
-|   return 0;
-|   ;
-|   return 0;
-| }
-configure:25630: result: no
+configure:25601: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
+configure:25607: $? = 0
+configure:25610: test -z 			 || test ! -s conftest.err
+configure:25613: $? = 0
+configure:25616: test -s conftest.o
+configure:25619: $? = 0
+configure:25630: result: yes
 configure:25633: checking size of unsigned __int32
-configure:25976: result: 0
+configure:25945: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+configure:25948: $? = 0
+configure:25950: ./conftest.exe
+configure:25953: $? = 0
+configure:25976: result: 4
 configure:25983: checking for intmax_t
-configure:26007: gcc -c -g -O2  conftest.c >&5
+configure:26007: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:26013: $? = 0
 configure:26016: test -z 			 || test ! -s conftest.err
 configure:26019: $? = 0
@@ -1604,13 +1363,17 @@ configure:26022: test -s conftest.o
 configure:26025: $? = 0
 configure:26036: result: yes
 configure:26039: checking size of intmax_t
-configure:26351: gcc -o conftest -g -O2   conftest.c  >&5
+configure:26351: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:26354: $? = 0
-configure:26356: ./conftest
+configure:26356: ./conftest.exe
 configure:26359: $? = 0
+err:winediag:WSASocketW Failed to create a socket of type SOCK_RAW, this requires special permissions.
+fixme:advapi:RegisterEventSourceW ((null),L"PandoraService.exe"): stub
+fixme:advapi:ReportEventW (0xcafe4242,0x0001,0x0000,0x00000000,(nil),0x0001,0x00000000,0x33f574,(nil)): stub
+err:eventlog:ReportEventW L"Socket Error # 10044\r\nSocket type not supported."
 configure:26382: result: 8
 configure:26389: checking for uintmax_t
-configure:26413: gcc -c -g -O2  conftest.c >&5
+configure:26413: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:26419: $? = 0
 configure:26422: test -z 			 || test ! -s conftest.err
 configure:26425: $? = 0
@@ -1618,13 +1381,13 @@ configure:26428: test -s conftest.o
 configure:26431: $? = 0
 configure:26442: result: yes
 configure:26445: checking size of uintmax_t
-configure:26757: gcc -o conftest -g -O2   conftest.c  >&5
+configure:26757: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:26760: $? = 0
-configure:26762: ./conftest
+configure:26762: ./conftest.exe
 configure:26765: $? = 0
 configure:26788: result: 8
 configure:26795: checking for intptr_t
-configure:26819: gcc -c -g -O2  conftest.c >&5
+configure:26819: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:26825: $? = 0
 configure:26828: test -z 			 || test ! -s conftest.err
 configure:26831: $? = 0
@@ -1632,13 +1395,13 @@ configure:26834: test -s conftest.o
 configure:26837: $? = 0
 configure:26848: result: yes
 configure:26851: checking size of intptr_t
-configure:27163: gcc -o conftest -g -O2   conftest.c  >&5
+configure:27163: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:27166: $? = 0
-configure:27168: ./conftest
+configure:27168: ./conftest.exe
 configure:27171: $? = 0
-configure:27194: result: 8
+configure:27194: result: 4
 configure:27201: checking for uintptr_t
-configure:27225: gcc -c -g -O2  conftest.c >&5
+configure:27225: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:27231: $? = 0
 configure:27234: test -z 			 || test ! -s conftest.err
 configure:27237: $? = 0
@@ -1646,13 +1409,13 @@ configure:27240: test -s conftest.o
 configure:27243: $? = 0
 configure:27254: result: yes
 configure:27257: checking size of uintptr_t
-configure:27569: gcc -o conftest -g -O2   conftest.c  >&5
+configure:27569: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:27572: $? = 0
-configure:27574: ./conftest
+configure:27574: ./conftest.exe
 configure:27577: $? = 0
-configure:27600: result: 8
+configure:27600: result: 4
 configure:27608: checking for float
-configure:27632: gcc -c -g -O2  conftest.c >&5
+configure:27632: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:27638: $? = 0
 configure:27641: test -z 			 || test ! -s conftest.err
 configure:27644: $? = 0
@@ -1660,13 +1423,13 @@ configure:27647: test -s conftest.o
 configure:27650: $? = 0
 configure:27661: result: yes
 configure:27664: checking size of float
-configure:27976: gcc -o conftest -g -O2   conftest.c  >&5
+configure:27976: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:27979: $? = 0
-configure:27981: ./conftest
+configure:27981: ./conftest.exe
 configure:27984: $? = 0
 configure:28007: result: 4
 configure:28014: checking for double
-configure:28038: gcc -c -g -O2  conftest.c >&5
+configure:28038: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:28044: $? = 0
 configure:28047: test -z 			 || test ! -s conftest.err
 configure:28050: $? = 0
@@ -1674,13 +1437,13 @@ configure:28053: test -s conftest.o
 configure:28056: $? = 0
 configure:28067: result: yes
 configure:28070: checking size of double
-configure:28382: gcc -o conftest -g -O2   conftest.c  >&5
+configure:28382: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:28385: $? = 0
-configure:28387: ./conftest
+configure:28387: ./conftest.exe
 configure:28390: $? = 0
 configure:28413: result: 8
 configure:28420: checking for long double
-configure:28444: gcc -c -g -O2  conftest.c >&5
+configure:28444: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:28450: $? = 0
 configure:28453: test -z 			 || test ! -s conftest.err
 configure:28456: $? = 0
@@ -1688,13 +1451,13 @@ configure:28459: test -s conftest.o
 configure:28462: $? = 0
 configure:28473: result: yes
 configure:28476: checking size of long double
-configure:28788: gcc -o conftest -g -O2   conftest.c  >&5
+configure:28788: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:28791: $? = 0
-configure:28793: ./conftest
+configure:28793: ./conftest.exe
 configure:28796: $? = 0
-configure:28819: result: 16
+configure:28819: result: 12
 configure:28827: checking for dev_t
-configure:28851: gcc -c -g -O2  conftest.c >&5
+configure:28851: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:28857: $? = 0
 configure:28860: test -z 			 || test ! -s conftest.err
 configure:28863: $? = 0
@@ -1702,13 +1465,13 @@ configure:28866: test -s conftest.o
 configure:28869: $? = 0
 configure:28880: result: yes
 configure:28883: checking size of dev_t
-configure:29195: gcc -o conftest -g -O2   conftest.c  >&5
+configure:29195: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:29198: $? = 0
-configure:29200: ./conftest
+configure:29200: ./conftest.exe
 configure:29203: $? = 0
-configure:29226: result: 8
+configure:29226: result: 4
 configure:29233: checking for fpos_t
-configure:29257: gcc -c -g -O2  conftest.c >&5
+configure:29257: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:29263: $? = 0
 configure:29266: test -z 			 || test ! -s conftest.err
 configure:29269: $? = 0
@@ -1716,13 +1479,13 @@ configure:29272: test -s conftest.o
 configure:29275: $? = 0
 configure:29286: result: yes
 configure:29289: checking size of fpos_t
-configure:29601: gcc -o conftest -g -O2   conftest.c  >&5
+configure:29601: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:29604: $? = 0
-configure:29606: ./conftest
+configure:29606: ./conftest.exe
 configure:29609: $? = 0
-configure:29632: result: 16
+configure:29632: result: 8
 configure:29639: checking for mode_t
-configure:29663: gcc -c -g -O2  conftest.c >&5
+configure:29663: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:29669: $? = 0
 configure:29672: test -z 			 || test ! -s conftest.err
 configure:29675: $? = 0
@@ -1730,21 +1493,21 @@ configure:29678: test -s conftest.o
 configure:29681: $? = 0
 configure:29692: result: yes
 configure:29695: checking size of mode_t
-configure:30007: gcc -o conftest -g -O2   conftest.c  >&5
+configure:30007: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:30010: $? = 0
-configure:30012: ./conftest
+configure:30012: ./conftest.exe
 configure:30015: $? = 0
-configure:30038: result: 4
+configure:30038: result: 2
 configure:30045: checking for off_t
 configure:30098: result: yes
 configure:30101: checking size of off_t
-configure:30413: gcc -o conftest -g -O2   conftest.c  >&5
+configure:30413: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:30416: $? = 0
-configure:30418: ./conftest
+configure:30418: ./conftest.exe
 configure:30421: $? = 0
 configure:30444: result: 8
 configure:30451: checking for ssize_t
-configure:30475: gcc -c -g -O2  conftest.c >&5
+configure:30475: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:30481: $? = 0
 configure:30484: test -z 			 || test ! -s conftest.err
 configure:30487: $? = 0
@@ -1752,13 +1515,13 @@ configure:30490: test -s conftest.o
 configure:30493: $? = 0
 configure:30504: result: yes
 configure:30507: checking size of ssize_t
-configure:30819: gcc -o conftest -g -O2   conftest.c  >&5
+configure:30819: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:30822: $? = 0
-configure:30824: ./conftest
+configure:30824: ./conftest.exe
 configure:30827: $? = 0
-configure:30850: result: 8
+configure:30850: result: 4
 configure:30857: checking for time_t
-configure:30881: gcc -c -g -O2  conftest.c >&5
+configure:30881: i686-w64-mingw32-gcc -c -g -O2  conftest.c >&5
 configure:30887: $? = 0
 configure:30890: test -z 			 || test ! -s conftest.err
 configure:30893: $? = 0
@@ -1766,26 +1529,26 @@ configure:30896: test -s conftest.o
 configure:30899: $? = 0
 configure:30910: result: yes
 configure:30913: checking size of time_t
-configure:31225: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31225: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31228: $? = 0
-configure:31230: ./conftest
+configure:31230: ./conftest.exe
 configure:31233: $? = 0
-configure:31256: result: 8
+configure:31256: result: 4
 configure:31313: checking for access
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for alloca
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 conftest.c:102:6: warning: conflicting types for built-in function 'alloca' [enabled by default]
-/tmp/ccmmkqUV.o:(.data+0x0): undefined reference to `alloca'
-/tmp/ccmmkqUV.o: In function `main':
-/media/null/project/GraVitoN/graviton/code/external/ucl/conftest.c:118: undefined reference to `alloca'
-collect2: error: ld returned 1 exit status
+/tmp/ccisKoYU.o:conftest.c:(.data+0x0): undefined reference to `_alloca'
+/tmp/ccisKoYU.o: In function `main':
+/media/null/project/GraVitoN/graviton/code/external/ucl/conftest.c:118: undefined reference to `_alloca'
+collect2: ld returned 1 exit status
 configure:31376: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -1796,6 +1559,7 @@ configure: failed program was:
 | #define PACKAGE_STRING "ucl 1.03"
 | #define PACKAGE_BUGREPORT "markus@oberhumer.com"
 | #define ACC_ENDIAN_LITTLE_ENDIAN 1
+| #define _FILE_OFFSET_BITS 64
 | #define PACKAGE "ucl"
 | #define VERSION "1.03"
 | #define STDC_HEADERS 1
@@ -1808,9 +1572,8 @@ configure: failed program was:
 | #define HAVE_INTTYPES_H 1
 | #define HAVE_STDINT_H 1
 | #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
 | #ifdef __cplusplus
-| extern "C" void exit (int) throw ();
+| extern "C" void exit (int);
 | #endif
 | #define TIME_WITH_SYS_TIME 1
 | #define HAVE_ASSERT_H 1
@@ -1839,30 +1602,30 @@ configure: failed program was:
 | #define RETSIGTYPE void
 | #define SIZEOF_SHORT 2
 | #define SIZEOF_INT 4
-| #define SIZEOF_LONG 8
-| #define SIZEOF_PTRDIFF_T 8
-| #define SIZEOF_SIZE_T 8
-| #define SIZEOF_VOID_P 8
-| #define SIZEOF_CHAR_P 8
+| #define SIZEOF_LONG 4
+| #define SIZEOF_PTRDIFF_T 4
+| #define SIZEOF_SIZE_T 4
+| #define SIZEOF_VOID_P 4
+| #define SIZEOF_CHAR_P 4
 | #define SIZEOF_LONG_LONG 8
 | #define SIZEOF_UNSIGNED_LONG_LONG 8
-| #define SIZEOF___INT64 0
-| #define SIZEOF_UNSIGNED___INT64 0
-| #define SIZEOF___INT32 0
-| #define SIZEOF_UNSIGNED___INT32 0
+| #define SIZEOF___INT64 8
+| #define SIZEOF_UNSIGNED___INT64 8
+| #define SIZEOF___INT32 4
+| #define SIZEOF_UNSIGNED___INT32 4
 | #define SIZEOF_INTMAX_T 8
 | #define SIZEOF_UINTMAX_T 8
-| #define SIZEOF_INTPTR_T 8
-| #define SIZEOF_UINTPTR_T 8
+| #define SIZEOF_INTPTR_T 4
+| #define SIZEOF_UINTPTR_T 4
 | #define SIZEOF_FLOAT 4
 | #define SIZEOF_DOUBLE 8
-| #define SIZEOF_LONG_DOUBLE 16
-| #define SIZEOF_DEV_T 8
-| #define SIZEOF_FPOS_T 16
-| #define SIZEOF_MODE_T 4
+| #define SIZEOF_LONG_DOUBLE 12
+| #define SIZEOF_DEV_T 4
+| #define SIZEOF_FPOS_T 8
+| #define SIZEOF_MODE_T 2
 | #define SIZEOF_OFF_T 8
-| #define SIZEOF_SSIZE_T 8
-| #define SIZEOF_TIME_T 8
+| #define SIZEOF_SSIZE_T 4
+| #define SIZEOF_TIME_T 4
 | #define HAVE_ACCESS 1
 | /* end confdefs.h.  */
 | /* Define alloca to an innocuous variant, in case <limits.h> declares alloca.
@@ -1911,617 +1674,715 @@ configure: failed program was:
 | }
 configure:31400: result: no
 configure:31313: checking for atexit
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for atoi
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for atol
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for chmod
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for chown
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-configure:31376: $? = 0
-configure:31379: test -z 			 || test ! -s conftest.err
-configure:31382: $? = 0
-configure:31385: test -s conftest
-configure:31388: $? = 0
-configure:31400: result: yes
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+/tmp/ccSkZeqC.o:conftest.c:(.data+0x0): undefined reference to `_chown'
+/tmp/ccSkZeqC.o: In function `main':
+/media/null/project/GraVitoN/graviton/code/external/ucl/conftest.c:122: undefined reference to `_chown'
+collect2: ld returned 1 exit status
+configure:31376: $? = 1
+configure: failed program was:
+| /* confdefs.h.  */
+| 
+| #define PACKAGE_NAME "ucl"
+| #define PACKAGE_TARNAME "ucl"
+| #define PACKAGE_VERSION "1.03"
+| #define PACKAGE_STRING "ucl 1.03"
+| #define PACKAGE_BUGREPORT "markus@oberhumer.com"
+| #define ACC_ENDIAN_LITTLE_ENDIAN 1
+| #define _FILE_OFFSET_BITS 64
+| #define PACKAGE "ucl"
+| #define VERSION "1.03"
+| #define STDC_HEADERS 1
+| #define HAVE_SYS_TYPES_H 1
+| #define HAVE_SYS_STAT_H 1
+| #define HAVE_STDLIB_H 1
+| #define HAVE_STRING_H 1
+| #define HAVE_MEMORY_H 1
+| #define HAVE_STRINGS_H 1
+| #define HAVE_INTTYPES_H 1
+| #define HAVE_STDINT_H 1
+| #define HAVE_UNISTD_H 1
+| #ifdef __cplusplus
+| extern "C" void exit (int);
+| #endif
+| #define TIME_WITH_SYS_TIME 1
+| #define HAVE_ASSERT_H 1
+| #define HAVE_CTYPE_H 1
+| #define HAVE_DIRENT_H 1
+| #define HAVE_ERRNO_H 1
+| #define HAVE_FCNTL_H 1
+| #define HAVE_LIMITS_H 1
+| #define HAVE_MALLOC_H 1
+| #define HAVE_MEMORY_H 1
+| #define HAVE_SETJMP_H 1
+| #define HAVE_SIGNAL_H 1
+| #define HAVE_STDARG_H 1
+| #define HAVE_STDDEF_H 1
+| #define HAVE_STDINT_H 1
+| #define HAVE_STDIO_H 1
+| #define HAVE_STDLIB_H 1
+| #define HAVE_STRING_H 1
+| #define HAVE_STRINGS_H 1
+| #define HAVE_TIME_H 1
+| #define HAVE_UNISTD_H 1
+| #define HAVE_UTIME_H 1
+| #define HAVE_SYS_STAT_H 1
+| #define HAVE_SYS_TIME_H 1
+| #define HAVE_SYS_TYPES_H 1
+| #define RETSIGTYPE void
+| #define SIZEOF_SHORT 2
+| #define SIZEOF_INT 4
+| #define SIZEOF_LONG 4
+| #define SIZEOF_PTRDIFF_T 4
+| #define SIZEOF_SIZE_T 4
+| #define SIZEOF_VOID_P 4
+| #define SIZEOF_CHAR_P 4
+| #define SIZEOF_LONG_LONG 8
+| #define SIZEOF_UNSIGNED_LONG_LONG 8
+| #define SIZEOF___INT64 8
+| #define SIZEOF_UNSIGNED___INT64 8
+| #define SIZEOF___INT32 4
+| #define SIZEOF_UNSIGNED___INT32 4
+| #define SIZEOF_INTMAX_T 8
+| #define SIZEOF_UINTMAX_T 8
+| #define SIZEOF_INTPTR_T 4
+| #define SIZEOF_UINTPTR_T 4
+| #define SIZEOF_FLOAT 4
+| #define SIZEOF_DOUBLE 8
+| #define SIZEOF_LONG_DOUBLE 12
+| #define SIZEOF_DEV_T 4
+| #define SIZEOF_FPOS_T 8
+| #define SIZEOF_MODE_T 2
+| #define SIZEOF_OFF_T 8
+| #define SIZEOF_SSIZE_T 4
+| #define SIZEOF_TIME_T 4
+| #define HAVE_ACCESS 1
+| #define HAVE_ATEXIT 1
+| #define HAVE_ATOI 1
+| #define HAVE_ATOL 1
+| #define HAVE_CHMOD 1
+| /* end confdefs.h.  */
+| /* Define chown to an innocuous variant, in case <limits.h> declares chown.
+|    For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+| #define chown innocuous_chown
+| 
+| /* System header to define __stub macros and hopefully few prototypes,
+|     which can conflict with char chown (); below.
+|     Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+|     <limits.h> exists even on freestanding compilers.  */
+| 
+| #ifdef __STDC__
+| # include <limits.h>
+| #else
+| # include <assert.h>
+| #endif
+| 
+| #undef chown
+| 
+| /* Override any gcc2 internal prototype to avoid an error.  */
+| #ifdef __cplusplus
+| extern "C"
+| {
+| #endif
+| /* We use char because int might match the return type of a gcc2
+|    builtin and then its argument prototype would still apply.  */
+| char chown ();
+| /* The GNU C library defines this for functions which it implements
+|     to always fail with ENOSYS.  Some functions are actually named
+|     something starting with __ and the normal name is an alias.  */
+| #if defined (__stub_chown) || defined (__stub___chown)
+| choke me
+| #else
+| char (*f) () = chown;
+| #endif
+| #ifdef __cplusplus
+| }
+| #endif
+| 
+| int
+| main ()
+| {
+| return f != chown;
+|   ;
+|   return 0;
+| }
+configure:31400: result: no
 configure:31313: checking for ctime
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for difftime
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for fstat
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for gettimeofday
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for gmtime
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for localtime
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for longjmp
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for lstat
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-configure:31376: $? = 0
-configure:31379: test -z 			 || test ! -s conftest.err
-configure:31382: $? = 0
-configure:31385: test -s conftest
-configure:31388: $? = 0
-configure:31400: result: yes
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+/tmp/ccVLBf82.o:conftest.c:(.data+0x0): undefined reference to `_lstat'
+/tmp/ccVLBf82.o: In function `main':
+/media/null/project/GraVitoN/graviton/code/external/ucl/conftest.c:129: undefined reference to `_lstat'
+collect2: ld returned 1 exit status
+configure:31376: $? = 1
+configure: failed program was:
+| /* confdefs.h.  */
+| 
+| #define PACKAGE_NAME "ucl"
+| #define PACKAGE_TARNAME "ucl"
+| #define PACKAGE_VERSION "1.03"
+| #define PACKAGE_STRING "ucl 1.03"
+| #define PACKAGE_BUGREPORT "markus@oberhumer.com"
+| #define ACC_ENDIAN_LITTLE_ENDIAN 1
+| #define _FILE_OFFSET_BITS 64
+| #define PACKAGE "ucl"
+| #define VERSION "1.03"
+| #define STDC_HEADERS 1
+| #define HAVE_SYS_TYPES_H 1
+| #define HAVE_SYS_STAT_H 1
+| #define HAVE_STDLIB_H 1
+| #define HAVE_STRING_H 1
+| #define HAVE_MEMORY_H 1
+| #define HAVE_STRINGS_H 1
+| #define HAVE_INTTYPES_H 1
+| #define HAVE_STDINT_H 1
+| #define HAVE_UNISTD_H 1
+| #ifdef __cplusplus
+| extern "C" void exit (int);
+| #endif
+| #define TIME_WITH_SYS_TIME 1
+| #define HAVE_ASSERT_H 1
+| #define HAVE_CTYPE_H 1
+| #define HAVE_DIRENT_H 1
+| #define HAVE_ERRNO_H 1
+| #define HAVE_FCNTL_H 1
+| #define HAVE_LIMITS_H 1
+| #define HAVE_MALLOC_H 1
+| #define HAVE_MEMORY_H 1
+| #define HAVE_SETJMP_H 1
+| #define HAVE_SIGNAL_H 1
+| #define HAVE_STDARG_H 1
+| #define HAVE_STDDEF_H 1
+| #define HAVE_STDINT_H 1
+| #define HAVE_STDIO_H 1
+| #define HAVE_STDLIB_H 1
+| #define HAVE_STRING_H 1
+| #define HAVE_STRINGS_H 1
+| #define HAVE_TIME_H 1
+| #define HAVE_UNISTD_H 1
+| #define HAVE_UTIME_H 1
+| #define HAVE_SYS_STAT_H 1
+| #define HAVE_SYS_TIME_H 1
+| #define HAVE_SYS_TYPES_H 1
+| #define RETSIGTYPE void
+| #define SIZEOF_SHORT 2
+| #define SIZEOF_INT 4
+| #define SIZEOF_LONG 4
+| #define SIZEOF_PTRDIFF_T 4
+| #define SIZEOF_SIZE_T 4
+| #define SIZEOF_VOID_P 4
+| #define SIZEOF_CHAR_P 4
+| #define SIZEOF_LONG_LONG 8
+| #define SIZEOF_UNSIGNED_LONG_LONG 8
+| #define SIZEOF___INT64 8
+| #define SIZEOF_UNSIGNED___INT64 8
+| #define SIZEOF___INT32 4
+| #define SIZEOF_UNSIGNED___INT32 4
+| #define SIZEOF_INTMAX_T 8
+| #define SIZEOF_UINTMAX_T 8
+| #define SIZEOF_INTPTR_T 4
+| #define SIZEOF_UINTPTR_T 4
+| #define SIZEOF_FLOAT 4
+| #define SIZEOF_DOUBLE 8
+| #define SIZEOF_LONG_DOUBLE 12
+| #define SIZEOF_DEV_T 4
+| #define SIZEOF_FPOS_T 8
+| #define SIZEOF_MODE_T 2
+| #define SIZEOF_OFF_T 8
+| #define SIZEOF_SSIZE_T 4
+| #define SIZEOF_TIME_T 4
+| #define HAVE_ACCESS 1
+| #define HAVE_ATEXIT 1
+| #define HAVE_ATOI 1
+| #define HAVE_ATOL 1
+| #define HAVE_CHMOD 1
+| #define HAVE_CTIME 1
+| #define HAVE_DIFFTIME 1
+| #define HAVE_FSTAT 1
+| #define HAVE_GETTIMEOFDAY 1
+| #define HAVE_GMTIME 1
+| #define HAVE_LOCALTIME 1
+| #define HAVE_LONGJMP 1
+| /* end confdefs.h.  */
+| /* Define lstat to an innocuous variant, in case <limits.h> declares lstat.
+|    For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+| #define lstat innocuous_lstat
+| 
+| /* System header to define __stub macros and hopefully few prototypes,
+|     which can conflict with char lstat (); below.
+|     Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+|     <limits.h> exists even on freestanding compilers.  */
+| 
+| #ifdef __STDC__
+| # include <limits.h>
+| #else
+| # include <assert.h>
+| #endif
+| 
+| #undef lstat
+| 
+| /* Override any gcc2 internal prototype to avoid an error.  */
+| #ifdef __cplusplus
+| extern "C"
+| {
+| #endif
+| /* We use char because int might match the return type of a gcc2
+|    builtin and then its argument prototype would still apply.  */
+| char lstat ();
+| /* The GNU C library defines this for functions which it implements
+|     to always fail with ENOSYS.  Some functions are actually named
+|     something starting with __ and the normal name is an alias.  */
+| #if defined (__stub_lstat) || defined (__stub___lstat)
+| choke me
+| #else
+| char (*f) () = lstat;
+| #endif
+| #ifdef __cplusplus
+| }
+| #endif
+| 
+| int
+| main ()
+| {
+| return f != lstat;
+|   ;
+|   return 0;
+| }
+configure:31400: result: no
 configure:31313: checking for memcmp
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:115:6: warning: conflicting types for built-in function 'memcmp' [enabled by default]
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+conftest.c:113:6: warning: conflicting types for built-in function 'memcmp' [enabled by default]
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for memcpy
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:116:6: warning: conflicting types for built-in function 'memcpy' [enabled by default]
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+conftest.c:114:6: warning: conflicting types for built-in function 'memcpy' [enabled by default]
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for memmove
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:117:6: warning: conflicting types for built-in function 'memmove' [enabled by default]
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+conftest.c:115:6: warning: conflicting types for built-in function 'memmove' [enabled by default]
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for memset
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:118:6: warning: conflicting types for built-in function 'memset' [enabled by default]
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+conftest.c:116:6: warning: conflicting types for built-in function 'memset' [enabled by default]
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for mktime
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for qsort
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for raise
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for setjmp
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-configure:31376: $? = 0
-configure:31379: test -z 			 || test ! -s conftest.err
-configure:31382: $? = 0
-configure:31385: test -s conftest
-configure:31388: $? = 0
-configure:31400: result: yes
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+/tmp/ccEjZ6Wo.o:conftest.c:(.data+0x0): undefined reference to `_setjmp'
+/tmp/ccEjZ6Wo.o: In function `main':
+/media/null/project/GraVitoN/graviton/code/external/ucl/conftest.c:136: undefined reference to `_setjmp'
+collect2: ld returned 1 exit status
+configure:31376: $? = 1
+configure: failed program was:
+| /* confdefs.h.  */
+| 
+| #define PACKAGE_NAME "ucl"
+| #define PACKAGE_TARNAME "ucl"
+| #define PACKAGE_VERSION "1.03"
+| #define PACKAGE_STRING "ucl 1.03"
+| #define PACKAGE_BUGREPORT "markus@oberhumer.com"
+| #define ACC_ENDIAN_LITTLE_ENDIAN 1
+| #define _FILE_OFFSET_BITS 64
+| #define PACKAGE "ucl"
+| #define VERSION "1.03"
+| #define STDC_HEADERS 1
+| #define HAVE_SYS_TYPES_H 1
+| #define HAVE_SYS_STAT_H 1
+| #define HAVE_STDLIB_H 1
+| #define HAVE_STRING_H 1
+| #define HAVE_MEMORY_H 1
+| #define HAVE_STRINGS_H 1
+| #define HAVE_INTTYPES_H 1
+| #define HAVE_STDINT_H 1
+| #define HAVE_UNISTD_H 1
+| #ifdef __cplusplus
+| extern "C" void exit (int);
+| #endif
+| #define TIME_WITH_SYS_TIME 1
+| #define HAVE_ASSERT_H 1
+| #define HAVE_CTYPE_H 1
+| #define HAVE_DIRENT_H 1
+| #define HAVE_ERRNO_H 1
+| #define HAVE_FCNTL_H 1
+| #define HAVE_LIMITS_H 1
+| #define HAVE_MALLOC_H 1
+| #define HAVE_MEMORY_H 1
+| #define HAVE_SETJMP_H 1
+| #define HAVE_SIGNAL_H 1
+| #define HAVE_STDARG_H 1
+| #define HAVE_STDDEF_H 1
+| #define HAVE_STDINT_H 1
+| #define HAVE_STDIO_H 1
+| #define HAVE_STDLIB_H 1
+| #define HAVE_STRING_H 1
+| #define HAVE_STRINGS_H 1
+| #define HAVE_TIME_H 1
+| #define HAVE_UNISTD_H 1
+| #define HAVE_UTIME_H 1
+| #define HAVE_SYS_STAT_H 1
+| #define HAVE_SYS_TIME_H 1
+| #define HAVE_SYS_TYPES_H 1
+| #define RETSIGTYPE void
+| #define SIZEOF_SHORT 2
+| #define SIZEOF_INT 4
+| #define SIZEOF_LONG 4
+| #define SIZEOF_PTRDIFF_T 4
+| #define SIZEOF_SIZE_T 4
+| #define SIZEOF_VOID_P 4
+| #define SIZEOF_CHAR_P 4
+| #define SIZEOF_LONG_LONG 8
+| #define SIZEOF_UNSIGNED_LONG_LONG 8
+| #define SIZEOF___INT64 8
+| #define SIZEOF_UNSIGNED___INT64 8
+| #define SIZEOF___INT32 4
+| #define SIZEOF_UNSIGNED___INT32 4
+| #define SIZEOF_INTMAX_T 8
+| #define SIZEOF_UINTMAX_T 8
+| #define SIZEOF_INTPTR_T 4
+| #define SIZEOF_UINTPTR_T 4
+| #define SIZEOF_FLOAT 4
+| #define SIZEOF_DOUBLE 8
+| #define SIZEOF_LONG_DOUBLE 12
+| #define SIZEOF_DEV_T 4
+| #define SIZEOF_FPOS_T 8
+| #define SIZEOF_MODE_T 2
+| #define SIZEOF_OFF_T 8
+| #define SIZEOF_SSIZE_T 4
+| #define SIZEOF_TIME_T 4
+| #define HAVE_ACCESS 1
+| #define HAVE_ATEXIT 1
+| #define HAVE_ATOI 1
+| #define HAVE_ATOL 1
+| #define HAVE_CHMOD 1
+| #define HAVE_CTIME 1
+| #define HAVE_DIFFTIME 1
+| #define HAVE_FSTAT 1
+| #define HAVE_GETTIMEOFDAY 1
+| #define HAVE_GMTIME 1
+| #define HAVE_LOCALTIME 1
+| #define HAVE_LONGJMP 1
+| #define HAVE_MEMCMP 1
+| #define HAVE_MEMCPY 1
+| #define HAVE_MEMMOVE 1
+| #define HAVE_MEMSET 1
+| #define HAVE_MKTIME 1
+| #define HAVE_QSORT 1
+| #define HAVE_RAISE 1
+| /* end confdefs.h.  */
+| /* Define setjmp to an innocuous variant, in case <limits.h> declares setjmp.
+|    For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+| #define setjmp innocuous_setjmp
+| 
+| /* System header to define __stub macros and hopefully few prototypes,
+|     which can conflict with char setjmp (); below.
+|     Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+|     <limits.h> exists even on freestanding compilers.  */
+| 
+| #ifdef __STDC__
+| # include <limits.h>
+| #else
+| # include <assert.h>
+| #endif
+| 
+| #undef setjmp
+| 
+| /* Override any gcc2 internal prototype to avoid an error.  */
+| #ifdef __cplusplus
+| extern "C"
+| {
+| #endif
+| /* We use char because int might match the return type of a gcc2
+|    builtin and then its argument prototype would still apply.  */
+| char setjmp ();
+| /* The GNU C library defines this for functions which it implements
+|     to always fail with ENOSYS.  Some functions are actually named
+|     something starting with __ and the normal name is an alias.  */
+| #if defined (__stub_setjmp) || defined (__stub___setjmp)
+| choke me
+| #else
+| char (*f) () = setjmp;
+| #endif
+| #ifdef __cplusplus
+| }
+| #endif
+| 
+| int
+| main ()
+| {
+| return f != setjmp;
+|   ;
+|   return 0;
+| }
+configure:31400: result: no
 configure:31313: checking for signal
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for snprintf
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:124:6: warning: conflicting types for built-in function 'snprintf' [enabled by default]
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+conftest.c:121:6: warning: conflicting types for built-in function 'snprintf' [enabled by default]
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for strcasecmp
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:125:6: warning: conflicting types for built-in function 'strcasecmp' [enabled by default]
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+conftest.c:122:6: warning: conflicting types for built-in function 'strcasecmp' [enabled by default]
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for strchr
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:126:6: warning: conflicting types for built-in function 'strchr' [enabled by default]
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+conftest.c:123:6: warning: conflicting types for built-in function 'strchr' [enabled by default]
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for strdup
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:127:6: warning: conflicting types for built-in function 'strdup' [enabled by default]
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+conftest.c:124:6: warning: conflicting types for built-in function 'strdup' [enabled by default]
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for strerror
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for strftime
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:129:6: warning: conflicting types for built-in function 'strftime' [enabled by default]
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+conftest.c:126:6: warning: conflicting types for built-in function 'strftime' [enabled by default]
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for stricmp
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-/tmp/ccS3xN4P.o:(.data+0x0): undefined reference to `stricmp'
-/tmp/ccS3xN4P.o: In function `main':
-/media/null/project/GraVitoN/graviton/code/external/ucl/conftest.c:146: undefined reference to `stricmp'
-collect2: error: ld returned 1 exit status
-configure:31376: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-| 
-| #define PACKAGE_NAME "ucl"
-| #define PACKAGE_TARNAME "ucl"
-| #define PACKAGE_VERSION "1.03"
-| #define PACKAGE_STRING "ucl 1.03"
-| #define PACKAGE_BUGREPORT "markus@oberhumer.com"
-| #define ACC_ENDIAN_LITTLE_ENDIAN 1
-| #define PACKAGE "ucl"
-| #define VERSION "1.03"
-| #define STDC_HEADERS 1
-| #define HAVE_SYS_TYPES_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_INTTYPES_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
-| #ifdef __cplusplus
-| extern "C" void exit (int) throw ();
-| #endif
-| #define TIME_WITH_SYS_TIME 1
-| #define HAVE_ASSERT_H 1
-| #define HAVE_CTYPE_H 1
-| #define HAVE_DIRENT_H 1
-| #define HAVE_ERRNO_H 1
-| #define HAVE_FCNTL_H 1
-| #define HAVE_LIMITS_H 1
-| #define HAVE_MALLOC_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_SETJMP_H 1
-| #define HAVE_SIGNAL_H 1
-| #define HAVE_STDARG_H 1
-| #define HAVE_STDDEF_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_STDIO_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_TIME_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_UTIME_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_SYS_TIME_H 1
-| #define HAVE_SYS_TYPES_H 1
-| #define RETSIGTYPE void
-| #define SIZEOF_SHORT 2
-| #define SIZEOF_INT 4
-| #define SIZEOF_LONG 8
-| #define SIZEOF_PTRDIFF_T 8
-| #define SIZEOF_SIZE_T 8
-| #define SIZEOF_VOID_P 8
-| #define SIZEOF_CHAR_P 8
-| #define SIZEOF_LONG_LONG 8
-| #define SIZEOF_UNSIGNED_LONG_LONG 8
-| #define SIZEOF___INT64 0
-| #define SIZEOF_UNSIGNED___INT64 0
-| #define SIZEOF___INT32 0
-| #define SIZEOF_UNSIGNED___INT32 0
-| #define SIZEOF_INTMAX_T 8
-| #define SIZEOF_UINTMAX_T 8
-| #define SIZEOF_INTPTR_T 8
-| #define SIZEOF_UINTPTR_T 8
-| #define SIZEOF_FLOAT 4
-| #define SIZEOF_DOUBLE 8
-| #define SIZEOF_LONG_DOUBLE 16
-| #define SIZEOF_DEV_T 8
-| #define SIZEOF_FPOS_T 16
-| #define SIZEOF_MODE_T 4
-| #define SIZEOF_OFF_T 8
-| #define SIZEOF_SSIZE_T 8
-| #define SIZEOF_TIME_T 8
-| #define HAVE_ACCESS 1
-| #define HAVE_ATEXIT 1
-| #define HAVE_ATOI 1
-| #define HAVE_ATOL 1
-| #define HAVE_CHMOD 1
-| #define HAVE_CHOWN 1
-| #define HAVE_CTIME 1
-| #define HAVE_DIFFTIME 1
-| #define HAVE_FSTAT 1
-| #define HAVE_GETTIMEOFDAY 1
-| #define HAVE_GMTIME 1
-| #define HAVE_LOCALTIME 1
-| #define HAVE_LONGJMP 1
-| #define HAVE_LSTAT 1
-| #define HAVE_MEMCMP 1
-| #define HAVE_MEMCPY 1
-| #define HAVE_MEMMOVE 1
-| #define HAVE_MEMSET 1
-| #define HAVE_MKTIME 1
-| #define HAVE_QSORT 1
-| #define HAVE_RAISE 1
-| #define HAVE_SETJMP 1
-| #define HAVE_SIGNAL 1
-| #define HAVE_SNPRINTF 1
-| #define HAVE_STRCASECMP 1
-| #define HAVE_STRCHR 1
-| #define HAVE_STRDUP 1
-| #define HAVE_STRERROR 1
-| #define HAVE_STRFTIME 1
-| /* end confdefs.h.  */
-| /* Define stricmp to an innocuous variant, in case <limits.h> declares stricmp.
-|    For example, HP-UX 11i <limits.h> declares gettimeofday.  */
-| #define stricmp innocuous_stricmp
-| 
-| /* System header to define __stub macros and hopefully few prototypes,
-|     which can conflict with char stricmp (); below.
-|     Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-|     <limits.h> exists even on freestanding compilers.  */
-| 
-| #ifdef __STDC__
-| # include <limits.h>
-| #else
-| # include <assert.h>
-| #endif
-| 
-| #undef stricmp
-| 
-| /* Override any gcc2 internal prototype to avoid an error.  */
-| #ifdef __cplusplus
-| extern "C"
-| {
-| #endif
-| /* We use char because int might match the return type of a gcc2
-|    builtin and then its argument prototype would still apply.  */
-| char stricmp ();
-| /* The GNU C library defines this for functions which it implements
-|     to always fail with ENOSYS.  Some functions are actually named
-|     something starting with __ and the normal name is an alias.  */
-| #if defined (__stub_stricmp) || defined (__stub___stricmp)
-| choke me
-| #else
-| char (*f) () = stricmp;
-| #endif
-| #ifdef __cplusplus
-| }
-| #endif
-| 
-| int
-| main ()
-| {
-| return f != stricmp;
-|   ;
-|   return 0;
-| }
-configure:31400: result: no
-configure:31313: checking for strncasecmp
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:130:6: warning: conflicting types for built-in function 'strncasecmp' [enabled by default]
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
+configure:31388: $? = 0
+configure:31400: result: yes
+configure:31313: checking for strncasecmp
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+conftest.c:128:6: warning: conflicting types for built-in function 'strncasecmp' [enabled by default]
+configure:31376: $? = 0
+configure:31379: test -z 			 || test ! -s conftest.err
+configure:31382: $? = 0
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for strnicmp
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-/tmp/ccgEBiZ9.o:(.data+0x0): undefined reference to `strnicmp'
-/tmp/ccgEBiZ9.o: In function `main':
-/media/null/project/GraVitoN/graviton/code/external/ucl/conftest.c:147: undefined reference to `strnicmp'
-collect2: error: ld returned 1 exit status
-configure:31376: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-| 
-| #define PACKAGE_NAME "ucl"
-| #define PACKAGE_TARNAME "ucl"
-| #define PACKAGE_VERSION "1.03"
-| #define PACKAGE_STRING "ucl 1.03"
-| #define PACKAGE_BUGREPORT "markus@oberhumer.com"
-| #define ACC_ENDIAN_LITTLE_ENDIAN 1
-| #define PACKAGE "ucl"
-| #define VERSION "1.03"
-| #define STDC_HEADERS 1
-| #define HAVE_SYS_TYPES_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_INTTYPES_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
-| #ifdef __cplusplus
-| extern "C" void exit (int) throw ();
-| #endif
-| #define TIME_WITH_SYS_TIME 1
-| #define HAVE_ASSERT_H 1
-| #define HAVE_CTYPE_H 1
-| #define HAVE_DIRENT_H 1
-| #define HAVE_ERRNO_H 1
-| #define HAVE_FCNTL_H 1
-| #define HAVE_LIMITS_H 1
-| #define HAVE_MALLOC_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_SETJMP_H 1
-| #define HAVE_SIGNAL_H 1
-| #define HAVE_STDARG_H 1
-| #define HAVE_STDDEF_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_STDIO_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_TIME_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_UTIME_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_SYS_TIME_H 1
-| #define HAVE_SYS_TYPES_H 1
-| #define RETSIGTYPE void
-| #define SIZEOF_SHORT 2
-| #define SIZEOF_INT 4
-| #define SIZEOF_LONG 8
-| #define SIZEOF_PTRDIFF_T 8
-| #define SIZEOF_SIZE_T 8
-| #define SIZEOF_VOID_P 8
-| #define SIZEOF_CHAR_P 8
-| #define SIZEOF_LONG_LONG 8
-| #define SIZEOF_UNSIGNED_LONG_LONG 8
-| #define SIZEOF___INT64 0
-| #define SIZEOF_UNSIGNED___INT64 0
-| #define SIZEOF___INT32 0
-| #define SIZEOF_UNSIGNED___INT32 0
-| #define SIZEOF_INTMAX_T 8
-| #define SIZEOF_UINTMAX_T 8
-| #define SIZEOF_INTPTR_T 8
-| #define SIZEOF_UINTPTR_T 8
-| #define SIZEOF_FLOAT 4
-| #define SIZEOF_DOUBLE 8
-| #define SIZEOF_LONG_DOUBLE 16
-| #define SIZEOF_DEV_T 8
-| #define SIZEOF_FPOS_T 16
-| #define SIZEOF_MODE_T 4
-| #define SIZEOF_OFF_T 8
-| #define SIZEOF_SSIZE_T 8
-| #define SIZEOF_TIME_T 8
-| #define HAVE_ACCESS 1
-| #define HAVE_ATEXIT 1
-| #define HAVE_ATOI 1
-| #define HAVE_ATOL 1
-| #define HAVE_CHMOD 1
-| #define HAVE_CHOWN 1
-| #define HAVE_CTIME 1
-| #define HAVE_DIFFTIME 1
-| #define HAVE_FSTAT 1
-| #define HAVE_GETTIMEOFDAY 1
-| #define HAVE_GMTIME 1
-| #define HAVE_LOCALTIME 1
-| #define HAVE_LONGJMP 1
-| #define HAVE_LSTAT 1
-| #define HAVE_MEMCMP 1
-| #define HAVE_MEMCPY 1
-| #define HAVE_MEMMOVE 1
-| #define HAVE_MEMSET 1
-| #define HAVE_MKTIME 1
-| #define HAVE_QSORT 1
-| #define HAVE_RAISE 1
-| #define HAVE_SETJMP 1
-| #define HAVE_SIGNAL 1
-| #define HAVE_SNPRINTF 1
-| #define HAVE_STRCASECMP 1
-| #define HAVE_STRCHR 1
-| #define HAVE_STRDUP 1
-| #define HAVE_STRERROR 1
-| #define HAVE_STRFTIME 1
-| #define HAVE_STRNCASECMP 1
-| /* end confdefs.h.  */
-| /* Define strnicmp to an innocuous variant, in case <limits.h> declares strnicmp.
-|    For example, HP-UX 11i <limits.h> declares gettimeofday.  */
-| #define strnicmp innocuous_strnicmp
-| 
-| /* System header to define __stub macros and hopefully few prototypes,
-|     which can conflict with char strnicmp (); below.
-|     Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-|     <limits.h> exists even on freestanding compilers.  */
-| 
-| #ifdef __STDC__
-| # include <limits.h>
-| #else
-| # include <assert.h>
-| #endif
-| 
-| #undef strnicmp
-| 
-| /* Override any gcc2 internal prototype to avoid an error.  */
-| #ifdef __cplusplus
-| extern "C"
-| {
-| #endif
-| /* We use char because int might match the return type of a gcc2
-|    builtin and then its argument prototype would still apply.  */
-| char strnicmp ();
-| /* The GNU C library defines this for functions which it implements
-|     to always fail with ENOSYS.  Some functions are actually named
-|     something starting with __ and the normal name is an alias.  */
-| #if defined (__stub_strnicmp) || defined (__stub___strnicmp)
-| choke me
-| #else
-| char (*f) () = strnicmp;
-| #endif
-| #ifdef __cplusplus
-| }
-| #endif
-| 
-| int
-| main ()
-| {
-| return f != strnicmp;
-|   ;
-|   return 0;
-| }
-configure:31400: result: no
-configure:31313: checking for strrchr
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:131:6: warning: conflicting types for built-in function 'strrchr' [enabled by default]
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
+configure:31388: $? = 0
+configure:31400: result: yes
+configure:31313: checking for strrchr
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+conftest.c:130:6: warning: conflicting types for built-in function 'strrchr' [enabled by default]
+configure:31376: $? = 0
+configure:31379: test -z 			 || test ! -s conftest.err
+configure:31382: $? = 0
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for strstr
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:132:6: warning: conflicting types for built-in function 'strstr' [enabled by default]
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+conftest.c:131:6: warning: conflicting types for built-in function 'strstr' [enabled by default]
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for time
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for umask
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for utime
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31313: checking for vsnprintf
-configure:31370: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:136:6: warning: conflicting types for built-in function 'vsnprintf' [enabled by default]
+configure:31370: i686-w64-mingw32-gcc -o conftest.exe -g -O2   conftest.c  >&5
+conftest.c:135:6: warning: conflicting types for built-in function 'vsnprintf' [enabled by default]
 configure:31376: $? = 0
 configure:31379: test -z 			 || test ! -s conftest.err
 configure:31382: $? = 0
-configure:31385: test -s conftest
+configure:31385: test -s conftest.exe
 configure:31388: $? = 0
 configure:31400: result: yes
 configure:31432: checking whether your compiler passes the ACC conformance test
-configure:31477: gcc -c -g -O2 -I. -I./acc  conftest.c >&5
+configure:31477: i686-w64-mingw32-gcc -c -g -O2 -I. -I./acc  conftest.c >&5
 configure:31483: $? = 0
 configure:31486: test -z 			 || test ! -s conftest.err
 configure:31489: $? = 0
@@ -2551,8 +2412,7 @@ config.status:771: creating include/Makefile
 config.status:771: creating include/ucl/Makefile
 config.status:771: creating src/Makefile
 config.status:837: creating config.h
-config.status:1157: config.h is unchanged
-config.status:1337: executing depfiles commands
+config.status:1335: executing depfiles commands
 
 ## ---------------- ##
 ## Cache variables. ##
@@ -2564,8 +2424,8 @@ ac_cv_c_bigendian=no
 ac_cv_c_compiler_gnu=yes
 ac_cv_c_const=yes
 ac_cv_cxx_compiler_gnu=yes
-ac_cv_env_CC_set=
-ac_cv_env_CC_value=
+ac_cv_env_CC_set=set
+ac_cv_env_CC_value=i686-w64-mingw32-gcc
 ac_cv_env_CFLAGS_set=
 ac_cv_env_CFLAGS_value=
 ac_cv_env_CPPFLAGS_set=
@@ -2576,8 +2436,8 @@ ac_cv_env_CXXCPP_set=
 ac_cv_env_CXXCPP_value=
 ac_cv_env_CXXFLAGS_set=
 ac_cv_env_CXXFLAGS_value=
-ac_cv_env_CXX_set=
-ac_cv_env_CXX_value=
+ac_cv_env_CXX_set=set
+ac_cv_env_CXX_value=i686-w64-mingw32-g++
 ac_cv_env_F77_set=
 ac_cv_env_F77_value=
 ac_cv_env_FFLAGS_set=
@@ -2590,7 +2450,7 @@ ac_cv_env_host_alias_set=
 ac_cv_env_host_alias_value=
 ac_cv_env_target_alias_set=
 ac_cv_env_target_alias_value=
-ac_cv_exeext=
+ac_cv_exeext=.exe
 ac_cv_f77_compiler_gnu=no
 ac_cv_func_access=yes
 ac_cv_func_alloca=no
@@ -2598,7 +2458,7 @@ ac_cv_func_atexit=yes
 ac_cv_func_atoi=yes
 ac_cv_func_atol=yes
 ac_cv_func_chmod=yes
-ac_cv_func_chown=yes
+ac_cv_func_chown=no
 ac_cv_func_ctime=yes
 ac_cv_func_difftime=yes
 ac_cv_func_fstat=yes
@@ -2606,7 +2466,7 @@ ac_cv_func_gettimeofday=yes
 ac_cv_func_gmtime=yes
 ac_cv_func_localtime=yes
 ac_cv_func_longjmp=yes
-ac_cv_func_lstat=yes
+ac_cv_func_lstat=no
 ac_cv_func_memcmp=yes
 ac_cv_func_memcpy=yes
 ac_cv_func_memmove=yes
@@ -2614,7 +2474,7 @@ ac_cv_func_memset=yes
 ac_cv_func_mktime=yes
 ac_cv_func_qsort=yes
 ac_cv_func_raise=yes
-ac_cv_func_setjmp=yes
+ac_cv_func_setjmp=no
 ac_cv_func_signal=yes
 ac_cv_func_snprintf=yes
 ac_cv_func_strcasecmp=yes
@@ -2622,9 +2482,9 @@ ac_cv_func_strchr=yes
 ac_cv_func_strdup=yes
 ac_cv_func_strerror=yes
 ac_cv_func_strftime=yes
-ac_cv_func_stricmp=no
+ac_cv_func_stricmp=yes
 ac_cv_func_strncasecmp=yes
-ac_cv_func_strnicmp=no
+ac_cv_func_strnicmp=yes
 ac_cv_func_strrchr=yes
 ac_cv_func_strstr=yes
 ac_cv_func_time=yes
@@ -2634,7 +2494,7 @@ ac_cv_func_vsnprintf=yes
 ac_cv_header_assert_h=yes
 ac_cv_header_ctype_h=yes
 ac_cv_header_dirent_h=yes
-ac_cv_header_dlfcn_h=yes
+ac_cv_header_dlfcn_h=no
 ac_cv_header_errno_h=yes
 ac_cv_header_fcntl_h=yes
 ac_cv_header_inttypes_h=yes
@@ -2663,11 +2523,10 @@ ac_cv_host_alias=x86_64-unknown-linux-gnu
 ac_cv_objext=o
 ac_cv_path_install='/usr/bin/install -c'
 ac_cv_prog_AWK=gawk
-ac_cv_prog_CPP='gcc -E'
-ac_cv_prog_CXXCPP='g++ -E'
+ac_cv_prog_CPP='i686-w64-mingw32-gcc -E'
+ac_cv_prog_CXXCPP='i686-w64-mingw32-g++ -E'
 ac_cv_prog_ac_ct_AR=ar
-ac_cv_prog_ac_ct_CC=gcc
-ac_cv_prog_ac_ct_CXX=g++
+ac_cv_prog_ac_ct_CC=i686-w64-mingw32-gcc
 ac_cv_prog_ac_ct_RANLIB=ranlib
 ac_cv_prog_ac_ct_STRIP=strip
 ac_cv_prog_cc_g=yes
@@ -2676,39 +2535,39 @@ ac_cv_prog_cxx_g=yes
 ac_cv_prog_egrep='grep -E'
 ac_cv_prog_f77_g=no
 ac_cv_prog_make_make_set=yes
-ac_cv_sizeof___int32=0
-ac_cv_sizeof___int64=0
-ac_cv_sizeof_char_p=8
-ac_cv_sizeof_dev_t=8
+ac_cv_sizeof___int32=4
+ac_cv_sizeof___int64=8
+ac_cv_sizeof_char_p=4
+ac_cv_sizeof_dev_t=4
 ac_cv_sizeof_double=8
 ac_cv_sizeof_float=4
-ac_cv_sizeof_fpos_t=16
+ac_cv_sizeof_fpos_t=8
 ac_cv_sizeof_int=4
 ac_cv_sizeof_intmax_t=8
-ac_cv_sizeof_intptr_t=8
-ac_cv_sizeof_long=8
-ac_cv_sizeof_long_double=16
+ac_cv_sizeof_intptr_t=4
+ac_cv_sizeof_long=4
+ac_cv_sizeof_long_double=12
 ac_cv_sizeof_long_long=8
-ac_cv_sizeof_mode_t=4
+ac_cv_sizeof_mode_t=2
 ac_cv_sizeof_off_t=8
-ac_cv_sizeof_ptrdiff_t=8
+ac_cv_sizeof_ptrdiff_t=4
 ac_cv_sizeof_short=2
-ac_cv_sizeof_size_t=8
-ac_cv_sizeof_ssize_t=8
-ac_cv_sizeof_time_t=8
+ac_cv_sizeof_size_t=4
+ac_cv_sizeof_ssize_t=4
+ac_cv_sizeof_time_t=4
 ac_cv_sizeof_uintmax_t=8
-ac_cv_sizeof_uintptr_t=8
-ac_cv_sizeof_unsigned___int32=0
-ac_cv_sizeof_unsigned___int64=0
+ac_cv_sizeof_uintptr_t=4
+ac_cv_sizeof_unsigned___int32=4
+ac_cv_sizeof_unsigned___int64=8
 ac_cv_sizeof_unsigned_long_long=8
-ac_cv_sizeof_void_p=8
-ac_cv_sys_file_offset_bits=no
+ac_cv_sizeof_void_p=4
+ac_cv_sys_file_offset_bits=64
 ac_cv_sys_large_files=no
 ac_cv_sys_largefile_CC=no
 ac_cv_target=x86_64-unknown-linux-gnu
 ac_cv_target_alias=x86_64-unknown-linux-gnu
-ac_cv_type___int32=no
-ac_cv_type___int64=no
+ac_cv_type___int32=yes
+ac_cv_type___int64=yes
 ac_cv_type_char_p=yes
 ac_cv_type_dev_t=yes
 ac_cv_type_double=yes
@@ -2730,8 +2589,8 @@ ac_cv_type_ssize_t=yes
 ac_cv_type_time_t=yes
 ac_cv_type_uintmax_t=yes
 ac_cv_type_uintptr_t=yes
-ac_cv_type_unsigned___int32=no
-ac_cv_type_unsigned___int64=no
+ac_cv_type_unsigned___int32=yes
+ac_cv_type_unsigned___int64=yes
 ac_cv_type_unsigned_long_long=yes
 ac_cv_type_void_p=yes
 am_cv_CC_dependencies_compiler_type=gcc3
@@ -2741,8 +2600,8 @@ lt_cv_file_magic_cmd='$MAGIC_CMD'
 lt_cv_file_magic_test_file=
 lt_cv_ld_reload_flag=-r
 lt_cv_objdir=.libs
-lt_cv_path_LD=/usr/bin/ld
-lt_cv_path_LDCXX='/usr/bin/ld -m elf_x86_64'
+lt_cv_path_LD=/usr/bin/i686-w64-mingw32-ld
+lt_cv_path_LDCXX=/usr/bin/i686-w64-mingw32-ld
 lt_cv_path_NM='/usr/bin/nm -B'
 lt_cv_path_SED=/bin/sed
 lt_cv_prog_compiler_c_o=yes
@@ -2750,15 +2609,15 @@ lt_cv_prog_compiler_c_o_CXX=yes
 lt_cv_prog_compiler_rtti_exceptions=no
 lt_cv_prog_gnu_ld=yes
 lt_cv_prog_gnu_ldcxx=yes
-lt_cv_sys_global_symbol_pipe='sed -n -e '\''s/^.*[ 	]\([ABCDGIRSTW][ABCDGIRSTW]*\)[ 	][ 	]*\(\)\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2\3 \3/p'\'''
+lt_cv_sys_global_symbol_pipe=
 lt_cv_sys_global_symbol_to_c_name_address='sed -n -e '\''s/^: \([^ ]*\) $/  {\"\1\", (lt_ptr) 0},/p'\'' -e '\''s/^[BCDEGRST] \([^ ]*\) \([^ ]*\)$/  {"\2", (lt_ptr) \&\2},/p'\'''
-lt_cv_sys_global_symbol_to_cdecl='sed -n -e '\''s/^. .* \(.*\)$/extern int \1;/p'\'''
+lt_cv_sys_global_symbol_to_cdecl=
 lt_cv_sys_max_cmd_len=32768
 lt_lt_cv_prog_compiler_c_o='"yes"'
 lt_lt_cv_prog_compiler_c_o_CXX='"yes"'
-lt_lt_cv_sys_global_symbol_pipe='"sed -n -e '\''s/^.*[ 	]\\([ABCDGIRSTW][ABCDGIRSTW]*\\)[ 	][ 	]*\\(\\)\\([_A-Za-z][_A-Za-z0-9]*\\)\$/\\1 \\2\\3 \\3/p'\''"'
+lt_lt_cv_sys_global_symbol_pipe='""'
 lt_lt_cv_sys_global_symbol_to_c_name_address='"sed -n -e '\''s/^: \\([^ ]*\\) \$/  {\\\"\\1\\\", (lt_ptr) 0},/p'\'' -e '\''s/^[BCDEGRST] \\([^ ]*\\) \\([^ ]*\\)\$/  {\"\\2\", (lt_ptr) \\&\\2},/p'\''"'
-lt_lt_cv_sys_global_symbol_to_cdecl='"sed -n -e '\''s/^. .* \\(.*\\)\$/extern int \\1;/p'\''"'
+lt_lt_cv_sys_global_symbol_to_cdecl='""'
 mfx_cv_header_sane_limits_h=yes
 
 ## ----------------- ##
@@ -2775,13 +2634,13 @@ AUTOCONF='${SHELL} /media/null/project/GraVitoN/graviton/code/external/ucl/accon
 AUTOHEADER='${SHELL} /media/null/project/GraVitoN/graviton/code/external/ucl/acconfig/missing --run autoheader'
 AUTOMAKE='${SHELL} /media/null/project/GraVitoN/graviton/code/external/ucl/acconfig/missing --run automake-1.8'
 AWK='gawk'
-CC='gcc'
+CC='i686-w64-mingw32-gcc'
 CCDEPMODE='depmode=gcc3'
 CFLAGS='-g -O2'
-CPP='gcc -E'
+CPP='i686-w64-mingw32-gcc -E'
 CPPFLAGS=' -DUCL_HAVE_CONFIG_H'
-CXX='g++'
-CXXCPP='g++ -E'
+CXX='i686-w64-mingw32-g++'
+CXXCPP='i686-w64-mingw32-g++ -E'
 CXXDEPMODE='depmode=gcc3'
 CXXFLAGS='-g -O2'
 CYGPATH_W='echo'
@@ -2792,7 +2651,7 @@ ECHO_C=''
 ECHO_N='-n'
 ECHO_T=''
 EGREP='grep -E'
-EXEEXT=''
+EXEEXT='.exe'
 F77=''
 FFLAGS=''
 INSTALL_DATA='${INSTALL} -m 644'
@@ -2830,8 +2689,8 @@ UCL_USE_ASM_FALSE=''
 UCL_USE_ASM_TRUE='#'
 VERSION='1.03'
 ac_ct_AR='ar'
-ac_ct_CC='gcc'
-ac_ct_CXX='g++'
+ac_ct_CC='i686-w64-mingw32-gcc'
+ac_ct_CXX=''
 ac_ct_F77=''
 ac_ct_RANLIB='ranlib'
 ac_ct_STRIP='strip'
@@ -2888,12 +2747,10 @@ target_vendor='unknown'
 #define HAVE_ATOI 1
 #define HAVE_ATOL 1
 #define HAVE_CHMOD 1
-#define HAVE_CHOWN 1
 #define HAVE_CTIME 1
 #define HAVE_CTYPE_H 1
 #define HAVE_DIFFTIME 1
 #define HAVE_DIRENT_H 1
-#define HAVE_DLFCN_H 1
 #define HAVE_ERRNO_H 1
 #define HAVE_FCNTL_H 1
 #define HAVE_FSTAT 1
@@ -2903,7 +2760,6 @@ target_vendor='unknown'
 #define HAVE_LIMITS_H 1
 #define HAVE_LOCALTIME 1
 #define HAVE_LONGJMP 1
-#define HAVE_LSTAT 1
 #define HAVE_MALLOC_H 1
 #define HAVE_MEMCMP 1
 #define HAVE_MEMCPY 1
@@ -2914,7 +2770,6 @@ target_vendor='unknown'
 #define HAVE_MKTIME 1
 #define HAVE_QSORT 1
 #define HAVE_RAISE 1
-#define HAVE_SETJMP 1
 #define HAVE_SETJMP_H 1
 #define HAVE_SIGNAL 1
 #define HAVE_SIGNAL_H 1
@@ -2931,11 +2786,13 @@ target_vendor='unknown'
 #define HAVE_STRDUP 1
 #define HAVE_STRERROR 1
 #define HAVE_STRFTIME 1
+#define HAVE_STRICMP 1
 #define HAVE_STRINGS_H 1
 #define HAVE_STRINGS_H 1
 #define HAVE_STRING_H 1
 #define HAVE_STRING_H 1
 #define HAVE_STRNCASECMP 1
+#define HAVE_STRNICMP 1
 #define HAVE_STRRCHR 1
 #define HAVE_STRSTR 1
 #define HAVE_SYS_STAT_H 1
@@ -2958,37 +2815,38 @@ target_vendor='unknown'
 #define PACKAGE_TARNAME "ucl"
 #define PACKAGE_VERSION "1.03"
 #define RETSIGTYPE void
-#define SIZEOF_CHAR_P 8
-#define SIZEOF_DEV_T 8
+#define SIZEOF_CHAR_P 4
+#define SIZEOF_DEV_T 4
 #define SIZEOF_DOUBLE 8
 #define SIZEOF_FLOAT 4
-#define SIZEOF_FPOS_T 16
+#define SIZEOF_FPOS_T 8
 #define SIZEOF_INT 4
 #define SIZEOF_INTMAX_T 8
-#define SIZEOF_INTPTR_T 8
-#define SIZEOF_LONG 8
-#define SIZEOF_LONG_DOUBLE 16
+#define SIZEOF_INTPTR_T 4
+#define SIZEOF_LONG 4
+#define SIZEOF_LONG_DOUBLE 12
 #define SIZEOF_LONG_LONG 8
-#define SIZEOF_MODE_T 4
+#define SIZEOF_MODE_T 2
 #define SIZEOF_OFF_T 8
-#define SIZEOF_PTRDIFF_T 8
+#define SIZEOF_PTRDIFF_T 4
 #define SIZEOF_SHORT 2
-#define SIZEOF_SIZE_T 8
-#define SIZEOF_SSIZE_T 8
-#define SIZEOF_TIME_T 8
+#define SIZEOF_SIZE_T 4
+#define SIZEOF_SSIZE_T 4
+#define SIZEOF_TIME_T 4
 #define SIZEOF_UINTMAX_T 8
-#define SIZEOF_UINTPTR_T 8
+#define SIZEOF_UINTPTR_T 4
 #define SIZEOF_UNSIGNED_LONG_LONG 8
-#define SIZEOF_UNSIGNED___INT32 0
-#define SIZEOF_UNSIGNED___INT64 0
-#define SIZEOF_VOID_P 8
-#define SIZEOF___INT32 0
-#define SIZEOF___INT64 0
+#define SIZEOF_UNSIGNED___INT32 4
+#define SIZEOF_UNSIGNED___INT64 8
+#define SIZEOF_VOID_P 4
+#define SIZEOF___INT32 4
+#define SIZEOF___INT64 8
 #define STDC_HEADERS 1
 #define TIME_WITH_SYS_TIME 1
 #define VERSION "1.03"
+#define _FILE_OFFSET_BITS 64
 #endif
 #ifdef __cplusplus
-extern "C" void exit (int) throw ();
+extern "C" void exit (int);
 
 configure: exit 0

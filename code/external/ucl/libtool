@@ -76,10 +76,10 @@ AR="ar"
 AR_FLAGS="cru"
 
 # A C compiler.
-LTCC="gcc"
+LTCC="i686-w64-mingw32-gcc"
 
 # A language-specific compiler.
-CC="gcc"
+CC="i686-w64-mingw32-gcc"
 
 # Is the compiler the GNU C compiler?
 with_gcc=yes
@@ -88,7 +88,7 @@ with_gcc=yes
 EGREP="grep -E"
 
 # The linker used to build libraries.
-LD="/usr/bin/ld -m elf_x86_64"
+LD="/usr/bin/i686-w64-mingw32-ld"
 
 # Whether we need hard or soft links.
 LN_S="ln -s"
@@ -134,7 +134,7 @@ shrext_cmds='.so'
 exeext=""
 
 # Additional compiler flags for building library objects.
-pic_flag=" -fPIC -DPIC"
+pic_flag=" -DPIC"
 pic_mode=default
 
 # What is the maximum length of a command?
@@ -257,10 +257,10 @@ finish_cmds="PATH=\\\"\\\$PATH:/sbin\\\" ldconfig -n \$libdir"
 finish_eval=""
 
 # Take the output of nm and produce a listing of raw symbols and C names.
-global_symbol_pipe="sed -n -e 's/^.*[ 	]\\([ABCDGIRSTW][ABCDGIRSTW]*\\)[ 	][ 	]*\\(\\)\\([_A-Za-z][_A-Za-z0-9]*\\)\$/\\1 \\2\\3 \\3/p'"
+global_symbol_pipe=""
 
 # Transform the output of nm in a proper C declaration
-global_symbol_to_cdecl="sed -n -e 's/^. .* \\(.*\\)\$/extern int \\1;/p'"
+global_symbol_to_cdecl=""
 
 # Transform the output of nm in a C name address pair
 global_symbol_to_c_name_address="sed -n -e 's/^: \\([^ ]*\\) \$/  {\\\"\\1\\\", (lt_ptr) 0},/p' -e 's/^[BCDEGRST] \\([^ ]*\\) \\([^ ]*\\)\$/  {\"\\2\", (lt_ptr) \\&\\2},/p'"
@@ -316,7 +316,7 @@ variables_saved_for_relink="PATH  LD_RUN_PATH GCC_EXEC_PREFIX COMPILER_PATH LIBR
 link_all_deplibs=no
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=" /usr/lib/gcc/x86_64-linux-gnu/4.7/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/4.7/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../../x86_64-linux-gnu/lib/../lib/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../x86_64-linux-gnu/4.7/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../x86_64-linux-gnu/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../../lib/ /lib/x86_64-linux-gnu/4.7/ /lib/x86_64-linux-gnu/ /lib/../lib/ /usr/lib/x86_64-linux-gnu/4.7/ /usr/lib/x86_64-linux-gnu/ /usr/lib/../lib/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../../x86_64-linux-gnu/lib/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../ /lib/ /usr/lib/"
+sys_lib_search_path_spec=" /usr/lib/gcc/i686-w64-mingw32/4.6/ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/lib/i686-w64-mingw32/4.6/ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/lib/../lib/ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/lib/"
 
 # Run-time system search path for libraries
 sys_lib_dlsearch_path_spec="/lib /usr/lib include /etc/ld.so.conf.d/*.conf  "
@@ -6807,10 +6807,10 @@ AR="ar"
 AR_FLAGS="cru"
 
 # A C compiler.
-LTCC="gcc"
+LTCC="i686-w64-mingw32-gcc"
 
 # A language-specific compiler.
-CC="g++"
+CC="i686-w64-mingw32-g++"
 
 # Is the compiler the GNU C compiler?
 with_gcc=yes
@@ -6819,7 +6819,7 @@ with_gcc=yes
 EGREP="grep -E"
 
 # The linker used to build libraries.
-LD="/usr/bin/ld -m elf_x86_64"
+LD="/usr/bin/i686-w64-mingw32-ld"
 
 # Whether we need hard or soft links.
 LN_S="ln -s"
@@ -6865,7 +6865,7 @@ shrext_cmds='.so'
 exeext=""
 
 # Additional compiler flags for building library objects.
-pic_flag=" -fPIC -DPIC"
+pic_flag=" -DPIC"
 pic_mode=default
 
 # What is the maximum length of a command?
@@ -6948,11 +6948,11 @@ striplib="strip --strip-unneeded"
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
-predep_objects="/usr/lib/gcc/x86_64-linux-gnu/4.7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/4.7/crtbeginS.o"
+predep_objects="/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/lib/../lib/dllcrt2.o /usr/lib/gcc/i686-w64-mingw32/4.6/crtbegin.o"
 
 # Dependencies to place after the objects being linked to create a
 # shared library.
-postdep_objects="/usr/lib/gcc/x86_64-linux-gnu/4.7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../x86_64-linux-gnu/crtn.o"
+postdep_objects="/usr/lib/gcc/i686-w64-mingw32/4.6/crtend.o"
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
@@ -6960,11 +6960,11 @@ predeps=""
 
 # Dependencies to place after the objects being linked to create a
 # shared library.
-postdeps="-lstdc++ -lm -lgcc_s -lc -lgcc_s"
+postdeps="-lstdc++ -lmingw32 -lgcc_s -lgcc -lmoldname -lmingwex -lmsvcrt -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc_s -lgcc -lmoldname -lmingwex -lmsvcrt"
 
 # The library search path used internally by the compiler when linking
 # a shared library.
-compiler_lib_search_path="-L/usr/lib/gcc/x86_64-linux-gnu/4.7 -L/usr/lib/gcc/x86_64-linux-gnu/4.7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/4.7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/4.7/../../.."
+compiler_lib_search_path="-L/usr/lib/gcc/i686-w64-mingw32/4.6 -L/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/lib/../lib -L/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/lib"
 
 # Method to check whether dependent libraries are shared objects.
 deplibs_check_method="pass_all"
@@ -6985,10 +6985,10 @@ finish_cmds="PATH=\\\"\\\$PATH:/sbin\\\" ldconfig -n \$libdir"
 finish_eval=""
 
 # Take the output of nm and produce a listing of raw symbols and C names.
-global_symbol_pipe="sed -n -e 's/^.*[ 	]\\([ABCDGIRSTW][ABCDGIRSTW]*\\)[ 	][ 	]*\\(\\)\\([_A-Za-z][_A-Za-z0-9]*\\)\$/\\1 \\2\\3 \\3/p'"
+global_symbol_pipe=""
 
 # Transform the output of nm in a proper C declaration
-global_symbol_to_cdecl="sed -n -e 's/^. .* \\(.*\\)\$/extern int \\1;/p'"
+global_symbol_to_cdecl=""
 
 # Transform the output of nm in a C name address pair
 global_symbol_to_c_name_address="sed -n -e 's/^: \\([^ ]*\\) \$/  {\\\"\\1\\\", (lt_ptr) 0},/p' -e 's/^[BCDEGRST] \\([^ ]*\\) \\([^ ]*\\)\$/  {\"\\2\", (lt_ptr) \\&\\2},/p'"
@@ -7044,7 +7044,7 @@ variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COM
 link_all_deplibs=no
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=" /usr/lib/gcc/x86_64-linux-gnu/4.7/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/4.7/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../../x86_64-linux-gnu/lib/../lib/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../x86_64-linux-gnu/4.7/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../x86_64-linux-gnu/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../../lib/ /lib/x86_64-linux-gnu/4.7/ /lib/x86_64-linux-gnu/ /lib/../lib/ /usr/lib/x86_64-linux-gnu/4.7/ /usr/lib/x86_64-linux-gnu/ /usr/lib/../lib/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../../x86_64-linux-gnu/lib/ /usr/lib/gcc/x86_64-linux-gnu/4.7/../../../ /lib/ /usr/lib/"
+sys_lib_search_path_spec=" /usr/lib/gcc/i686-w64-mingw32/4.6/ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/lib/i686-w64-mingw32/4.6/ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/lib/../lib/ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/lib/"
 
 # Run-time system search path for libraries
 sys_lib_dlsearch_path_spec="/lib /usr/lib include /etc/ld.so.conf.d/*.conf  "
