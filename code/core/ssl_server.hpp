@@ -287,7 +287,7 @@ bool SSL_Server::initializeConnection(GraVitoN::Core::SSL_Client &client_sock)
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool SSL_Server::finalizeConnection(Core::SSL_Client &client_sock)
 {
-    client_sock.close();
+    // client_sock.close();
     return true;
 }
 

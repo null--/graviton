@@ -26,6 +26,10 @@ THE SOFTWARE. */
 
 #include "UDPSocket.hpp"
 
+#if M_OS == M_OS_WINDOWS
+	#define ssize_t long
+#endif
+
 #if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX || M_OS == M_OS_SOLARIS
 #	include <netinet/in.h>
 #endif
@@ -36,7 +40,7 @@ using namespace ting::net;
 
 
 
-void UDPSocket::Open(u16 port){
+void UDPSocket::Open(ting::u16 port){
 	if(this->IsValid()){
 		throw net::Exc("UDPSocket::Open(): the socket is already opened");
 	}
@@ -246,7 +250,7 @@ size_t UDPSocket::Recv(const ting::Buffer<ting::u8>& buf, IPAddress &out_SenderI
 
 #if M_OS == M_OS_WINDOWS
 //override
-void UDPSocket::SetWaitingEvents(u32 flagsToWaitFor){
+void UDPSocket::SetWaitingEvents(ting::u32 flagsToWaitFor){
 	long flags = FD_CLOSE;
 	if((flagsToWaitFor & Waitable::READ) != 0){
 		flags |= FD_READ;

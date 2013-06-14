@@ -14,9 +14,9 @@
 #include <stdio.h> // If you don't know what this is for stop reading now.
 
 #ifdef INFO_OS_WINDOWS
-    #include <winsock2.h> // To prevent crashing (see the OpenSSL FAQ)
+    #include <winsock2.h>
 #endif
-
+	
 namespace GraVitoN
 {
 namespace Core
@@ -48,7 +48,7 @@ public:
 
 #ifdef INFO_OS_WINDOWS
     typedef SOCKET Handle;
-    typedef size_t Size;
+    typedef int Size;
 #else
     typedef int Handle;
     typedef socklen_t Size;

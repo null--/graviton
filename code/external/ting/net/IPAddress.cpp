@@ -84,7 +84,7 @@ ting::u32 ParseIPAddressString(const char*& p){
 
 
 
-IPAddress::IPAddress(const char* ip, u16 p) :
+IPAddress::IPAddress(const char* ip, ting::u16 p) :
 		host(ParseIPAddressString(ip)),
 		port(p)
 {}

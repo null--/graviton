@@ -5,7 +5,9 @@
 #include <core/ssl_server.hpp>
 
 using namespace std;
-
+/*
+cl ..\..\..\libs\openssl\win-x86-msvc\libeay32.lib ..\..\..\libs\ting\win-x86-msvc\libting.lib ..\..\..\libs\openssl\win-x86-msvc\ssleay32.lib /I ..\..\..\code /I ..\..\..\code\external\ting /I ..\..\..\code\external\openssl\include\ /D WIN32 kernel32.lib user32.lib gdi32.lib wsock32.lib advapi32.lib /GS /EHsc ssl_client.cpp
+*/
 /// Generate PEM File:
 /// openssl genrsa -out domain.tld.key 1024
 /// openssl req -new -key domain.tld.key -out domain.tld.csr
@@ -33,7 +35,7 @@ public:
         }
 
         string data;
-        client_sock.recvString(data);
+        data = client_sock.recvString();
         cout << "Client: '" << data << "'" << endl;
         // GraVitoN::Core::Thread::sleep(1000);
         client_sock.sendString("I Hear You, man!");

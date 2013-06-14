@@ -26,6 +26,10 @@ THE SOFTWARE. */
 
 #include "TCPSocket.hpp"
 
+#if M_OS == M_OS_WINDOWS
+	#define ssize_t long
+#endif
+
 #if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX || M_OS == M_OS_SOLARIS
 #	include <netinet/in.h>
 #endif
@@ -300,7 +304,7 @@ IPAddress TCPSocket::GetRemoteAddress(){
 
 #if M_OS == M_OS_WINDOWS
 //override
-void TCPSocket::SetWaitingEvents(u32 flagsToWaitFor){
+void TCPSocket::SetWaitingEvents(ting::u32 flagsToWaitFor){
 	long flags = FD_CLOSE;
 	if((flagsToWaitFor & Waitable::READ) != 0){
 		flags |= FD_READ;

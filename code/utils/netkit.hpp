@@ -19,7 +19,7 @@ using namespace std;
     #include <unistd.h>
 #endif
 #ifdef INFO_OS_WINDOWS
-    #include <wsock2.h>
+    #include <winsock2.h>
 #endif
 
 namespace GraVitoN

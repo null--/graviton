@@ -4,6 +4,9 @@
 #include <iostream>
 #include <core/ssl_client.hpp>
 
+/*
+cl ..\..\..\libs\openssl\win-x86-msvc\libeay32.lib ..\..\..\libs\openssl\win-x86-msvc\ssleay32.lib /I ..\..\..\code /I ..\..\..\code\external\openssl\include\ /D WIN32 kernel32.lib user32.lib gdi32.lib wsock32.lib advapi32.lib /GS /EHsc ssl_client.cpp
+*/
 using namespace std;
 
 int main()
@@ -26,7 +29,7 @@ int main()
 
         string data;
         cln.sendString("HEAD / HTTP/1.1\n\n");
-        cln.recvString(data);
+        data = cln.recvString();
         cout << "Server: " << data << endl;
     }
 

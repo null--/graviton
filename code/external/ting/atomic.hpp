@@ -527,7 +527,7 @@ public:
 			__asm{
 				mov ebx, this
 				mov eax, [value]
-				lock xadd [ebx].v, eax
+				lock xadd [ebx]S32.v, eax
 				mov [old], eax
 			}
 #	else
@@ -614,7 +614,7 @@ public:
 			mov ebx, this
 			mov eax, [compareTo]
 			mov edx, [exchangeBy]
-			lock cmpxchg [ebx].v, edx
+			lock cmpxchg [ebx]S32.v, edx
 			mov [old], eax
 		}
 #	else

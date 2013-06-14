@@ -178,6 +178,8 @@ bool SSL_Client::loadPemFromFile(const string &cert_file, const string &key_file
         Core::Logger::logItLn("[SSL SERVER] Private key does not match public key");
         return false;
     }
+
+	return true;
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -375,16 +377,18 @@ bool SSL_Client::close()
     try
     {
         is_dead = true;
+		cout << "F1" << endl;
         if( ssl )
         {
             SSL_shutdown (ssl);  /* send SSL/TLS close_notify */
         }
-
+		cout << "F2" << endl;
         /* Clean up. */
         if( sock != SSL_Socket::invalidSocket() )
         {
             ::close(sock);
         }
+		cout << "F3" << endl;
         if(ssl)
             SSL_free (ssl);
 

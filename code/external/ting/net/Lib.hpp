@@ -36,7 +36,6 @@ THE SOFTWARE. */
 #include "../Singleton.hpp"
 
 
-
 namespace ting{
 
 /**

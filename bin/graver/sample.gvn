@@ -1,0 +1,24 @@
+<project>
+    <info>
+        <name>SAMPLE</name>
+        <version>0.1</version>
+        <hacker>_null_</hacker>
+        <date>01/01/01</date>
+    </info>
+
+    <code>
+        <incpath>code/inc</incpath>
+        <srcpath>code/src/</srcpath>
+        <source>sample.cpp</source>
+    </code>
+
+    <build>
+        <platfrom os="linux" arch="32" compiler="g++" />
+        <platform os="linux" arch="64" compiler="g++" />
+        <platform os="windows" arch="32" compiler="mingw" />
+        <depend>ting</depend>
+        <depend>ssl</depend>
+        <depend>crypto</depend>
+        <depend>zlib</depend>
+    </build>
+</project>
