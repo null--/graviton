@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <project>
     <info>
         <name>SAMPLE</name>
@@ -7,13 +8,16 @@
     </info>
 
     <code>
-        <incpath>code/inc</incpath>
-        <srcpath>code/src/</srcpath>
+        <incpath>code/</incpath>
+        <srcpath>code/</srcpath>
         <source>sample.cpp</source>
     </code>
 
     <build>
-        <platfrom os="linux" arch="32" compiler="g++" />
+        <!-- type = exec|statlib|dynlib|obj -->
+        <type>exec</type>
+        
+        <platform os="linux" arch="32" compiler="g++" />
         <platform os="linux" arch="64" compiler="g++" />
         <platform os="windows" arch="32" compiler="mingw" />
         <depend>ting</depend>

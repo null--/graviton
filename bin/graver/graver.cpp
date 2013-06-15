@@ -15,6 +15,12 @@ struct PROJECT
 {
     bool unsaved_proj;
     string path;
+    string compiler;
+    string target_os;
+    string arch;
+
+    rapidxml::xml_document<> project_xml;
+    
     PROJECT();
 } glob_proj;
 
@@ -180,7 +186,7 @@ void initLibs()
     }
 
     /// Parse library
-    node = node->first_node(XML_TAG_LIB);
+    node = node->first_node(XML_TAG_LIBRARY);
     while (node)
     {
         rapidxml::xml_attribute<> *sub_attr;
@@ -240,7 +246,7 @@ void initCompilers()
         exit(0);
     }
 
-    /// Parse library
+    /// Parse compiler
     node = node->first_node(XML_TAG_COMPILER);
     while (node)
     {        
@@ -264,24 +270,26 @@ void initCompilers()
             sub_node = sub_node->next_sibling(XML_TAG_COMMAND);
         }
 
-        /// Parse platform flag
+        /// Parse flag
         sub_node = node->first_node(XML_TAG_FLAG);
         if( sub_node )
         {
             cout << "\t" << XML_TAG_FLAG << ":" << endl;
 
             child = sub_node->first_node(XML_TAG_INCPATH);
-            if(child) cout << "\t\t" << child->name() << child->value() << endl;
+            if(child) cout << "\t\t" << child->name() << ": " << child->value() << endl;
             child = sub_node->first_node(XML_TAG_LIBPATH);
-            if(child) cout << "\t\t" << child->name() << child->value() << endl;
-            child = sub_node->first_node(XML_TAG_LIB_FLAG);
-            if(child) cout << "\t\t" << child->name() << child->value() << endl;
+            if(child) cout << "\t\t" << child->name() << ": "<< child->value() << endl;
+            child = sub_node->first_node(XML_TAG_DEFINE);
+            if(child) cout << "\t\t" << child->name() << ": "<< child->value() << endl;
+            child = sub_node->first_node(XML_TAG_LIB);
+            if(child) cout << "\t\t" << child->name() << ": "<< child->value() << endl;
             child = sub_node->first_node(XML_TAG_BUILDOBJ);
-            if(child) cout << "\t\t" << child->name() << child->value() << endl;
+            if(child) cout << "\t\t" << child->name() << ": "<< child->value() << endl;
             child = sub_node->first_node(XML_TAG_OUTPUT);
-            if(child) cout << "\t\t" << child->name() << child->value() << endl;
+            if(child) cout << "\t\t" << child->name() << ": "<< child->value() << endl;
             child = sub_node->first_node(XML_TAG_GENERAL);
-            if(child) cout << "\t\t" << child->name() << child->value() << endl;
+            if(child) cout << "\t\t" << child->name() << ": "<< child->value() << endl;
         }
 
         /// Parse modes
@@ -291,11 +299,11 @@ void initCompilers()
             cout << "\t" << XML_TAG_MODE << ":" << endl;
 
             child = sub_node->first_node(XML_TAG_GENERAL);
-            if(child) cout << "\t\t" << child->name() << child->value() << endl;
+            if(child) cout << "\t\t" << child->name() << ": "<< child->value() << endl;
             child = sub_node->first_node(XML_TAG_GUI);
-            if(child) cout << "\t\t" << child->name() << child->value() << endl;
+            if(child) cout << "\t\t" << child->name() << ": "<< child->value() << endl;
             child = sub_node->first_node(XML_TAG_SOCK);
-            if(child) cout << "\t\t" << child->name() << child->value() << endl;
+            if(child) cout << "\t\t" << child->name() << ": "<< child->value() << endl;
         }
         
         node = node->next_sibling(XML_TAG_COMPILER);
@@ -310,13 +318,13 @@ void init()
 }
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
-int main()
+/// TODO: Interactive Mode
+void interactive()
 {
     string input;
 
     init();
 
-    cout << BANNER << endl;
     cout << "[ There are rules... to be broken. ]" << endl;
     cout << VERSION << endl << endl;
     
@@ -324,6 +332,133 @@ int main()
     {
         parse(input);
     }
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+void loadProject()
+{
+    rapidxml::file<char> projf(glob_proj.path.c_str());
+    glob_proj.project_xml.parse<0>( projf.data() );
+
+    rapidxml::xml_node<> *node = glob_proj.project_xml.first_node(XML_TAG_PROJECT);
+
+    if( !node )
+    {
+        cout << "Failed to load " << glob_proj.path <<", which is fuckin' necessary!" << endl;
+        exit(0);
+    }
+
+    /// Parse Project       
+    rapidxml::xml_attribute<> *sub_attr;
+    rapidxml::xml_node<> *sub_node, *child;
+
+    cout << "PROJECT:" << endl;
+        
+    /// Parse info tag
+    sub_node = node->first_node(XML_TAG_INFO);
+    if( sub_node )
+    {
+        cout << "\t" << XML_TAG_INFO << ":" << endl;
+
+        child = sub_node->first_node(XML_TAG_NAME);
+        if(child) cout << "\t\t" << child->name() << ": \t" << child->value() << endl;
+        child = sub_node->first_node(XML_TAG_VERSION);
+        if(child) cout << "\t\t" << child->name() << ": \t" << child->value() << endl;
+        child = sub_node->first_node(XML_TAG_HACKER);
+        if(child) cout << "\t\t" << child->name() << ": \t" << child->value() << endl;
+        child = sub_node->first_node(XML_TAG_DATE);
+        if(child) cout << "\t\t" << child->name() << ": \t" << child->value() << endl;
+    }
+
+    /// Parse code tag
+    sub_node = node->first_node(XML_TAG_CODE);
+    if( sub_node )
+    {
+        cout << "\t" << XML_TAG_MODE << ":" << endl;
+
+        child = sub_node->first_node(XML_TAG_INCPATH);
+        if(child) cout << "\t\t" << child->name() << ": \t" << child->value() << endl;
+        child = sub_node->first_node(XML_TAG_SRCPATH);
+        if(child) cout << "\t\t" << child->name() << ": \t" << child->value() << endl;
+        child = sub_node->first_node(XML_TAG_SOURCE);
+        if(child) cout << "\t\t" << child->name() << ": \t" << child->value() << endl;
+    }
+
+    /// Parse build tag
+    sub_node = node->first_node(XML_TAG_BUILD);
+    cout << "\t" << XML_TAG_BUILD << ":" << endl;
+
+    child = sub_node->first_node(XML_TAG_PLAT);
+    while(child)
+    {
+        cout << "\t\t" << XML_TAG_PLAT << ": \t";
+        for (sub_attr = child->first_attribute();
+             sub_attr; sub_attr = sub_attr->next_attribute())
+        {
+            cout <<  sub_attr->name() << ": \t" << sub_attr->value() << "\t";
+        }
+        cout << endl;
+
+        child = child->next_sibling(XML_TAG_PLAT);
+    }
+        
+    child = sub_node->first_node(XML_TAG_DEP);
+    while(child)
+    {
+        cout << "\t\t" << XML_TAG_DEP << ": \t" << child->value() << endl;
+        child = child->next_sibling(XML_TAG_DEP);
+    }
+        
+    node = node->next_sibling(XML_TAG_COMPILER);
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+void normal(int argc, char **argv)
+{
+    cout << VERSION << endl << endl;
+    
+    if( argc != 9 )
+    {
+        cout << "Usage: " << argv[0] << "-c <compiler> -o <target os> -a <architecture> -p <project file>" << endl;
+        cout << "For more information about -c, -o and -a valid options you can look at compiler.conf file, inside graver folder" << endl;
+    }
+
+    for(int i=1; i<argc; i+=2)
+    {
+        string opt = argv[i];
+
+        if( opt == "-c" || opt == "-C" )
+        {
+            glob_proj.compiler = argv[i+1];
+        }
+        else if ( opt == "-o" || opt == "-O" )
+        {
+            glob_proj.target_os = argv[i+1];
+        }
+        else if ( opt == "-a" || opt == "-A" )
+        {
+            glob_proj.arch = argv[i+1];
+        }
+        else if ( opt == "-p" || opt == "-P" )
+        {
+            glob_proj.path = argv[i+1];
+        }
+        else
+        {
+            printError(ERR_UNK_CMD);
+        }
+    }
+
+    cout << "Loading project..." << endl;
+    loadProject();
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+int main(int argc, char **argv)
+{
+    cout << BANNER << endl;
+
+    normal(argc, argv);
     
     return 0;
 }
