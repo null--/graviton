@@ -11,7 +11,9 @@ Installed:
 	ucl-1.03
 	ldigest - BASED ON lmd5 - github 05/13/2013
 	rapidxml - 1.13	
-
+    dirent   - 1.1.3
+    trex     - 1.3
+    
 Removed:
 	apr-1.4.2
 	apr-iconv-1.2.1

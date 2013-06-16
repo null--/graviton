@@ -1,5 +1,8 @@
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+#define GVN_ACTIVATE_LOGGER
+
 #include <graviton.hpp>
+#include <utils/files.hpp>
 
 #include "graver.hpp"
 
@@ -26,6 +29,8 @@ struct CONF
     const string compiler;
 
     const string os;
+
+    string graviton_path;
     
     rapidxml::xml_document<> compiler_xml;
     rapidxml::xml_document<> library_xml;
@@ -47,6 +52,7 @@ CONF::CONF():library("library.conf"), compiler("compiler.conf")
                 )
 {
     verbose = false;
+    graviton_path = "../../";
 }
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
@@ -56,6 +62,9 @@ struct PLATFORM
     string os;
     string target;
     string compiler;
+
+    string compiler_option;
+    vector<string> files;
     
     PLATFORM(){}
 };
@@ -82,7 +91,7 @@ struct COMPILER
 
     string mode_general;
     string mode_gui;
-    string mode_sock;
+    // string mode_sock;
 
     COMPILER(){}
 };
@@ -119,10 +128,14 @@ struct PROJECT
     vector<string> srcpath;
     vector<string> source;
 
+    int compiler_id;
+    
     string build_type;
     // vector<PLATFORM> build_platform;
     vector<string>   build_depend;
-    vector<int>      build_depend_idx;
+    /// This vector, will initialize on verifyProject
+    vector<string>   build_depend_file;
+    string           build_depend_option;   
     
     rapidxml::xml_document<> project_xml;
     
@@ -184,7 +197,7 @@ void initLibs()
     {
         LIBRARY mlib;
         rapidxml::xml_attribute<> *sub_attr;
-        rapidxml::xml_node<> *sub_node;
+        rapidxml::xml_node<> *sub_node, *child;
 
         /// name
         sub_attr = node->first_attribute(XML_ATTR_NAME);
@@ -243,6 +256,28 @@ void initLibs()
             }
             plat.compiler = sub_attr->value();
             vcout << "\t\t" << XML_ATTR_COMPILER << ": \t" << plat.os << endl;
+
+            /// <file>
+            // plat.files.clear();
+            child = sub_node->first_node(XML_TAG_FILE);
+            while(child)
+            {
+                string tmp = child->value();
+                tmp = glob_conf.graviton_path + GRAV_LIB_PATH + tmp;
+                
+                if( !GraVitoN::Utils::File::pathExists(tmp) )
+                {
+                    cout << "SHIT HAPPENED: " << tmp << " not found." << endl;
+                    exit(0);
+                }
+                
+                plat.files.push_back(child->value());
+                child = child->next_sibling(XML_TAG_FILE);
+            }
+
+            /// <compiler>
+            child = sub_node->first_node(XML_TAG_COMPILER_OPT);
+            if(child) plat.compiler_option = child->value();
 
             mlib.platform.push_back(plat);
             sub_node = sub_node->next_sibling(XML_TAG_PLAT);
@@ -438,12 +473,13 @@ void initCompilers()
                 mcom.mode_gui = child->value();
                 vcout << "\t\t" << child->name() << ": "<< child->value() << endl;
             }
-            child = sub_node->first_node(XML_TAG_SOCK);
-            if(child)
-            {
-                mcom.mode_sock = child->value();
-                vcout << "\t\t" << child->name() << ": "<< child->value() << endl;
-            }
+
+            // child = sub_node->first_node(XML_TAG_SOCK);
+            // if(child)
+            // {
+            //    mcom.mode_sock = child->value();
+            //     vcout << "\t\t" << child->name() << ": "<< child->value() << endl;
+            // }
         }
 
         glob_compiler.push_back(mcom);
@@ -473,7 +509,7 @@ bool loadProject()
     rapidxml::xml_node<> *sub_node, *child;
 
     vcout << "PROJECT:" << endl;
-        
+    
     /// Parse info tag
     sub_node = node->first_node(XML_TAG_INFO);
     if( sub_node )
@@ -614,7 +650,10 @@ bool verifyProject()
             glob_compiler[i].target    == glob_proj.target_os &&
             glob_compiler[i].arch      == glob_proj.arch
             )
+        {
+            glob_proj.compiler_id = i;
             res = true;
+        }
     }
 
     if( res )
@@ -628,41 +667,87 @@ bool verifyProject()
     }
     
     /// 2. check library/project
-    for(i=0; i<glob_library.size(); ++i)
+
+    glob_proj.build_depend_option = "";
+    glob_proj.build_depend.clear();
+    glob_proj.build_depend_file.clear();
+    for(i=0; i<glob_proj.build_depend.size(); ++i)
     {
-        for(int j=0; j<glob_proj.build_depend.size(); ++j)
+        bool found = false;
+
+        for(int j=0; j<glob_library.size() && !found; ++j)
         {
-            if( glob_library[i].name == glob_proj.build_depend[j] )
+            if( glob_library[j].name == glob_proj.build_depend[i] )
             {
-                for(int k=0; k < glob_library[i].platform.size(); ++k)
+                for(int k=0; k < glob_library[i].platform.size() && !found; ++k)
                 {
-                    if( glob_library[i].platform[k].arch       == glob_proj.arch &&
-                        glob_library[i].platform[k].os         == glob_proj.target_os &&
-                        glob_library[i].platform[k].compiler   == glob_proj.compiler )
+                    if( glob_library[j].platform[k].arch       == glob_proj.arch &&
+                        glob_library[j].platform[k].os         == glob_proj.target_os &&
+                        glob_library[j].platform[k].compiler   == glob_proj.compiler )
                     {
-                        vcout << glob_library[i].name << "|" << glob_proj.build_depend[j] << endl;
-                        glob_proj.build_depend_idx.push_back(i);
-                        break;
+                        found = true;
+                        // vcout << glob_library[i].name << "|" << glob_proj.build_depend[j] << endl;
+                        for(int m=0; m<glob_library[j].platform[k].files.size(); ++m)
+                            glob_proj.build_depend_file.push_back( glob_library[j].platform[k].files[m] );
+                        glob_proj.build_depend_option += "";
+                        glob_proj.build_depend_option += glob_library[j].platform[k].compiler_option;
+                        glob_proj.build_depend_option += "";
                     }
                 }
-                break;
             }
+
+        }
+
+        if( !found && GraVitoN::Utils::File::pathExists( glob_proj.build_depend[i] ) )
+        {
+            found = true;
+            glob_proj.build_depend_file.push_back( glob_proj.build_depend[i] );
+        }
+
+        if( !found )
+        {
+            cout << "UNKNOWN/INCOMPATIBLE DEPENDENY: " << glob_proj.build_depend[i] << endl;
+            return false;
         }
     }
-
-    if( glob_proj.build_depend.size() == glob_proj.build_depend_idx.size() )
-    {
-        return true;
-    }
-
-    cout << "UNKNOWN/INCOMPATIBLE DEPENDENIES." << endl;
-    return false;
+    
+    return true;
 }
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
 void buildProject()
 {
-    /// TODO
+    COMPILER mc = glob_compiler[glob_proj.compiler_id];
+    string command =
+        mc.command + " " +
+        mc.flag_general + " " +
+        mc.flag_build_object + " " +
+        mc.flag_incpath + glob_conf.graviton_path + GRAV_CODE_PATH + " ";
+
+    int i;
+
+    /// Adding Project Includes
+    vcout << "Adding includes: " << glob_proj.incpath.size() << endl;
+    for(i=0; i<glob_proj.incpath.size(); ++i)
+        if( !glob_proj.incpath[i].empty() )
+            command += mc.flag_incpath + " " + glob_proj.incpath[i] + " ";
+
+    /// Adding Library Includes
+    vcout << "Adding libraries: " << glob_proj.build_depend_file.size() << endl;
+    for(i=0; i<glob_proj.build_depend_file.size(); ++i)
+        if( !glob_proj.build_depend_file[i].empty() )
+            command += mc.flag_incpath + " " + glob_proj.build_depend_file[i] + " ";
+
+    /// Get sources
+    vcout << "Adding sources: " << glob_proj.srcpath.size() << endl;
+    vector<string> sources;
+    for(int i=0; i<glob_proj.srcpath.size(); ++i)
+    {
+        GraVitoN::Utils::File::findAllFiles(glob_proj.srcpath[i], sources, ".*\\.[c][p][p]$", true);
+    }
+
+    for(int i=0; i<sources.size(); ++i)
+        vcout << "SOURCE: " << sources[i] << endl;
 }
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
@@ -793,9 +878,10 @@ void normal(int argc, char **argv)
 {
     if( argc != 9 && argc != 10 )
     {
-        cout << "Usage: " << argv[0] << "-v -c <compiler> -o <target os> -a <architecture> -p <project file>" << endl;
-        cout << "-v:        verbose" << endl;
-        cout << "For more information about -c, -o and -a valid options you can look at compiler.conf file, inside graver folder" << endl;
+        cout << "Usage: " << argv[0] << "-v -c <compiler> -o <target os> -a <architecture> -p <project file>" << endl << endl;
+        cout << "\t-v:        verbose" << endl;
+        cout << "\n\tFor more information about -c, -o and -a valid options you can take a look at \n\tcompiler.conf file, inside graver folder" << endl;
+        exit(0);
     }
 
     for(int i=1; i<argc-1; ++i)
@@ -818,7 +904,12 @@ void normal(int argc, char **argv)
         {
             glob_proj.path = argv[i+1];
         }
-        else if ( opt != "-v" )
+        else if ( opt == "-v" )
+        {
+            glob_conf.verbose = true;
+            vcout << "[VERBOSE MODE]" << endl;
+        }
+        else
         {
             printError(ERR_UNK_CMD);
             exit(0);
@@ -844,16 +935,25 @@ void normal(int argc, char **argv)
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
 int main(int argc, char **argv)
 {
-    for(int i=0; i<argc; ++i)
-    {
-        if( string(argv[i]) == string("-v") )
-        {
-            glob_conf.verbose = true;
-            break;
-        }
-    }
+    // GraVitoN::Utils::Regex rex;
+    // rex.compile(".*\\.[c][p][p]$");
+
+    // cout << rex.match("/usr/include/webkitgtk-1.0/webkit/WebKitDOMEventTarget.h") << endl;
+    // cout << rex.match("/usr/include/webkitgtk-1.0/webkit/WebKitDOMEventTarget.h") << endl;
+    // cout << rex.match("/usr/include/webkitgtk-1.0/webkit/WebKitDOMEventTarget.h") << endl;
+    // cout << rex.match("/usr/include/webkitgtk-1.0/webkit/WebKitDOMEventTarget.h") << endl;
+    // cout << rex.match("/usr/include/webkitgtk-1.0/webkit/WebKitDOMEventTarget.h") << endl;
+    // cout << rex.match("/usr/include/webkitgtk-1.0/webkit/WebKitDOMEventTarget.h") << endl;
+    // cout << rex.match("/usr/include/webkitgtk-1.0/webkit/WebKitDOMEventTarget.h") << endl;
+    
+    // return 0;
+    
     cout << BANNER << endl;
     cout << VERSION << " for " << glob_conf.os << endl << endl;
+
+    for(int i=0; i<argc; ++i)
+        if( string(argv[i]) == "-v" )
+            glob_conf.verbose = true;
     
     init();
     

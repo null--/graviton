@@ -28,11 +28,21 @@
 
 #include <core/logger.hpp>
 
+#include <utils/regex.hpp>
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <vector>
 using namespace std;
+
+#if defined(INFO_OS_WINDOWS)
+    #include <external/dirent/dirent.h>
+#else
+    #include <sys/types.h>
+    #include <sys/stat.h>
+    #include <dirent.h>
+#endif
 
 namespace GraVitoN
 {
@@ -211,8 +221,254 @@ bool printUCharsIntoFile(const string opath, const unsigned char *buffer, const 
 	return true;
 }
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool listDirectory(const string &dirname, vector<string> &folders, vector<string> &files)
+{
+    folders.clear();
+    files.clear();
+    
+    DIR *dir;
+    struct dirent *ent;
+                
+    /* Open directory stream */
+    dir = opendir (dirname.c_str());
+    if (dir != NULL)
+    {
+
+        /* Print all files and directories within the directory */
+        while ((ent = readdir (dir)) != NULL) {
+            switch (ent->d_type) {
+            case DT_REG:
+                // printf ("[%s]\n", ent->d_name);
+                files.push_back(ent->d_name);
+                break;
+
+            case DT_DIR:
+                // printf ("(%s/)\n", ent->d_name);
+                folders.push_back(ent->d_name);
+                break;
+
+                // default:
+                // printf ("{%s*}\n", ent->d_name);
+            }
+        }
+
+        closedir (dir);
+
+    } else
+    {
+        /* Could not open directory */
+        // printf ("Cannot open directory %s\n", dirname);
+        return false;
+    }
+    return true;
 }
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// @todo: Do a BFS
+/// append: do not clear files vector
+/// pattern: a valid regular expression for search (see utils/regex.hpp for more information)
+bool findAllFiles(const string &dirname, vector<string> &files, const string pattern = "", const bool append = false)
+{
+    // Core::Logger::logVariable("[File] ", dirname);
+    
+    DIR *dir;
+    char buffer[PATH_MAX + 2];
+    char *p = buffer;
+    const char *src;
+    char *end = &buffer[PATH_MAX];
+
+    /* Copy directory name to buffer */
+    src = dirname.c_str();
+    while (p < end  &&  *src != '\0') {
+        *p++ = *src++;
+    }
+    *p = '\0';
+
+    bool search = !pattern.empty();
+
+    Utils::Regex rex;
+    if( search  )
+    {
+        // cout << "COMILE" << endl;
+        if( !rex.compile(pattern) )
+        {
+            Core::Logger::logItLn("[File] findAllFiles invalid regex pattern");
+
+            // search = false;
+            /// 
+            return false;
+        }
+    }
+        
+    /* Open directory stream */
+    dir = opendir (dirname.c_str());
+    if (dir != NULL) {
+        struct dirent *ent;
+
+        /* Print all files and directories within the directory */
+        while ((ent = readdir (dir)) != NULL)
+        {
+            char *q = p;
+            char c;
+
+            /* Get final character of directory name */
+            if (buffer < q)
+            {
+                c = q[-1];
+            } else {
+                c = ':';
+            }
+
+            /* Append directory separator if not already there */
+            if (c != ':'  &&  c != '/'  &&  c != '\\')
+            {
+                *q++ = '/';
+            }
+
+            /* Append file name */
+            src = ent->d_name;
+            while (q < end  &&  *src != '\0')
+            {
+                *q++ = *src++;
+            }
+            *q = '\0';
+
+            string bf;
+            /* Decide what to do with the directory entry */
+            switch (ent->d_type)
+            {
+            case DT_REG:
+                /* Output file name with directory */
+                // printf ("%s\n", buffer);
+                // Core::Logger::logVariable("[File]", buffer);
+
+                if( search && !rex.match(buffer) )
+                {
+                    // Core::Logger::logVariable("[File] Not Match", buffer);
+                    break;
+                }
+               
+
+                // Core::Logger::logVariable("[File] Match", buffer);
+                
+                files.push_back(buffer);
+                break;
+
+            case DT_DIR:
+                /* Scan sub-directory recursively */
+                if (strcmp (ent->d_name, ".") != 0  
+                        &&  strcmp (ent->d_name, "..") != 0)
+                {
+                    findAllFiles (buffer, files, pattern, append);
+                }
+                break;
+
+            default:
+                /* Do not device entries */
+                /*NOP*/;
+                break;
+            }
+
+        }
+
+        closedir (dir);
+    }
+    else
+    {
+        /* Could not open directory */
+        Core::Logger::logVariable("Cannot open directory ", dirname);
+        return false;
+    }
+
+    return true;
 }
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool createFolder(const string &dir)
+{
+#if defined(INFO_OS_WINDOW)
+    return CreateDirectory(dir.c_str(), NULL) != 0;
+#else
+    /// @TODO: 0750 is not a good idea
+    return mkdir(dir.c_str(), 0750) == 0;
+    // return _mkdir(dir) == 0;
+#endif
 }
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool isDirectory (const string &path) {
+    DIR *dir;
+    dir = opendir (path.c_str());
+
+    if( dir )
+    {
+        closedir(dir);
+        return true;
+    }
+    return false;
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool pathExists(const string &path)
+{
+    if(isDirectory(path))
+    {
+        return true;
+    }
+    else
+    {
+        FILE *f = fopen(path.c_str(), "r");
+        if(!f)
+            return false;
+        fclose(f);
+        return true;
+    }
+    
+    return false;
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool deleteFile(const string &file)
+{
+    return std::remove(file.c_str()) == 0;
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+bool deleteFolder(const string &folder)
+{
+#if defined(INFO_OS_WINDOW)
+    return RemoveDirectory((LPCSTR)folder.c_str()) != 0;
+#else
+    DIR*            dp;
+    struct dirent*  ep;
+    string          buf;
+
+    dp = opendir(folder.c_str());
+
+    if( !dp ) return false;
+    while ((ep = readdir(dp)) != NULL)
+    {
+        buf = folder + "/" + ep->d_name;
+        if (isDirectory(buf))
+        {
+            deleteFolder(buf);
+        }
+        else
+        {     
+            if( unlink(buf.c_str()) != 0 )
+                Core::Logger::logVariable("Unable to delete: ", buf);
+        }
+    }
+
+    closedir(dp);
+        
+    return rmdir(folder.c_str()) == 0;
+#endif
+}
+
+} // file
+} // utility
+} // grav
 
 #endif // _GVN_FILES_HEAD_
