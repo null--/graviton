@@ -9,7 +9,7 @@
 
     <code>
         <incpath>sample/</incpath>
-        <srcpath>/usr/</srcpath>
+        <srcpath>sample/</srcpath>
         <source>sample.cpp</source>
     </code>
 

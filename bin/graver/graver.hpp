@@ -34,7 +34,7 @@ const char BANNER[] =
 ;
 
 const char VERSION[] =
-    "Graver - Version: 0.1 - EXPERIMENTAL";
+    "Graver - Version: 0.2 EXPERIMENTAL";
     
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
 const string SIGN           = "graver# ";
