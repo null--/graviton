@@ -22,34 +22,39 @@ struct CONF
 {
     bool verbose;
     
-    const string library;
-    const string compiler;
+    string library;
+    string compiler;
 
     const string os;
 
     string graviton_path;
     
-    rapidxml::xml_document<> compiler_xml;
-    rapidxml::xml_document<> library_xml;
+    GraVitoN::Utils::XML_Parser compiler_xml;
+    GraVitoN::Utils::XML_Parser library_xml;
 
     CONF();
 } glob_conf;
 
-CONF::CONF():library("library.conf"), compiler("compiler.conf")
-            ,os(
+CONF::CONF():
+    os(
 #if defined(INFO_OS_WINDOWS)
-                "windows"
+        "windows"
 #elif defined(INFO_OS_LINUX)
-                "linux"
+        "linux"
 #elif defined(INFO_OS_OSX)
-                "osx"
+        "osx"
 #else
-                "unknown os"
+        "unknown os"
 #endif                
                 )
 {
     verbose = false;
-    graviton_path = "../../";
+    graviton_path = "/media/null/project/GraVitoN/graviton/";
+
+    compiler = graviton_path + "bin/graver/compiler.conf";
+    library = graviton_path + "bin/graver/library.conf";
+
+    cout << GraVitoN::Utils::File::getRootDirectory(library);
 }
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
@@ -78,6 +83,8 @@ struct COMPILER
     string command;
     string linker;
 
+    string obj_extension;
+    
     string flag_incpath;
     string flag_libpath;
     string flag_lib;
@@ -175,18 +182,18 @@ void initLibs()
     
     cout << "Loading Libraries..." << endl;
 
-    GraVitoN::Utils::XML_Parser pars;
+    // GraVitoN::Utils::XML_Parser pars;
     GraVitoN::Utils::XML_Node master, node, sub_node, child;
     GraVitoN::Utils::XML_Attrib attr, sub_attr;
         
     /// Load library.conf
     // rapidxml::file<char> libf(glob_conf.library.c_str());
     // glob_conf.library_xml.parse<0>( libf.data() );
-    pars.load(glob_conf.library.c_str());
+    glob_conf.library_xml.load(glob_conf.library.c_str());
     
     /// <conf>
     // rapidxml::xml_node<> *node = glob_conf.library_xml.first_node(XML_TAG_CONF);
-    master = pars.firstNode(XML_TAG_CONF);
+    master = glob_conf.library_xml.firstNode(XML_TAG_CONF);
 
     if( !master.isValid() )
     {
@@ -285,7 +292,8 @@ void initLibs()
                     cout << "SHIT HAPPENED: " << tmp << " not found." << endl;
                     exit(0);
                 }
-                
+
+                // cout << "Pushing " << child.value() << endl;
                 plat.files.push_back( child.value() );//child->value());
                 // child = child->next_sibling(XML_TAG_FILE);
                 child = child.next(XML_TAG_FILE);
@@ -324,17 +332,17 @@ void initCompilers()
 
     cout << "Loading Compilers..." << endl;
 
-    GraVitoN::Utils::XML_Parser pars;
+    // GraVitoN::Utils::XML_Parser pars;
     GraVitoN::Utils::XML_Node master, node, sub_node, child;
     GraVitoN::Utils::XML_Attrib attr, sub_attr;
 
-    pars.load(glob_conf.compiler.c_str());
+    glob_conf.compiler_xml.load(glob_conf.compiler.c_str());
     
     // rapidxml::file<char> compf(glob_conf.compiler.c_str());
     // glob_conf.compiler_xml.parse<0>( compf.data() );
 
     // rapidxml::xml_node<> *node = glob_conf.compiler_xml.first_node(XML_TAG_CONF);
-    node = pars.firstNode(XML_TAG_CONF);
+    node = glob_conf.compiler_xml.firstNode(XML_TAG_CONF);
 
     if( !node.isValid() )
     {
@@ -395,7 +403,7 @@ void initCompilers()
         vcout << "\t" << XML_TAG_COMMAND << ": " << sub_node.value() << endl;
         mcom.command = sub_node.value();
 
-        /// Parse command tag
+        /// Parse linker tag
         sub_node = node.firstChild(XML_TAG_LINKER);
         if( !sub_node.isValid() )
         {
@@ -404,7 +412,17 @@ void initCompilers()
         }
         vcout << "\t" << XML_TAG_LINKER << ": " << sub_node.value() << endl;
         mcom.linker = sub_node.value();
-        
+
+        /// Parse obj_extension tag
+        sub_node = node.firstChild(XML_TAG_OBJ_EXTENSION);
+        if( !sub_node.isValid() )
+        {
+            cout << "BAD COMPILER: no 'obj_extension' tag" << endl;
+            goto NEXT;
+        }
+        vcout << "\t" << XML_TAG_OBJ_EXTENSION << ": " << sub_node.value() << endl;
+        mcom.obj_extension = sub_node.value();
+
         /// Parse flag
         sub_node = node.firstChild(XML_TAG_FLAG);
         if( !sub_node.isValid() )
@@ -545,23 +563,26 @@ bool loadProject()
         vcout << "\t" << XML_TAG_INFO << ":" << endl;
 
         child = sub_node.firstChild(XML_TAG_NAME);
-        if(!child.isValid())
+        if(child.isValid())
         {
             glob_proj.info_name = child.value();
             vcout << "\t\t" << child.name() << ": \t" << child.value() << endl;
         }
+        
         child = sub_node.firstChild(XML_TAG_VERSION);
         if(child.isValid())
         {
             glob_proj.info_version = child.value();
             vcout << "\t\t" << child.name() << ": \t" << child.value() << endl;
         }
+
         child = sub_node.firstChild(XML_TAG_HACKER);
         if(child.isValid()) 
         {
             glob_proj.info_hacker = child.value();
             vcout << "\t\t" << child.name() << ": \t" << child.value() << endl;
         }
+
         child = sub_node.firstChild(XML_TAG_DATE);
         if(child.isValid()) 
         {
@@ -694,19 +715,21 @@ bool verifyProject()
         return false;
     }
     
-    /// 2. check library/project
-
+    /// 2. check library(lib+inc)/project
+    cout << "Check dependencies" << endl;
     glob_proj.build_depend_option = "";
-    glob_proj.build_depend.clear();
     glob_proj.build_depend_file.clear();
+    
     for(i=0; i<glob_proj.build_depend.size(); ++i)
     {
         bool found = false;
 
         for(int j=0; j<glob_library.size() && !found; ++j)
-        {
+        {            
             if( glob_library[j].name == glob_proj.build_depend[i] )
             {
+                // vcout << "Checking " << glob_library[j].name << endl;
+                
                 for(int k=0; k < glob_library[i].platform.size() && !found; ++k)
                 {
                     if( glob_library[j].platform[k].arch       == glob_proj.arch &&
@@ -714,12 +737,26 @@ bool verifyProject()
                         glob_library[j].platform[k].compiler   == glob_proj.compiler )
                     {
                         found = true;
-                        // vcout << glob_library[i].name << "|" << glob_proj.build_depend[j] << endl;
+                        vcout << glob_library[j].name << "|" << glob_proj.build_depend[i] << endl;
+
                         for(int m=0; m<glob_library[j].platform[k].files.size(); ++m)
-                            glob_proj.build_depend_file.push_back( glob_library[j].platform[k].files[m] );
-                        glob_proj.build_depend_option += "";
-                        glob_proj.build_depend_option += glob_library[j].platform[k].compiler_option;
-                        glob_proj.build_depend_option += "";
+                        {
+                            glob_proj.build_depend_file.push_back( glob_conf.graviton_path + GRAV_LIB_PATH + glob_library[j].platform[k].files[m] );
+                            // cout << "Adding " << glob_library[j].platform[k].files[m] << endl;
+                        }
+
+                        for(int m=0; m<glob_library[j].include.size(); ++m)
+                        {
+                            glob_proj.incpath.push_back( glob_conf.graviton_path + GRAV_CODE_PATH + glob_library[j].include[m] );
+                            // cout << "Adding " << glob_library[j].platform[k].files[m] << endl;
+                        }
+                        
+                        if( !glob_library[j].platform[k].compiler_option.empty() )
+                        {
+                            // glob_proj.build_depend_option += " ";
+                            glob_proj.build_depend_option += glob_library[j].platform[k].compiler_option;
+                            glob_proj.build_depend_option += " ";
+                        }
                     }
                 }
             }
@@ -746,36 +783,79 @@ bool verifyProject()
 void buildProject()
 {
     COMPILER mc = glob_compiler[glob_proj.compiler_id];
-    string command =
+    string cmd_includes, cmd_build_obj, cmd_build;
+
+    cmd_build = " " + mc.flag_general + glob_proj.build_depend_option + " ";
+    cmd_build_obj =
         mc.command + " " +
         mc.flag_general + " " +
         mc.flag_build_object + " " +
-        mc.flag_incpath + glob_conf.graviton_path + GRAV_CODE_PATH + " ";
+        mc.flag_incpath + "\"" + glob_conf.graviton_path  + GRAV_CODE_PATH + "\" ";
 
     int i;
 
-    /// Adding Project Includes
+    /// Add Project Includes
     vcout << "Adding includes: " << glob_proj.incpath.size() << endl;
     for(i=0; i<glob_proj.incpath.size(); ++i)
         if( !glob_proj.incpath[i].empty() )
-            command += mc.flag_incpath + " " + glob_proj.incpath[i] + " ";
+            cmd_includes += mc.flag_incpath + " \"" + glob_proj.incpath[i] + "\" ";
 
-    /// Adding Library Includes
+    /// Add Library Includes
     vcout << "Adding libraries: " << glob_proj.build_depend_file.size() << endl;
     for(i=0; i<glob_proj.build_depend_file.size(); ++i)
         if( !glob_proj.build_depend_file[i].empty() )
-            command += mc.flag_incpath + " " + glob_proj.build_depend_file[i] + " ";
+        {
+            cmd_build += " \"" + glob_proj.build_depend_file[i] + "\" ";
+        }
+        else
+        {
+            cout << "Fatal Error: " << glob_proj.build_depend_file[i] << " not found" << endl;
+        }
 
-    /// Get sources
+    /// Add sources
     vcout << "Adding sources: " << glob_proj.srcpath.size() << endl;
     vector<string> sources;
     for(int i=0; i<glob_proj.srcpath.size(); ++i)
     {
-        GraVitoN::Utils::File::findAllFiles(glob_proj.srcpath[i], sources, ".*\\.[c][p][p]$", true);
+        GraVitoN::Utils::File::findAllFiles(glob_proj.srcpath[i], sources, ".*\\.[Cc][Pp][Pp]$", true);
+        GraVitoN::Utils::File::findAllFiles(glob_proj.srcpath[i], sources, ".*\\.[Cc]$", true);
     }
-
+    
+    for(int i=0; i<glob_proj.source.size(); ++i)
+        sources.push_back( glob_proj.source[i] );
+    
     for(int i=0; i<sources.size(); ++i)
         vcout << "SOURCE: " << sources[i] << endl;
+
+    /// Create build folder
+    if( GraVitoN::Utils::File::pathExists( BUILD_DIRECTORY ) )
+        GraVitoN::Utils::File::deleteFolder( BUILD_DIRECTORY );
+    if( !GraVitoN::Utils::File::createFolder( BUILD_DIRECTORY ) )
+    {
+        cout << "Unable to create build directory" << endl;
+        exit(0);
+    }
+    
+    /// Building Objects
+    cout << "Executing System Commands:" << endl;
+    string cmd;
+    for(int i=0; i<sources.size(); ++i)
+    {
+        cmd = cmd_build_obj + cmd_includes + "\"" + sources[i] + "\"" + mc.flag_output + BUILD_DIRECTORY + "/\"" + sources[i] +  "\"" + mc.obj_extension;
+        cout << "Executing: " << cmd << endl;
+        system( cmd.c_str() );
+    }
+
+    /// Linking Objects
+    /// Rule: Objects before Libs
+    cmd = mc.command + " "+ BUILD_DIRECTORY + "/*" + mc.obj_extension + mc.flag_output + "\"" + BUILD_DIRECTORY + "/" + glob_proj.info_name + "\"" + cmd_build;
+    // cmd = cmd_build + " ";
+    // for(int i=0; i<sources.size(); ++i);
+    // {
+    //    cmd_build += "\"" + sources[i] + + mc.obj_extension + "\" ";
+    // }
+    cout << "Executing: " << cmd_build << endl;
+    system( cmd.c_str() );
 }
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */

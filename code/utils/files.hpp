@@ -429,6 +429,18 @@ bool pathExists(const string &path)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+string getRootDirectory(const string &path)
+{
+    string root;
+    int lpos = path.size() - 1;
+    while(lpos > 0 && path[lpos] != '/' && path[lpos] != '\\')
+        --lpos;
+    for(int i=0; i<lpos; ++i)
+        root = root + path[i];
+    return root;
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool deleteFile(const string &file)
 {
     return std::remove(file.c_str()) == 0;
@@ -442,22 +454,32 @@ bool deleteFolder(const string &folder)
 #else
     DIR*            dp;
     struct dirent*  ep;
-    string          buf;
+    string          buf, tmp;
 
     dp = opendir(folder.c_str());
 
     if( !dp ) return false;
     while ((ep = readdir(dp)) != NULL)
     {
-        buf = folder + "/" + ep->d_name;
+        tmp = ep->d_name;
+        if( tmp == "." || tmp == ".." )
+            continue;
+        
+        buf = folder + "/" + tmp;
         if (isDirectory(buf))
         {
             deleteFolder(buf);
         }
         else
-        {     
-            if( unlink(buf.c_str()) != 0 )
+        {
+            Core::Logger::logVariable("[FILE] Deleting", buf);
+            // continue;
+            
+            if( !deleteFile(buf) )
+            {
                 Core::Logger::logVariable("Unable to delete: ", buf);
+                return false;
+            }
         }
     }
 

@@ -75,6 +75,7 @@ const string BUILD_TYPE_EXEC        = "exec";
 const string BUILD_TYPE_STATLIB     = "statlib";
 const string BUILD_TYPE_DYNLIB      = "dynlib";
 const string BUILD_TYPE_OBJ         = "obj";
+const string BUILD_DIRECTORY        = "build";
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
 /*
@@ -89,6 +90,7 @@ const char XML_TAG_CONF[]           = "conf";
 const char XML_TAG_LIBRARY[]        = "library";
 const char XML_TAG_COMPILER[]       = "compiler";
 const char XML_TAG_COMMAND[]        = "command";
+const char XML_TAG_OBJ_EXTENSION[]  = "obj_extension";
 const char XML_TAG_DEP[]            = "depend";
 const char XML_TAG_FILE[]           = "file";
 const char XML_TAG_FLAG[]           = "flag";

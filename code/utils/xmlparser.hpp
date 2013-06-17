@@ -170,8 +170,16 @@ namespace GraVitoN
         /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
         bool XML_Parser::parse(char *text)
         {
-            xml_doc.parse<0>(text);
-            return true;
+            try
+            {
+                xml_doc.parse<0>(text);
+                return true;
+            }
+            catch( ... )
+            {
+                Core::Logger::logItLn("[XMLParser] Exception: Parse ERROR");
+            }
+            return false;
         }
 
         /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
