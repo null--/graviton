@@ -30,6 +30,7 @@ struct CONF
     string graviton_path;
     
     GraVitoN::Utils::XML_Parser compiler_xml;
+	// rapidxml::xml_document<> library_xml;
     GraVitoN::Utils::XML_Parser library_xml;
 
     CONF();
@@ -49,12 +50,16 @@ CONF::CONF():
                 )
 {
     verbose = false;
-    graviton_path = "/media/null/project/GraVitoN/graviton/";
-
+    graviton_path = GraVitoN::Utils::File::getRootDirectory(
+						GraVitoN::Utils::File::getRootDirectory(
+							GraVitoN::Utils::File::getWorkingDirectory()
+						)
+					) + "/";
+	cout << "GraVitoN Path: " << graviton_path << endl;
     compiler = graviton_path + "bin/graver/compiler.conf";
     library = graviton_path + "bin/graver/library.conf";
 
-    cout << GraVitoN::Utils::File::getRootDirectory(library);
+    // cout << GraVitoN::Utils::File::getRootDirectory(library);
 }
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
@@ -188,30 +193,32 @@ void initLibs()
         
     /// Load library.conf
     // rapidxml::file<char> libf(glob_conf.library.c_str());
-    // glob_conf.library_xml.parse<0>( libf.data() );
+    // glob_conf.library_xml.parse( libf.data() );
     glob_conf.library_xml.load(glob_conf.library.c_str());
     
     /// <conf>
     // rapidxml::xml_node<> *node = glob_conf.library_xml.first_node(XML_TAG_CONF);
-    master = glob_conf.library_xml.firstNode(XML_TAG_CONF);
+    // rapidxml::xml_node<> *node = glob_conf.library_xml.firstNode(XML_TAG_CONF);
+	node = glob_conf.library_xml.firstNode(XML_TAG_CONF);
 
-    if( !master.isValid() )
+    if( !node )
     {
         cout << "Failed to load " << glob_conf.library <<", which is fuckin' necessary!" << endl;
         exit(0);
     }
 
     /// <library name>
-    // node = node->first_node(XML_TAG_LIBRARY);
-    node = master.firstChild(XML_TAG_LIBRARY);
-    while (node.isValid())
+    // node = node.first_node(XML_TAG_LIBRARY);
+    node = node.firstChild(XML_TAG_LIBRARY);
+    while (node)
     {
+		// cout << "Node: " << node << endl;
         LIBRARY mlib;
         // rapidxml::xml_attribute<> *sub_attr;
         // rapidxml::xml_node<> *sub_node, *child;
 
-        /// name
-        // sub_attr = node->first_attribute(XML_ATTR_NAME);
+        /// <name>
+        // sub_attr = node.first_attribute(XML_ATTR_NAME);
         sub_attr = node.firstAttribute(XML_ATTR_NAME);
         if(!sub_attr)
         {
@@ -223,19 +230,21 @@ void initLibs()
         // mlib.name = sub_attr->value();
         mlib.name = sub_attr.value(); // sub_attr->value();
         
+		// cout << "Node: " << node << endl;
         /// <include>  
-        // sub_node = node->first_node(XML_TAG_INC);
+        // sub_node = node.first_node(XML_TAG_INC);
         sub_node = node.firstChild(XML_TAG_INC);
-        while( sub_node.isValid() )
+        while( sub_node )
         {
             vcout << "\t" << sub_node.name() << ": " << sub_node.value() << endl;
             mlib.include.push_back( sub_node.value() );
-            // sub_node = sub_node->next_sibling(XML_TAG_INC);
+            // sub_node = sub_node.next_sibling(XML_TAG_INC);
             sub_node = sub_node.next(XML_TAG_INC);
         }
 
+		// cout << "Node: " << node << endl;
         /// <platform arch os compiler>
-        // sub_node = node->first_node(XML_TAG_PLAT);
+        //sub_node = node.first_node(XML_TAG_PLAT);
         sub_node = node.firstChild(XML_TAG_PLAT);
         while( sub_node )
         {
@@ -244,7 +253,7 @@ void initLibs()
             vcout << "\t" << sub_node.name() << ": " << endl;
 
             /// os
-            // sub_attr = sub_node->first_attribute(XML_ATTR_OS);
+            // sub_attr = sub_node.first_attribute(XML_ATTR_OS);
             sub_attr = sub_node.firstAttribute(XML_ATTR_OS);
             if(!sub_attr)
             {
@@ -255,9 +264,9 @@ void initLibs()
             vcout << "\t\t" << XML_ATTR_OS << ": \t" << plat.os << endl;
 
             /// arch
-            // sub_attr = sub_node->first_attribute(XML_ATTR_ARCH);
+            // sub_attr = sub_node.first_attribute(XML_ATTR_ARCH);
             sub_attr = sub_node.firstAttribute(XML_ATTR_ARCH);
-            if(!sub_attr.isValid())
+            if(!sub_attr)
             {
                 cout << "BAD PLATFORM: no 'arch' attr" << endl;
                 goto NEXT;
@@ -267,9 +276,9 @@ void initLibs()
             vcout << "\t\t" << XML_ATTR_ARCH << ": \t" << plat.arch << endl;
 
             /// compiler
-            // sub_attr = sub_node->first_attribute(XML_ATTR_COMPILER);
+            // sub_attr = sub_node.first_attribute(XML_ATTR_COMPILER);
             sub_attr = sub_node.firstAttribute(XML_ATTR_COMPILER);
-            if(!sub_attr.isValid())
+            if(!sub_attr)
             {
                 cout << "BAD PLATFORM: no 'compiler' attr" << endl;
                 goto NEXT;
@@ -280,11 +289,11 @@ void initLibs()
 
             /// <file>
             // plat.files.clear();
-            // child = sub_node->first_node(XML_TAG_FILE);
+            // child = sub_node.first_node(XML_TAG_FILE);
             child = sub_node.firstChild(XML_TAG_FILE);
-            while(child.isValid())
+            while(child)
             {
-                string tmp = child.value();// child->value();
+                string tmp = child.value();// child.value();
                 tmp = glob_conf.graviton_path + GRAV_LIB_PATH + tmp;
                 
                 if( !GraVitoN::Utils::File::pathExists(tmp) )
@@ -294,33 +303,38 @@ void initLibs()
                 }
 
                 // cout << "Pushing " << child.value() << endl;
-                plat.files.push_back( child.value() );//child->value());
-                // child = child->next_sibling(XML_TAG_FILE);
+                plat.files.push_back( child.value() );//child.value());
+                // child = child.next_sibling(XML_TAG_FILE);
                 child = child.next(XML_TAG_FILE);
             }
 
             /// <compiler>
-            child = sub_node.firstChild(XML_TAG_COMPILER_OPT);
-            if(child.isValid()) plat.compiler_option = child.value();
+            // child = sub_node.next_sibling(XML_TAG_COMPILER_OPT);
+			child = sub_node.firstChild(XML_TAG_COMPILER_OPT);
+            if(child) plat.compiler_option = child.value();
 
             mlib.platform.push_back(plat);
             sub_node = sub_node.next(XML_TAG_PLAT); //->next_sibling(XML_TAG_PLAT);
+			// sub_node = sub_node.next_sibling(XML_TAG_PLAT);
         }
 
+		// cout << "Node: " << node << endl;
         /// <depend>
         sub_node = node.firstChild(XML_TAG_DEP);
-        while( sub_node.isValid() )
+		// sub_node = node.next_sibling(XML_TAG_DEP);
+        while( sub_node )
         {
             vcout << "\t" << XML_TAG_DEP << ": " << sub_node.value() << endl;
             mlib.depend.push_back(sub_node.value());
 
-            // sub_node = sub_node->next_sibling(XML_TAG_DEP);
+            // sub_node = sub_node.next_sibling(XML_TAG_DEP);
             sub_node = sub_node.next(XML_TAG_DEP);
         }
 
         glob_library.push_back(mlib);
 NEXT:        
-        // node = node->next_sibling(XML_TAG_LIBRARY);
+		// cout << " --- Node: ---" << node << endl;
+        // node = node.next_sibling(XML_TAG_LIBRARY);
         node = node.next(XML_TAG_LIBRARY);
     }
 }
@@ -333,18 +347,20 @@ void initCompilers()
     cout << "Loading Compilers..." << endl;
 
     // GraVitoN::Utils::XML_Parser pars;
-    GraVitoN::Utils::XML_Node master, node, sub_node, child;
+    GraVitoN::Utils::XML_Node node, sub_node, child;
     GraVitoN::Utils::XML_Attrib attr, sub_attr;
 
+	vcout << "Parsing..." << endl;
     glob_conf.compiler_xml.load(glob_conf.compiler.c_str());
     
     // rapidxml::file<char> compf(glob_conf.compiler.c_str());
     // glob_conf.compiler_xml.parse<0>( compf.data() );
 
+	vcout << "Get CONF Tag..." << endl;
     // rapidxml::xml_node<> *node = glob_conf.compiler_xml.first_node(XML_TAG_CONF);
     node = glob_conf.compiler_xml.firstNode(XML_TAG_CONF);
 
-    if( !node.isValid() )
+    if( !node )
     {
         cout << "Failed to load " << glob_conf.compiler <<", which is fuckin' necessary!" << endl;
         exit(0);
@@ -352,13 +368,13 @@ void initCompilers()
 
     /// Parse compiler
     node = node.firstChild(XML_TAG_COMPILER);
-    while (node.isValid())
+    while (node)
     {
         COMPILER mcom;
         
         vcout << "COMPILER\t";
         sub_attr = node.firstAttribute(XML_ATTR_NAME);
-        if(!sub_attr.isValid())
+        if(!sub_attr)
         {
             cout << "BAD COMPILER: no 'name' attr" << endl;
             goto NEXT;
@@ -367,7 +383,7 @@ void initCompilers()
         vcout << "\t" << XML_ATTR_NAME << ":\t" << sub_attr.value() << endl;
 
         sub_attr = node.firstAttribute(XML_ATTR_ARCH);
-        if(!sub_attr.isValid())
+        if(!sub_attr)
         {
             cout << "BAD COMPILER: no 'arch' attr" << endl;
             goto NEXT;
@@ -376,7 +392,7 @@ void initCompilers()
         vcout << "\t" << XML_ATTR_ARCH << ":\t" << sub_attr.value() << endl;
 
         sub_attr = node.firstAttribute(XML_ATTR_OS);
-        if(!sub_attr.isValid())
+        if(!sub_attr)
         {
             cout << "BAD COMPILER: no 'os' attr" << endl;
             goto NEXT;
@@ -385,7 +401,7 @@ void initCompilers()
         vcout << "\t" << XML_ATTR_OS << ":\t" << sub_attr.value() << endl;
 
         sub_attr = node.firstAttribute(XML_ATTR_TARGET);
-        if(!sub_attr.isValid())
+        if(!sub_attr)
         {
             cout << "BAD COMPILER: no 'target' attr" << sub_attr.value() << endl;
             goto NEXT;
@@ -395,7 +411,7 @@ void initCompilers()
         
         /// Parse command tag
         sub_node = node.firstChild(XML_TAG_COMMAND);
-        if( !sub_node.isValid() )
+        if( !sub_node )
         {
             cout << "BAD COMPILER: no 'command' tag" << endl;
             goto NEXT;
@@ -405,7 +421,7 @@ void initCompilers()
 
         /// Parse linker tag
         sub_node = node.firstChild(XML_TAG_LINKER);
-        if( !sub_node.isValid() )
+        if( !sub_node )
         {
             cout << "BAD COMPILER: no 'linker' tag" << endl;
             goto NEXT;
@@ -415,7 +431,7 @@ void initCompilers()
 
         /// Parse obj_extension tag
         sub_node = node.firstChild(XML_TAG_OBJ_EXTENSION);
-        if( !sub_node.isValid() )
+        if( !sub_node )
         {
             cout << "BAD COMPILER: no 'obj_extension' tag" << endl;
             goto NEXT;
@@ -425,7 +441,7 @@ void initCompilers()
 
         /// Parse flag
         sub_node = node.firstChild(XML_TAG_FLAG);
-        if( !sub_node.isValid() )
+        if( !sub_node )
         {
             cout << "BAD COMPILER: no 'flag' tag" << endl;
             goto NEXT;
@@ -433,7 +449,7 @@ void initCompilers()
         vcout << "\t" << XML_TAG_FLAG << ":" << endl;
 
         child = sub_node.firstChild(XML_TAG_INCPATH);
-        if(!child.isValid())
+        if(!child)
         {
             cout << "BAD COMPILER: no flag > 'incpath' tag" << endl;
             goto NEXT;
@@ -442,7 +458,7 @@ void initCompilers()
         vcout << "\t\t" << child.name() << ": " << child.value() << endl;
 
         child = sub_node.firstChild(XML_TAG_LIBPATH);
-        if(!child.isValid())
+        if(!child)
         {
             cout << "BAD COMPILER: no flag > 'libpath' tag" << endl;
             goto NEXT;
@@ -451,7 +467,7 @@ void initCompilers()
         vcout << "\t\t" << child.name() << ": "<< child.value() << endl;
         
         child = sub_node.firstChild(XML_TAG_DEFINE);
-        if(!child.isValid())
+        if(!child)
         {
             cout << "BAD COMPILER: no flag > 'define' tag" << endl;
             goto NEXT;
@@ -460,7 +476,7 @@ void initCompilers()
         vcout << "\t\t" << child.name() << ": "<< child.value() << endl;
 
         child = sub_node.firstChild(XML_TAG_LIB);
-        if(!child.isValid())
+        if(!child)
         {
             cout << "BAD COMPILER: no flag > 'lib' tag" << endl;
             goto NEXT;
@@ -469,7 +485,7 @@ void initCompilers()
         vcout << "\t\t" << child.name() << ": "<< child.value() << endl;
 
         child = sub_node.firstChild(XML_TAG_BUILDOBJ);
-        if(!child.isValid())
+        if(!child)
         {
             cout << "BAD COMPILER: no flag > 'build_object' tag" << endl;
             goto NEXT;
@@ -478,7 +494,7 @@ void initCompilers()
         vcout << "\t\t" << child.name() << ": "<< child.value() << endl;
 
         child = sub_node.firstChild(XML_TAG_OUTPUT);
-        if(!child.isValid())
+        if(!child)
         {
             cout << "BAD COMPILER: no flag > 'output' tag" << endl;
             goto NEXT;
@@ -487,7 +503,7 @@ void initCompilers()
         vcout << "\t\t" << child.name() << ": "<< child.value() << endl;
 
         child = sub_node.firstChild(XML_TAG_GENERAL);
-        if(!child.isValid())
+        if(!child)
         {
             cout << "BAD COMPILER: no flag > 'general' tag" << endl;
             goto NEXT;
@@ -497,28 +513,28 @@ void initCompilers()
 
         /// Parse modes
         sub_node = node.firstChild(XML_TAG_MODE);
-        if( sub_node.isValid() )
+        if( sub_node )
         {
             vcout << "\t" << XML_TAG_MODE << ":" << endl;
 
             child = sub_node.firstChild(XML_TAG_GENERAL);
-            if(child.isValid())
+            if(child)
             {
                 mcom.mode_general = child.value();
                 vcout << "\t\t" << child.name() << ": "<< child.value() << endl;
             }
             child = sub_node.firstChild(XML_TAG_GUI);
-            if(child.isValid())
+            if(child)
             {
                 mcom.mode_gui = child.value();
                 vcout << "\t\t" << child.name() << ": "<< child.value() << endl;
             }
 
-            // child = sub_node->first_node(XML_TAG_SOCK);
+            // child = sub_node.first_node(XML_TAG_SOCK);
             // if(child)
             // {
-            //    mcom.mode_sock = child->value();
-            //     vcout << "\t\t" << child->name() << ": "<< child->value() << endl;
+            //    mcom.mode_sock = child.value();
+            //     vcout << "\t\t" << child.name() << ": "<< child.value() << endl;
             // }
         }
 
@@ -534,7 +550,7 @@ bool loadProject()
     cout << "Loading Project..." << endl;
 
     GraVitoN::Utils::XML_Parser pars;
-    GraVitoN::Utils::XML_Node master, node, sub_node, child;
+    GraVitoN::Utils::XML_Node node, sub_node, child;
     GraVitoN::Utils::XML_Attrib attr, sub_attr;
 
     pars.load(glob_proj.path.c_str());
@@ -544,7 +560,7 @@ bool loadProject()
     // rapidxml::xml_node<> *node = glob_proj.project_xml.first_node(XML_TAG_PROJECT);
     node = pars.firstNode(XML_TAG_PROJECT);
     
-    if( !node.isValid() )
+    if( !node )
     {
         cout << "Failed to load " << glob_proj.path <<", which is fuckin' necessary!" << endl;
         exit(0);
@@ -558,33 +574,33 @@ bool loadProject()
     
     /// Parse info tag
     sub_node = node.firstChild(XML_TAG_INFO);
-    if( sub_node.isValid() )
+    if( sub_node )
     {
         vcout << "\t" << XML_TAG_INFO << ":" << endl;
 
         child = sub_node.firstChild(XML_TAG_NAME);
-        if(child.isValid())
+        if(child)
         {
             glob_proj.info_name = child.value();
             vcout << "\t\t" << child.name() << ": \t" << child.value() << endl;
         }
         
         child = sub_node.firstChild(XML_TAG_VERSION);
-        if(child.isValid())
+        if(child)
         {
             glob_proj.info_version = child.value();
             vcout << "\t\t" << child.name() << ": \t" << child.value() << endl;
         }
 
         child = sub_node.firstChild(XML_TAG_HACKER);
-        if(child.isValid()) 
+        if(child) 
         {
             glob_proj.info_hacker = child.value();
             vcout << "\t\t" << child.name() << ": \t" << child.value() << endl;
         }
 
         child = sub_node.firstChild(XML_TAG_DATE);
-        if(child.isValid()) 
+        if(child) 
         {
             glob_proj.info_date = child.value();
             vcout << "\t\t" << child.name() << ": \t" << child.value() << endl;
@@ -593,12 +609,12 @@ bool loadProject()
 
     /// Parse code tag
     sub_node = node.firstChild(XML_TAG_CODE);
-    if( sub_node.isValid() )
+    if( sub_node )
     {
         vcout << "\t" << XML_TAG_MODE << ":" << endl;
 
         child = sub_node.firstChild(XML_TAG_INCPATH);
-        while(child.isValid())
+        while(child)
         {
             glob_proj.incpath.push_back(child.value());
             vcout << "\t\t" << child.name() << ": \t" << child.value() << endl;
@@ -606,7 +622,7 @@ bool loadProject()
         }
 
         child = sub_node.firstChild(XML_TAG_SRCPATH);
-        while(child.isValid())
+        while(child)
         {
             glob_proj.srcpath.push_back(child.value());
             vcout << "\t\t" << child.name() << ": \t" << child.value() << endl;
@@ -614,7 +630,7 @@ bool loadProject()
         }
         
         child = sub_node.firstChild(XML_TAG_SOURCE);
-        while(child.isValid())
+        while(child)
         {
             glob_proj.source.push_back(child.value());
             vcout << "\t\t" << child.name() << ": \t" << child.value() << endl;
@@ -626,7 +642,7 @@ bool loadProject()
     sub_node = node.firstChild(XML_TAG_BUILD);
     vcout << "\t" << XML_TAG_BUILD << ":" << endl;
     child = sub_node.firstChild(XML_TAG_TYPE);
-    if(child.isValid())
+    if(child)
     {
         glob_proj.build_type = child.value();
         vcout << "\t\t" << child.name() << ": \t" << child.value() << endl;
@@ -634,45 +650,45 @@ bool loadProject()
         
     /// Parse platform tags
     /*
-    child = sub_node->first_node(XML_TAG_PLAT);
+    child = sub_node.first_node(XML_TAG_PLAT);
     while( child )
     {
         PLATFORM plat;
             
-        vcout << "\t" << child->name() << ": ";
+        vcout << "\t" << child.name() << ": ";
 
-        sub_attr = child->first_attribute(XML_ATTR_OS);
+        sub_attr = child.first_attribute(XML_ATTR_OS);
         if(!sub_attr)
         {
             cout << "BAD PLATFORM: no 'os' attr" << endl;
         }
-        plat.os = sub_attr->value();
+        plat.os = sub_attr.value();
         vcout << "\t\t" << XML_ATTR_OS << ": \t" << plat.os << endl;
             
-        sub_attr = child->first_attribute(XML_ATTR_ARCH);
+        sub_attr = child.first_attribute(XML_ATTR_ARCH);
         if(!sub_attr)
         {
             cout << "BAD PLATFORM: no 'arch' attr" << endl;
         }
-        plat.arch = sub_attr->value();
+        plat.arch = sub_attr.value();
         vcout << "\t\t" << XML_ATTR_ARCH << ": \t" << plat.arch << endl;
 
-        sub_attr = child->first_attribute(XML_ATTR_COMPILER);
+        sub_attr = child.first_attribute(XML_ATTR_COMPILER);
         if(!sub_attr)
         {
             cout << "BAD PLATFORM: no 'compiler' attr" << endl;
         }
-        plat.compiler = sub_attr->value();
+        plat.compiler = sub_attr.value();
         vcout << "\t\t" << XML_ATTR_COMPILER << ": \t" << plat.os << endl;
 
         glob_proj.build_platform.push_back(plat);
 
-        child = child->next_sibling(XML_TAG_PLAT);
+        child = child.next_sibling(XML_TAG_PLAT);
     }
     */
         
     child = sub_node.firstChild(XML_TAG_DEP);
-    while(child.isValid())
+    while( child )
     {
         vcout << "\t\t" << XML_TAG_DEP << ": \t" << child.value() << endl;
         glob_proj.build_depend.push_back(child.value());
@@ -783,9 +799,11 @@ bool verifyProject()
 void buildProject()
 {
     COMPILER mc = glob_compiler[glob_proj.compiler_id];
+    string base_dir = GraVitoN::Utils::File::getRootDirectory(glob_proj.path);
+    
     string cmd_includes, cmd_build_obj, cmd_build;
 
-    cmd_build = " " + mc.flag_general + glob_proj.build_depend_option + " ";
+    cmd_build = " " + mc.flag_general + glob_proj.build_depend_option + " " + mc.mode_general;
     cmd_build_obj =
         mc.command + " " +
         mc.flag_general + " " +
@@ -798,7 +816,7 @@ void buildProject()
     vcout << "Adding includes: " << glob_proj.incpath.size() << endl;
     for(i=0; i<glob_proj.incpath.size(); ++i)
         if( !glob_proj.incpath[i].empty() )
-            cmd_includes += mc.flag_incpath + " \"" + glob_proj.incpath[i] + "\" ";
+            cmd_includes += mc.flag_incpath + "\"" + base_dir + "/" + glob_proj.incpath[i] + "\" ";
 
     /// Add Library Includes
     vcout << "Adding libraries: " << glob_proj.build_depend_file.size() << endl;
@@ -814,7 +832,8 @@ void buildProject()
 
     /// Add sources
     vcout << "Adding sources: " << glob_proj.srcpath.size() << endl;
-    vector<string> sources;
+    vector<string> sources, objects;
+    
     for(int i=0; i<glob_proj.srcpath.size(); ++i)
     {
         GraVitoN::Utils::File::findAllFiles(glob_proj.srcpath[i], sources, ".*\\.[Cc][Pp][Pp]$", true);
@@ -828,9 +847,10 @@ void buildProject()
         vcout << "SOURCE: " << sources[i] << endl;
 
     /// Create build folder
-    if( GraVitoN::Utils::File::pathExists( BUILD_DIRECTORY ) )
-        GraVitoN::Utils::File::deleteFolder( BUILD_DIRECTORY );
-    if( !GraVitoN::Utils::File::createFolder( BUILD_DIRECTORY ) )
+    if( GraVitoN::Utils::File::pathExists( base_dir + "/" + BUILD_DIRECTORY ) )
+        GraVitoN::Utils::File::deleteFolder( base_dir + "/" + BUILD_DIRECTORY );
+    if( !GraVitoN::Utils::File::pathExists( base_dir + "/" + BUILD_DIRECTORY ) &&
+		!GraVitoN::Utils::File::createFolder( base_dir + "/" + BUILD_DIRECTORY ) )
     {
         cout << "Unable to create build directory" << endl;
         exit(0);
@@ -841,20 +861,24 @@ void buildProject()
     string cmd;
     for(int i=0; i<sources.size(); ++i)
     {
-        cmd = cmd_build_obj + cmd_includes + "\"" + sources[i] + "\"" + mc.flag_output + BUILD_DIRECTORY + "/\"" + sources[i] +  "\"" + mc.obj_extension;
-        cout << "Executing: " << cmd << endl;
+        vcout << "Source: " << sources[i] << endl;
+        objects.push_back(  "\"" + base_dir + "/" + BUILD_DIRECTORY + "/" + sources[i]  + mc.obj_extension + "\"");
+        
+        cmd = cmd_build_obj + cmd_includes + " \"" + base_dir + "/" + sources[i] + "\" " + mc.flag_output + objects[i];
+        cout << "-- Executing: " << cmd << endl;
         system( cmd.c_str() );
     }
-
+    
     /// Linking Objects
     /// Rule: Objects before Libs
-    cmd = mc.command + " "+ BUILD_DIRECTORY + "/*" + mc.obj_extension + mc.flag_output + "\"" + BUILD_DIRECTORY + "/" + glob_proj.info_name + "\"" + cmd_build;
-    // cmd = cmd_build + " ";
-    // for(int i=0; i<sources.size(); ++i);
-    // {
-    //    cmd_build += "\"" + sources[i] + + mc.obj_extension + "\" ";
-    // }
-    cout << "Executing: " << cmd_build << endl;
+    cmd = mc.command;
+    for(int i=0; i<objects.size(); ++i)
+    {
+        vcout << "Linking: " << objects[i] << endl;
+        cmd += " " + objects[i];
+    }
+    cmd += " " + mc.flag_output + "\"" + base_dir + "/" + BUILD_DIRECTORY + "/" + glob_proj.info_name + "\"" + cmd_build;
+    cout << "-- Executing: " << cmd << endl;
     system( cmd.c_str() );
 }
 
@@ -1063,6 +1087,8 @@ int main(int argc, char **argv)
         if( string(argv[i]) == "-v" )
             glob_conf.verbose = true;
     
+	vcout << "VERBOSE MODE ENABLED" << endl;
+	
     init();
     
     normal(argc, argv);

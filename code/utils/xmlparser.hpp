@@ -7,7 +7,6 @@
 #include <external/rapidxml/rapidxml.hpp>
 #include <external/rapidxml/rapidxml_utils.hpp>
 #include <external/rapidxml/rapidxml_print.hpp>
-#include <map>
 using namespace std;
 
 namespace GraVitoN
@@ -16,70 +15,152 @@ namespace GraVitoN
     {
         /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
         // typedef rapidxml::xml_node<> XML_Node;
-        
+
         class XML_Attrib
         {
+		private:
+			rapidxml::xml_attribute<> *attr;
+			
         public:
-            rapidxml::xml_attribute<> *attr;
-
-            XML_Attrib(rapidxml::xml_attribute<> *_attr = _null_) {attr = _attr;}
-
-            operator rapidxml::xml_attribute<>* ()
-                { return attr; }
-
+            XML_Attrib(rapidxml::xml_attribute<> * _attr = _null_) { attr = _attr; }
+			~XML_Attrib() {}
+			
+			operator rapidxml::xml_attribute<> * ()
+			{
+				return attr;
+			}
+			
+			bool operator ! ()
+			{
+				return attr == _null_;
+			}
+			
             XML_Attrib   next(const char *name = _null_)
-                {return (XML_Attrib)(name?(attr->next_attribute(name)):(attr->next_attribute()));}
+            {
+				if( !attr ) return XML_Attrib(_null_);
+				return (XML_Attrib)(name?(attr->next_attribute(name)):(attr->next_attribute()));
+			}
 
-            char*        name()                       {return attr->name();}
-            void         setName(const char *name)    {attr->name( name );}
-
-            char*        value()                      {return attr->value();}
-            void         setValue(const char *value)  {attr->value( value );}
-
-            bool isValid() {return attr != _null_;}
-        };
+			char 		 *name()					  
+			{
+				if( !attr ) return _null_;
+				return attr->name();
+			}
             
+			void         setName(const char *name)    
+			{
+				if( !attr ) return;
+				attr->name( name );
+			}
+			
+			char 		 *value()					  
+			{
+				if( !attr ) return _null_;
+				return attr->value(); 
+			}
+            void         setValue(const char *value)  
+			{
+				if(!attr) return;
+				attr->value( value );
+			}
+        };
+        
         class XML_Node
         {
-        public:
-            rapidxml::xml_node<> *node;
-            
-            XML_Node(rapidxml::xml_node<> *_node = _null_) {node = _node;}
-            
-            operator rapidxml::xml_node<> * ()
-                { return node; }
-
+		private:
+			rapidxml::xml_node<> *node;
+			
+        public:  
+            XML_Node(rapidxml::xml_node<> *_node = _null_)
+			{
+				node = _node;
+			}
+			
+			~XML_Node() {}
+			
+			bool operator ! ()
+			{
+				return node == _null_;
+			}
+			
+			operator rapidxml::xml_node<> * ()
+			{
+				return node;
+			}
+			
             void removeAttribute(XML_Attrib &_attr)
-                {node->remove_attribute((rapidxml::xml_attribute<> *)_attr); }
-            void removeAllAttributes()
-                {node->remove_all_attributes();}
-            void removeChild(XML_Node &_node)
-                {node->remove_node( _node.node );}
-            void removeAllChilds()
-                {node->remove_all_nodes();}
+			{
+				if(!node) return;
+				node->remove_attribute((rapidxml::xml_attribute<> *)_attr);
+			}
+            
+			void removeAllAttributes()
+            {
+				if(!node) return;
+				node->remove_all_attributes();
+			}
+            
+			void removeChild(XML_Node &_node)
+            {
+				if(!node) return;
+				node->remove_node( (rapidxml::xml_node<>*)_node );
+			}
+            
+			void removeAllChilds()
+            {
+				if(!node) return;
+				node->remove_all_nodes();
+			}
 
             XML_Node     firstChild(const char *name = _null_)
-                {return (XML_Node)(name?(node->first_node(name)):(node->first_node()));}
-            XML_Node     next(const char *name = _null_)
-                {return (XML_Node)(name?(node->next_sibling(name)):(node->next_sibling()));}
-            XML_Attrib   firstAttribute(const char *name = _null_)
-                {return (XML_Attrib)(name?(node->first_attribute(name)):(node->first_attribute()));}
-
-            char*        name()                       {return node->name(); }
-            void         setName(const char *name)    {node->name( name ); } 
+            {
+				if(!node) return XML_Node(_null_);
+				return XML_Node(name?(node->first_node(name)):(node->first_node()));
+			}
             
-            char*        value()                      {return node->value();}
-            void         setValue(const char *value)  {node->value( value );}
+			XML_Node     next(const char *name = _null_)
+            {
+				if(!node) return XML_Node(_null_);
+				return XML_Node(name?(node->next_sibling(name)):(node->next_sibling()));
+			}
+            XML_Attrib   firstAttribute(const char *name = _null_)
+            {
+				if(!node) return XML_Attrib(_null_);
+				return XML_Attrib(name?(node->first_attribute(name)):(node->first_attribute()));
+			}
 
-            bool isValid() {return node != _null_;}
+			char		*name()
+			{
+				if(!node) return _null_;
+				return node->name();
+			}
+			
+            void         setName(const char *name)    
+			{
+				if(!node) return;
+				node->name( name );
+			} 
+			
+            void         setValue(const char *value)  
+			{
+				if(!node) return;
+				node->value( value );
+			}
+			
+			char 		*value()
+			{
+				if(!node) return _null_;
+				return node->value();
+			}
         };
             
         /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
         class XML_Parser
         {
-        private:
-            rapidxml::xml_document<> xml_doc;
-
+		private:
+			std::vector<char> file_data;   // File data
+			rapidxml::xml_document<> xml_doc;
+			
         public:
             XML_Parser();
             ~XML_Parser();
@@ -93,7 +174,10 @@ namespace GraVitoN
             bool load(const char *path);
             bool parse(char *path);
 
-            XML_Node firstNode(const char *name = _null_)   {return (XML_Node)xml_doc.first_node( name ); }
+            XML_Node firstNode(const char *name = _null_)
+			{
+				return XML_Node( xml_doc.first_node( name ) );
+			}
 
             void clear() {xml_doc.clear();}
             // XML_Node *cloneNode(const XML_Node *&node) {return xml_doc.clone_node(node); }
@@ -117,33 +201,29 @@ namespace GraVitoN
         bool XML_Parser::addDecleration(const char *version, const char *encoding)
         {
             rapidxml::xml_node<>* decl = xml_doc.allocate_node(rapidxml::node_declaration);
+			if(!decl) return false;
             decl->append_attribute(xml_doc.allocate_attribute("version", version));
             decl->append_attribute(xml_doc.allocate_attribute("encoding", encoding));
             xml_doc.append_node(decl);  
+			return true;
         }
 
         /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
         bool XML_Parser::addNode(XML_Node &node, const char *name, const char *value)
         {
-            if( !value || value[0] == '\0' )
-                node.node = xml_doc.allocate_node(rapidxml::node_element, name);
-            else
-                node.node = xml_doc.allocate_node(rapidxml::node_element, name, value);
+            node = XML_Node(xml_doc.clone_node(xml_doc.allocate_node(rapidxml::node_element, name, value)));
 
-            if(!node.node) return false;
-            xml_doc.append_node( (rapidxml::xml_node<>*)node);
+            if(!node) return false;
+            xml_doc.append_node( (rapidxml::xml_node<>*)node );
             return true;
         }
 
         /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
         bool XML_Parser::addChild(XML_Node &node, XML_Node &child, const char*name, const char*value)
         {
-            if( !value || value[0] == '\0' )
-                child.node = xml_doc.allocate_node(rapidxml::node_element, name);
-            else
-                child.node = xml_doc.allocate_node(rapidxml::node_element, name, value);
+            child = XML_Node(xml_doc.clone_node(xml_doc.allocate_node(rapidxml::node_element, name, value)));
 
-            if(!child.node) return false;
+            if(!child) return false;
             ((rapidxml::xml_node<>*)node)->append_node((rapidxml::xml_node<>*)child);
             return true;
         }
@@ -151,8 +231,8 @@ namespace GraVitoN
         /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
         bool XML_Parser::addAttribute(XML_Node &node, XML_Attrib &attr, const char*name, const char*value)
         {
-            attr = (XML_Attrib)xml_doc.allocate_attribute(name, value);
-            if(!attr.attr) return false;
+            attr = XML_Attrib( xml_doc.allocate_attribute(name, value) );
+            if(!attr) return false;
             ((rapidxml::xml_node<>*)node)->append_attribute((rapidxml::xml_attribute<>*)attr);
             return true;
         }
@@ -168,27 +248,47 @@ namespace GraVitoN
         }
 
         /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
-        bool XML_Parser::parse(char *text)
+		bool XML_Parser::parse(char *text)
         {
-            try
-            {
-                xml_doc.parse<0>(text);
-                return true;
-            }
-            catch( ... )
-            {
-                Core::Logger::logItLn("[XMLParser] Exception: Parse ERROR");
-            }
-            return false;
-        }
-
+			try
+			{
+				xml_doc.parse<0>( text );
+			}
+			catch( ... )
+			{
+				return false;
+			}
+			return true;
+		}
+		
         /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
-        bool XML_Parser::load(const char *path)
+        bool XML_Parser::load(const char *filename)
         {
-            rapidxml::file<char> xml_file(path);
-            bool res = parse( xml_file.data() );
-            // xml_file.close();
-            return res;
+			try
+			{
+				// Open stream
+				basic_ifstream<char> stream(filename, ios::binary);
+				if (!stream)
+					throw runtime_error(string("cannot open file ") + filename);
+				stream.unsetf(ios::skipws);
+				
+				// Determine stream size
+				stream.seekg(0, ios::end);
+				size_t size = stream.tellg();
+				stream.seekg(0);   
+				
+				// Load data and add terminating 0
+				file_data.resize(size + 1);
+				stream.read(&file_data.front(), static_cast<streamsize>(size));
+				file_data[size] = 0;
+				
+				return parse( &file_data.front());
+			}
+			catch(...)
+			{
+			}
+			
+            return false;
         }
     }
 }

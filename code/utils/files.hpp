@@ -38,10 +38,12 @@ using namespace std;
 
 #if defined(INFO_OS_WINDOWS)
     #include <external/dirent/dirent.h>
+	#include <direct.h>
 #else
     #include <sys/types.h>
     #include <sys/stat.h>
     #include <dirent.h>
+	#include <unistd.h>
 #endif
 
 namespace GraVitoN
@@ -387,7 +389,7 @@ bool findAllFiles(const string &dirname, vector<string> &files, const string pat
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool createFolder(const string &dir)
 {
-#if defined(INFO_OS_WINDOW)
+#if defined(INFO_OS_WINDOWS)
     return CreateDirectory(dir.c_str(), NULL) != 0;
 #else
     /// @TODO: 0750 is not a good idea
@@ -429,10 +431,24 @@ bool pathExists(const string &path)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+string getWorkingDirectory()
+{
+	char buf[256];
+#ifdef INFO_OS_WINDOWS
+	_getcwd(buf, 255);
+#else
+	getcwd(buf, 255);
+#endif
+	return string( buf );
+}
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// @todo Incomplete algorithm
 string getRootDirectory(const string &path)
 {
     string root;
     int lpos = path.size() - 1;
+	while( lpos > 0 && path[lpos] == '/' || path[lpos] == '\\' ) --lpos;
     while(lpos > 0 && path[lpos] != '/' && path[lpos] != '\\')
         --lpos;
     for(int i=0; i<lpos; ++i)
@@ -449,7 +465,7 @@ bool deleteFile(const string &file)
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 bool deleteFolder(const string &folder)
 {
-#if defined(INFO_OS_WINDOW)
+#if defined(INFO_OS_WINDOWS)
     return RemoveDirectory((LPCSTR)folder.c_str()) != 0;
 #else
     DIR*            dp;
