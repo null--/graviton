@@ -1,5 +1,10 @@
 Major:
-	- graver: an automake utility for GraVitoN library
+	- graver
+        - mingw x86_64
+        - msvc x86_64
+        - clang x86_64
+        - support building static library: <type>statlib</type>
+
 	- Low-level: C++, High-level: Lua
 	- ms12-20
 	- Build static lib files (.a, .lib) of external libraries for linux (32/64) and windows (32/64)
@@ -16,5 +21,7 @@ Major:
 Minor:
     - Combine luabridge with components ---> IN PROGRESS
     - mini http(s) web server
+    - ting
+         compile for win x86_64
 
 and much more!

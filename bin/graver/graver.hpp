@@ -102,6 +102,7 @@ const char XML_TAG_LIBPATH[]        = "libpath";
 const char XML_TAG_LIB[]            = "lib";
 const char XML_TAG_BUILDOBJ[]       = "build_object";
 const char XML_TAG_OUTPUT[]         = "output";
+const char XML_TAG_OUTPUT_OBJ[]     = "output_object";
 const char XML_TAG_GENERAL[]        = "general";
 const char XML_TAG_EXTRA_LIBS[]     = "extra_libs";
 const char XML_TAG_GUI[]            = "gui";
@@ -121,6 +122,7 @@ const char XML_TAG_DEFINE[]         = "define";
 const char XML_TAG_LINKER[]         = "linker";
 const char XML_TAG_TYPE[]           = "type";
 const char XML_TAG_COMPILER_OPT[]   = "compiler_option";
+const char XML_TAG_INIT[]           = "init";
 
 const char XML_ATTR_OS[]            = "os";
 const char XML_ATTR_TARGET[]        = "target";

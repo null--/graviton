@@ -84,7 +84,8 @@ struct COMPILER
     string arch;
     string os;
     string target;
-    
+
+    string init;
     string command;
     string linker;
 
@@ -96,6 +97,7 @@ struct COMPILER
     string flag_build_object;
     string flag_define;
     string flag_output;
+    string flag_output_object;
     string flag_general;
 
     string mode_general;
@@ -408,6 +410,16 @@ void initCompilers()
         }
         mcom.target = sub_attr.value();
         vcout << "\t" << XML_ATTR_TARGET << ":\t" << sub_attr.value() <<endl;
+
+        /// Parse init tag
+        sub_node = node.firstChild(XML_TAG_INIT);
+        if( !sub_node )
+        {
+            cout << "BAD COMPILER: no 'init' tag" << endl;
+            goto NEXT;
+        }
+        vcout << "\t" << XML_TAG_INIT << ": " << sub_node.value() << endl;
+        mcom.init = sub_node.value();
         
         /// Parse command tag
         sub_node = node.firstChild(XML_TAG_COMMAND);
@@ -502,6 +514,15 @@ void initCompilers()
         mcom.flag_output = child.value();
         vcout << "\t\t" << child.name() << ": "<< child.value() << endl;
 
+        child = sub_node.firstChild(XML_TAG_OUTPUT_OBJ);
+        if(!child)
+        {
+            cout << "BAD COMPILER: no flag > 'output_object' tag" << endl;
+            goto NEXT;
+        }   
+        mcom.flag_output_object = child.value();
+        vcout << "\t\t" << child.name() << ": "<< child.value() << endl;
+        
         child = sub_node.firstChild(XML_TAG_GENERAL);
         if(!child)
         {
@@ -803,7 +824,7 @@ void buildProject()
     
     string cmd_includes, cmd_build_obj, cmd_build;
 
-    cmd_build = " " + mc.flag_general + glob_proj.build_depend_option + " " + mc.mode_general;
+    cmd_build = " " + mc.flag_general + " " + glob_proj.build_depend_option + " " + mc.mode_general;
     cmd_build_obj =
         mc.command + " " +
         mc.flag_general + " " +
@@ -855,6 +876,9 @@ void buildProject()
         cout << "Unable to create build directory" << endl;
         exit(0);
     }
+
+    /// Build
+    system( mc.init.c_str() );
     
     /// Building Objects
     cout << "Executing System Commands:" << endl;
@@ -864,7 +888,7 @@ void buildProject()
         vcout << "Source: " << sources[i] << endl;
         objects.push_back(  "\"" + base_dir + "/" + BUILD_DIRECTORY + "/" + sources[i]  + mc.obj_extension + "\"");
         
-        cmd = cmd_build_obj + cmd_includes + " \"" + base_dir + "/" + sources[i] + "\" " + mc.flag_output + objects[i];
+        cmd = cmd_build_obj + cmd_includes + " \"" + base_dir + "/" + sources[i] + "\" " + mc.flag_output_object + objects[i];
         cout << "-- Executing: " << cmd << endl;
         system( cmd.c_str() );
     }
