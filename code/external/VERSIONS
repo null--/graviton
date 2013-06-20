@@ -1,0 +1,9 @@
+Installed:
+	openssl-1.0.1d
+	zlip - 1.2.8
+	upx-3.0.9
+	ucl-1.03
+	rapidxml - 1.13	
+	dirent   - 1.1.3
+	trex     - 1.3
+	luabridge - github 012013 - developmental

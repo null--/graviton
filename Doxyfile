@@ -52,7 +52,7 @@ PROJECT_LOGO           = "GraVitoN-small.png"
 # If a relative path is entered, it will be relative to the location 
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = docs/GraVitoN
+OUTPUT_DIRECTORY       = doc/GraVitoN
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 
 # 4096 sub-directories (in 2 levels) under the output directory of each output 
@@ -701,8 +701,8 @@ RECURSIVE              = YES
 # Note that relative paths are relative to directory from which doxygen is run.
 
 EXCLUDE                = "code/external/" \
-						 "samples/" \
-						 "docs/"
+						 "demo/" \
+						 "doc/"
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix file system feature) are excluded 

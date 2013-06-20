@@ -1,0 +1,140 @@
+ucl_init.lo: ucl_init.c ucl_conf.h ../include/ucl/uclconf.h ../config.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/include-fixed/limits.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/include-fixed/syslimits.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/limits.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/crtdefs.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_mac.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/vadefs.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sdks/_mingw_directx.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sdks/_mingw_ddk.h \
+ ../acc/acc.h ../acc/acc_init.h ../acc/acc_os.h ../acc/acc_cc.h \
+ ../acc/acc_arch.h ../acc/acc_mm.h ../acc/acc_defs.h ../acc/acc_type.h \
+ ../acc/acc_incd.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdio.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_print_push.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_off_t.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/stdio_s.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_print_pop.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sys/types.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sys/stat.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/io.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/string.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/string_s.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/io_s.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_stat64.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdlib.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/stdlib_s.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/malloc.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/include/stddef.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stddef.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/strings.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/inttypes.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/include/stdint.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdint.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/unistd.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/process.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/getopt.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/pthread_unistd.h \
+ /usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/assert.h \
+ ucl_ptr.h ../acc/acc_chk.ch ucl_dll.ch
+
+ucl_conf.h:
+
+../include/ucl/uclconf.h:
+
+../config.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/include-fixed/limits.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/include-fixed/syslimits.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/limits.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/crtdefs.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_mac.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/vadefs.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sdks/_mingw_directx.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sdks/_mingw_ddk.h:
+
+../acc/acc.h:
+
+../acc/acc_init.h:
+
+../acc/acc_os.h:
+
+../acc/acc_cc.h:
+
+../acc/acc_arch.h:
+
+../acc/acc_mm.h:
+
+../acc/acc_defs.h:
+
+../acc/acc_type.h:
+
+../acc/acc_incd.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdio.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_print_push.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_off_t.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/stdio_s.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_print_pop.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sys/types.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sys/stat.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/io.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/string.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/string_s.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/io_s.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/_mingw_stat64.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdlib.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/sec_api/stdlib_s.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/malloc.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/include/stddef.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stddef.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/strings.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/inttypes.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/include/stdint.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/stdint.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/unistd.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/process.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/getopt.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/pthread_unistd.h:
+
+/usr/lib/gcc/i686-w64-mingw32/4.6/../../../../i686-w64-mingw32/include/assert.h:
+
+ucl_ptr.h:
+
+../acc/acc_chk.ch:
+
+ucl_dll.ch:
