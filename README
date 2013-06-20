@@ -1,0 +1,33 @@
+# Project:
+	GraVitoN: A Cross Platform Malware Development Framework
+
+# Version Info:
+	2.0.0.-1
+
+# Code Name:
+	Scream of Pain
+
+# Some Key Notes:
+	1- Always build external libraries statically
+	2- Before using a class or function from GraVitoN lib, make sure that you now it's dependencies.
+		(e.g. SSL_Client depends on openssl so you should link openssl's 
+		static library (.a or .lib) to your project. of course you can refuse to do
+		that and shuff-every-undefined-reference-error-up-to-your-ass!
+		using dynamically linked libraries of code/external/ is lame,
+		don't do it man!)
+	99- There are rules to be broken.
+
+# Statement Of Agreement:
+	
+As a developer/hacker/user of The GraVitoN Project, by downloading any part of 
+this framework, I understand my duties and responibilities include the following:
+
+1. Responsibility:
+	1.a) I will not use this framework to lunch an illegal attack vector
+	against any individual/legal entity, and if I do, I'm the
+	only person who is legaly responsible for, and NOT The GraVitoN Community.
+	
+2. Benevolent Use:
+	2.a) I will develope/hack/use GraVitoN framework, for educational purpose, research
+	or legal penetration tests.
+
