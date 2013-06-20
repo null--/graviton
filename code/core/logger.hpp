@@ -96,7 +96,7 @@ namespace GraVitoN
             
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// prints message with and a new line character
+/// print message with and a new line character
             template < class _C_T_ >
             bool logItLn ( const _C_T_ &log )
             {
@@ -106,7 +106,7 @@ namespace GraVitoN
             }
             
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// prints a variable
+/// print a variable
             template < class _C_T_ > bool
             logVariable(const string &name,const _C_T_ & value)
             {
@@ -118,7 +118,7 @@ namespace GraVitoN
             }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// prints two variables
+/// print two variables
             template < class _C_T_ > bool
             logVariable2(const string &name,const _C_T_ & value,
                          const string &name2,const _C_T_ & value2)
@@ -136,7 +136,7 @@ namespace GraVitoN
 
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//            
-/// prints three variables
+/// print three variables
             template < class _C_T_ > bool
             logVariable3(const string &name,const _C_T_ & value,
                          const string &name2,const _C_T_ & value2,
@@ -158,7 +158,7 @@ namespace GraVitoN
             }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//            
-/// prints four variables
+/// print four variables
             template < class _C_T_ > bool
             logVariable4(const string &name,const _C_T_ & value,
                          const string &name2,const _C_T_ & value2,

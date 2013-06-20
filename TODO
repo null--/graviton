@@ -21,7 +21,16 @@ Major:
 Minor:
     - Combine luabridge with components ---> IN PROGRESS
     - mini http(s) web server
-    - ting
-         compile for win x86_64
-
+    - File
+    - Memory
+    - Thread
+    - Mutex
+    - Socket
+      - TCP Client
+      - TCP Server
+      - UDP
+      - SSL
+        - Client
+        - Server
+    
 and much more!

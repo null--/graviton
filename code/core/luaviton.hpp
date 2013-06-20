@@ -46,263 +46,244 @@ using namespace std;
 
 namespace GraVitoN
 {
-namespace Core
-{
+    namespace Core
+    {
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-class Luaviton : public Component_Singleton<Luaviton>
-{
-private:
-    lua_State *lua_state;
+        /// Luaviton Class
+        /// An interface for using lua features. (e.g. run lua scripts)
+        class Luaviton : public Component_Singleton<Luaviton>
+        {
+        private:
+            /// Lua state
+            lua_State *lua_state;
 
-    int lastError;
+            /// Last lua error (0 means OK)
+            int last_error;
 
-    bool runScript(const int prev_err = LUA_OK);
-    void printErrorCode (const int err);
+            /// run latest added lua script
+            bool runScript(const int prev_err = LUA_OK);
 
-    // static Luaviton *instance;
+            /// print lua errors
+            void printErrorCode (const int err);
 
-protected:
-    void initialize();
-    static int traceback(lua_State *L);
+        protected:
+            /// initialize luaviton
+            void initialize();
 
-public:
-    Luaviton()
-    {
-        lua_state = _null_;
-        initialize();
-    }
+            /// lua stack trace
+            static int traceback(lua_State *L);
 
-    lua_State * getState()
-    {
-        return lua_state;
-    }
+        public:
+            /// Constructor
+            Luaviton()
+                {
+                    lua_state = _null_;
+                    initialize();
+                }
 
-//    static Luaviton * getInstance()
-//    {
-//        if( !instance )
-//            instance = new Luaviton();
-//        return instance;
-//    }
+            /// Destructor
+            ~Luaviton();
+            
+            /// get lua state: USE IT CAREFULLY
+            lua_State * getState()
+                {
+                    return lua_state;
+                }
 
-    ~Luaviton();
-    bool regiserFunction (const string &func_name, const lua_CFunction func_addr );
-    void callLuaFunction (const string &lua_func_name, int nparams, int nreurns);
+            /// Register a C++ function
+            bool regiserFunction (const std::string &func_name, const lua_CFunction func_addr );
 
-    bool loadModuleFile (const string &_file );
-    bool loadModuleString (const string &_script );
+            /// Call a lua function from C++
+            void callLuaFunction (const std::string &lua_func_name, int nparams, int nreurns);
 
-    bool runScriptFile (const string &_file );
-    bool runScriptString ( const string &_script );
+            /// Load a lua module file
+            bool loadModuleFile (const std::string &_file );
+            /// Load a lua module written in a string variable
+            bool loadModuleString (const std::string &_script );
 
-    void preloadModule (const string &module_name, lua_CFunction function_addr);
-};
+            /// Run a lua script file
+            bool runScriptFile (const std::string &_file );
+            /// Run a lua script written is a string variable
+            bool runScriptString ( const std::string &_script );
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// Beautiful!
-template <class _CS_MOD_> class Luaviton_Module : public Component_Singleton<_CS_MOD_>
-{
-protected:
-    Luaviton &luaviton;
-
-public:
-    Luaviton_Module() : luaviton(Luaviton::getInstance()) {}
-    virtual ~Luaviton_Module() {}
-
-    virtual void registerModule() = 0;
-    virtual bool loadEmAll() = 0;
-};
+            /// Load C++ coded lua module
+            void preloadModule (const std::string &module_name, lua_CFunction function_addr);
+        };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-Luaviton::~Luaviton()
-{
-    // Double Free Exception
-    if( lua_state )
-    {
-        lua_close ( lua_state );
-    }
-}
+        Luaviton::~Luaviton()
+        {
+            // Double Free Exception
+            if( lua_state )
+            {
+                lua_close ( lua_state );
+            }
+        }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-void Luaviton::initialize()
-{
-    if ( lua_state == _null_ )
-    {
-        // General
-        lua_state = luaL_newstate();
-        luaL_openlibs( lua_state );
+        void Luaviton::initialize()
+        {
+            if ( lua_state == _null_ )
+            {
+                // General
+                lua_state = luaL_newstate();
+                luaL_openlibs( lua_state );
 
-        // Lua 5.1
-        // lua_state = lua_open();
-        // luaopen_base(lua_state);
-        // luaopen_debug(lua_state);
-        // luaopen_io(lua_state);
-        // luaopen_math(lua_state);
-        // luaopen_package(lua_state);
-        // luaopen_string(lua_state);
-        // luaopen_table(lua_state);
+                // Lua 5.1
+                // lua_state = lua_open();
+                // luaopen_base(lua_state);
+                // luaopen_debug(lua_state);
+                // luaopen_io(lua_state);
+                // luaopen_math(lua_state);
+                // luaopen_package(lua_state);
+                // luaopen_string(lua_state);
+                // luaopen_table(lua_state);
 
-        // Lua 5.2
-        // lua_state = lua_open();
-        // luaopen_base ( lua_state );
-        // luaopen_coroutine ( lua_state );
-        // luaopen_table ( lua_state );
-        // luaopen_io ( lua_state );
-        // luaopen_os(lua_state);
-        // luaopen_string ( lua_state );
-        // luaopen_bit32 ( lua_state );
-        // luaopen_math ( lua_state );
-        // // luaopen_debug ( lua_state );
-        // luaopen_package ( lua_state );
-    }
+                // Lua 5.2
+                // lua_state = lua_open();
+                // luaopen_base ( lua_state );
+                // luaopen_coroutine ( lua_state );
+                // luaopen_table ( lua_state );
+                // luaopen_io ( lua_state );
+                // luaopen_os(lua_state);
+                // luaopen_string ( lua_state );
+                // luaopen_bit32 ( lua_state );
+                // luaopen_math ( lua_state );
+                // // luaopen_debug ( lua_state );
+                // luaopen_package ( lua_state );
+            }
 
-    /// add traceback
-    /// @todo need more tests
-    lua_pushcfunction (lua_state, &traceback);
-    luaL_ref (lua_state, LUA_REGISTRYINDEX);
+            /// add traceback
+            /// @todo need more tests
+            lua_pushcfunction (lua_state, &traceback);
+            luaL_ref (lua_state, LUA_REGISTRYINDEX);
 
-    //return true;
-}
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-//void Luaviton::printStackInfo()
-//{
-//    lua_Debug info;
-//    int level = 0;
-//    while (lua_getstack(lua_state, level, &info))
-//    {
-//        lua_getinfo(lua_state, "nSl", &info);
-////#ifdef GVN_ACTIVATE_LOGGER
-//        fprintf(stderr, "  [%d] %s:%d -- %s [%s]\n",
-//            level, info.short_src, info.currentline,
-//            (info.name ? info.name : "<unknown>"), info.what);
-//        ++level;
-////#endif
-//    }
-//}
+            //return true;
+        }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-int Luaviton::traceback (lua_State *L)
-{
-    // look up Lua's 'debug.traceback' function
-    lua_getglobal(L, "debug");
-    if (!lua_istable(L, -1))
-    {
-        lua_pop(L, 1);
-        return 1;
-    }
-    lua_getfield(L, -1, "traceback");
-    if (!lua_isfunction(L, -1))
-    {
-        lua_pop(L, 2);
-        return 1;
-    }
-    lua_pushvalue(L, 1);  /* pass error message */
-    lua_pushinteger(L, 2);  /* skip this function and traceback */
-    lua_call(L, 2, 1);  /* call debug.traceback */
-    return 1;
-}
+        int Luaviton::traceback (lua_State *L)
+        {
+            // look up Lua's 'debug.traceback' function
+            lua_getglobal(L, "debug");
+            if (!lua_istable(L, -1))
+            {
+                lua_pop(L, 1);
+                return 1;
+            }
+            lua_getfield(L, -1, "traceback");
+            if (!lua_isfunction(L, -1))
+            {
+                lua_pop(L, 2);
+                return 1;
+            }
+            lua_pushvalue(L, 1);  /* pass error message */
+            lua_pushinteger(L, 2);  /* skip this function and traceback */
+            lua_call(L, 2, 1);  /* call debug.traceback */
+            return 1;
+        }
 
-void Luaviton::printErrorCode(const int err)
-{
+        void Luaviton::printErrorCode(const int err)
+        {
 #if defined(GVN_VERBOSE_LUA) || defined(GVN_ACTIVATE_LOGGER)
-    cout << "---------------------------------------------------------" << endl;
+            cout << "---------------------------------------------------------" << endl;
 #endif
-    switch (err)
-    {
+            switch (err)
+            {
 #if defined(GVN_VERBOSE_LUA) || defined(GVN_ACTIVATE_LOGGER)
-        case LUA_OK:
-            cout << "[LUA] Success" << endl; break;
-        case LUA_ERRRUN:
-            cout << "[LUA ERROR] Runtime error" << endl; break;
-        case LUA_ERRSYNTAX:
-            cout << "[LUA ERROR] Syntax error" << endl; break;
-        case LUA_ERRERR:
-            cout << "[LUA ERROR] Error while trying to print an error." << endl; break;
-        case LUA_ERRFILE:
-            cout << "[LUA ERROR] Couldn't open or read file" << endl; break;
-        case LUA_ERRMEM:
-            cout << "[LUA ERROR] Memory allocation error" << endl; break;
-        default:
-            cout << "[LUA ERROR] CODE: " << err << endl; break;
+            case LUA_OK:
+                cout << "[LUA] Success" << endl; break;
+            case LUA_ERRRUN:
+                cout << "[LUA ERROR] Runtime error" << endl; break;
+            case LUA_ERRSYNTAX:
+                cout << "[LUA ERROR] Syntax error" << endl; break;
+            case LUA_ERRERR:
+                cout << "[LUA ERROR] Error while trying to print an error." << endl; break;
+            case LUA_ERRFILE:
+                cout << "[LUA ERROR] Couldn't open or read file" << endl; break;
+            case LUA_ERRMEM:
+                cout << "[LUA ERROR] Memory allocation error" << endl; break;
+            default:
+                cout << "[LUA ERROR] CODE: " << err << endl; break;
 #endif
-}
+            }
 #if defined(GVN_VERBOSE_LUA) || defined(GVN_ACTIVATE_LOGGER)
-    if( err != LUA_OK ) cout << lua_tostring(lua_state, -1) << endl;
-    cout << "---------------------------------------------------------" << endl;
+            if( err != LUA_OK ) cout << lua_tostring(lua_state, -1) << endl;
+            cout << "---------------------------------------------------------" << endl;
 #endif
-}
+        }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Luaviton::runScript(const int prev_err)
-{
-    // Check any previous error
-    int err = LUA_OK;
+        bool Luaviton::runScript(const int prev_err)
+        {
+            // Check any previous error
+            int err = LUA_OK;
 
-    if ( prev_err != LUA_OK )
-    {
-        lua_pop(lua_state, 1);
-        printErrorCode(prev_err);
-        return false;
-    }
+            if ( prev_err != LUA_OK )
+            {
+                lua_pop(lua_state, 1);
+                printErrorCode(prev_err);
+                return false;
+            }
 
-    err = lua_pcall (lua_state, 0, LUA_MULTRET, 0 );
+            err = lua_pcall (lua_state, 0, LUA_MULTRET, 0 );
 
-    printErrorCode(err);
+            printErrorCode(err);
 
-    if( err != LUA_OK )
-    {
-        return false;
-    }
+            if( err != LUA_OK )
+            {
+                return false;
+            }
 
-    lua_pop(lua_state, 1);
-    return true;
-}
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Luaviton::loadModuleFile (const string &_file )
-{
-    Logger::logVariable("Loading LUA Module: ",_file);
-    return luaL_dofile (lua_state, _file.c_str() ) == LUA_OK;
-}
+            lua_pop(lua_state, 1);
+            return true;
+        }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Luaviton::loadModuleString (const string &_script )
-{
-    Logger::logItLn("Loading LUA Module (string)");
-    return luaL_dostring ( lua_state, _script.c_str() ) == LUA_OK;
-}
+        bool Luaviton::loadModuleFile (const std::string &_file )
+        {
+            Logger::logVariable("Loading LUA Module: ",_file);
+            return luaL_dofile (lua_state, _file.c_str() ) == LUA_OK;
+        }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Luaviton::runScriptFile (const string &_file )
-{
-    // return runScript( luaL_dofile(lua_state, _file.c_str()) );
-    return runScript( luaL_loadfile(lua_state, _file.c_str()) );
-}
+        bool Luaviton::loadModuleString (const std::string &_script )
+        {
+            Logger::logItLn("Loading LUA Module (string)");
+            return luaL_dostring ( lua_state, _script.c_str() ) == LUA_OK;
+        }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Luaviton::runScriptString ( const string &_script )
-{
-    return runScript( luaL_loadstring(lua_state, _script.c_str()));
-}
+        bool Luaviton::runScriptFile (const std::string &_file )
+        {
+            // return runScript( luaL_dofile(lua_state, _file.c_str()) );
+            return runScript( luaL_loadfile(lua_state, _file.c_str()) );
+        }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-void Luaviton::preloadModule (const string &module_name, lua_CFunction function_addr)
-{
-    lua_getfield(lua_state, LUA_GLOBALSINDEX, "package");
-    lua_getfield(lua_state, -1, "preload");
-    lua_pushcfunction(lua_state, function_addr);
-    lua_setfield(lua_state, -2, module_name.c_str());
-}
+        bool Luaviton::runScriptString ( const std::string &_script )
+        {
+            return runScript( luaL_loadstring(lua_state, _script.c_str()));
+        }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-bool Luaviton::regiserFunction (const string& func_name, const lua_CFunction func_addr )
-{
-    lua_register (lua_state, func_name.c_str(), func_addr );
-    return true;
-}
+        void Luaviton::preloadModule (const std::string &module_name, lua_CFunction function_addr)
+        {
+            lua_getfield(lua_state, LUA_GLOBALSINDEX, "package");
+            lua_getfield(lua_state, -1, "preload");
+            lua_pushcfunction(lua_state, function_addr);
+            lua_setfield(lua_state, -2, module_name.c_str());
+        }
 
-} // Core
-} // GraVitoN
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        bool Luaviton::regiserFunction (const std::string& func_name, const lua_CFunction func_addr )
+        {
+            lua_register (lua_state, func_name.c_str(), func_addr );
+            return true;
+        }
 
-#endif // _GVN_LUA_HEAD_
+    } /// end of Core
+} /// end of GraVitoN
+
+#endif /// end of GRAVITON_LUAVITON_H

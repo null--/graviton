@@ -46,7 +46,7 @@
 #endif
 
 #ifdef INFO_OS_WINDOWS
-	/// YOU DO NOT NEED TO WRITE #include<windows.h> INSIDE YOUR SOURCE CODE
+	/// DO NOT NEED TO WRITE #include<windows.h> INSIDE YOUR SOURCE CODE, it may cause redefinition errors
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
 #endif
@@ -55,14 +55,19 @@
 
 namespace GraVitoN
 {
-    typedef std::string         gstring;
+    /// Some typedefs
     typedef char                gchar;
     typedef unsigned char       guchar;
+    typedef unsigned int        guint;
+    typedef size_t              gsize;
+    typedef unsigned long       gulong;
     
 	namespace Config
 	{
-		const unsigned int MAX_TCP_PACKET_SIZE = 4069;
-		const unsigned long MAX_FILE_SIZE = 32 * 1024 * 1024 * sizeof(unsigned char); // 64 MB
+        /// Maximum packet size
+		const guint     MAX_TCP_PACKET_SIZE = 4069;
+        /// Maximum file size
+		const gulong    MAX_FILE_SIZE = 32 * 1024 * 1024 * sizeof(guchar); // 64 MB
 	}
 }
 
