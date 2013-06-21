@@ -42,6 +42,8 @@ namespace GraVitoN
             
         public:
             Memory(GraVitoN::gsize size_ = 0, bool executable_ = false);
+
+            /// Destructor
             ~Memory();
 
             /// alloc
@@ -64,6 +66,9 @@ namespace GraVitoN
 
             /// size of buffer
             GraVitoN::gsize size();
+
+            /// = operator
+            Memory<Type> & operator = (const Memory<Type> &a);
         };
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -77,7 +82,7 @@ namespace GraVitoN
         template<class Type>
         Memory<Type>::~Memory()
         {
-            // Memory<Type>::free();
+            Memory<Type>::free();
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -91,6 +96,9 @@ namespace GraVitoN
             }
             else
             {
+                if( buff_size > 0 )
+                    Memory::free();
+                
                 buff_size = size_;
                 
 #if defined(INFO_OS_LINUX)
@@ -121,11 +129,19 @@ namespace GraVitoN
         template<class Type>
         void Memory<Type>::copy(const Type *buffer_, GraVitoN::gsize size_)
         {
-            if( size_ > buff_size )
-                return;
+            Memory<Type>::free();
+            Memory<Type>::alloc(size_);
             memcpy( (void*) buffer, (void *) buffer_, size_);
         }
 
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        Memory<Type> & Memory<Type>::operator = (const Memory<Type> &a)
+        {
+            this->copy(a.address(), a.size());
+            return *this;
+        }
+        
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
         void Memory<Type>::set(Type value)
