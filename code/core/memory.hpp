@@ -41,7 +41,10 @@ namespace GraVitoN
             GraVitoN::gsize buff_size;
             
         public:
-            Memory(GraVitoN::gsize size_ = 0, bool executable_ = false);
+            Memory(const GraVitoN::gsize size_ = 0, bool executable_ = false);
+            Memory(const Type *buffer_, const GraVitoN::gsize size);
+            /// Copy Memory object
+            Memory(const Memory<Type> &a_);
 
             /// Destructor
             ~Memory();
@@ -58,14 +61,14 @@ namespace GraVitoN
             /// fill buffer with
             void zero();
 
-            /// get buffer address
-            Type * address();
-            
             /// copy buffer
             void copy(const Type *buffer_, GraVitoN::gsize size_);
 
+            /// get buffer address
+            Type * address() const;
+            
             /// size of buffer
-            GraVitoN::gsize size();
+            GraVitoN::gsize size() const;
 
             /// = operator
             Memory<Type> & operator = (const Memory<Type> &a);
@@ -73,11 +76,25 @@ namespace GraVitoN
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
-        Memory<Type>::Memory(GraVitoN::gsize size_, bool executable_)
+        Memory<Type>::Memory(const GraVitoN::gsize size_, bool executable_)
         {
             Memory<Type>::alloc(size_, executable_);
         }
 
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        Memory<Type>::Memory(const Memory<Type> &a_)
+        {
+            Memory<Type>::copy(a_.address(), a_.size());
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        Memory<Type>::Memory(const Type *buffer_, const GraVitoN::gsize size_)
+        {
+            Memory<Type>::copy(buffer_, size_);
+        }
+        
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
         Memory<Type>::~Memory()
@@ -129,8 +146,17 @@ namespace GraVitoN
         template<class Type>
         void Memory<Type>::copy(const Type *buffer_, GraVitoN::gsize size_)
         {
-            Memory<Type>::free();
-            Memory<Type>::alloc(size_);
+            if( size_ <= 0 || buffer_ == _null_ )
+            {
+                buffer = _null_;
+                buff_size = 0;
+                return;
+            }
+            else if( size_ != buff_size )
+            {
+                Memory<Type>::free();
+                Memory<Type>::alloc(size_);
+            }
             memcpy( (void*) buffer, (void *) buffer_, size_);
         }
 
@@ -158,14 +184,14 @@ namespace GraVitoN
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
-        Type* Memory<Type>::address()
+        Type* Memory<Type>::address() const
         {
             return buffer;
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
-        GraVitoN::gsize Memory<Type>::size()
+        GraVitoN::gsize Memory<Type>::size() const
         {
             return buff_size;
         }
