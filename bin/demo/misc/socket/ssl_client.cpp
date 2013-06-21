@@ -12,8 +12,8 @@ using namespace std;
 int main()
 {
     // GraVitoN::Core::SSL_Client cln("127.0.0.1", 1111);
-
-    GraVitoN::Core::SSL_Client cln("173.194.113.147", 443);
+    // GraVitoN::Core::SSL_Client cln("173.194.113.147", 443);
+    GraVitoN::Core::SSL_Client cln("192.168.56.1", 1111);
 
     if( cln.connect() )
     {
@@ -28,7 +28,8 @@ int main()
         }
 
         string data;
-        cln.sendString("HEAD / HTTP/1.1\n\n");
+        // cln.sendString("HEAD / HTTP/1.1\n\n");
+        cln.sendString("Do you hear me?");
         data = cln.recvString();
         cout << "Server: " << data << endl;
     }
