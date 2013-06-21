@@ -72,11 +72,11 @@ namespace GraVitoN
         template<class _CS_T_> _CS_T_ Component_Singleton<_CS_T_>::instance;
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-        static _CS_T_ & Component_Singleton::getInstance()
+        template<class _CS_T_> _CS_T_ & Component_Singleton<_CS_T_>::getInstance()
         {
             // if( !instance )
             // instance = new _CS_T_();
-            return instance;
+            return Component_Singleton<_CS_T_>::instance;
         }
 
     } // Core

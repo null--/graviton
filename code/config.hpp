@@ -49,9 +49,20 @@
 	/// DO NOT NEED TO WRITE #include<windows.h> INSIDE YOUR SOURCE CODE, it may cause redefinition errors
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
+#elif defined(INFO_OS_LINUX)
+    #include <sys/mman.h>
+    #include <sys/types.h>
+    #include <sys/wait.h>
+    #include <errno.h>
+    #include <unistd.h>
+#elif defined(INFO_OS_OSX)
+    #include <sys/mman.h>
+    #include <errno.h>
 #endif
 
 #include <string>
+#include <exception>
+#include <stdexcept>
 
 namespace GraVitoN
 {
@@ -61,7 +72,7 @@ namespace GraVitoN
     typedef unsigned int        guint;
     typedef size_t              gsize;
     typedef unsigned long       gulong;
-    
+
 	namespace Config
 	{
         /// Maximum packet size
@@ -69,6 +80,20 @@ namespace GraVitoN
         /// Maximum file size
 		const gulong    MAX_FILE_SIZE = 32 * 1024 * 1024 * sizeof(guchar); // 64 MB
 	}
+
+    namespace Core
+    {
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        /// Sleep for a number of miliseconds
+        void sleep(gulong milisec)
+        {
+#ifdef INFO_OS_WINDOWS
+            ::SleepEx(milisec, FALSE);// (float)milisec / 1000.f );
+#else
+            ::usleep( milisec * 1000);
+#endif
+        }
+    }
 }
 
 #endif
