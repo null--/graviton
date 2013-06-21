@@ -39,13 +39,19 @@ namespace GraVitoN
         class TCP_Client
         {
         protected:
+            /// is socket open
             bool is_dead;
+            /// socket handle
             Socket::Handle sock;
 
-            string r_ip_str;
+            /// remote ip address (string)
+            std::string r_ip_str;
+            /// remote ip address (hex)
             unsigned int r_ip_hex;
+            /// remote port
             unsigned int r_port;
 
+            /// socket address
             Socket::Address sa;
             
         public:
@@ -54,31 +60,42 @@ namespace GraVitoN
         
             virtual ~TCP_Client();
 
+            /// connect to server
             virtual bool connect();
 
+            /// close socket
             virtual bool close();
 
+            /// recieve data from server
             template<class Type>
             bool recv(Memory<Type> &data);
 
+            /// recv string from server
             string recvString();
 
+            /// send data to server
             template<class Type>
             bool send(const Memory<Type> &data);
 
+            /// send string to server
             bool sendString(const std::string &data);
 
+            /// is connection still alive
             virtual bool isActive();
 
-            string getRemoteIP()
+            /// get server ip address (string)
+            std::string getRemoteIP()
                 { return r_ip_str; }
 
+            /// get server ip address (hex)
             guint getRemoteIPHex()
                 { return r_ip_hex; }
 
+            /// get server port number
             guint getRemotePort()
                 { return r_port; }
 
+            /// get socket handle (DANGEROUS)
             Socket::Handle getHandle()
                 { return sock; }
         };
@@ -209,7 +226,7 @@ namespace GraVitoN
             try
             {
                 // Logger::logVariable("[TCP_Client] recving", ssl);
-                guchar buf[ Config::MAX_TCP_PACKET_SIZE + 1];
+                Type buf[ Config::MAX_TCP_PACKET_SIZE + 1];
                 int err = -1;
 
                 err = ::recv(sock, (char*)buf, Config::MAX_TCP_PACKET_SIZE * sizeof(guchar), 0);
