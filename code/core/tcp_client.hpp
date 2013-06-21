@@ -122,7 +122,7 @@ namespace GraVitoN
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
     TCP_Client::TCP_Client(Socket::Handle _sock, Socket::Address _sa)
         {
-            is_dead = true;
+            is_dead = Socket::invalidSocket(_sock);
 
             sock = _sock;
 
@@ -138,6 +138,7 @@ namespace GraVitoN
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         bool TCP_Client::connect()
         {
+            is_dead = true;
             Logger::logItLn("[TCP_Client] connecting");
             try
             {
@@ -160,6 +161,7 @@ namespace GraVitoN
                 return false;
             }
 
+            is_dead = false;
             return true;
         }
 
@@ -231,9 +233,9 @@ namespace GraVitoN
 
                 err = ::recv(sock, (char*)buf, Config::MAX_TCP_PACKET_SIZE * sizeof(guchar), 0);
                 
-                if( Socket::socketError(err) )
+                if( Socket::socketError(err) || err == 0)
                 {
-                    // close();
+                    close();
                     Logger::logVariable("[TCP_Client] recv failed", err);
                     return false;
                 }
@@ -267,7 +269,7 @@ namespace GraVitoN
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         bool TCP_Client::isActive()
         {
-            return !is_dead && !Socket::invalidSocket(sock) && Socket::socketError(sock);
+            return !is_dead && !Socket::invalidSocket(sock);
         }
 
     }
