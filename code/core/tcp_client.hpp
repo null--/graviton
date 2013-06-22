@@ -217,7 +217,7 @@ namespace GraVitoN
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         bool TCP_Client::sendString(const std::string &data)
         {
-            Memory<char> data_(data.c_str(), data.size());
+            Memory<char> data_ = data;
             return TCP_Client::send(data_);
         }
         
@@ -257,10 +257,10 @@ namespace GraVitoN
         std::string TCP_Client::recvString()
         {
             // sdata = "";
-            Memory<guchar> data;
+            Memory<char> data;
             if( TCP_Client::recv(data) )
             {
-                return std::string((char*)data.address(), data.size());
+                return data.toString();
             }
 
             return "";

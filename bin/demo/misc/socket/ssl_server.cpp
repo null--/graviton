@@ -17,7 +17,7 @@ cl ..\..\..\libs\openssl\win-x86-msvc\libeay32.lib ..\..\..\libs\ting\win-x86-ms
 class My_SSL_Server : public GraVitoN::Core::SSL_Server
 {
 public:
-    My_SSL_Server() : GraVitoN::Core::SSL_Server(1111, "key.pem", "key.pem")
+    My_SSL_Server() : GraVitoN::Core::SSL_Server("192.168.56.1", 1111, "key.pem", "key.pem")
     {
 
     }

@@ -359,7 +359,7 @@ namespace GraVitoN
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         bool SSL_Client::sendString(const std::string &data)
         {
-            Memory<char> data_(data.c_str(), data.size());
+            Memory<char> data_ = data;
             return SSL_Client::send(data_);
         }
 
@@ -400,7 +400,7 @@ namespace GraVitoN
             Memory<guchar> data;
             if( SSL_Client::recv(data) )
             {
-                return std::string((char*)data.address(), data.size());
+                return data.toString();
             }
 
             return std::string("");

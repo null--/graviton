@@ -45,7 +45,8 @@ namespace GraVitoN
         protected:
             unsigned int port;
             bool multi_thread;
-
+            string bind_ip;
+            
             struct sockaddr_in sa_serv;
 
             Socket::Handle listen_sock;
@@ -109,19 +110,21 @@ namespace GraVitoN
             virtual bool finalizeConnection(GraVitoN::Core::TCP_Client &client_sock);
 
         public:
-            TCP_Server(const unsigned int local_port,
+            TCP_Server(const std::string &bind_ip_,
+                       const unsigned int local_port,
                        const bool enable_multi_thread = true)
                 {
                     Socket::getInstance();
 
                     multi_thread = enable_multi_thread;
                     port = local_port;
-
+                    bind_ip = bind_ip_;
+                    
                     listen_sock = socket (AF_INET, SOCK_STREAM, 0);
                 }
 
             virtual bool run();
-            virtual bool open();
+            virtual bool bind();
             virtual bool listen();
             virtual bool accept(Socket::Handle &handle, Socket::Address &addr);
             virtual bool close();
@@ -130,7 +133,7 @@ namespace GraVitoN
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         bool TCP_Server::run()
         {
-            if( open() )
+            if( bind() )
             {
                 if( listen() )
                 {
@@ -152,7 +155,7 @@ namespace GraVitoN
             {
                 memset (&sa_serv, '\0', sizeof(sa_serv));
                 sa_serv.sin_family      = AF_INET;
-                sa_serv.sin_addr.s_addr = INADDR_ANY;
+                sa_serv.sin_addr.s_addr = inet_addr( bind_ip.c_str() );
                 sa_serv.sin_port        = htons (port);          /* Server Port number */
 
                 int err = ::bind(listen_sock, (struct sockaddr*) &sa_serv, sizeof (sa_serv));

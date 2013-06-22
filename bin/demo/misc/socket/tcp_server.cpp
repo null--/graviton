@@ -39,14 +39,14 @@ public:
 		return true;
 	}
 
-    My_Server(unsigned int port) : TCP_Server(port)
+    My_Server(const string &ip, unsigned int port) : TCP_Server(ip, port)
     {
     }
 };
 
 int main()
 {
-    My_Server server(7357);
+    My_Server server("0.0.0.0", 7357);
 
 	cout << "Main" << endl;
 	server.run();

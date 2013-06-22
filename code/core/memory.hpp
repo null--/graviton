@@ -46,6 +46,9 @@ namespace GraVitoN
             /// Copy Memory object
             Memory(const Memory<Type> &a_);
 
+            /// Copy string to memory
+            Memory(const string &str);
+            
             /// Destructor
             ~Memory();
 
@@ -70,8 +73,14 @@ namespace GraVitoN
             /// size of buffer
             GraVitoN::gsize size() const;
 
-            /// = operator
+            /// Memory = Memory operator
             Memory<Type> & operator = (const Memory<Type> &a);
+
+            /// Memory = Memory operator
+            Memory<Type> & operator = (const std::string &str);
+            
+            /// convert buffer to string
+            std::string toString();
         };
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -88,6 +97,13 @@ namespace GraVitoN
             Memory<Type>::copy(a_.address(), a_.size());
         }
 
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        Memory<Type>::Memory(const string &str)
+        {
+            Memory<Type>::copy((Type*)str.c_str(), str.size());
+        }
+        
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
         Memory<Type>::Memory(const Type *buffer_, const GraVitoN::gsize size_)
@@ -167,6 +183,14 @@ namespace GraVitoN
             this->copy(a.address(), a.size());
             return *this;
         }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        Memory<Type> & Memory<Type>::operator = (const std::string &str)
+        {
+            this->copy((Type*)str.c_str(), str.size());
+            return *this;
+        }
         
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
@@ -216,6 +240,16 @@ namespace GraVitoN
             buffer = _null_;
             buff_size = 0;
         }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        std::string Memory<Type>::toString()
+        {
+            if( buffer == _null_ || buff_size <= 0 )
+                return "";
+            return string((char*)buffer, buff_size);
+        }
+        
     } /// end of Core
 } /// end of GraVitoN
 
