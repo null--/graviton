@@ -24,8 +24,8 @@
  *
  */
 
-#ifndef _GVN_XMLPARSER_HEAD_
-#define _GVN_XMLPARSER_HEAD_
+#ifndef GRAVITON_XMLPARSER_H
+#define GRAVITON_XMLPARSER_H
 
 #include <graviton.hpp>
 #include <core/logger.hpp>
