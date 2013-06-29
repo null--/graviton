@@ -147,6 +147,10 @@ namespace GraVitoN
             sock = _sock;
             sa = _sa;
 
+            r_port = ntohs( sa.sin_port );
+            r_ip_hex = ntohl( sa.sin_addr.s_addr );
+            r_ip_str = inet_ntoa( sa.sin_addr );
+            
             Socket::Address sin;
             socklen_t len = sizeof(sin);
             if( getsockname(sock, (struct sockaddr*)&sin, &len) == Socket::Error )
@@ -158,8 +162,8 @@ namespace GraVitoN
             else
             {
                 l_port = ntohs( sin.sin_port );
-                l_ip_hex = ntohl( sa.sin_addr.s_addr );
-                l_ip_str = inet_ntoa( sa.sin_addr );
+                l_ip_hex = ntohl( sin.sin_addr.s_addr );
+                l_ip_str = inet_ntoa( sin.sin_addr );
             }
         }
 
@@ -174,8 +178,8 @@ namespace GraVitoN
         {
             is_dead = true;
             Logger::logItLn("[TCP_Client] connecting");
-            try
-            {
+//            try
+//            {
                 /* ----------------------------------------------- */
                 /* Create a socket and connect to server using normal socket calls. */
 
@@ -188,12 +192,12 @@ namespace GraVitoN
                     Logger::logItLn("[TCP_Client] connect failed");
                     return false;
                 }
-            }
-            catch(...)
-            {
-                Logger::logItLn("[TCP_Client] connect failed - EXCEPTION");
-                return false;
-            }
+//            }
+//            catch(...)
+//            {
+//                Logger::logItLn("[TCP_Client] connect failed - EXCEPTION");
+//                return false;
+//            }
 
             Socket::Address sin;
             socklen_t len = sizeof(sin);
@@ -244,22 +248,25 @@ namespace GraVitoN
         template<class Type>
         bool TCP_Client::send(const Memory<Type> &data)
         {
-            try
+            if( !isActive() )
+                return false;
+            
+            //try
+            //{
+            int err = ::send(sock, (char*)data.address(), data.size(), 0);
+            if( Socket::socketError(err) )
             {
-                int err = ::send(sock, (char*)data.address(), data.size(), 0);
-                if( Socket::socketError(err) )
-                {
-                    Logger::logVariable("[TCP_Client] send failed err", err);
-                    // close();
-                    return false;
-                }
-                // Logger::logVariable("[TCP_Client] send success", err);
-            }
-            catch(...)
-            {
-                Logger::logItLn("[TCP_Client] send failed - EXCEPTION");
+                Logger::logVariable("[TCP_Client] send failed err", err);
+                // close();
                 return false;
             }
+            // Logger::logVariable("[TCP_Client] send success", err);
+            //}
+            //catch(...)
+            //{
+            // Logger::logItLn("[TCP_Client] send failed - EXCEPTION");
+            //return false;
+            //}
             return true;
         }
 
@@ -274,31 +281,33 @@ namespace GraVitoN
         template<class Type>
         bool TCP_Client::recv(Memory<Type> &data)
         {
-            try
-            {
-                // Logger::logVariable("[TCP_Client] recving", ssl);
-                Type buf[ Config::MAX_TCP_PACKET_SIZE + 1];
-                int err = -1;
+            if( sock == Socket::Invalid )
+                return false;
+//            try
+//            {
+            // Logger::logVariable("[TCP_Client] recving", ssl);
+            Type buf[ Config::MAX_TCP_PACKET_SIZE + 1];
+            int err = -1;
 
-                err = ::recv(sock, (char*)buf, Config::MAX_TCP_PACKET_SIZE * sizeof(guchar), 0);
+            err = ::recv(sock, (char*)buf, Config::MAX_TCP_PACKET_SIZE * sizeof(guchar), 0);
                 
-                if( Socket::socketError(err) || err == 0)
-                {
-                    close();
-                    Logger::logVariable("[TCP_Client] recv failed", err);
-                    return false;
-                }
-                // Logger::logVariable("[TCP_Client] recv", err);
-
-                // buf[ err ] = '\0';
-                // data.copy(buf, err + 1);
-                data.copy(buf, err);
-            }
-            catch(...)
+            if( Socket::socketError(err) || err == 0)
             {
-                Logger::logItLn("[TCP_Client] connect failed - EXCEPTION");
+                close();
+                Logger::logVariable("[TCP_Client] recv failed", err);
                 return false;
             }
+            // Logger::logVariable("[TCP_Client] recv", err);
+
+            // buf[ err ] = '\0';
+            // data.copy(buf, err + 1);
+            data.copy(buf, err);
+//            }
+//            catch(...)
+//            {
+//                Logger::logItLn("[TCP_Client] recv failed - EXCEPTION");
+//                return false;
+//            }
             return true;
         }
 

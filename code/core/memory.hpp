@@ -81,10 +81,10 @@ namespace GraVitoN
             /// cool!
             Type *operator + (const size_t &index) const
                 {
-                    return address(index);
+                    return this->address(index);
                 }
             
-            /// size of buffer
+            /// size of buffer in byte ( not in sizeof(Type) )
             GraVitoN::gsize size() const;
 
             /// Memory = Memory operator
@@ -113,8 +113,13 @@ namespace GraVitoN
                    return buffer[ ((index % buff_size) + buff_size) % buff_size ];
                }
 
+            /// get sub buffer
+            bool sub(Type *&sub_buffer_,
+                     const GraVitoN::gsize size_,
+                     const GraVitoN::gsize position_ = 0) const;
+            
             /// convert buffer to string
-            std::string toString() const;
+            std::string toString(const GraVitoN::gsize position_ = 0) const;
         };
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -215,14 +220,36 @@ namespace GraVitoN
             if(good)
                 memcpy( (void*) (buffer), (void *) tmp.address(), std::min(size_, buff_size));
         }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        bool Memory<Type>::sub(Type *&sub_buffer_, const GraVitoN::gsize size_, const GraVitoN::gsize position_) const
+        {
+            // cout << " size_ " << size_ << " posiiton_ " << position_ << " buff_size " << buff_size << endl;
+            
+            if( buffer && (position_ + size_) <= buff_size && position_ >= 0 )
+            {
+                // cout << "sub" << endl;
+
+                /// char = 1 byte
+                sub_buffer_ = (Type*)( new char[size_] );
+                // cout << (int) ( buffer[position_] ) << (int) ( buffer[position_ + 1] ) << endl;
+                memcpy( (void*) sub_buffer_, (void*)( buffer + position_ ), size_);
+                // cout << (int) ( sub_buffer_[0] ) << (int) ( sub_buffer_[1] ) << endl;
+                return true;
+            }
+
+            sub_buffer_ = _null_;
+            return false;
+        }
         
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
         void Memory<Type>::copy(const Type *buffer_, GraVitoN::gsize size_, GraVitoN::gsize position_)
         {
-            cout << "copying" << endl;
+            // cout << "copying" << endl;
             
-            if( size_ <= 0 || buffer_ == _null_ )
+            if( size_ <= 0 || buffer_ == _null_ || position_ < 0 )
             {
                 buffer = _null_;
                 buff_size = 0;
@@ -234,7 +261,7 @@ namespace GraVitoN
             }
             memcpy( (void*) (buffer + position_), (void *) buffer_, size_);
 
-            cout << "done" << endl;
+            // cout << "done" << endl;
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -272,7 +299,7 @@ namespace GraVitoN
         Type* Memory<Type>::address(const GraVitoN::gsize position_) const
         {
             if( position_ >=  buff_size ) return _null_;
-            return buffer + position_;
+            return &buffer[ position_ ];
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -305,11 +332,11 @@ namespace GraVitoN
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
-        std::string Memory<Type>::toString() const
+        std::string Memory<Type>::toString(const GraVitoN::gsize position_) const
         {
-            if( buffer == _null_ || buff_size <= 0 )
+            if( buffer == _null_ || buff_size <= 0 || position_ < 0)
                 return "";
-            return string((char*)buffer, buff_size);
+            return string((char*)&buffer[position_], buff_size);
         }
         
     } /// end of Core

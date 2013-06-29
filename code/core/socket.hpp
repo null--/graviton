@@ -42,6 +42,8 @@
 #include <unistd.h>
 #endif
 
+/// @todo A BIG TODO! review all try-catch(...) blocks of tcp/ssl/udp classes and
+/// make sure the code will avoid all 'FATAL: exception not rethrown' runtime errors
 namespace GraVitoN
 {
     namespace Core

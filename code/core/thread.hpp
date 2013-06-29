@@ -43,6 +43,8 @@ namespace GraVitoN
         class Thread: public Core::Component
         {
         private:
+            static void finalize(Thread *_this);
+            
 #ifdef INFO_OS_WINDOWS
             static unsigned long internalCall(void *arg);
 #else
@@ -131,10 +133,30 @@ namespace GraVitoN
         void * Thread::internalCall(void *arg)
 #endif
         {
+            
             Thread *_this = (Thread*)arg;
             _this->flag_stop = false;
 
-            _this->main();
+            try
+            {
+                _this->main();
+            }
+            catch(...)
+            {
+                Core::Logger::logItLn("[Thread] main loop failed due to an unhandled exception");
+                Thread::finalize(_this);
+                throw;
+            }
+
+            Thread::finalize(_this);
+            
+            return 0;
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        void Thread::finalize(Thread *_this)
+        {
+            // cout << " -- killing -- " << endl;
             
             _this->flag_stop = true;
 
@@ -144,10 +166,10 @@ namespace GraVitoN
 #else
             delete _this->thread;
             _this->thread = _null_;
+            // pthread_exit( _null_ );
 #endif
-            return 0;
         }
-
+        
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         bool Thread::isActive()
         {

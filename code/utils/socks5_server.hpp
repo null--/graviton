@@ -119,11 +119,11 @@ namespace GraVitoN
                 return SOCKS5::REP_COMMAND_NOT_SUPPORTED;
 
             ver = (char)( data[0] );
-            // Core::Logger::logVariable("ver",(int)ver);
+            Core::Logger::logVariable("ver",(int)ver);
             cmd = (char)( data[1] );
-            // Core::Logger::logVariable("cmd",(int)cmd);
+            Core::Logger::logVariable("cmd",(int)cmd);
             atyp = (char)( data[3]);
-            // Core::Logger::logVariable("atyp",(int)atyp);
+            Core::Logger::logVariable("atyp",(int)atyp);
 
             if( ver != SOCKS5::VER )
                 return SOCKS5::REP_COMMAND_NOT_SUPPORTED;
@@ -145,8 +145,8 @@ namespace GraVitoN
                     return SOCKS5::REP_COMMAND_NOT_SUPPORTED;
 
                 unsigned int hip, hport = 0;
-                memcpy((void*)&hip, (void*)(data + 4), 4);
-                memcpy((void*)&hport, (void*)( data + data.size() - 2 ), 2);
+                memcpy((void*)&hip, (void*)data.address(4), 4);
+                memcpy((void*)&hport, (void*)data.address(data.size() - 2 ), 2);
 
                 /// Bloody ntohl
                 hip = Core::Socket::netToHost_32(hip);
@@ -155,11 +155,12 @@ namespace GraVitoN
             }
             else if( atyp == SOCKS5::ATYP_DOMAINNAME )
             {
+                Core::Logger::logItLn(" -- Processing domain");
                 unsigned int hport = 0, domsz = data[4];
                 char domain[ data.size() ];
                 /// data + 4 + 1 for size of domain
-                memcpy((void*)&domain, (void*)(data+5), domsz);
-                memcpy((void*)&hport, (void*)(data + data.size() - 2), 2);
+                memcpy((void*)&domain, (void*)data.address(5), domsz);
+                memcpy((void*)&hport, (void*)data.address(data.size() - 2), 2);
 
                 domain[domsz] = '\0';
 
