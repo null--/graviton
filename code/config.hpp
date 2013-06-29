@@ -79,6 +79,8 @@ namespace GraVitoN
 		const guint     MAX_TCP_PACKET_SIZE = 4069;
         /// Maximum file size
 		const gulong    MAX_FILE_SIZE = 32 * 1024 * 1024 * sizeof(guchar); // 64 MB
+        /// Maximum xml value size
+        const gsize     MAX_XML_VALUE_SIZE = 4069;
 	}
 
     namespace Core

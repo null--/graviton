@@ -62,26 +62,30 @@ namespace GraVitoN
             
             virtual ~UDP_Socket();
 
+            /// open a fresh udp socket!
             virtual bool open();
 
+            /// bind to udp port
             virtual bool bind(const std::string &bind_ip, const guint port);
-            
+
+            /// close the socket
             virtual bool close();
 
             /// Like recv but also stored ip address and port number of sender
             template<class Type>
             bool recv(Memory<Type> &data, string &_sender_ip, guint &_sender_port);
 
-            // virtual string recvString(string &_sender_ip, unsigned int &_sender_port)
+            /// recieve a string data from peer
             UDP_Packet_String recvString();
 
-            /// Send data to client
+            /// Send data to peer
             template<class Type>
             bool send(const Memory<Type> &data, const string &ip, const guint &port);
 
-            /// send string
+            /// send string data to peer
             bool sendString(const UDP_Packet_String &packet);
-            
+
+            /// is socket still valid?
             virtual bool isActive();
         };
 
