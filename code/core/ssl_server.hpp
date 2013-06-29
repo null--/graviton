@@ -158,7 +158,7 @@ namespace GraVitoN
         }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-        bool SSL_Server::open()
+        bool SSL_Server::bind()
         {
             try
             {

@@ -149,7 +149,7 @@ namespace GraVitoN
         }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-        bool TCP_Server::open()
+        bool TCP_Server::bind()
         {
             try
             {

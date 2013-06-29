@@ -118,12 +118,8 @@ namespace GraVitoN
             {
                 thread = _null_;
             }
-            else
-            {
-                pthread_yield();
-            }
             
-            flag_stop = (res == 0);
+            flag_stop = (res != 0);
 #endif
             return !flag_stop;
         }

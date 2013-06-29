@@ -71,7 +71,7 @@ namespace GraVitoN
             /// close the socket
             virtual bool close();
 
-            /// Like recv but also stored ip address and port number of sender
+            /// recv data
             template<class Type>
             bool recv(Memory<Type> &data, string &_sender_ip, guint &_sender_port);
 
@@ -95,6 +95,7 @@ namespace GraVitoN
             Socket::getInstance();
 
             sock = Socket::Invalid;
+
             // open();
         }
 
@@ -130,6 +131,13 @@ namespace GraVitoN
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         bool UDP_Socket::bind(const std::string &local_ip, const guint port)
         {
+            if( sock == Socket::Invalid )
+                if( !open() )
+                {
+                    Logger::logItLn("[UDP_Socket] open failed");
+                    return false;
+                }
+            
             sa.sin_family      = AF_INET;
             /// server IP
             sa.sin_addr.s_addr = inet_addr (local_ip.c_str());

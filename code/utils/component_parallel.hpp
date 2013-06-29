@@ -92,7 +92,7 @@ namespace GraVitoN
             Component_Parallel();
             ~Component_Parallel();
 
-            /// Run this component on a new thread
+            /// Run a component on a new thread
             bool runThis(GraVitoN::Core::Component &component);
 
             /// Is there any active thread?
