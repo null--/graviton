@@ -130,6 +130,7 @@ namespace GraVitoN
             return true;
         }
 
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         bool Component_Parallel::runThis(GraVitoN::Core::Component &component)
         {
             internal_threads.push_back( new Component_Thread(component) );
@@ -137,6 +138,7 @@ namespace GraVitoN
             return internal_threads.back()->run();
         }
 
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         bool Component_Parallel::isActive()
         {
             for(list<Component_Thread*>::iterator p_trd = internal_threads.begin(); p_trd != internal_threads.end(); ++p_trd)

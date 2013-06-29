@@ -111,8 +111,10 @@ namespace GraVitoN
             pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
             int res = pthread_create(thread, &attr, internalCall, this);
             pthread_attr_destroy(&attr);
+
+            // cout << "res: " << res << endl;
             
-            if( !res )
+            if( res != 0 )
             {
                 thread = _null_;
             }
@@ -121,9 +123,9 @@ namespace GraVitoN
                 pthread_yield();
             }
             
-            flag_stop = (res != 0);
+            flag_stop = (res == 0);
 #endif
-            return flag_stop;
+            return !flag_stop;
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
