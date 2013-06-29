@@ -24,8 +24,8 @@
  *
  */
 
-#ifndef GRAVITON_UDP_CLIENT_H
-#define GRAVITON_UDP_CLIENT_H
+#ifndef GRAVITON_UDP_SOCKET_H
+#define GRAVITON_UDP_SOCKET_H
 
 #include <graviton.hpp>
 #include <core/memory.hpp>
@@ -307,4 +307,4 @@ namespace GraVitoN
 
 } // end of GraVitoN
 
-#endif // GRAVITON_UDP_CLIENT
+#endif // GRAVITON_UDP_SOCKET_H

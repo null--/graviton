@@ -266,12 +266,12 @@ namespace GraVitoN
 
         public:
             Network_Relay_TCP_Server(
+                const string &          local_ip_,
                 const unsigned int &    listen_port,
                 const string &          remote_ip,
                 const unsigned int &    remote_port,
                 const bool              multi_thread = true):
-                /// @todo binding on 0.0.0.0 is not geek
-                TCP_Server("0.0.0.0", listen_port, multi_thread)
+                TCP_Server(local_ip_, listen_port, multi_thread)
                 {
                     // Core::Logger::logVariable("Left", client_ip);
                     // Core::Logger::logVariable("Right", server_ip);
@@ -294,6 +294,7 @@ namespace GraVitoN
         class Network_Relay_UDP : public Core::Component
         {
         private:
+            string          local_ip;
             unsigned int    local_port;
             string          left_ip;
             unsigned int    left_port;
@@ -307,8 +308,7 @@ namespace GraVitoN
 
                     Core::UDP_Socket server;
 
-                    /// @todo binding on 0.0.0.0 is not geek
-                    if( !server.bind("0.0.0.0", local_port) )
+                    if( !server.bind(local_ip, local_port) )
                         return;
 
                     Core::Memory<guchar> data;
@@ -355,12 +355,14 @@ namespace GraVitoN
                 }
 
         public:
-            Network_Relay_UDP(const unsigned int &_local_port,
+            Network_Relay_UDP(const string &local_ip_,
+                              const unsigned int &_local_port,
                               const string &_left_ip,
                               const unsigned int &_left_port,
                               const string &_right_ip,
                               const unsigned int &_right_port)
                 {
+                    local_ip = local_ip_;
                     local_port = _local_port;
                     left_ip = _left_ip;
                     left_port = _left_port;
@@ -388,7 +390,8 @@ namespace GraVitoN
             string right_ip;
             unsigned int right_port;
             unsigned int udp_port;
-
+            string local_ip;
+            
             class RELAY_THREAD: public Core::Thread
             {
             protected:
@@ -449,11 +452,13 @@ namespace GraVitoN
         public:
             /// udp_port == 0 --> random port
             Network_Relay_TCP_To_UDP(Core::TCP_Client &_left,
+                                     const string &local_ip_,
                                      const string &_right_ip,
                                      const unsigned int &_right_port,
                                      const unsigned int &_udp_port = 0):
                 left(_left)
                 {
+                    local_ip = local_ip_;
                     right_ip = _right_ip;
                     right_port = _right_port;
                     udp_port = _udp_port;
@@ -462,8 +467,7 @@ namespace GraVitoN
             virtual bool run()
                 {
                     Core::UDP_Socket right;
-                    /// @todo binding on 0.0.0.0 is not geek
-                    if( !right.bind("0.0.0.0", udp_port) )
+                    if( !right.bind(local_ip, udp_port) )
                         return false;
 
                     // cout << "F1" << endl;

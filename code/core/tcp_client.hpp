@@ -46,11 +46,19 @@ namespace GraVitoN
 
             /// remote ip address (string)
             std::string r_ip_str;
+            /// local ip address
+            std::string l_ip_str;
+            
             /// remote ip address (hex)
-            unsigned int r_ip_hex;
+            guint r_ip_hex;
+            /// local ip hex
+            guint l_ip_hex;
+            
             /// remote port
-            unsigned int r_port;
-
+            guint r_port;
+            /// local port
+            guint l_port;
+            
             /// socket address
             Socket::Address sa;
             
@@ -82,6 +90,18 @@ namespace GraVitoN
 
             /// is connection still alive
             virtual bool isActive();
+
+            /// get local port
+            guint getLocalPort()
+                { return l_port; }
+
+            /// get local ip address (string)
+            std::string getLocalIP()
+                { return l_ip_str; }
+
+            /// get local ip address (hex)
+            guint getLocalIPHex()
+                { return l_ip_hex; }
 
             /// get server ip address (string)
             std::string getRemoteIP()
@@ -125,8 +145,22 @@ namespace GraVitoN
             is_dead = Socket::invalidSocket(_sock);
 
             sock = _sock;
-
             sa = _sa;
+
+            Socket::Address sin;
+            socklen_t len = sizeof(sin);
+            if( getsockname(sock, (struct sockaddr*)&sin, &len) == Socket::Error )
+            {
+                l_port = 0;
+                l_ip_hex = 0;
+                l_ip_str = "";
+            }
+            else
+            {
+                l_port = ntohs( sin.sin_port );
+                l_ip_hex = ntohl( sa.sin_addr.s_addr );
+                l_ip_str = inet_ntoa( sa.sin_addr );
+            }
         }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -161,6 +195,21 @@ namespace GraVitoN
                 return false;
             }
 
+            Socket::Address sin;
+            socklen_t len = sizeof(sin);
+            if( getsockname(sock, (struct sockaddr*)&sin, &len) == Socket::Error )
+            {
+                l_port = 0;
+                l_ip_hex = 0;
+                l_ip_str = "";
+            }
+            else
+            {
+                l_port = ntohs( sin.sin_port );
+                l_ip_hex = ntohl( sa.sin_addr.s_addr );
+                l_ip_str = inet_ntoa( sa.sin_addr );
+            }
+            
             is_dead = false;
             return true;
         }

@@ -175,7 +175,7 @@ namespace GraVitoN
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         unsigned int Socket::netToHost_32(const unsigned int &val)
-        {
+       {
             return ntohl(val);
         }
 

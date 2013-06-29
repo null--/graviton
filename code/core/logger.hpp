@@ -100,6 +100,7 @@ namespace GraVitoN
             template < class _C_T_ >
             bool logItLn ( const _C_T_ &log )
             {
+                logIt ( "G: " );
                 logIt ( log );
                 logEndl();
                 return true;
@@ -110,6 +111,7 @@ namespace GraVitoN
             template < class _C_T_ > bool
             logVariable(const string &name,const _C_T_ & value)
             {
+                logIt ( "G: " );
                 logIt(name);
                 logIt(": ");
                 logItLn(value);
@@ -123,6 +125,7 @@ namespace GraVitoN
             logVariable2(const string &name,const _C_T_ & value,
                          const string &name2,const _C_T_ & value2)
             {
+                logIt ( "G: " );
                 logIt(name);
                 logIt(": ");
                 logIt(value);
@@ -142,6 +145,7 @@ namespace GraVitoN
                          const string &name2,const _C_T_ & value2,
                          const string &name3,const _C_T_ & value3)
             {
+                logIt ( "G: " );
                 logIt(name);
                 logIt(": ");
                 logIt(value);
@@ -165,6 +169,7 @@ namespace GraVitoN
                          const string &name3,const _C_T_ & value3,
                          const string &name4,const _C_T_ & value4)
             {
+                logIt ( "G: " );
                 logIt(name);
                 logIt(": ");
                 logIt(value);

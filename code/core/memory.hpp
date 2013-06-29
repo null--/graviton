@@ -39,6 +39,7 @@ namespace GraVitoN
         protected:
             Type *buffer;
             GraVitoN::gsize buff_size;
+            bool is_executable;
             
         public:
             Memory(const GraVitoN::gsize size_ = 0, bool executable_ = false);
@@ -52,8 +53,15 @@ namespace GraVitoN
             /// Destructor
             ~Memory();
 
+            /// is executable
+            bool isExecutable() const
+                { return is_executable; }
+            
             /// alloc
             bool alloc(GraVitoN::gsize size_, bool executable_ = false);
+
+            /// resize without loosing data
+            bool resize(GraVitoN::gsize size_);
             
             /// free
             void free();
@@ -63,12 +71,18 @@ namespace GraVitoN
             
             /// fill buffer with
             void zero();
+            
+            /// copy new data on memory starting at position
+            void copy(const Type *buffer_, GraVitoN::gsize size_, GraVitoN::gsize positon_ = 0);
 
-            /// copy buffer
-            void copy(const Type *buffer_, GraVitoN::gsize size_);
+            /// 'buffer address' + 'position_ bytes'
+            Type * address(const GraVitoN::gsize position_ = 0) const;
 
-            /// get buffer address
-            Type * address() const;
+            /// cool!
+            Type *operator + (const size_t &index) const
+                {
+                    return address(index);
+                }
             
             /// size of buffer
             GraVitoN::gsize size() const;
@@ -78,15 +92,36 @@ namespace GraVitoN
 
             /// Memory = Memory operator
             Memory<Type> & operator = (const std::string &str);
-            
+
+            /// index operator (cyclic: size = A -=> data[A-1] == data[-1], data[1] == data[A+1] )
+            Type &operator [] (const size_t &index)
+                {
+                    if( !buffer )
+                    {
+                        throw( std::logic_error("Memory: index operator - trying to access an empty buffer") );
+                    }
+                    return buffer[ ((index % buff_size) + buff_size) % buff_size ];
+                }
+
+            /// const index operator
+            Type operator [] (const size_t &index) const
+               {
+                   if( !buffer )
+                   {
+                       throw( std::logic_error("Memory: index operator - trying to access an empty buffer") );
+                   }
+                   return buffer[ ((index % buff_size) + buff_size) % buff_size ];
+               }
+
             /// convert buffer to string
-            std::string toString();
+            std::string toString() const;
         };
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
         Memory<Type>::Memory(const GraVitoN::gsize size_, bool executable_)
         {
+            is_executable = executable_;
             Memory<Type>::alloc(size_, executable_);
         }
 
@@ -94,6 +129,7 @@ namespace GraVitoN
         template<class Type>
         Memory<Type>::Memory(const Memory<Type> &a_)
         {
+            is_executable = a_.isExecutable();
             Memory<Type>::copy(a_.address(), a_.size());
         }
 
@@ -101,6 +137,7 @@ namespace GraVitoN
         template<class Type>
         Memory<Type>::Memory(const string &str)
         {
+            is_executable = false;
             Memory<Type>::copy((Type*)str.c_str(), str.size());
         }
         
@@ -108,6 +145,7 @@ namespace GraVitoN
         template<class Type>
         Memory<Type>::Memory(const Type *buffer_, const GraVitoN::gsize size_)
         {
+            is_executable = false;
             Memory<Type>::copy(buffer_, size_);
         }
         
@@ -122,6 +160,8 @@ namespace GraVitoN
         template<class Type>
         bool Memory<Type>::alloc(GraVitoN::gsize size_, bool executable_)
         {
+            is_executable = executable_;
+            
             if(size_ <= 0)
             {
                 buffer = _null_;
@@ -160,20 +200,41 @@ namespace GraVitoN
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
-        void Memory<Type>::copy(const Type *buffer_, GraVitoN::gsize size_)
+        bool Memory<Type>::resize(GraVitoN::gsize size_)
         {
+            bool good = (buffer != _null_ && buff_size > 0);
+
+            Memory<Type> tmp;
+            
+            if(good)
+                tmp.copy(buffer, buff_size);
+            
+            Memory<Type>::free();
+            Memory<Type>::alloc(size_, is_executable);
+
+            if(good)
+                memcpy( (void*) (buffer), (void *) tmp.address(), std::min(size_, buff_size));
+        }
+        
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        void Memory<Type>::copy(const Type *buffer_, GraVitoN::gsize size_, GraVitoN::gsize position_)
+        {
+            cout << "copying" << endl;
+            
             if( size_ <= 0 || buffer_ == _null_ )
             {
                 buffer = _null_;
                 buff_size = 0;
                 return;
             }
-            else if( size_ != buff_size )
+            else if( (position_ + size_) != buff_size )
             {
-                Memory<Type>::free();
-                Memory<Type>::alloc(size_);
+                Memory<Type>::resize(position_ + size_);
             }
-            memcpy( (void*) buffer, (void *) buffer_, size_);
+            memcpy( (void*) (buffer + position_), (void *) buffer_, size_);
+
+            cout << "done" << endl;
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -208,9 +269,10 @@ namespace GraVitoN
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
-        Type* Memory<Type>::address() const
+        Type* Memory<Type>::address(const GraVitoN::gsize position_) const
         {
-            return buffer;
+            if( position_ >=  buff_size ) return _null_;
+            return buffer + position_;
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -243,7 +305,7 @@ namespace GraVitoN
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
-        std::string Memory<Type>::toString()
+        std::string Memory<Type>::toString() const
         {
             if( buffer == _null_ || buff_size <= 0 )
                 return "";
