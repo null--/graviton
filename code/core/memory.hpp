@@ -27,6 +27,8 @@
 #define GRAVITON_MEMORY_H
 
 #include <graviton.hpp>
+#include <istream>
+#include <ostream>
 
 namespace GraVitoN
 {
@@ -42,8 +44,12 @@ namespace GraVitoN
             bool is_executable;
             
         public:
+            /// Default constgructor
             Memory(const GraVitoN::gsize size_ = 0, bool executable_ = false);
+
+            /// Construct from a valid buffer
             Memory(const Type *buffer_, const GraVitoN::gsize size);
+            
             /// Copy Memory object
             Memory(const Memory<Type> &a_);
 
@@ -78,11 +84,14 @@ namespace GraVitoN
             /// 'buffer address' + 'position_ bytes'
             Type * address(const GraVitoN::gsize position_ = 0) const;
 
-            /// cool!
-            Type *operator + (const size_t &index) const
-                {
-                    return this->address(index);
-                }
+            /// cool! char x = (memory + 5)
+            Type *operator + (const gsize &index) const;
+            
+            /// cast operator Type *
+            operator Type * () const;
+
+            /// check if buffer is allocated
+            bool operator ! () const;
             
             /// size of buffer in byte ( not in sizeof(Type) )
             GraVitoN::gsize size() const;
@@ -94,25 +103,8 @@ namespace GraVitoN
             Memory<Type> & operator = (const std::string &str);
 
             /// index operator (cyclic: size = A -=> data[A-1] == data[-1], data[1] == data[A+1] )
-            Type &operator [] (const size_t &index)
-                {
-                    if( !buffer )
-                    {
-                        throw( std::logic_error("Memory: index operator - trying to access an empty buffer") );
-                    }
-                    return buffer[ ((index % buff_size) + buff_size) % buff_size ];
-                }
-
-            /// const index operator
-            Type operator [] (const size_t &index) const
-               {
-                   if( !buffer )
-                   {
-                       throw( std::logic_error("Memory: index operator - trying to access an empty buffer") );
-                   }
-                   return buffer[ ((index % buff_size) + buff_size) % buff_size ];
-               }
-
+            Type &operator [] (const gsize &index) const;
+            
             /// get sub buffer
             bool sub(Type *&sub_buffer_,
                      const GraVitoN::gsize size_,
@@ -120,6 +112,15 @@ namespace GraVitoN
             
             /// convert buffer to string
             std::string toString(const GraVitoN::gsize position_ = 0) const;
+
+            /// print memory into an ostream as a string
+            template<class MType>
+            friend std::ostream& operator << (std::ostream& stream, const Memory<MType> &m);
+            
+            /// read memory from an istream
+            template<class MType>
+            friend std::istream& operator >> (std::istream& stream, Memory<MType> &m);
+            
         };
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -284,22 +285,28 @@ namespace GraVitoN
         template<class Type>
         void Memory<Type>::set(Type value)
         {
-            memset(buffer, value, buff_size);
+            if( buffer && buff_size > 0 )
+                memset(buffer, value, buff_size);
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
         void Memory<Type>::zero()
         {
-            memset(buffer, 0, buff_size);
+            Memory<Type>::set( 0x00 );
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
         Type* Memory<Type>::address(const GraVitoN::gsize position_) const
         {
-            if( position_ >=  buff_size ) return _null_;
-            return &buffer[ position_ ];
+            if( !buffer || position_ >=  buff_size || position_ < 0 )
+            {
+                // cout << "dead beef" << endl;
+                return _null_;
+            }
+            // cout << "still alive" << endl;
+            return (buffer + position_);
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -334,9 +341,71 @@ namespace GraVitoN
         template<class Type>
         std::string Memory<Type>::toString(const GraVitoN::gsize position_) const
         {
-            if( buffer == _null_ || buff_size <= 0 || position_ < 0)
-                return "";
-            return string((char*)&buffer[position_], buff_size);
+            if ( buffer == _null_  || buff_size <= 0 || position_ < 0 ) //|| position_ >= buff_size )
+            {
+                return string("");
+            }
+
+            std::string res;
+            for(gsize i = position_; i < buff_size; ++i)
+                res += (char)*(buffer+i);
+
+            return res;
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        Type * Memory<Type>::operator + (const gsize &index) const
+        {
+            return Memory<Type>::address(index);
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        Memory<Type>::operator Type * () const
+        {
+            return this->address();
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        bool Memory<Type>::operator ! () const
+        {
+            return (buffer != _null_) && (buff_size > 0);
+        }
+        
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        Type & Memory<Type>::operator [] (const gsize &index) const
+        {
+            if( !buffer )
+            {
+                throw( std::logic_error("Memory: index operator - trying to access an empty buffer") );
+            }
+            return buffer[ ((index % buff_size) + buff_size) % buff_size ];
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        std::ostream& operator << (std::ostream& stream, const Memory<Type> &m)
+        {
+            gsize i = 0;
+            while( (m + i) )
+            {
+                stream  << (char)*(m + i);
+                ++i;
+            }
+            return stream;
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        std::istream& operator >> (std::istream& stream, Memory<Type> &m)
+        {
+            string str;
+            stream >> str;
+            m.copy((Type*)str.c_str(), str.size());
+            return stream;
         }
         
     } /// end of Core

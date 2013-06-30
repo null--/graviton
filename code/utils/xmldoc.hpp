@@ -88,13 +88,13 @@ namespace GraVitoN
                 }
 
             /// cast XML_Attrib* to xml_attribute<>*
-			operator rapidxml::xml_attribute<> * ()
+			operator rapidxml::xml_attribute<> * () const
                 {
                     return attr;
                 }
 
             /// check if attribute is valid
-			bool operator ! ()
+			bool operator ! () const
                 {
                     return attr == _null_;
                 }
@@ -103,14 +103,14 @@ namespace GraVitoN
              * @params [IN]
              * name of attribute, use a empty string as argument when you want to retrive next-nearest attribute.
              */
-            XML_Attrib   next(const std::string &name = "")
+            XML_Attrib   next(const std::string &name = "") const
                 {
                     if( !attr ) return XML_Attrib(_null_);
                     return (XML_Attrib)(!name.empty()?(attr->next_attribute(name.c_str())):(attr->next_attribute()));
                 }
 
             /// get attribute name
-            std::string name()					  
+            std::string name() const					  
                 {
                     if( !attr ) return "";
                     // m_name = attr->name();
@@ -126,7 +126,7 @@ namespace GraVitoN
                 }
 
             /// get attribute value
-			string value()		  
+			string value() const		  
                 {
                     if( !attr ) return "";
                     // m_value = attr->value();
@@ -193,13 +193,13 @@ namespace GraVitoN
                 }
 
             /// check if node is valid
-			bool operator ! ()
+			bool operator ! () const
                 {
                     return node == _null_;
                 }
 
             /// cast XML_Node* to rapidxml::xml_node<>*
-			operator rapidxml::xml_node<> * ()
+			operator rapidxml::xml_node<> * () const
                 {
                     return node;
                 }
@@ -233,28 +233,28 @@ namespace GraVitoN
                 }
 
             /// get first child of node (with or whitout a given name)
-            XML_Node     firstChild(const std::string name = "")
+            XML_Node     firstChild(const std::string name = "") const
                 {
                     if(!node) return XML_Node(_null_);
                     return XML_Node(!name.empty()?(node->first_node(name.c_str())):(node->first_node()));
                 }
 
             /// get next sibling node
-			XML_Node     next(const std::string &name = "")
+			XML_Node     next(const std::string &name = "") const
                 {
                     if(!node) return XML_Node(_null_);
                     return XML_Node(!name.empty()?(node->next_sibling(name.c_str())):(node->next_sibling()));
                 }
 
             /// get first attribute of node
-            XML_Attrib   firstAttribute(const std::string &name = "")
+            XML_Attrib   firstAttribute(const std::string &name = "") const
                 {
                     if(!node) return XML_Attrib(_null_);
                     return XML_Attrib(!name.empty()?(node->first_attribute(name.c_str())):(node->first_attribute()));
                 }
 
             /// get name of the node
-            std::string name()
+            std::string name() const
                 {
                     if(!node) return _null_;
                     // m_name = node->name();
@@ -278,7 +278,7 @@ namespace GraVitoN
                 }
 
             /// get value of the node
-            std::string value()
+            std::string value() const
                 {
                     if(!node) return _null_;
                     // m_value = node->value();
