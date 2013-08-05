@@ -29,7 +29,7 @@
 #include <graviton.hpp>
 #include <core/memory.hpp>
 #include <utils/socks5.hpp>
-#include <utils/netkit.hpp>
+#include <core/memory.hpp>
 #include <core/tcp_client.hpp>
 
 namespace GraVitoN
@@ -112,7 +112,7 @@ namespace GraVitoN
         {
             Core::Logger::logItLn("[SOCKS5 Client] Greeting...");
 
-            Core::Memmory<guchar> data(5);
+            Core::Memory<guchar> data(5);
             size_t sz = 0;
 
             data[sz++] = SOCKS5::VER;
@@ -120,9 +120,9 @@ namespace GraVitoN
             data[sz++] = SOCKS5::AUTH_NONE;
             data[sz++] = SOCKS5::AUTH_USERPASS;
 
-            if( TCP_Client::send(data, sz) )
+            if( TCP_Client::send(data) )
             {
-                if( TCP_Client::recv(data, sz) )
+                if( TCP_Client::recv(data) )
                 {
                     if( sz <= 1 || data[1] == SOCKS5::REP_AUTH_UNACCEPTABLE )
                         return false;
@@ -141,7 +141,8 @@ namespace GraVitoN
         bool SOCKS5_Client::authenticate()
         {
             Core::Logger::logItLn("[SOCKS5 Client] Authenticating...");
-            unsigned char *data = new unsigned char[3 + username.size() + pass.size() + 1];
+            // unsigned char *data = new unsigned char[3 + username.size() + pass.size() + 1];
+            Core::Memory<guchar> data(3 + username.size() + pass.size() + 1);
             size_t sz = 0;
 
             data[sz++] = SOCKS5::AUTH_VER;
@@ -152,9 +153,9 @@ namespace GraVitoN
             for(size_t i=0; i<pass.size(); ++i)
                 data[sz++] = (unsigned char)pass[i];
 
-            if( TCP_Client::send(data, sz) )
+            if( TCP_Client::send(data) )
             {
-                if( TCP_Client::recv(data, sz) )
+                if( TCP_Client::recv(data) )
                 {
                     if( sz <= 1 || data[1] != SOCKS5::REP_SUCCEEDED )
                     {
@@ -176,7 +177,8 @@ namespace GraVitoN
         {
             Core::Logger::logItLn("[SOCKS5 Client] Ask CONNECT...");
 
-            unsigned char *data = new unsigned char[5];
+            // unsigned char *data = new unsigned char[5];
+            Core::Memory<guchar> data(32);
             size_t sz = 0;
 
             data[sz++] = SOCKS5::VER;
@@ -184,12 +186,13 @@ namespace GraVitoN
             data[sz++] = SOCKS5::RSV;
 
             /// @todo IPv6
-            if( Netkit::isAValidIPv4(remote_host) )
+            if( Core::Socket::isAValidIPv4(remote_host) )
             {
                 data[sz++] = SOCKS5::ATYP_IPV4;
 
-                unsigned int hip = Netkit::hostToNet_32( Netkit::strToHexIPv4(remote_host) );
-                memcpy((void*)(data+sz), (void*)&hip, 4);
+                unsigned int hip = Core::Socket::hostToNet_32( Core::Socket::strToHexIPv4(remote_host) );
+                // memcpy((void*)(data+sz), (void*)&hip, 4);
+                data.copy((guchar*)&hip, 4, sz);
                 sz += 4;
             }
             else
@@ -198,18 +201,22 @@ namespace GraVitoN
 
                 size_t len = remote_host.size();
                 data[sz++] = (unsigned char)len;
-                memcpy((void*)(data+sz), (void*)remote_host.c_str(), len);
+                // memcpy((void*)(data+sz), (void*)remote_host.c_str(), len);
+                data.copy((guchar*)remote_host.c_str(), len, sz);
                 sz += len;
             }
 
-            unsigned int hport = Netkit::hostToNet_16( remote_port );
-            memcpy((void*)(data+sz), (void*)&hport, 2);
+            unsigned int hport = Core::Socket::hostToNet_16( remote_port );
+            // memcpy((void*)(data+sz), (void*)&hport, 2);
+            data.copy((guchar*)&hport, 2, sz);
             sz += 2;
 
-            if( TCP_Client::send(data, sz) )
+            if( TCP_Client::send(data) )
             {
-                if( TCP_Client::recv(data, sz) )
+                // cout << "sending..." << endl;
+                if( TCP_Client::recv(data) )
                 {
+                    // cout << "recv..." << endl;
                     if( sz <= 1 || data[1] != SOCKS5::REP_SUCCEEDED )
                     {
                         Core::Logger::logItLn("[SOCKS5 CLIENT] [FAILD]");

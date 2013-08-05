@@ -248,12 +248,15 @@ namespace GraVitoN
         template<class Type>
         bool TCP_Client::send(const Memory<Type> &data)
         {
+            // cout << "damn send..." << endl;
             if( !isActive() )
                 return false;
-            
+
+            // cout << "a lost try..." << endl;
             //try
             //{
             int err = ::send(sock, (char*)data.address(), data.size(), 0);
+            // cout << "::send..." << endl;
             if( Socket::socketError(err) )
             {
                 Logger::logVariable("[TCP_Client] send failed err", err);

@@ -135,6 +135,9 @@ namespace GraVitoN
         template<class Type>
         Memory<Type>::Memory(const Memory<Type> &a_)
         {
+            buff_size = 0;
+            buffer = _null_;
+            
             is_executable = a_.isExecutable();
             Memory<Type>::copy(a_.address(), a_.size());
         }
@@ -143,7 +146,11 @@ namespace GraVitoN
         template<class Type>
         Memory<Type>::Memory(const string &str)
         {
+            buff_size = 0;
+            buffer = _null_;
+            
             is_executable = false;
+            // cout << str << (void*) str.c_str() << endl;
             Memory<Type>::copy((Type*)str.c_str(), str.size());
         }
         
@@ -205,6 +212,7 @@ namespace GraVitoN
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        /// @todo optimization
         template<class Type>
         bool Memory<Type>::resize(GraVitoN::gsize size_)
         {
@@ -213,13 +221,22 @@ namespace GraVitoN
             Memory<Type> tmp;
             
             if(good)
+            {
+                // cout << "copying mem into tmp " << (void*) buffer << endl;
                 tmp.copy(buffer, buff_size);
-            
+            }
+
+            // cout << "free/alloc" << endl;
             Memory<Type>::free();
             Memory<Type>::alloc(size_, is_executable);
 
             if(good)
+            {
+                // cout << "copy tmp into mem" << (void*) buffer << endl;
                 memcpy( (void*) (buffer), (void *) tmp.address(), std::min(size_, buff_size));
+            }
+
+            // cout << "resize done" << (void*) buffer << endl;
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -248,12 +265,11 @@ namespace GraVitoN
         template<class Type>
         void Memory<Type>::copy(const Type *buffer_, GraVitoN::gsize size_, GraVitoN::gsize position_)
         {
-            // cout << "copying" << endl;
-            
-            if( size_ <= 0 || buffer_ == _null_ || position_ < 0 )
+            // cout << "copying " << (void*) buffer_ << endl;
+
+            /// @todo logical review
+            if( size_ <= 0 || position_ < 0 )
             {
-                buffer = _null_;
-                buff_size = 0;
                 return;
             }
             else if( (position_ + size_) != buff_size )
@@ -278,6 +294,19 @@ namespace GraVitoN
         Memory<Type> & Memory<Type>::operator = (const std::string &str)
         {
             this->copy((Type*)str.c_str(), str.size());
+            
+            // this->resize(str.size() + 1);
+            // cout << "free" << endl;
+            // this->free();
+            // cout << "alloc" << endl;
+            // this->alloc(str.size() + 1);
+            // int i = 0;
+            // do
+            // {
+            //    cout << str[i] << endl;
+            //    this += str[i];
+            // } while ( str[i] != '\0' );
+
             return *this;
         }
         

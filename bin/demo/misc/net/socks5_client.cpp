@@ -45,7 +45,7 @@ int main()
 
             // GraVitoN::Core::Thread::sleep(100);
 
-            soc.recvString(data);
+            data = soc.recvString();
             cout << data << endl;
         }
     }
