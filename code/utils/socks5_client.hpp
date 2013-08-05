@@ -38,6 +38,12 @@ namespace GraVitoN
     {
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        /*
+         * socks5 client class
+         * socks5 connect + socks5 authentication
+         * call send/sendString to send data and recv/recvString to recieve data
+         *
+         */
         class SOCKS5_Client : public Core::TCP_Client
         {
         protected:
@@ -57,8 +63,6 @@ namespace GraVitoN
             virtual bool askUDP();
 
         public:
-            /// @param [in] _remote_host
-            /// IP or Domain
             SOCKS5_Client(
                 const string &_socks_server_ip,
                 const unsigned int _port,
