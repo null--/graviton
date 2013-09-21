@@ -1,0 +1,43 @@
+<?xml version="0.1" encoding="UTF-8"?>
+<Files dummy="foobar.com">
+	<File>
+		<Path>File_Path</Path>
+		<Name>File_Name</Name>
+	</File>
+	<File>
+		<Path>File_Path</Path>
+		<Name>File_Name</Name>
+	</File>
+	<File>
+		<Path>File_Path</Path>
+		<Name>File_Name</Name>
+	</File>
+	<File>
+		<Path>File_Path</Path>
+		<Name>File_Name</Name>
+	</File>
+	<File>
+		<Path>File_Path</Path>
+		<Name>File_Name</Name>
+	</File>
+	<File>
+		<Path>File_Path</Path>
+		<Name>File_Name</Name>
+	</File>
+	<File>
+		<Path>File_Path</Path>
+		<Name>File_Name</Name>
+	</File>
+	<File>
+		<Path>File_Path</Path>
+		<Name>File_Name</Name>
+	</File>
+	<File>
+		<Path>File_Path</Path>
+		<Name>File_Name</Name>
+	</File>
+	<File>
+		<Path>File_Path</Path>
+	</File>
+</Files>
+
