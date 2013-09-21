@@ -30,7 +30,9 @@ Major:
 	- code a polymorphic engine (binary and source)
 	- lua script encrypter/decrypter modules
 	- SolarWind
-
+    - Injection and Hooking techniques
+    - Check possibility of compiling GraVitoN as nt driver and kernel module (targeting ring #0)
+    
 Minor:
     - Combine luabridge with components ---> IN PROGRESS
     - mini http(s) web server

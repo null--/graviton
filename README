@@ -1,3 +1,5 @@
+# Now available on both savannah and github
+
 # Project:
 	GraVitoN: A Cross Platform Malware Development Framework
 
@@ -8,6 +10,7 @@
 	Scream of Pain
 
 # Some Key Notes:
+    0- Use doxygen to generate documentation. (There is a Doxyfile inside graviton/ folder)
 	1- Always build external libraries statically
 	2- Before using a class or function from GraVitoN lib, make sure that you now it's dependencies.
 		(e.g. SSL_Client depends on openssl so you should link openssl's 
