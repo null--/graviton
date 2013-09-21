@@ -2,7 +2,6 @@ Breakthrought:
     OOP:
         Utils:
             ZIP
-            File
             Crypto
         Malkit:
             UPX
@@ -30,8 +29,8 @@ Major:
 	- code a polymorphic engine (binary and source)
 	- lua script encrypter/decrypter modules
 	- SolarWind
-    - Injection and Hooking techniques
-    - Check possibility of compiling GraVitoN as nt driver and kernel module (targeting ring #0)
+	- Injection and Hooking techniques
+	- Check possibility of compiling GraVitoN as nt driver and kernel module driver (targeting ring #0)
     
 Minor:
     - Combine luabridge with components ---> IN PROGRESS

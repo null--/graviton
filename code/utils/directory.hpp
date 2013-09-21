@@ -52,7 +52,7 @@ namespace GraVitoN
     {   
         class Directory
         {
-        private:
+        protected:
             std::string dirname;
 
         public:

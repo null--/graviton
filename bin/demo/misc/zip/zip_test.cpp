@@ -1,3 +1,29 @@
+ /**
+ * @file
+ * 
+ * @author  Sina Hatef Matbue ( _null_ ) <sinahatef.cpp@gmail.com>
+ *
+ * @section License
+ * This file is part of GraVitoN.
+ *
+ * Graviton is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Graviton is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Graviton.  If not, see http://www.gnu.org/licenses/.
+ *
+ * @brief test zip lib
+ *
+*/
+
+
 #define GVN_ACTIVATE_LOGGER
 
 #include <graviton.hpp>
@@ -6,6 +32,10 @@
 #include <utils/zip.hpp>
 
 using namespace std;
+using namespace GraVitoN::Utils;
+using namespace GraVitoN::Core;
+
+/// COMPILE: g++ -I ../../../../code -o zip_test zip_test.cpp -L ../../../../lib/zlib/linux-amd64/ -lzlib
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 int main ( int argc , char **argv)
@@ -16,35 +46,42 @@ int main ( int argc , char **argv)
         return 0;
     }
 
-    string file_name = argv[1];
-    size_t b_sz = 256; /// don't forget '\0'
-    unsigned char buff[b_sz];
-    for(size_t i=0; i<b_sz-1; ++i)
-        buff[i] =  (i % ('z' - 'a' + 1)) + 'a';
-    buff[b_sz-1] = '\0';
-
-    size_t f_size, iz_size, oz_size, ib_size, ob_size;
-
+    ZipFile zfile(argv[1]);
+    
     /// Zip a file
-    f_size = GraVitoN::Utils::File::getSize( file_name );
-    cout << "Original File Size: " << f_size << " Bytes" << endl;
-    GraVitoN::Utils::Zip::compressFile(file_name, file_name + ".gz");
-    oz_size = GraVitoN::Utils::File::getSize( file_name + ".gz");
-    cout << "Compressed File Size: " << oz_size << " Bytes" << endl;
-    GraVitoN::Utils::Zip::decompressFile(file_name + ".gz", file_name + ".gz.decom");
-    iz_size = GraVitoN::Utils::File::getSize( file_name + ".gz.decom");
-    cout << "Decompressed File Size: " << iz_size << " Bytes" << endl;
+    cout << "Original File Size: " << zfile.size() << " Bytes" << endl;
 
+    /// Compress file
+    ZipFile czf = zfile.compress(zfile.getPath() + ".gz");
+    cout << "Compressed File Size: " << czf.size() << " Bytes" << endl;
+
+    /// Decompress file
+    ZipFile dzf = czf.decompress(czf.getPath() + ".decom");
+    cout << "Decompressed File Size: " << dzf.size() << " Bytes" << endl;
+    cout << "Ratio: " << (1.f - (float)czf.size() / (float)dzf.size()) * 100.f << "%" << endl;
+    
     /// Zip a buffer
+    ZipMemory<GraVitoN::guchar> buff(256);
+    buff.zero();
+    
+    for(size_t i=0; i<buff.size(); ++i)
+        buff[i] =  (i % ('z' - 'a' + 1)) + 'a';
+
     cout << endl;
-    // cout << "Original buff: '" << buff << "'" << endl;
-    unsigned char *izbuff = _null_, *ozbuff = _null_;
-    GraVitoN::Utils::Zip::compressBuffer(buff, b_sz, izbuff, ib_size);
-    cout << "Compressed buffer size: " << ib_size << " Bytes" << endl;
+    cout << "Original buff: '" << buff << "'" << endl;
+
+    /// Compress buffer
+    ZipMemory<unsigned char> izbuff, ozbuff;
+    ozbuff = buff.compress();
+    cout << "Compressed buffer size: " << ozbuff.size() << " Bytes" << endl;
+
+    /// Decompress buffer
     // cout << "Compressed Buffer: '" << GraVitoN::Utils::OptParser::hexToStr(izbuff, ib_size) << "'" << endl;
-    GraVitoN::Utils::Zip::decompressBuffer(izbuff, ib_size, ozbuff, ob_size);
-    cout << "Decompressed buffer size: " << ob_size << " Bytes" << endl;
-    // cout << "Decompressed Buffer: '" << ozbuff << "'" << endl;
-    cout << "Result: " << ((string((char*)buff) == string((char*)ozbuff))?("Matched"):("UNMATCHED")) << endl;
+    izbuff = ozbuff.decompress();
+    cout << "Decompressed Buffer Size: " << izbuff.size() << " Bytes" << endl;
+    cout << "Decompressed Buffer: '" << izbuff << "'" << endl;
+    cout << "Ratio: " << (1.f - (float)ozbuff.size() / (float)izbuff.size()) * 100.f << "%" << endl;
+    
+    cout << "Result: " << ( (buff.toString() == izbuff.toString()) ? ("Matched") : ("UNMATCHED") ) << endl;
     return 0;
 }

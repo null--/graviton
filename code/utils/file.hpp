@@ -26,6 +26,7 @@
 #ifndef _GVN_FILE_HEAD_
 #define _GVN_FILE_HEAD_
 
+#include <core/memory.hpp>
 #include <core/logger.hpp>
 // #include <utils/directory.hpp>
 
@@ -55,7 +56,7 @@ namespace GraVitoN
         
         class File
         {
-        private:
+        protected:
             std::string path;
             
         public:
