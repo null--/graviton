@@ -27,7 +27,7 @@
 #define _GVN_FILE_HEAD_
 
 #include <core/logger.hpp>
-#include <utils/folder.hpp>
+// #include <utils/directory.hpp>
 
 #include <utils/regex.hpp>
 #include <iostream>
@@ -50,7 +50,9 @@ using namespace std;
 namespace GraVitoN
 {
     namespace Utils
-    {   
+    {
+        class Directory;
+        
         class File
         {
         private:
@@ -59,25 +61,50 @@ namespace GraVitoN
         public:
             File(std::string path_);
             
-            size_t size();
+            size_t size() const;
 
             template<class T_File>
-            Core::Memory<T_File> load();
+            Core::Memory<T_File> load() const;
 
             template<class T_File>
-            bool save(Core::Memory<T_File> data, bool append = false);
+            bool save(const Core::Memory<T_File> &data, bool append = false);
 
-            bool exists();
-            bool delete();
+            template<class T_File>
+            bool saveAsCppArray(const Core::Memory<T_File> &buffer);
+                
+            bool exists() const;
+            bool create();
+            bool remove();
 
-            /// get parent directory
-            Utils::Directory parent();
+            std::string getPath() const;
         };
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-        size_t File::size()
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        File::File(std::string path_)
         {
-            FILE *file = fopen(file_name.c_str(), "rb");
+            path = path_;
+        }
+        
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        std::string File::getPath() const
+        {
+            return path;
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        bool File::create()
+        {
+            if( !File::exists() )
+            {
+                Core::Memory<char> buf(0);
+                File::save(buf);
+            }
+        }
+        
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        size_t File::size() const
+        {
+            FILE *file = fopen(path.c_str(), "rb");
             fseek (file, 0, SEEK_END);
             size_t _size = ftell(file);
             fclose (file);
@@ -88,9 +115,6 @@ namespace GraVitoN
 /**
  * @brief Load a binary file into an unsigned char array
  * 
- * @param [i] path
- * Path to binary file
- *
  * @param [out] buffer
  * Pointer to your buffer pointer (double pointer). we needs your pointer to buffer pointer
  * because after return of this function c++ will free your allocated buffer memory.
@@ -102,70 +126,58 @@ namespace GraVitoN
  *
  */
         template <class T_File>
-        Core::Memory<T_File> File::load()
+        Core::Memory<T_File> File::load() const
         {
-            unsigned long size = 0;
-	
-            if( *buffer != NULL)
-                free(*buffer);
-	
+            Core::Memory<T_File> buffer(Config::MAX_FILE_SIZE);
+            
             FILE *file;
 	
             Core::Logger::logIt("Reading Binary File... ");
             file = fopen(path.c_str(), "rb");
             if( file )
             {
-                *buffer = (unsigned char*)malloc(Config::MAX_FILE_SIZE);
-                size = 0;
-		
                 while( !feof(file) )
                 {
                     unsigned char ch = fgetc(file);
                     //printf("%.9d < %.2x\n", size, (*buffer)[size]);
                     if(!feof(file))
                     {
-                        *(*buffer + size) = ch;
-                        size = size + 1;
+                        buffer.insert(&ch, sizeof(ch));
                     }
                 }
-                Core::Logger::logIt("[Size: "); Core::Logger::logIt(size);
+                Core::Logger::logIt("[Size: "); Core::Logger::logIt( buffer.size() );
                 Core::Logger::logItLn("] DONE");
 		
                 fclose(file);
             }
             else
             {
-                *buffer = NULL;
+                buffer.free();
             }
-            return size;
+            return buffer;
         }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /**
  * @brief Save your buffer as a binary file
  *
- * @param [in] opath
- * Path to output file
- *
  * @param [in] buffer
  * Pointer to your buffer
- *
- * @param [in] size
- * Size of your buffer
  *
  * @return
  * True if buffer was saved to file successfully
  */
-        bool saveUChars(const string opath, const unsigned char *buffer, const unsigned long &size, const bool append = false)
+        template<class T_File>
+        bool File::save(const Core::Memory<T_File> &buffer, const bool append)
         {
             FILE *outf;
-            outf = (append)?fopen(opath.c_str(), "ab+"):fopen(opath.c_str(), "wb+");
+            outf = (append)?fopen(path.c_str(), "ab+"):fopen(path.c_str(), "wb+");
 
             if( !outf )
                 return false;
 	
-            Core::Logger::logIt("Writing to binary file... ");
-            for(register unsigned long i = 0; i < size; ++i)
+            Core::Logger::logItLn("Writing to binary file... ");
+            for(register unsigned long i = 0; i < buffer.size(); ++i)
             {
                 fputc(*(buffer + i), outf);
                 //printf("%.9d > %.2x\n", i, buffer[i]);
@@ -182,22 +194,17 @@ namespace GraVitoN
 /**
  * @brief Save your buffer as a cpp file
  *
- * @param [in] opath
- * Path to output file
- *
  * @param [in] buffer
  * Pointer to your buffer
- *
- * @param [in] size
- * Size of your buffer
  *
  * @return
  * True if buffer was saved to file successfully
  */
-        bool printUCharsIntoFile(const string opath, const unsigned char *buffer, const unsigned long &size)
+        template<class T_File>
+        bool File::saveAsCppArray(const Core::Memory<T_File> &buffer)
         {
             FILE *outf;
-            outf = fopen(opath.c_str(), "w+");
+            outf = fopen(path.c_str(), "w+");
 
             if( !outf )
                 return false;
@@ -205,11 +212,11 @@ namespace GraVitoN
             int mod = 0;
             fprintf(outf, "const unsigned long buf_len = %lu;\n"
                     "unsigned char buf[] = \n",
-                    size);
+                    buffer.size());
             Core::Logger::logIt("Writing to cpp file... ");
             Core::Logger::logIt("Size: ");
             Core::Logger::logIt("Size: ");
-            for(unsigned long i = 0; i < size; ++i)
+            for(unsigned long i = 0; i < buffer.size(); ++i)
             {
                 //printf(".2x\n", buffer[i]);
                 if( mod % 16 == 0 )
@@ -243,44 +250,20 @@ namespace GraVitoN
         }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-        bool exists(const string &path)
+        bool File::exists() const
         {
             FILE *f = fopen(path.c_str(), "r");
             if(!f)
                 return false;
             fclose(f);
+            return true;
         }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-        string getWorkingDirectory()
+        bool File::remove()
         {
-            char buf[256];
-#ifdef INFO_OS_WINDOWS
-            _getcwd(buf, 255);
-#else
-            getcwd(buf, 255);
-#endif
-            return string( buf );
-        }
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// @todo Incomplete algorithm
-        string getRootDirectory(const string &path)
-        {
-            string root;
-            int lpos = path.size() - 1;
-            while( lpos > 0 && path[lpos] == '/' || path[lpos] == '\\' ) --lpos;
-            while(lpos > 0 && path[lpos] != '/' && path[lpos] != '\\')
-                --lpos;
-            for(int i=0; i<lpos; ++i)
-                root = root + path[i];
-            return root;
-        }
-
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-        bool deleteFile(const string &file)
-        {
-            return std::remove(file.c_str()) == 0;
+            Core::Logger::logVariable("[File] Removing", path);
+            return std::remove(path.c_str()) == 0;
         }
 
     } // utility

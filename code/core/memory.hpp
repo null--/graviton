@@ -81,6 +81,9 @@ namespace GraVitoN
             /// copy new data on memory starting at position
             void copy(const Type *buffer_, GraVitoN::gsize size_, GraVitoN::gsize positon_ = 0);
 
+            /// insert data to the end of memory
+            void insert(const Type *buffer_, GraVitoN::gsize size_);
+            
             /// 'buffer address' + 'position_ bytes'
             Type * address(const GraVitoN::gsize position_ = 0) const;
 
@@ -281,6 +284,13 @@ namespace GraVitoN
             // cout << "done" << endl;
         }
 
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        void Memory<Type>::insert(const Type *buffer_, GraVitoN::gsize size_)
+        {
+            Memory<Type>::copy(buffer_, size_, Memory<Type>::size());
+        }
+        
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
         Memory<Type> & Memory<Type>::operator = (const Memory<Type> &a)

@@ -53,26 +53,69 @@ namespace GraVitoN
         class Directory
         {
         private:
-            std::string dir;
+            std::string dirname;
 
         public:
-            Folder(std::string dir_);
-
-            bool exits();
-            bool delete();
+            Directory(std::string dir_);
+            Directory(const File &file_);
             
-            bool list(std::vector<Utils::Folder> folders, std::vector<Utils::File> files);
-            bool findFile(const std::string &regex_pattern, const bool append = false);
+            bool exists() const;
+            Directory parent() const;
+            Directory child(const string &child_name) const;
+            string getPath() const;
+            
+            bool list(std::vector<Utils::Directory> &folders, std::vector<Utils::File> &files) const;
+            bool findFiles(vector<File> &files, const string pattern = "", const bool append = false) const;
 
-            Directory createChild(const string &dir_name);
-            Directory parent();
-
-            /// same as pwd command in linux
-            static Directory pwd();
+            Directory createSubDirectory(const string &child);
+            bool create();
+            bool remove();
+            
+            /// Current Working directory
+            static Directory cwd();
+            static Directory getDirectory(const File &file);
+            static bool isDirectory(const std::string &path);
         };
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        string Directory::getPath() const
+        {
+            return dirname;
+        }
         
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-        bool Directory::list(vector<Utils::Directory> &folders, vector<Utils::File> &files)
+        Directory::Directory(std::string dir_)
+        {
+            dirname = dir_;
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// @todo Incomplete algorithm
+        Directory::Directory(const File &file)
+        {
+            string root, path = file.getPath();
+            int lpos = path.size() - 1;
+            while( lpos > 0 && path[lpos] == '/' || path[lpos] == '\\' ) --lpos;
+            while(lpos > 0 && path[lpos] != '/' && path[lpos] != '\\')
+                --lpos;
+            for(int i=0; i<lpos; ++i)
+                root = root + path[i];
+
+            dirname = root;
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        Directory Directory::child(const string &child_name) const
+        {
+#ifdef INFO_OS_WINDOWS
+            return Directory(dirname + "\\" + child_name);
+#else
+            return Directory(dirname + "/" + child_name);
+#endif
+        }
+        
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//        
+        bool Directory::list(vector<Utils::Directory> &folders, vector<Utils::File> &files) const
         {
             folders.clear();
             files.clear();
@@ -115,12 +158,13 @@ namespace GraVitoN
         }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-/// @todo: Do a BFS
+/// @todo: 1- Do a BFS
+/// @todo: 2- It's not optimized
 /// append: do not clear files vector
 /// pattern: a valid regular expression for search (see utils/regex.hpp for more information)
-        bool Directory::findFiles(vector<File> &files, const string pattern = "", const bool append = false)
+        bool Directory::findFiles(vector<File> &files, const string pattern, const bool append) const
         {
-            // Core::Logger::logVariable("[File] ", dirname);
+            Core::Logger::logVariable("[Directory] Searching ", dirname);
     
             DIR *dir;
             char buffer[PATH_MAX + 2];
@@ -143,7 +187,7 @@ namespace GraVitoN
                 // cout << "COMILE" << endl;
                 if( !rex.compile(pattern) )
                 {
-                    Core::Logger::logItLn("[File] findAllFiles invalid regex pattern");
+                    Core::Logger::logItLn("[Directory] findFiles invalid regex pattern");
 
                     // search = false;
                     /// 
@@ -191,18 +235,18 @@ namespace GraVitoN
                     case DT_REG:
                         /* Output file name with directory */
                         // printf ("%s\n", buffer);
-                        // Core::Logger::logVariable("[File]", buffer);
+                        Core::Logger::logVariable("[File]", buffer);
 
                         if( search && !rex.match(buffer) )
                         {
-                            // Core::Logger::logVariable("[File] Not Match", buffer);
+                            Core::Logger::logVariable("[File] Not Match", buffer);
                             break;
                         }
                
 
-                        // Core::Logger::logVariable("[File] Match", buffer);
+                        Core::Logger::logVariable("[File] Match", buffer);
                 
-                        files.push_back(buffer);
+                        files.push_back( File( string(buffer) ) );
                         break;
 
                     case DT_DIR:
@@ -210,7 +254,8 @@ namespace GraVitoN
                         if (strcmp (ent->d_name, ".") != 0  
                             &&  strcmp (ent->d_name, "..") != 0)
                         {
-                            findAllFiles (buffer, files, pattern, append);
+                            // cout << "Going after " << ent->d_name << endl;
+                            Directory::child(std::string(ent->d_name)).findFiles(files, pattern, true);
                         }
                         break;
 
@@ -227,7 +272,7 @@ namespace GraVitoN
             else
             {
                 /* Could not open directory */
-                Core::Logger::logVariable("Cannot open directory ", dirname);
+                Core::Logger::logVariable("[Directory] Cannot open directory ", dirname);
                 return false;
             }
 
@@ -235,22 +280,33 @@ namespace GraVitoN
         }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-        bool Directory::createDirectory(const string &name)
+        bool Directory::create()
         {
+            bool res;
 #if defined(INFO_OS_WINDOWS)
-            return CreateDirectory(dir.c_str(), NULL) != 0;
+            res = ( CreateDirectory(dirname.c_str(), NULL) != 0 );
 #else
             /// @TODO: 0750 is not a good idea
-            return mkdir(dir.c_str(), 0750) == 0;
+            res = ( mkdir(dirname.c_str(), 0750) == 0 );
             // return _mkdir(dir) == 0;
 #endif
+            Core::Logger::logVariable("Creating new dir, result", res);
+            return res;
         }
 
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        Directory Directory::createSubDirectory(const string &name)
+        {
+            Directory child = Directory::child(name);
+            child.create();
+            return child;
+        }
+        
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-        bool Directory::exits ()
+        bool Directory::exists () const
         {
             DIR *dir;
-            dir = opendir (path.c_str());
+            dir = opendir (dirname.c_str());
 
             if( dir )
             {
@@ -259,23 +315,29 @@ namespace GraVitoN
             }
             return false;
         }
+        
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        bool Directory::isDirectory(const std::string &path)
+        {
+            return Directory(path).exists();
+        }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
 /// @todo Incomplete algorithm
-        Directory Directory::parent()
+        Directory Directory::parent() const
         {
             string root;
-            int lpos = path.size() - 1;
-            while( lpos > 0 && path[lpos] == '/' || path[lpos] == '\\' ) --lpos;
-            while(lpos > 0 && path[lpos] != '/' && path[lpos] != '\\')
+            int lpos = dirname.size() - 1;
+            while( lpos > 0 && dirname[lpos] == '/' || dirname[lpos] == '\\' ) --lpos;
+            while(lpos > 0 && dirname[lpos] != '/' && dirname[lpos] != '\\')
                 --lpos;
             for(int i=0; i<lpos; ++i)
-                root = root + path[i];
+                root = root + dirname[i];
             return root;
         }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-        bool Directory::delete()
+        bool Directory::remove()
         {
 #if defined(INFO_OS_WINDOWS)
             return RemoveDirectory((LPCSTR)folder.c_str()) != 0;
@@ -284,7 +346,7 @@ namespace GraVitoN
             struct dirent*  ep;
             string          buf, tmp;
 
-            dp = opendir(folder.c_str());
+            dp = opendir(dirname.c_str());
 
             if( !dp ) return false;
             while ((ep = readdir(dp)) != NULL)
@@ -292,20 +354,18 @@ namespace GraVitoN
                 tmp = ep->d_name;
                 if( tmp == "." || tmp == ".." )
                     continue;
-        
-                buf = folder + "/" + tmp;
-                if (isDirectory(buf))
+
+                std::string rpath = dirname + "/" + tmp;
+                if ( Directory::isDirectory(rpath) )
                 {
-                    deleteDirectory(buf);
+                    Core::Logger::logVariable("[Directory] Removing directory ", rpath);
+                    Directory(rpath).remove();
                 }
                 else
                 {
-                    Core::Logger::logVariable("[FILE] Deleting", buf);
-                    // continue;
-            
-                    if( !deleteFile(buf) )
+                    if( !File(rpath).remove() )
                     {
-                        Core::Logger::logVariable("Unable to delete: ", buf);
+                        Core::Logger::logVariable("[Directory] Unable to remove file ", rpath);
                         return false;
                     }
                 }
@@ -313,8 +373,27 @@ namespace GraVitoN
 
             closedir(dp);
         
-            return rmdir(folder.c_str()) == 0;
+            return rmdir(dirname.c_str()) == 0;
 #endif
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        Directory Directory::cwd()
+        {
+            char buf[256];
+#ifdef INFO_OS_WINDOWS
+            _getcwd(buf, 255);
+#else
+            getcwd(buf, 255);
+#endif
+            return Directory( buf );
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+/// @todo Incomplete algorithm
+        Directory Directory::getDirectory(const File &file)
+        {
+            return Directory(file);
         }
 
     } // utility
