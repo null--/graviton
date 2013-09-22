@@ -1,7 +1,6 @@
 Breakthrought:
     OOP:
         Utils:
-            ZIP
             Crypto
         Malkit:
             UPX
@@ -12,18 +11,17 @@ Breakthrought:
 
 Major:
 	- graver
-        - mingw x86_64
-        - msvc x86_64
-        - clang x86_64
-        - support building static library: <type>statlib</type>
-
+    - mingw x86_64
+    - msvc x86_64
+    - clang x86_64
+    - support building static library: <type>statlib</type>
 	- Low-level: C++, High-level: Lua
 	- ms12-20
 	- Build static lib files (.a, .lib) of external libraries for linux (32/64) and windows (32/64)
 	- code a cross platform raw socket lib
 	- metasploit plugin
 	- metaworm master/slave
-		- exploit-and-infect shellcode
+    - exploit-and-infect shellcode
 	- android/ios/osx test
 	- Documentation
 	- code a polymorphic engine (binary and source)
@@ -35,16 +33,5 @@ Major:
 Minor:
     - Combine luabridge with components ---> IN PROGRESS
     - mini http(s) web server
-    - File
-    - Memory
-    - Thread
-    - Mutex
-    - Socket
-      - TCP Client
-      - TCP Server
-      - UDP
-      - SSL
-        - Client
-        - Server
     
-and much more!
+and a lot more!

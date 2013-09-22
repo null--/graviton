@@ -64,8 +64,11 @@ namespace GraVitoN
                 { return is_executable; }
             
             /// alloc
-            bool alloc(GraVitoN::gsize size_, bool executable_ = false);
+            bool alloc(GraVitoN::gsize size_);
 
+            /// alloc and change is_executable flag
+            bool allocExec(GraVitoN::gsize size_, bool executable_);
+            
             /// resize without loosing data
             bool resize(GraVitoN::gsize size_);
             
@@ -123,15 +126,17 @@ namespace GraVitoN
             /// read memory from an istream
             template<class MType>
             friend std::istream& operator >> (std::istream& stream, Memory<MType> &m);
-            
-        };
 
+            /// set eip at the beginning of executable memory
+            void call(void *arg = _null_);
+        };        
+        
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
         Memory<Type>::Memory(const GraVitoN::gsize size_, bool executable_)
         {
             is_executable = executable_;
-            Memory<Type>::alloc(size_, executable_);
+            Memory<Type>::allocExec(size_, executable_);
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -174,7 +179,14 @@ namespace GraVitoN
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
-        bool Memory<Type>::alloc(GraVitoN::gsize size_, bool executable_)
+        bool Memory<Type>::alloc(GraVitoN::gsize size_)
+        {
+            return allocExec(size_, is_executable);
+        }
+            
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        bool Memory<Type>::allocExec(GraVitoN::gsize size_, bool executable_)
         {
             is_executable = executable_;
             
@@ -231,7 +243,7 @@ namespace GraVitoN
 
             // cout << "free/alloc" << endl;
             Memory<Type>::free();
-            Memory<Type>::alloc(size_, is_executable);
+            Memory<Type>::alloc(size_);
 
             if(good)
             {
@@ -445,6 +457,15 @@ namespace GraVitoN
             stream >> str;
             m.copy((Type*)str.c_str(), str.size());
             return stream;
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        template<class Type>
+        void Memory<Type>call(void *arg)
+        {
+            void ( *jumper ) ( void * );
+            jumper = address();
+            jumper(arg);
         }
         
     } /// end of Core
