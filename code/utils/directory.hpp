@@ -164,7 +164,7 @@ namespace GraVitoN
 /// pattern: a valid regular expression for search (see utils/regex.hpp for more information)
         bool Directory::findFiles(vector<File> &files, const string pattern, const bool append) const
         {
-            Core::Logger::logVariable("[Directory] Searching ", dirname);
+            // Core::Logger::logVariable("[Directory] Searching ", dirname);
     
             DIR *dir;
             char buffer[PATH_MAX + 2];
@@ -187,7 +187,7 @@ namespace GraVitoN
                 // cout << "COMILE" << endl;
                 if( !rex.compile(pattern) )
                 {
-                    Core::Logger::logItLn("[Directory] findFiles invalid regex pattern");
+                    // Core::Logger::logItLn("[Directory] findFiles invalid regex pattern");
 
                     // search = false;
                     /// 
@@ -235,16 +235,16 @@ namespace GraVitoN
                     case DT_REG:
                         /* Output file name with directory */
                         // printf ("%s\n", buffer);
-                        Core::Logger::logVariable("[File]", buffer);
+                        // Core::Logger::logVariable("[File]", buffer);
 
                         if( search && !rex.match(buffer) )
                         {
-                            Core::Logger::logVariable("[File] Not Match", buffer);
+                            // Core::Logger::logVariable("[File] Not Match", buffer);
                             break;
                         }
                
 
-                        Core::Logger::logVariable("[File] Match", buffer);
+                        // Core::Logger::logVariable("[File] Match", buffer);
                 
                         files.push_back( File( string(buffer) ) );
                         break;
@@ -290,7 +290,7 @@ namespace GraVitoN
             res = ( mkdir(dirname.c_str(), 0750) == 0 );
             // return _mkdir(dir) == 0;
 #endif
-            Core::Logger::logVariable("Creating new dir, result", res);
+            // Core::Logger::logVariable("[Directory] Creating new dir, result", res);
             return res;
         }
 

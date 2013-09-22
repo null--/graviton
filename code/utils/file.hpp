@@ -78,6 +78,9 @@ namespace GraVitoN
             bool remove();
 
             std::string getPath() const;
+
+            string name() const;
+            string extension() const;
         };
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -133,7 +136,7 @@ namespace GraVitoN
             
             FILE *file;
 	
-            Core::Logger::logIt("Reading Binary File... ");
+            Core::Logger::logIt("[File] Reading Binary File... ");
             file = fopen(path.c_str(), "rb");
             if( file )
             {
@@ -177,7 +180,7 @@ namespace GraVitoN
             if( !outf )
                 return false;
 	
-            Core::Logger::logItLn("Writing to binary file... ");
+            Core::Logger::logItLn("[File] Writing to binary file... ");
             for(register unsigned long i = 0; i < buffer.size(); ++i)
             {
                 fputc(*(buffer + i), outf);
@@ -214,7 +217,7 @@ namespace GraVitoN
             fprintf(outf, "const unsigned long buf_len = %lu;\n"
                     "unsigned char buf[] = \n",
                     buffer.size());
-            Core::Logger::logIt("Writing to cpp file... ");
+            Core::Logger::logIt("[File] Writing to cpp file... ");
             Core::Logger::logIt("Size: ");
             Core::Logger::logIt("Size: ");
             for(unsigned long i = 0; i < buffer.size(); ++i)
@@ -265,6 +268,24 @@ namespace GraVitoN
         {
             Core::Logger::logVariable("[File] Removing", path);
             return std::remove(path.c_str()) == 0;
+        }
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        string File::name() const
+        {
+            string nm;
+            int lpos = path.size() - 1;
+            while( lpos > 0 && path[lpos] != '/' && path[lpos] != '\\' ) nm = path[lpos--] + nm;
+            return (lpos == 0) ? "" : nm;
+        }
+
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        string File::extension() const
+        {
+            string ext;
+            int lpos = path.size() - 1;
+            while( lpos > 0 && path[lpos] != '.' ) ext = path[lpos--] + ext;
+            return (lpos == 0) ? "" : ext;
         }
 
     } // utility

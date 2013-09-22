@@ -67,7 +67,7 @@ const int CMD_SAVE          = 5;
 const int CMD_HELP          = 6;
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
-const string GRAV_LIB_PATH  = "libs/";
+const string GRAV_LIB_PATH  = "lib/";
 const string GRAV_CODE_PATH = "code/";
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */

@@ -1,9 +1,36 @@
+/**
+ * @file
+ *
+ * @author  Sina Hatef Matbue ( _null_ ) <sinahatef.cpp@gmail.com>
+ *
+ * @section License
+ *
+ * This file is part of GraVitoN.
+ *
+ * Graviton is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Graviton is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Graviton.  If not, see http://www.gnu.org/licenses/.
+ *
+ * @brief GRAVER: GRAViton makER
+ *
+ */
+
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
 #define GVN_ACTIVATE_LOGGER
 
 #include <graviton.hpp>
-#include <utils/files.hpp>
-#include <utils/xmlparser.hpp>
+#include <utils/file.hpp>
+#include <utils/directory.hpp>
+#include <utils/xmldoc.hpp>
 
 #include "graver.hpp"
 
@@ -29,9 +56,9 @@ struct CONF
 
     string graviton_path;
     
-    GraVitoN::Utils::XML_Parser compiler_xml;
+    GraVitoN::Utils::XML_Document compiler_xml;
 	// rapidxml::xml_document<> library_xml;
-    GraVitoN::Utils::XML_Parser library_xml;
+    GraVitoN::Utils::XML_Document library_xml;
 
     CONF();
 } glob_conf;
@@ -50,14 +77,10 @@ CONF::CONF():
                 )
 {
     verbose = false;
-    graviton_path = GraVitoN::Utils::File::getRootDirectory(
-						GraVitoN::Utils::File::getRootDirectory(
-							GraVitoN::Utils::File::getWorkingDirectory()
-						)
-					) + "/";
+    graviton_path = GraVitoN::Utils::Directory::cwd().parent().parent().getPath() + "/";
 	cout << "GraVitoN Path: " << graviton_path << endl;
-    compiler = graviton_path + "bin/graver/compiler.conf";
-    library = graviton_path + "bin/graver/library.conf";
+    compiler = graviton_path + "bin/graver/compiler2.conf";
+    library = graviton_path + "bin/graver/library2.conf";
 
     // cout << GraVitoN::Utils::File::getRootDirectory(library);
 }
@@ -116,6 +139,7 @@ struct LIBRARY
     vector<string> include;
     vector<string> depend;
     vector<PLATFORM> platform;
+    vector<GraVitoN::Utils::File> file;
 
     LIBRARY(){}
 };
@@ -298,7 +322,7 @@ void initLibs()
                 string tmp = child.value();// child.value();
                 tmp = glob_conf.graviton_path + GRAV_LIB_PATH + tmp;
                 
-                if( !GraVitoN::Utils::File::pathExists(tmp) )
+                if( !GraVitoN::Utils::File(tmp).exists() )
                 {
                     cout << "SHIT HAPPENED: " << tmp << " not found." << endl;
                     exit(0);
@@ -570,7 +594,7 @@ bool loadProject()
 {
     cout << "Loading Project..." << endl;
 
-    GraVitoN::Utils::XML_Parser pars;
+    GraVitoN::Utils::XML_Document pars;
     GraVitoN::Utils::XML_Node node, sub_node, child;
     GraVitoN::Utils::XML_Attrib attr, sub_attr;
 
@@ -774,18 +798,18 @@ bool verifyProject()
                         glob_library[j].platform[k].compiler   == glob_proj.compiler )
                     {
                         found = true;
-                        vcout << glob_library[j].name << "|" << glob_proj.build_depend[i] << endl;
+                        // vcout << glob_library[j].name << "|" << glob_proj.build_depend[i] << endl;
 
                         for(int m=0; m<glob_library[j].platform[k].files.size(); ++m)
                         {
                             glob_proj.build_depend_file.push_back( glob_conf.graviton_path + GRAV_LIB_PATH + glob_library[j].platform[k].files[m] );
-                            // cout << "Adding " << glob_library[j].platform[k].files[m] << endl;
+                            // vcout << "Adding " << glob_library[j].platform[k].files[m] << endl;
                         }
 
                         for(int m=0; m<glob_library[j].include.size(); ++m)
                         {
                             glob_proj.incpath.push_back( glob_conf.graviton_path + GRAV_CODE_PATH + glob_library[j].include[m] );
-                            // cout << "Adding " << glob_library[j].platform[k].files[m] << endl;
+                            // vcout << "Adding " << glob_library[j].platform[k].files[m] << endl;
                         }
                         
                         if( !glob_library[j].platform[k].compiler_option.empty() )
@@ -800,10 +824,12 @@ bool verifyProject()
 
         }
 
-        if( !found && GraVitoN::Utils::File::pathExists( glob_proj.build_depend[i] ) )
+        GraVitoN::Utils::File lib( glob_conf.graviton_path + GRAV_LIB_PATH + glob_proj.build_depend[i] + "/" + glob_compiler[glob_proj.compiler_id].arch + "/" + ;
+        vcout << "Lib: "  << glob_proj.build_depend[i] << endl;
+        if( !found && lib.exists() )
         {
             found = true;
-            glob_proj.build_depend_file.push_back( glob_proj.build_depend[i] );
+            glob_proj.build_depend_file.push_back( lib );
         }
 
         if( !found )
@@ -820,7 +846,7 @@ bool verifyProject()
 void buildProject()
 {
     COMPILER mc = glob_compiler[glob_proj.compiler_id];
-    string base_dir = GraVitoN::Utils::File::getRootDirectory(glob_proj.path);
+    string base_dir = GraVitoN::Utils::Directory(glob_proj.path).parent().getPath();
     
     string cmd_includes, cmd_build_obj, cmd_build;
 
@@ -853,25 +879,29 @@ void buildProject()
 
     /// Add sources
     vcout << "Adding sources: " << glob_proj.srcpath.size() << endl;
-    vector<string> sources, objects;
+    vector<GraVitoN::Utils::File> sources, objects;
     
     for(int i=0; i<glob_proj.srcpath.size(); ++i)
     {
-        GraVitoN::Utils::File::findAllFiles(glob_proj.srcpath[i], sources, ".*\\.[Cc][Pp][Pp]$", true);
-        GraVitoN::Utils::File::findAllFiles(glob_proj.srcpath[i], sources, ".*\\.[Cc]$", true);
+        GraVitoN::Utils::Directory cpp_src(glob_proj.srcpath[i]);
+        cpp_src.findFiles(sources, ".*\\.[Cc][Pp][Pp]$", true);
+
+        GraVitoN::Utils::Directory c_src(glob_proj.srcpath[i]);
+        c_src.findFiles(sources, ".*\\.[Cc]$", true);
     }
     
     for(int i=0; i<glob_proj.source.size(); ++i)
-        sources.push_back( glob_proj.source[i] );
+        sources.push_back( GraVitoN::Utils::File(base_dir + "/" + glob_proj.source[i]) );
     
     for(int i=0; i<sources.size(); ++i)
-        vcout << "SOURCE: " << sources[i] << endl;
+        vcout << "SOURCE: " << sources[i].getPath() << endl;
 
     /// Create build folder
-    if( GraVitoN::Utils::File::pathExists( base_dir + "/" + BUILD_DIRECTORY ) )
-        GraVitoN::Utils::File::deleteFolder( base_dir + "/" + BUILD_DIRECTORY );
-    if( !GraVitoN::Utils::File::pathExists( base_dir + "/" + BUILD_DIRECTORY ) &&
-		!GraVitoN::Utils::File::createFolder( base_dir + "/" + BUILD_DIRECTORY ) )
+    GraVitoN::Utils::Directory build_dir( base_dir + "/" + BUILD_DIRECTORY );
+    if( build_dir.exists() )
+        build_dir.remove();
+    if( !build_dir.exists() &&
+		!build_dir.create() )
     {
         cout << "Unable to create build directory" << endl;
         exit(0);
@@ -885,10 +915,10 @@ void buildProject()
     string cmd;
     for(int i=0; i<sources.size(); ++i)
     {
-        vcout << "Source: " << sources[i] << endl;
-        objects.push_back(  "\"" + base_dir + "/" + BUILD_DIRECTORY + "/" + sources[i]  + mc.obj_extension + "\"");
+        vcout << "Source: " << sources[i].getPath() << endl;
+        objects.push_back(  GraVitoN::Utils::File("\"" + base_dir + "/" + BUILD_DIRECTORY + "/" + sources[i].name()  + mc.obj_extension + "\"") );
         
-        cmd = cmd_build_obj + cmd_includes + " \"" + base_dir + "/" + sources[i] + "\" " + mc.flag_output_object + objects[i];
+        cmd = cmd_build_obj + cmd_includes + " \"" + sources[i].getPath() + "\" " + mc.flag_output_object + objects[i].getPath();
         cout << "-- Executing: " << cmd << endl;
         system( cmd.c_str() );
     }
@@ -898,8 +928,16 @@ void buildProject()
     cmd = mc.command;
     for(int i=0; i<objects.size(); ++i)
     {
-        vcout << "Linking: " << objects[i] << endl;
-        cmd += " " + objects[i];
+        vcout << "Linking: " << objects[i].getPath() << endl;
+        cmd += " " + objects[i].getPath();
+    }
+
+    /// Add external libs
+    for(int i=0; i<glob_proj.build_depend_file.size(); ++i)
+    {
+        GraVitoN::Utils::File lib(glob_proj.build_depend_file[i]);
+        vcout << "Linking: " << glob_proj.build_depend_file[i] << endl;
+        cmd += " " + mc.flag_libpath + " \"" + GraVitoN::Utils::Directory::getDirectory(lib).getPath() + "\" " + mc.flag_lib + lib.name();
     }
     cmd += " " + mc.flag_output + "\"" + base_dir + "/" + BUILD_DIRECTORY + "/" + glob_proj.info_name + "\"" + cmd_build;
     cout << "-- Executing: " << cmd << endl;

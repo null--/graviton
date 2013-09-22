@@ -8,8 +8,8 @@
     </info>
 
     <code>
-        <incpath>sample/</incpath>
-        <srcpath>sample/</srcpath>
+        <incpath>sample/src</incpath>
+        <srcpath>sample/inc</srcpath>
         <source>sample.cpp</source>
     </code>
 
@@ -21,7 +21,6 @@
         <platform os="linux" arch="64" compiler="g++" />
         <platform os="windows" arch="32" compiler="mingw" />
         -->
-        <depend>ting</depend>
         <depend>ssl</depend>
         <depend>crypto</depend>
         <depend>zlib</depend>

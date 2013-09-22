@@ -164,7 +164,7 @@ namespace GraVitoN
                         if( node->name() )
                         {
                             strncpy(m_name, node->name(), Config::MAX_XML_VALUE_SIZE - 1);
-                            cout << "Adding node name = " << m_name << endl;
+                            // cout << "Adding node name = " << m_name << endl;
                             node->name( m_name );
                         }
                         else

@@ -461,7 +461,7 @@ namespace GraVitoN
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         template<class Type>
-        void Memory<Type>call(void *arg)
+        void Memory<Type>::call(void *arg)
         {
             void ( *jumper ) ( void * );
             jumper = address();
