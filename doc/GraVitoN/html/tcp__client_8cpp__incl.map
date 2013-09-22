@@ -1,0 +1,10 @@
+<map id="bin/demo/misc/net/tcp_client.cpp" name="bin/demo/misc/net/tcp_client.cpp">
+<area shape="rect" id="node3" href="$graviton_8hpp.html" title="GraVitoN Core File. " alt="" coords="260,256,353,285"/>
+<area shape="rect" id="node33" href="$tcp__client_8hpp.html" title="GraVitoN::Core::TCP_Client. " alt="" coords="340,101,471,131"/>
+<area shape="rect" id="node5" href="$aocinfo_8hpp.html" title="GraVitoN Artitecture/OS/Compiler (AOC) Information header. " alt="" coords="109,333,227,363"/>
+<area shape="rect" id="node7" href="$config_8hpp.html" title="GraVitoN Config File. " alt="" coords="463,333,545,363"/>
+<area shape="rect" id="node15" href="$component_8hpp.html" title="GraVitoN Component. " alt="" coords="644,333,783,363"/>
+<area shape="rect" id="node20" href="$logger_8hpp.html" title="GraVitoN::Core::Logger. " alt="" coords="251,333,360,363"/>
+<area shape="rect" id="node36" href="$socket_8hpp.html" title="GraVitoN::Core::Socket. " alt="" coords="645,179,760,208"/>
+<area shape="rect" id="node54" href="$memory_8hpp.html" title="GraVitoN::Core::Buffer. " alt="" coords="143,179,265,208"/>
+</map>

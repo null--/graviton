@@ -1,0 +1,11 @@
+<map id="code/malkit/generic/reporter_text.hpp" name="code/malkit/generic/reporter_text.hpp">
+<area shape="rect" id="node3" href="$malkit_8hpp.html" title="GraVitoN::Malkit. " alt="" coords="259,179,379,208"/>
+<area shape="rect" id="node36" href="$tcp__client_8hpp.html" title="GraVitoN::Core::TCP_Client. " alt="" coords="448,101,579,131"/>
+<area shape="rect" id="node5" href="$graviton_8hpp.html" title="GraVitoN Core File. " alt="" coords="516,256,609,285"/>
+<area shape="rect" id="node22" href="$logger_8hpp.html" title="GraVitoN::Core::Logger. " alt="" coords="243,333,352,363"/>
+<area shape="rect" id="node7" href="$aocinfo_8hpp.html" title="GraVitoN Artitecture/OS/Compiler (AOC) Information header. " alt="" coords="581,333,699,363"/>
+<area shape="rect" id="node9" href="$config_8hpp.html" title="GraVitoN Config File. " alt="" coords="475,333,557,363"/>
+<area shape="rect" id="node17" href="$component_8hpp.html" title="GraVitoN Component. " alt="" coords="723,333,861,363"/>
+<area shape="rect" id="node39" href="$socket_8hpp.html" title="GraVitoN::Core::Socket. " alt="" coords="901,179,1016,208"/>
+<area shape="rect" id="node57" href="$memory_8hpp.html" title="GraVitoN::Core::Buffer. " alt="" coords="403,179,525,208"/>
+</map>

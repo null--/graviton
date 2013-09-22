@@ -1,0 +1,9 @@
+<map id="code/core/udp_socket.hpp" name="code/core/udp_socket.hpp">
+<area shape="rect" id="node3" href="$graviton_8hpp.html" title="GraVitoN Core File. " alt="" coords="509,160,603,189"/>
+<area shape="rect" id="node20" href="$logger_8hpp.html" title="GraVitoN::Core::Logger. " alt="" coords="236,237,345,267"/>
+<area shape="rect" id="node33" href="$memory_8hpp.html" title="GraVitoN::Core::Buffer. " alt="" coords="392,83,515,112"/>
+<area shape="rect" id="node41" href="$socket_8hpp.html" title="GraVitoN::Core::Socket. " alt="" coords="892,83,1007,112"/>
+<area shape="rect" id="node5" href="$aocinfo_8hpp.html" title="GraVitoN Artitecture/OS/Compiler (AOC) Information header. " alt="" coords="373,237,491,267"/>
+<area shape="rect" id="node7" href="$config_8hpp.html" title="GraVitoN Config File. " alt="" coords="515,237,597,267"/>
+<area shape="rect" id="node15" href="$component_8hpp.html" title="GraVitoN Component. " alt="" coords="652,237,791,267"/>
+</map>

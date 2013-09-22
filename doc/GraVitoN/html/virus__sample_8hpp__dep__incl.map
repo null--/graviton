@@ -1,0 +1,5 @@
+<map id="code/ai/virus_sample.hpp" name="code/ai/virus_sample.hpp">
+<area shape="rect" id="node3" href="$virus_2sample__virus__linux64_2graviton_8cpp.html" title="Sample Virus For Linux, Infects Win32 Binary. " alt="" coords="5,83,184,130"/>
+<area shape="rect" id="node5" href="$virus_2sample__virus__osx32_2graviton_8cpp.html" title="Sample Virus For Osx, Infects Win32 Binary. " alt="" coords="208,83,381,130"/>
+<area shape="rect" id="node7" href="$virus_2sample__virus__win32_2graviton_8cpp.html" title="Sample Virus For Windows, Infects ELF Binary. " alt="" coords="405,83,579,130"/>
+</map>

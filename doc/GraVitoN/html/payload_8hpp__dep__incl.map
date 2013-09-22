@@ -1,0 +1,18 @@
+<map id="code/payload/payload.hpp" name="code/payload/payload.hpp">
+<area shape="rect" id="node3" href="$backdoor__sample_8hpp.html" title="A very simple trojan&#45;AI. " alt="" coords="837,92,1032,121"/>
+<area shape="rect" id="node13" href="$virus__sample_8hpp.html" title="A very simple trojan&#45;AI. " alt="" coords="51,92,221,121"/>
+<area shape="rect" id="node21" href="$msf__shell__bind__64_8hpp.html" title="Linux_MSF_Shell_Bind_64. " alt="" coords="1488,83,1645,130"/>
+<area shape="rect" id="node23" href="$msf__shell__reverse__64_8hpp.html" title="Payload_Linux64r. " alt="" coords="245,83,424,130"/>
+<area shape="rect" id="node27" href="$dos__32_8hpp.html" title="OSX_DoS_32. " alt="" coords="1669,83,1819,130"/>
+<area shape="rect" id="node29" href="$msf__shell__bind__32_8hpp.html" title="OSX_MSF_Shell_Bind_32. " alt="" coords="448,83,597,130"/>
+<area shape="rect" id="node33" href="$meterpreter__bind__32_8hpp.html" title="Windows_MSF_Shell_Bind_32. " alt="" coords="621,83,813,130"/>
+<area shape="rect" id="node37" href="$meterpreter__bind__kasper__32_8hpp.html" title="Payload_Meter_W32b. " alt="" coords="1272,83,1464,130"/>
+<area shape="rect" id="node40" href="$meterpreter__reverse__32_8hpp.html" title="GraVitoN::Windows_MSF_Shell_Reverse_32. " alt="" coords="1056,83,1248,130"/>
+<area shape="rect" id="node5" href="$backdoor_2sample__backdoor__linux64_2graviton_8cpp.html" title="GraVitoN &#45; Sample Linux64 Trojan. " alt="" coords="603,187,808,234"/>
+<area shape="rect" id="node7" href="$backdoor_2sample__backdoor__osx32_2graviton_8cpp.html" title="GraVitoN &#45; Sample Linux64 Trojan. " alt="" coords="832,187,1029,234"/>
+<area shape="rect" id="node9" href="$backdoor_2sample__backdoor__win32_2graviton_8cpp.html" title="GraVitoN Sample Win32 Trojan. " alt="" coords="1053,187,1251,234"/>
+<area shape="rect" id="node11" href="$backdoor_2sample__backdoor__win32__kasper_2graviton_8cpp.html" title="GraVitoN Sample Win32 Trojan. " alt="" coords="1276,179,1455,243"/>
+<area shape="rect" id="node15" href="$virus_2sample__virus__linux64_2graviton_8cpp.html" title="Sample Virus For Linux, Infects Win32 Binary. " alt="" coords="5,187,184,234"/>
+<area shape="rect" id="node17" href="$virus_2sample__virus__osx32_2graviton_8cpp.html" title="Sample Virus For Osx, Infects Win32 Binary. " alt="" coords="208,187,381,234"/>
+<area shape="rect" id="node19" href="$virus_2sample__virus__win32_2graviton_8cpp.html" title="Sample Virus For Windows, Infects ELF Binary. " alt="" coords="405,187,579,234"/>
+</map>

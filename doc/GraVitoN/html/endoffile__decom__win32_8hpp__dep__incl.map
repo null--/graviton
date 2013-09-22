@@ -1,0 +1,10 @@
+<map id="code/infect/generic/endoffile_decom_win32.hpp" name="code/infect/generic/endoffile_decom_win32.hpp">
+<area shape="rect" id="node3" href="$endoffile_8hpp.html" title="Inject malware to end of an executable file. " alt="" coords="609,102,740,149"/>
+<area shape="rect" id="node5" href="$linux64_2decompressor_8cpp.html" title="bin/demo/virus/infect\l_endoffile_decompressor\l/linux64/decompressor.cpp" alt="" coords="5,197,184,261"/>
+<area shape="rect" id="node7" href="$osx32_2decompressor_8cpp.html" title="bin/demo/virus/infect\l_endoffile_decompressor\l/osx32/decompressor.cpp" alt="" coords="208,197,379,261"/>
+<area shape="rect" id="node9" href="$win32_2decompressor_8cpp.html" title="bin/demo/virus/infect\l_endoffile_decompressor\l/win32/decompressor.cpp" alt="" coords="403,197,573,261"/>
+<area shape="rect" id="node11" href="$infector_8cpp.html" title="GraVitoN &#45; Executable Infector, Using spread/generic/end_of_file component. " alt="" coords="597,206,752,253"/>
+<area shape="rect" id="node13" href="$virus_2sample__virus__linux64_2graviton_8cpp.html" title="Sample Virus For Linux, Infects Win32 Binary. " alt="" coords="776,206,955,253"/>
+<area shape="rect" id="node15" href="$virus_2sample__virus__osx32_2graviton_8cpp.html" title="Sample Virus For Osx, Infects Win32 Binary. " alt="" coords="979,206,1152,253"/>
+<area shape="rect" id="node17" href="$virus_2sample__virus__win32_2graviton_8cpp.html" title="Sample Virus For Windows, Infects ELF Binary. " alt="" coords="1176,206,1349,253"/>
+</map>

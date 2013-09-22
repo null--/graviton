@@ -1,0 +1,12 @@
+<map id="bin/demo/virus/infector_endoffile/infector.cpp" name="bin/demo/virus/infector_endoffile/infector.cpp">
+<area shape="rect" id="node7" href="$graviton_8hpp.html" title="GraVitoN Core File. " alt="" coords="184,256,277,285"/>
+<area shape="rect" id="node36" href="$endoffile_8hpp.html" title="Inject malware to end of an executable file. " alt="" coords="708,101,886,131"/>
+<area shape="rect" id="node9" href="$aocinfo_8hpp.html" title="GraVitoN Artitecture/OS/Compiler (AOC) Information header. " alt="" coords="364,333,481,363"/>
+<area shape="rect" id="node11" href="$config_8hpp.html" title="GraVitoN Config File. " alt="" coords="257,333,340,363"/>
+<area shape="rect" id="node19" href="$component_8hpp.html" title="GraVitoN Component. " alt="" coords="94,333,233,363"/>
+<area shape="rect" id="node24" href="$logger_8hpp.html" title="GraVitoN::Core::Logger. " alt="" coords="608,333,717,363"/>
+<area shape="rect" id="node40" href="$infect_8hpp.html" title="GraVitoN::Infect::Infect_Component. " alt="" coords="173,179,288,208"/>
+<area shape="rect" id="node52" href="$endoffile__decom__win32_8hpp.html" title="endoffile Component &#45; Decompressor for Windows32 " alt="" coords="1141,179,1322,208"/>
+<area shape="rect" id="node54" href="$endoffile__decom__linux64_8hpp.html" title="endoffile Component &#45; Decompressor for Linux64 " alt="" coords="312,179,501,208"/>
+<area shape="rect" id="node56" href="$endoffile__decom__osx32_8hpp.html" title="endoffile Component &#45; Decompressor for Osx32 " alt="" coords="525,179,709,208"/>
+</map>

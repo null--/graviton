@@ -1,0 +1,33 @@
+<map id="GraVitoN::Core::Component" name="GraVitoN::Core::Component">
+<area shape="rect" id="node3" href="$class_compo1.html" title="Compo1" alt="" coords="301,111,371,140"/>
+<area shape="rect" id="node5" href="$class_compo2.html" title="Compo2" alt="" coords="301,164,371,193"/>
+<area shape="rect" id="node7" href="$class_compo3.html" title="Compo3" alt="" coords="301,217,371,247"/>
+<area shape="rect" id="node9" href="$class_gra_vito_n_1_1_a_i_1_1_a_i___component.html" title="Decision making techniques. " alt="" coords="240,271,432,300"/>
+<area shape="rect" id="node15" href="$class_gra_vito_n_1_1_core_1_1_t_c_p___server.html" title="GraVitoN::Core::TCP\l_Server" alt="" coords="263,323,409,370"/>
+<area shape="rect" id="node23" href="$class_gra_vito_n_1_1_core_1_1_thread.html" title="Thread Class. " alt="" coords="256,441,416,471"/>
+<area shape="rect" id="node37" href="$class_gra_vito_n_1_1_infect_1_1_infect___component.html" title="Infection techniques. " alt="" coords="257,494,415,541"/>
+<area shape="rect" id="node41" href="$class_gra_vito_n_1_1_malkit_1_1_malkit___component.html" title="MALware toolKIT. " alt="" coords="255,563,417,610"/>
+<area shape="rect" id="node43" href="$class_gra_vito_n_1_1_payload_1_1_payload___component.html" title="Payload execution class. " alt="" coords="265,633,407,679"/>
+<area shape="rect" id="node61" href="$class_gra_vito_n_1_1_utils_1_1_network___relay___t_c_p.html" title="bob &lt;—&gt; [relay server] &lt;—&gt; alice " alt="" coords="252,702,420,749"/>
+<area shape="rect" id="node63" href="$class_gra_vito_n_1_1_utils_1_1_network___relay___t_c_p___forward.html" title="bob —&gt; [relay server] —&gt; alice " alt="" coords="252,771,420,818"/>
+<area shape="rect" id="node65" href="$class_gra_vito_n_1_1_utils_1_1_network___relay___t_c_p___to___u_d_p.html" title="GraVitoN::Utils::Network\l_Relay_TCP_To_UDP" alt="" coords="252,841,420,887"/>
+<area shape="rect" id="node67" href="$class_gra_vito_n_1_1_utils_1_1_network___relay___u_d_p.html" title="GraVitoN::Utils::Network\l_Relay_UDP" alt="" coords="252,910,420,957"/>
+<area shape="rect" id="node11" href="$class_gra_vito_n_1_1_a_i_1_1_backdoor___sample.html" title="GraVitoN::AI::Backdoor\l_Sample" alt="" coords="536,5,696,51"/>
+<area shape="rect" id="node13" href="$class_gra_vito_n_1_1_a_i_1_1_virus___sample.html" title="A Very Simple AI component for a virus. " alt="" coords="549,74,683,121"/>
+<area shape="rect" id="node17" href="$class_gra_vito_n_1_1_utils_1_1_network___relay___t_c_p___server.html" title="GraVitoN::Utils::Network\l_Relay_TCP_Server" alt="" coords="532,143,700,190"/>
+<area shape="rect" id="node19" href="$class_gra_vito_n_1_1_utils_1_1_s_o_c_k_s5___server.html" title="GraVitoN::Utils::SOCKS5\l_Server" alt="" coords="529,213,703,259"/>
+<area shape="rect" id="node21" href="$class_my___server.html" title="My_Server" alt="" coords="573,283,659,312"/>
+<area shape="rect" id="node25" href="$class_gra_vito_n_1_1_core_1_1_s_s_l___server_1_1_s_e_r_v_e_r___i_n_t_e_r_n_a_l___t_h_r_e_a_d.html" title="Server socket thread. " alt="" coords="513,336,719,400"/>
+<area shape="rect" id="node27" href="$class_gra_vito_n_1_1_core_1_1_t_c_p___server_1_1_s_e_r_v_e_r___i_n_t_e_r_n_a_l___t_h_r_e_a_d.html" title="Server socket thread. " alt="" coords="513,424,719,488"/>
+<area shape="rect" id="node29" title="Run a component inside a thread. " alt="" coords="519,511,713,558"/>
+<area shape="rect" id="node35" href="$class_my___thread.html" title="My_Thread" alt="" coords="573,720,659,749"/>
+<area shape="rect" id="node39" href="$class_gra_vito_n_1_1_infect_1_1_end_of_file.html" title="Inject malware to end of an executable file. " alt="" coords="525,773,707,803"/>
+<area shape="rect" id="node45" href="$class_gra_vito_n_1_1_payload_1_1_binary___payload.html" title="Binary payload class. " alt="" coords="547,826,685,873"/>
+<area shape="rect" id="node47" href="$class_gra_vito_n_1_1_payload_1_1_linux___m_s_f___shell___bind__64.html" title="A bind shell for linux x64. " alt="" coords="823,618,1001,665"/>
+<area shape="rect" id="node49" href="$class_gra_vito_n_1_1_payload_1_1_linux___m_s_f___shell___reverse__64.html" title="A reverse shell for linux x64. " alt="" coords="812,687,1012,734"/>
+<area shape="rect" id="node51" href="$class_gra_vito_n_1_1_payload_1_1_o_s_x___do_s__32.html" title="OSX 32 bit DoS Shell. " alt="" coords="843,757,981,803"/>
+<area shape="rect" id="node53" href="$class_gra_vito_n_1_1_payload_1_1_o_s_x___m_s_f___shell___bind__32.html" title="OSX 32bit Bind Shell. " alt="" coords="825,826,999,873"/>
+<area shape="rect" id="node55" href="$class_gra_vito_n_1_1_payload_1_1_windows___m_s_f___shell___bind__32.html" title="Meterpreter Encoded Bind Shell For Win32. " alt="" coords="812,895,1012,942"/>
+<area shape="rect" id="node57" href="$class_gra_vito_n_1_1_payload_1_1_windows___m_s_f___shell___bind__32___kasper.html" title="Meterpreter Encoded Bind Shell For Win32. " alt="" coords="823,965,1001,1029"/>
+<area shape="rect" id="node59" href="$class_gra_vito_n_1_1_payload_1_1_windows___m_s_f___shell___reverse__32.html" title="A Sample Payload. " alt="" coords="800,1053,1024,1099"/>
+</map>

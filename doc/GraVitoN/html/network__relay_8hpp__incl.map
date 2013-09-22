@@ -1,0 +1,13 @@
+<map id="code/utils/network_relay.hpp" name="code/utils/network_relay.hpp">
+<area shape="rect" id="node3" href="$graviton_8hpp.html" title="GraVitoN Core File. " alt="" coords="284,333,377,363"/>
+<area shape="rect" id="node33" href="$memory_8hpp.html" title="GraVitoN::Core::Buffer. " alt="" coords="21,256,144,285"/>
+<area shape="rect" id="node40" href="$tcp__client_8hpp.html" title="GraVitoN::Core::TCP_Client. " alt="" coords="77,179,208,208"/>
+<area shape="rect" id="node62" href="$tcp__server_8hpp.html" title="GraVitoN::Core::TCP_Server. " alt="" coords="313,101,449,131"/>
+<area shape="rect" id="node74" href="$udp__socket_8hpp.html" title="GraVitoN::Core::UDP_Socket. " alt="" coords="581,179,723,208"/>
+<area shape="rect" id="node5" href="$aocinfo_8hpp.html" title="GraVitoN Artitecture/OS/Compiler (AOC) Information header. " alt="" coords="97,411,215,440"/>
+<area shape="rect" id="node7" href="$config_8hpp.html" title="GraVitoN Config File. " alt="" coords="239,411,321,440"/>
+<area shape="rect" id="node15" href="$component_8hpp.html" title="GraVitoN Component. " alt="" coords="345,411,484,440"/>
+<area shape="rect" id="node20" href="$logger_8hpp.html" title="GraVitoN::Core::Logger. " alt="" coords="648,411,757,440"/>
+<area shape="rect" id="node43" href="$socket_8hpp.html" title="GraVitoN::Core::Socket. " alt="" coords="613,256,728,285"/>
+<area shape="rect" id="node67" href="$thread_8hpp.html" title="GraVitoN::Core::Thread. " alt="" coords="232,179,344,208"/>
+</map>

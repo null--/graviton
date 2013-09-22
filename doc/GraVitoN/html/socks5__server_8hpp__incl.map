@@ -1,0 +1,15 @@
+<map id="code/utils/socks5_server.hpp" name="code/utils/socks5_server.hpp">
+<area shape="rect" id="node3" href="$socks5_8hpp.html" title="GraVitoN socks5 basics. " alt="" coords="33,160,151,189"/>
+<area shape="rect" id="node35" href="$network__relay_8hpp.html" title="GraVitoN multi&#45;Threaded Component. " alt="" coords="473,83,628,112"/>
+<area shape="rect" id="node38" href="$memory_8hpp.html" title="GraVitoN::Core::Buffer. " alt="" coords="809,315,932,344"/>
+<area shape="rect" id="node45" href="$tcp__client_8hpp.html" title="GraVitoN::Core::TCP_Client. " alt="" coords="537,237,668,267"/>
+<area shape="rect" id="node67" href="$tcp__server_8hpp.html" title="GraVitoN::Core::TCP_Server. " alt="" coords="371,160,507,189"/>
+<area shape="rect" id="node79" href="$udp__socket_8hpp.html" title="GraVitoN::Core::UDP_Socket. " alt="" coords="692,237,833,267"/>
+<area shape="rect" id="node5" href="$graviton_8hpp.html" title="GraVitoN Core File. " alt="" coords="141,392,235,421"/>
+<area shape="rect" id="node7" href="$aocinfo_8hpp.html" title="GraVitoN Artitecture/OS/Compiler (AOC) Information header. " alt="" coords="5,469,123,499"/>
+<area shape="rect" id="node9" href="$config_8hpp.html" title="GraVitoN Config File. " alt="" coords="147,469,229,499"/>
+<area shape="rect" id="node17" href="$component_8hpp.html" title="GraVitoN Component. " alt="" coords="253,469,392,499"/>
+<area shape="rect" id="node22" href="$logger_8hpp.html" title="GraVitoN::Core::Logger. " alt="" coords="564,469,673,499"/>
+<area shape="rect" id="node48" href="$socket_8hpp.html" title="GraVitoN::Core::Socket. " alt="" coords="556,315,671,344"/>
+<area shape="rect" id="node72" href="$thread_8hpp.html" title="GraVitoN::Core::Thread. " alt="" coords="239,237,351,267"/>
+</map>

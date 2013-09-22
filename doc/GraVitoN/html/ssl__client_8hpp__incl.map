@@ -1,0 +1,11 @@
+<map id="code/core/ssl_client.hpp" name="code/core/ssl_client.hpp">
+<area shape="rect" id="node3" href="$graviton_8hpp.html" title="GraVitoN Core File. " alt="" coords="187,256,280,285"/>
+<area shape="rect" id="node33" href="$ssl__socket_8hpp.html" title="GraVitoN::Core::SSL_Socket. " alt="" coords="563,83,701,112"/>
+<area shape="rect" id="node61" href="$tcp__client_8hpp.html" title="GraVitoN::Core::TCP_Client. " alt="" coords="156,83,287,112"/>
+<area shape="rect" id="node5" href="$aocinfo_8hpp.html" title="GraVitoN Artitecture/OS/Compiler (AOC) Information header. " alt="" coords="175,333,292,363"/>
+<area shape="rect" id="node7" href="$config_8hpp.html" title="GraVitoN Config File. " alt="" coords="68,333,151,363"/>
+<area shape="rect" id="node15" href="$component_8hpp.html" title="GraVitoN Component. " alt="" coords="316,333,455,363"/>
+<area shape="rect" id="node20" href="$logger_8hpp.html" title="GraVitoN::Core::Logger. " alt="" coords="563,333,672,363"/>
+<area shape="rect" id="node36" href="$socket_8hpp.html" title="GraVitoN::Core::Socket. " alt="" coords="412,169,527,199"/>
+<area shape="rect" id="node65" href="$memory_8hpp.html" title="GraVitoN::Core::Buffer. " alt="" coords="69,169,192,199"/>
+</map>

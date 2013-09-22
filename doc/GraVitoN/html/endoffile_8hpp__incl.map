@@ -1,0 +1,11 @@
+<map id="code/infect/generic/endoffile.hpp" name="code/infect/generic/endoffile.hpp">
+<area shape="rect" id="node5" href="$infect_8hpp.html" title="GraVitoN::Infect::Infect_Component. " alt="" coords="488,101,603,131"/>
+<area shape="rect" id="node47" href="$endoffile__decom__win32_8hpp.html" title="endoffile Component &#45; Decompressor for Windows32 " alt="" coords="1179,101,1360,131"/>
+<area shape="rect" id="node49" href="$endoffile__decom__linux64_8hpp.html" title="endoffile Component &#45; Decompressor for Linux64 " alt="" coords="1384,101,1573,131"/>
+<area shape="rect" id="node51" href="$endoffile__decom__osx32_8hpp.html" title="endoffile Component &#45; Decompressor for Osx32 " alt="" coords="1597,101,1781,131"/>
+<area shape="rect" id="node7" href="$graviton_8hpp.html" title="GraVitoN Core File. " alt="" coords="425,179,519,208"/>
+<area shape="rect" id="node9" href="$aocinfo_8hpp.html" title="GraVitoN Artitecture/OS/Compiler (AOC) Information header. " alt="" coords="261,256,379,285"/>
+<area shape="rect" id="node11" href="$config_8hpp.html" title="GraVitoN Config File. " alt="" coords="104,256,187,285"/>
+<area shape="rect" id="node19" href="$component_8hpp.html" title="GraVitoN Component. " alt="" coords="403,256,541,285"/>
+<area shape="rect" id="node24" href="$logger_8hpp.html" title="GraVitoN::Core::Logger. " alt="" coords="565,256,675,285"/>
+</map>

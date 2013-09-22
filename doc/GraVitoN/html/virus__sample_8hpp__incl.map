@@ -1,0 +1,11 @@
+<map id="code/ai/virus_sample.hpp" name="code/ai/virus_sample.hpp">
+<area shape="rect" id="node3" href="$ai_8hpp.html" title="GraVitoN::AI. " alt="" coords="237,160,307,189"/>
+<area shape="rect" id="node35" href="$infect_8hpp.html" title="GraVitoN::Infect::Infect_Component. " alt="" coords="304,83,419,112"/>
+<area shape="rect" id="node38" href="$payload_8hpp.html" title="GraVitoN::Payload and GraVitoN::Bin_Payload. " alt="" coords="443,83,584,112"/>
+<area shape="rect" id="node5" href="$graviton_8hpp.html" title="GraVitoN Core File. " alt="" coords="308,237,401,267"/>
+<area shape="rect" id="node7" href="$aocinfo_8hpp.html" title="GraVitoN Artitecture/OS/Compiler (AOC) Information header. " alt="" coords="168,315,285,344"/>
+<area shape="rect" id="node9" href="$config_8hpp.html" title="GraVitoN Config File. " alt="" coords="725,315,808,344"/>
+<area shape="rect" id="node17" href="$component_8hpp.html" title="GraVitoN Component. " alt="" coords="5,315,144,344"/>
+<area shape="rect" id="node22" href="$logger_8hpp.html" title="GraVitoN::Core::Logger. " alt="" coords="309,315,419,344"/>
+<area shape="rect" id="node41" href="$memory_8hpp.html" title="GraVitoN::Core::Buffer. " alt="" coords="493,160,616,189"/>
+</map>
