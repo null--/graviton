@@ -84,7 +84,7 @@ namespace GraVitoN
 
             /// Destructor
             ~Luaviton();
-            
+
             /// get lua state: USE IT CAREFULLY
             lua_State * getState()
                 {
