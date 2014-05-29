@@ -1,9 +1,8 @@
 GraVitoN project has been (temporarily) suspended due to ...
 
-# Now available on both savannah and github
-
 # Project:
 	GraVitoN: A Cross Platform Malware Development Framework
+  (Now available on both savannah and github)
 
 # Version Info:
 	2.0.0.-1
@@ -12,15 +11,12 @@ GraVitoN project has been (temporarily) suspended due to ...
 	Scream of Pain
 
 # Some Key Notes:
-    0- Use doxygen to generate documentation. (There is a Doxyfile inside graviton/ folder)
-	1- Always build external libraries statically
-	2- Before using a class or function from GraVitoN lib, make sure that you now it's dependencies.
-		(e.g. SSL_Client depends on openssl so you should link openssl's 
-		static library (.a or .lib) to your project. of course you can refuse to do
-		that and shuff-every-undefined-reference-error-up-to-your-ass!
-		using dynamically linked libraries of code/external/ is lame,
-		don't do it man!)
-	99- There are rules to be broken.
+  0- Use doxygen to generate documentation. (There is a Doxyfile inside graviton/ folder)
+  1- Always build external libraries statically
+  2- Before using a class or function from GraVitoN lib, make sure that you know it's dependencies.
+    (e.g. SSL_Client depends on openssl so you should link openssl's 
+    static library (.a or .lib) to your project.)
+  99- There are rules to be broken.
 
 # ------------------------- Statement Of Agreement ------------------------- #
 	
@@ -34,48 +30,47 @@ this framework, I understand my duties and responibilities include the following
 	
 2. Benevolent Use:
 	2.a) I will develope/hack/use GraVitoN framework, for educational purpose, research
-	or legal penetration tests.
+	and/or legal penetration tests.
 
 
 # ------------------------- TODO ------------------------- #
 Lots of code, lots of test
 
-Breakthrought:
-    OOP:
-        Utils:
-            Crypto
-        Malkit:
-            UPX
-        Graver
-        
-    Core::Memory:
-        Payload
-        Infect
+OP - #Breakthrought:
+  OOP:
+    Utils:
+      Crypto
+    Malkit:
+      UPX
+      Graver
+  Core::Memory:
+    Payload
+    Infect
 
 Major:
 	- graver
-    - mingw x86_64
-    - msvc x86_64
-    - clang x86_64
-    - support building static library: <type>statlib</type>
-	- Low-level: C++, High-level: Lua
-	- ms12-20
-	- Build static lib files (.a, .lib) of external libraries for linux (32/64) and windows (32/64)
-	- code a cross platform raw socket lib
-	- metasploit plugin
-	- metaworm master/slave
+    - build static library: <type>statlib</type>    
+  - mingw x86_64
+  - msvc x86_64
+  - clang x86_64
+  - Low-level: C++, High-level: Lua
+  - ms12-20
+  - Build static lib files (.a, .lib) of external libraries for linux (32/64) and windows (32/64)
+  - code a cross platform raw socket lib
+  - metasploit plugin
+    - metaworm master/slave
     - exploit-and-infect shellcode
-	- android/ios/osx test
-	- Documentation
-	- code a polymorphic engine (binary and source)
-	- lua script encrypter/decrypter modules
-	- SolarWind
-	- Injection and Hooking techniques (win: IAT, SSDT)
-	- Check possibility of compiling GraVitoN as nt driver and kernel module driver (targeting ring #0)
+  - android/ios/osx test
+  - Documentation
+  - code a polymorphic engine (binary and source)
+  - lua script encrypter/decrypter modules
+  - SolarWind
+  - Injection and Hooking techniques (win: IAT, SSDT)
+  - Check possibility of compiling GraVitoN as nt driver and kernel module driver (targeting ring #0)
     
 Minor:
-    - Combine luabridge with components ---> IN PROGRESS
-    - mini http(s) web server
+  - Combine luabridge with components ---> IN PROGRESS
+  - mini http(s) web server
     
 and a lot more!
 

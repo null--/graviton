@@ -937,6 +937,7 @@ void buildProject()
     }
 
     /// Add external libs
+    /// @todo MSVC test, multi sourcce test, multi include test
     /// replaced with cmd_build
     /*
     for(int i=0; i<glob_proj.build_depend_file.size(); ++i)

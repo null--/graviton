@@ -1,6 +1,6 @@
 <map id="bin/demo/backdoor/sample_backdoor_win32_kasper" name="bin/demo/backdoor/sample_backdoor_win32_kasper">
-<area shape="rect" id="node2" href="dir_2a2607021ba428b6ee001ad7a3e0addb.html" title="sample_backdoor_win32_kasper" alt="" coords="27,55,237,103"/>
-<area shape="rect" id="node3" href="dir_050edd66366d13764f98250ef6db77f6.html" title="code" alt="" coords="96,151,168,199"/>
-<area shape="rect" id="edge3" href="dir_000006_000026.html" title="3" alt="" coords="136,123,144,141"/>
-<area shape="rect" id="graph2" href="dir_f56f3eb72e99d6bf9de38dd1663dd5e6.html" title="backdoor" alt="" coords="16,16,248,113"/>
+<area shape="rect" id="node2" href="dir_2a2607021ba428b6ee001ad7a3e0addb.html" title="sample_backdoor_win32_kasper" alt="" coords="27,59,237,107"/>
+<area shape="rect" id="node3" href="dir_050edd66366d13764f98250ef6db77f6.html" title="code" alt="" coords="96,155,168,203"/>
+<area shape="rect" id="edge3" href="dir_000006_000030.html" title="3" alt="" coords="136,125,144,147"/>
+<area shape="rect" id="graph2" href="dir_f56f3eb72e99d6bf9de38dd1663dd5e6.html" title="backdoor" alt="" coords="16,16,248,117"/>
 </map>

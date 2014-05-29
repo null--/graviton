@@ -1,5 +1,6 @@
 <map id="code/core/ssl_client.hpp" name="code/core/ssl_client.hpp">
-<area shape="rect" id="node3" href="$ssl__client_8cpp.html" title="test ssl client " alt="" coords="5,83,155,130"/>
-<area shape="rect" id="node5" href="$ssl__server_8hpp.html" title="GraVitoN::Core::SSL_Server. " alt="" coords="179,92,347,121"/>
-<area shape="rect" id="node7" href="$ssl__server_8cpp.html" title="test ssl server " alt="" coords="188,179,337,226"/>
+<area shape="rect" id="node3" href="$ssl__client_8cpp.html" title="test ssl client " alt="" coords="5,89,155,143"/>
+<area shape="rect" id="node5" href="$sample_8cpp.html" title="test ssl client " alt="" coords="179,99,373,133"/>
+<area shape="rect" id="node7" href="$ssl__server_8hpp.html" title="GraVitoN::Core::SSL_Server. " alt="" coords="397,99,563,133"/>
+<area shape="rect" id="node9" href="$ssl__server_8cpp.html" title="test ssl server " alt="" coords="405,193,555,247"/>
 </map>

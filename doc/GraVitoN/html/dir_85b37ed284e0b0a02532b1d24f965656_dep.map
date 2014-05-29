@@ -1,6 +1,6 @@
 <map id="bin/demo/backdoor/sample_backdoor_win32" name="bin/demo/backdoor/sample_backdoor_win32">
-<area shape="rect" id="node2" href="dir_85b37ed284e0b0a02532b1d24f965656.html" title="sample_backdoor_win32" alt="" coords="27,55,192,103"/>
-<area shape="rect" id="node3" href="dir_050edd66366d13764f98250ef6db77f6.html" title="code" alt="" coords="73,151,145,199"/>
-<area shape="rect" id="edge3" href="dir_000005_000026.html" title="4" alt="" coords="114,123,122,141"/>
-<area shape="rect" id="graph2" href="dir_f56f3eb72e99d6bf9de38dd1663dd5e6.html" title="backdoor" alt="" coords="16,16,203,113"/>
+<area shape="rect" id="node2" href="dir_85b37ed284e0b0a02532b1d24f965656.html" title="sample_backdoor_win32" alt="" coords="27,59,192,107"/>
+<area shape="rect" id="node3" href="dir_050edd66366d13764f98250ef6db77f6.html" title="code" alt="" coords="73,155,145,203"/>
+<area shape="rect" id="edge3" href="dir_000005_000030.html" title="4" alt="" coords="114,125,122,147"/>
+<area shape="rect" id="graph2" href="dir_f56f3eb72e99d6bf9de38dd1663dd5e6.html" title="backdoor" alt="" coords="16,16,203,117"/>
 </map>

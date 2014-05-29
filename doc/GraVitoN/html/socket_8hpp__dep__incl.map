@@ -1,21 +1,22 @@
 <map id="code/core/socket.hpp" name="code/core/socket.hpp">
-<area shape="rect" id="node3" href="$ssl__socket_8hpp.html" title="GraVitoN::Core::SSL_Socket. " alt="" coords="180,83,351,112"/>
-<area shape="rect" id="node14" href="$tcp__client_8hpp.html" title="GraVitoN::Core::TCP_Client. " alt="" coords="516,83,679,112"/>
-<area shape="rect" id="node21" href="$tcp__server_8hpp.html" title="GraVitoN::Core::TCP_Server. " alt="" coords="853,169,1021,199"/>
-<area shape="rect" id="node45" href="$udp__socket_8hpp.html" title="GraVitoN::Core::UDP_Socket. " alt="" coords="1096,169,1269,199"/>
-<area shape="rect" id="node5" href="$ssl__client_8hpp.html" title="GraVitoN::Core::SSL_Client. " alt="" coords="184,169,347,199"/>
-<area shape="rect" id="node9" href="$ssl__server_8hpp.html" title="GraVitoN::Core::SSL_Server. " alt="" coords="5,265,173,295"/>
-<area shape="rect" id="node7" href="$ssl__client_8cpp.html" title="test ssl client " alt="" coords="197,257,347,303"/>
-<area shape="rect" id="node11" href="$ssl__server_8cpp.html" title="test ssl server " alt="" coords="15,353,164,399"/>
-<area shape="rect" id="node16" href="$tcp__client_8cpp.html" title="test tcp client " alt="" coords="523,161,672,207"/>
-<area shape="rect" id="node18" href="$luaviton__shell_8cpp.html" title="bin/luaviton_shell\l/luaviton_shell.cpp" alt="" coords="544,257,675,303"/>
-<area shape="rect" id="node26" href="$network__relay_8hpp.html" title="GraVitoN multi&#45;Threaded Component. " alt="" coords="995,257,1123,303"/>
-<area shape="rect" id="node30" href="$socks5__server_8hpp.html" title="GraVitoN socks5 server. " alt="" coords="688,361,880,391"/>
-<area shape="rect" id="node37" href="$reporter__text_8hpp.html" title="Reporter. " alt="" coords="696,161,829,207"/>
-<area shape="rect" id="node40" href="$socks5__client_8hpp.html" title="GraVitoN socks5 client. " alt="" coords="384,361,571,391"/>
-<area shape="rect" id="node23" href="$tcp__server_8cpp.html" title="test tcp server " alt="" coords="821,257,971,303"/>
-<area shape="rect" id="node28" href="$network__relay_8cpp.html" title="test Network Relay " alt="" coords="969,353,1148,399"/>
-<area shape="rect" id="node32" href="$socks5__client_8cpp.html" title="socks5 client test " alt="" coords="445,449,619,495"/>
-<area shape="rect" id="node34" href="$socks5__server_8cpp.html" title="socks5 server test " alt="" coords="697,449,871,495"/>
-<area shape="rect" id="node47" href="$udp__socket_8cpp.html" title="test udp socket " alt="" coords="1197,257,1352,303"/>
+<area shape="rect" id="node3" href="$ssl__socket_8hpp.html" title="GraVitoN::Core::SSL_Socket. " alt="" coords="316,89,487,122"/>
+<area shape="rect" id="node16" href="$tcp__client_8hpp.html" title="GraVitoN::Core::TCP_Client. " alt="" coords="732,89,895,122"/>
+<area shape="rect" id="node23" href="$tcp__server_8hpp.html" title="GraVitoN::Core::TCP_Server. " alt="" coords="1069,182,1237,215"/>
+<area shape="rect" id="node47" href="$udp__socket_8hpp.html" title="GraVitoN::Core::UDP_Socket. " alt="" coords="1312,182,1485,215"/>
+<area shape="rect" id="node5" href="$ssl__client_8hpp.html" title="GraVitoN::Core::SSL_Client. " alt="" coords="320,182,483,215"/>
+<area shape="rect" id="node11" href="$ssl__server_8hpp.html" title="GraVitoN::Core::SSL_Server. " alt="" coords="5,286,171,319"/>
+<area shape="rect" id="node7" href="$ssl__client_8cpp.html" title="test ssl client " alt="" coords="195,275,344,330"/>
+<area shape="rect" id="node9" href="$sample_8cpp.html" title="test ssl client " alt="" coords="368,286,563,319"/>
+<area shape="rect" id="node13" href="$ssl__server_8cpp.html" title="test ssl server " alt="" coords="13,379,163,434"/>
+<area shape="rect" id="node18" href="$tcp__client_8cpp.html" title="test tcp client " alt="" coords="739,171,888,226"/>
+<area shape="rect" id="node20" href="$luaviton__shell_8cpp.html" title="bin/luaviton_shell\l/luaviton_shell.cpp" alt="" coords="760,275,891,330"/>
+<area shape="rect" id="node28" href="$network__relay_8hpp.html" title="GraVitoN multi&#45;Threaded Component. " alt="" coords="1211,275,1339,330"/>
+<area shape="rect" id="node32" href="$socks5__server_8hpp.html" title="GraVitoN socks5 server. " alt="" coords="905,390,1095,423"/>
+<area shape="rect" id="node39" href="$reporter__text_8hpp.html" title="Reporter. " alt="" coords="912,171,1045,226"/>
+<area shape="rect" id="node42" href="$socks5__client_8hpp.html" title="GraVitoN socks5 client. " alt="" coords="601,390,788,423"/>
+<area shape="rect" id="node25" href="$tcp__server_8cpp.html" title="test tcp server " alt="" coords="1037,275,1187,330"/>
+<area shape="rect" id="node30" href="$network__relay_8cpp.html" title="test Network Relay " alt="" coords="1185,379,1364,434"/>
+<area shape="rect" id="node34" href="$socks5__client_8cpp.html" title="socks5 client test " alt="" coords="663,483,836,538"/>
+<area shape="rect" id="node36" href="$socks5__server_8cpp.html" title="socks5 server test " alt="" coords="913,483,1087,538"/>
+<area shape="rect" id="node49" href="$udp__socket_8cpp.html" title="test udp socket " alt="" coords="1413,275,1568,330"/>
 </map>

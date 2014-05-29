@@ -1,11 +1,11 @@
 <map id="bin/demo" name="bin/demo">
-<area shape="rect" id="node4" href="dir_f56f3eb72e99d6bf9de38dd1663dd5e6.html" title="backdoor" alt="" coords="229,65,304,113"/>
-<area shape="rect" id="node7" href="dir_050edd66366d13764f98250ef6db77f6.html" title="code" alt="" coords="133,161,205,209"/>
-<area shape="rect" id="edge4" href="dir_000002_000026.html" title="13" alt="" coords="205,146,220,163"/>
-<area shape="rect" id="node5" href="dir_47bd493c07dcc164cb45f846cec18cd9.html" title="misc" alt="" coords="133,65,205,113"/>
-<area shape="rect" id="edge6" href="dir_000011_000026.html" title="34" alt="" coords="170,134,185,151"/>
-<area shape="rect" id="node6" href="dir_846f5a2a388864f65b26cb94a119f225.html" title="virus" alt="" coords="37,65,109,113"/>
-<area shape="rect" id="edge8" href="dir_000007_000026.html" title="17" alt="" coords="131,133,145,151"/>
-<area shape="rect" id="graph3" href="dir_6b7710c689498f43e747ae098c0ccc6f.html" alt="" coords="27,55,411,124"/>
-<area shape="rect" id="graph2" href="dir_2ea30aa2956a8db99dd22aa5e597f384.html" title="bin" alt="" coords="16,16,421,135"/>
+<area shape="rect" id="node4" href="dir_f56f3eb72e99d6bf9de38dd1663dd5e6.html" title="backdoor" alt="" coords="229,69,304,117"/>
+<area shape="rect" id="node7" href="dir_050edd66366d13764f98250ef6db77f6.html" title="code" alt="" coords="133,165,205,213"/>
+<area shape="rect" id="edge4" href="dir_000002_000030.html" title="13" alt="" coords="205,148,220,169"/>
+<area shape="rect" id="node5" href="dir_47bd493c07dcc164cb45f846cec18cd9.html" title="misc" alt="" coords="133,69,205,117"/>
+<area shape="rect" id="edge6" href="dir_000011_000030.html" title="45" alt="" coords="170,136,185,157"/>
+<area shape="rect" id="node6" href="dir_846f5a2a388864f65b26cb94a119f225.html" title="virus" alt="" coords="37,69,109,117"/>
+<area shape="rect" id="edge8" href="dir_000007_000030.html" title="17" alt="" coords="131,135,145,157"/>
+<area shape="rect" id="graph3" href="dir_6b7710c689498f43e747ae098c0ccc6f.html" alt="" coords="27,59,411,128"/>
+<area shape="rect" id="graph2" href="dir_2ea30aa2956a8db99dd22aa5e597f384.html" title="bin" alt="" coords="16,16,421,139"/>
 </map>

@@ -1,4 +1,5 @@
 <map id="code/utils/component_parallel.hpp" name="code/utils/component_parallel.hpp">
-<area shape="rect" id="node3" href="$network__relay_8cpp.html" title="test Network Relay " alt="" coords="5,102,184,149"/>
-<area shape="rect" id="node5" href="$pcompo_8cpp.html" title="test parallel components " alt="" coords="208,102,355,149"/>
+<area shape="rect" id="node3" href="$parallel__compo_8cpp.html" title="bin/demo/misc/component\l/parallel_compo.cpp" alt="" coords="5,110,179,165"/>
+<area shape="rect" id="node5" href="$network__relay_8cpp.html" title="test Network Relay " alt="" coords="203,110,381,165"/>
+<area shape="rect" id="node7" href="$pcompo_8cpp.html" title="test parallel components " alt="" coords="405,110,552,165"/>
 </map>
