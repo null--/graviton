@@ -358,6 +358,8 @@ void initLibs()
         }
 
         glob_library.push_back(mlib);
+
+        vcout << "-- LIB ADDED --" << endl;
 NEXT:        
 		// cout << " --- Node: ---" << node << endl;
         // node = node.next_sibling(XML_TAG_LIBRARY);
@@ -584,6 +586,8 @@ void initCompilers()
         }
 
         glob_compiler.push_back(mcom);
+
+        vcout << "-- COMPILER ADDED --" << endl;
 NEXT:
         node = node.next(XML_TAG_COMPILER);
     }
@@ -824,12 +828,12 @@ bool verifyProject()
 
         }
 
-        GraVitoN::Utils::File lib( glob_conf.graviton_path + GRAV_LIB_PATH + glob_proj.build_depend[i] + "/" + glob_compiler[glob_proj.compiler_id].arch + "/" + ;
+        GraVitoN::Utils::File lib( glob_conf.graviton_path + GRAV_LIB_PATH + glob_proj.build_depend[i] + "/" + glob_compiler[glob_proj.compiler_id].arch + "/" );
         vcout << "Lib: "  << glob_proj.build_depend[i] << endl;
         if( !found && lib.exists() )
         {
             found = true;
-            glob_proj.build_depend_file.push_back( lib );
+            glob_proj.build_depend_file.push_back( lib.getPath() );
         }
 
         if( !found )
@@ -911,7 +915,7 @@ void buildProject()
     system( mc.init.c_str() );
     
     /// Building Objects
-    cout << "Executing System Commands:" << endl;
+    cout << "Executing System Commands: (" << sources.size() << " files)" << endl;
     string cmd;
     for(int i=0; i<sources.size(); ++i)
     {
@@ -933,12 +937,18 @@ void buildProject()
     }
 
     /// Add external libs
+    /// replaced with cmd_build
+    /*
     for(int i=0; i<glob_proj.build_depend_file.size(); ++i)
     {
         GraVitoN::Utils::File lib(glob_proj.build_depend_file[i]);
         vcout << "Linking: " << glob_proj.build_depend_file[i] << endl;
         cmd += " " + mc.flag_libpath + " \"" + GraVitoN::Utils::Directory::getDirectory(lib).getPath() + "\" " + mc.flag_lib + lib.name();
+
+        vcout << "CMD: " << cmd << endl;
     }
+    */
+    
     cmd += " " + mc.flag_output + "\"" + base_dir + "/" + BUILD_DIRECTORY + "/" + glob_proj.info_name + "\"" + cmd_build;
     cout << "-- Executing: " << cmd << endl;
     system( cmd.c_str() );

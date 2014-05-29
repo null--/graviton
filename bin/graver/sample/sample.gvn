@@ -8,8 +8,8 @@
     </info>
 
     <code>
-        <incpath>sample/src</incpath>
-        <srcpath>sample/inc</srcpath>
+        <!-- <incpath>sample/inc/</incpath> -->
+        <!-- <srcpath>sample/src/</srcpath> -->
         <source>sample.cpp</source>
     </code>
 
