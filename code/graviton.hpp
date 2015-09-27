@@ -35,7 +35,7 @@
 // #define GVN_ACTIVATE_LUABRIDGE
 #ifndef GVN_ACTIVATE_LUABRIDGE
     #if defined(INFO_COMPILER_GCC)
-        #warning ("[WARNING] LUABRIDGE IS NOT ACTIVATED")
+        # warning ("[WARNING] LUABRIDGE IS NOT ACTIVATED")
     #else
     #endif
 #endif

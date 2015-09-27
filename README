@@ -1,14 +1,14 @@
-GraVitoN project has been (temporarily) suspended due to ...
+GraVitoN project has been (temporarily) suspended due to...
 
 # Project:
-	GraVitoN: A Cross Platform Malware Development Framework
+  GraVitoN: A Cross Platform Malware Development Framework
   (Now available on both savannah and github)
 
 # Version Info:
-	2.0.0.-1
+  2.0.0.-1
 
 # Code Name:
-	Scream of Pain
+  Scream of Pain
 
 # Some Key Notes:
   0- Use doxygen to generate documentation. (There is a Doxyfile inside graviton/ folder)
@@ -24,13 +24,13 @@ As a developer/hacker/user of The GraVitoN Project, by downloading any part of
 this framework, I understand my duties and responibilities include the following:
 
 1. Responsibility:
-	1.a) I will not use this framework to lunch an illegal attack vector
-	against any individual/legal entity, and if I do, I'm the
-	only person who is legaly responsible for, and NOT The GraVitoN Community.
+  1.a) I will not use this framework to lunch an illegal attack vector
+  against any individual/legal entity, and if I do, I'm the
+  only person who is legaly responsible for, and NOT The GraVitoN Community.
 	
 2. Benevolent Use:
-	2.a) I will develope/hack/use GraVitoN framework, for educational purpose, research
-	and/or legal penetration tests.
+  2.a) I will develope/hack/use GraVitoN framework, for educational purpose, research
+  and/or legal penetration tests.
 
 
 # ------------------------- TODO ------------------------- #
@@ -40,16 +40,17 @@ OP - #Breakthrought:
   OOP:
     Utils:
       Crypto
-    Malkit:
-      UPX
-      Graver
+      File & Directory: UNICODE (wchar_t) Support
+  Malkit:
+    UPX
+    Graver (Continue Dev. in C++ or Rewrite in Lua)
   Core::Memory:
     Payload
     Infect
 
 Major:
-	- graver
-    - build static library: <type>statlib</type>    
+  - graver
+  - build static library: <type>statlib</type>    
   - mingw x86_64
   - msvc x86_64
   - clang x86_64
@@ -58,8 +59,8 @@ Major:
   - Build static lib files (.a, .lib) of external libraries for linux (32/64) and windows (32/64)
   - code a cross platform raw socket lib
   - metasploit plugin
-    - metaworm master/slave
-    - exploit-and-infect shellcode
+  - metaworm master/slave
+  - exploit-and-infect shellcode
   - android/ios/osx test
   - Documentation
   - code a polymorphic engine (binary and source)

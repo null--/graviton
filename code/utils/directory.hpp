@@ -46,6 +46,12 @@ using namespace std;
 #include <unistd.h>
 #endif
 
+#if defined(INFO_OS_WINDOWS)
+	#define SLASH '\\'
+#else
+	#define SLASH '/'
+#endif
+
 namespace GraVitoN
 {
     namespace Utils
@@ -107,11 +113,7 @@ namespace GraVitoN
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         Directory Directory::child(const string &child_name) const
         {
-#ifdef INFO_OS_WINDOWS
-            return Directory(dirname + "\\" + child_name);
-#else
-            return Directory(dirname + "/" + child_name);
-#endif
+            return Directory(dirname + SLASH + child_name);
         }
         
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//        
@@ -129,16 +131,20 @@ namespace GraVitoN
             {
 
                 /* Print all files and directories within the directory */
-                while ((ent = readdir (dir)) != NULL) {
-                    switch (ent->d_type) {
+                while ((ent = readdir (dir)) != NULL) 
+				{
+                    switch (ent->d_type) 
+					{
                     case DT_REG:
                         // printf ("[%s]\n", ent->d_name);
-                        files.push_back( File( ent->d_name ) );
+                        files.push_back( File( dirname + SLASH + ent->d_name ) );
                         break;
 
                     case DT_DIR:
                         // printf ("(%s/)\n", ent->d_name);
-                        folders.push_back( Directory( ent->d_name ) );
+                        if( string(ent->d_name) == "." || string(ent->d_name) == ".." )
+                        	break;
+                        folders.push_back( Directory( dirname + SLASH + ent->d_name ) );
                         break;
 
                         // default:
@@ -340,7 +346,7 @@ namespace GraVitoN
         bool Directory::remove()
         {
 #if defined(INFO_OS_WINDOWS)
-            return RemoveDirectory((LPCSTR)folder.c_str()) != 0;
+            return RemoveDirectoryA((LPCSTR)dirname.c_str()) != 0; // @TODO: RemoveDirectoryA vs RemoveDirectoryW
 #else
             DIR*            dp;
             struct dirent*  ep;

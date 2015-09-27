@@ -36,6 +36,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 #if defined(INFO_OS_WINDOWS)
@@ -108,7 +109,7 @@ namespace GraVitoN
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         size_t File::size() const
         {
-            FILE *file = fopen(path.c_str(), "rb");
+            FILE *file = fopen((const char*)path.c_str(), "rb");
             fseek (file, 0, SEEK_END);
             size_t _size = ftell(file);
             fclose (file);
@@ -273,10 +274,11 @@ namespace GraVitoN
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
         string File::name() const
         {
-            string nm;
+            string nm = "";
             int lpos = path.size() - 1;
-            while( lpos > 0 && path[lpos] != '/' && path[lpos] != '\\' ) nm = path[lpos--] + nm;
-            return (lpos == 0) ? "" : nm;
+            if (lpos < 0) return "";
+            while( lpos >= 0 && path[lpos] != '/' && path[lpos] != '\\' ) nm = path[lpos--] + nm;
+            return nm;
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
@@ -285,7 +287,8 @@ namespace GraVitoN
             string ext;
             int lpos = path.size() - 1;
             while( lpos > 0 && path[lpos] != '.' ) ext = path[lpos--] + ext;
-            return (lpos == 0) ? "" : ext;
+            std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+            return (lpos < 1) ? "" : ext;
         }
 
     } // utility
