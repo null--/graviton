@@ -49,6 +49,12 @@ using namespace std;
 #include <unistd.h>
 #endif
 
+#if defined(INFO_OS_WINDOWS)
+	#define SLASH '\\'
+#else
+	#define SLASH '/'
+#endif
+
 namespace GraVitoN
 {
     namespace Utils
@@ -277,7 +283,7 @@ namespace GraVitoN
             string nm = "";
             int lpos = path.size() - 1;
             if (lpos < 0) return "";
-            while( lpos >= 0 && path[lpos] != '/' && path[lpos] != '\\' ) nm = path[lpos--] + nm;
+            while( lpos >= 0 && path[lpos] != SLASH ) nm = path[lpos--] + nm;
             return nm;
         }
 

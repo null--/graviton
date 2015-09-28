@@ -1,0 +1,4 @@
+Bahram: Currently supports windows only.
+
+Quick customization:
+    change consts and defines inside bahram.hpp

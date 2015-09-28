@@ -46,12 +46,6 @@ using namespace std;
 #include <unistd.h>
 #endif
 
-#if defined(INFO_OS_WINDOWS)
-	#define SLASH '\\'
-#else
-	#define SLASH '/'
-#endif
-
 namespace GraVitoN
 {
     namespace Utils
@@ -69,6 +63,7 @@ namespace GraVitoN
             Directory parent() const;
             Directory child(const string &child_name) const;
             string getPath() const;
+            string name() const;
             
             bool list(std::vector<Utils::Directory> &folders, std::vector<Utils::File> &files) const;
             bool findFiles(vector<File> &files, const string pattern = "", const bool append = false) const;
@@ -114,6 +109,23 @@ namespace GraVitoN
         Directory Directory::child(const string &child_name) const
         {
             return Directory(dirname + SLASH + child_name);
+        }
+        
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
+        string Directory::name() const
+        {
+            string nm = "";
+            int lpos = dirname.size() - 1;
+            if (lpos < 0) return "";
+            
+            while( lpos > 0 && dirname[lpos] == SLASH )
+			{
+				lpos--;
+				Core::Logger::logVariable("lpos", lpos);	
+			}
+            if(lpos == 0) return string() + SLASH;
+            while( lpos > 0 && dirname[lpos] != SLASH ) nm = dirname[lpos--] + nm;
+            return nm;
         }
         
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//        
