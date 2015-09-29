@@ -1,16 +1,16 @@
-# Project: Bahram
+# Project: blackhole
 # Makefile created by Dev-C++ 5.11
 
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-RES      = Bahram_private.res
+RES      = blackhole_private.res
 OBJ      = main.o $(RES)
 LINKOBJ  = main.o $(RES)
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib32" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib32" -static-libgcc -mwindows libole32.a -m32
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"F:/bops/graviton/code"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++" -I"F:/bops/graviton/code"
-BIN      = Bahram.exe
+BIN      = blackhole.exe
 CXXFLAGS = $(CXXINCS) -m32
 CFLAGS   = $(INCS) -m32
 RM       = rm.exe -f
@@ -28,6 +28,6 @@ $(BIN): $(OBJ)
 main.o: main.cpp
 	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
 
-Bahram_private.res: Bahram_private.rc 
-	$(WINDRES) -i Bahram_private.rc -F pe-i386 --input-format=rc -o Bahram_private.res -O coff 
+blackhole_private.res: blackhole_private.rc 
+	$(WINDRES) -i blackhole_private.rc -F pe-i386 --input-format=rc -o blackhole_private.res -O coff 
 

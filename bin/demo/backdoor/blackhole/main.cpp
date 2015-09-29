@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief Bahram: A USB RAT for Windows OSs
+ * @brief blackhole: A USB RAT for Windows OSs
  *
  */
 
@@ -43,7 +43,7 @@ HRESULT ResolveIt(HWND, LPCSTR, LPWSTR, int);
 #include <string>
 using namespace std;
 
-#include "bahram.hpp"
+#include "blackhole.hpp"
 
 void runOrphanProc(string cmd)
 {

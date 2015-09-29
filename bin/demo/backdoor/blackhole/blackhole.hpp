@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Graviton.  If not, see http://www.gnu.org/licenses/.
  *
- * @brief Bahram: A USB RAT
+ * @brief blackhole's primary header containing its constants and defines.
  *
  */
 
