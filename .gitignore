@@ -11,6 +11,8 @@ bup/*
 *~
 *.#*
 *.gch
+*.o
+*.exe
 
 # OS generated files #
 ######################
