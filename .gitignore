@@ -13,6 +13,7 @@ bup/*
 *.gch
 *.o
 *.exe
+*.shell
 
 # OS generated files #
 ######################

